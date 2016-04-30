@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUILayout version="4">
+  <Window type="OgreTray/FrameWindow" name="Cfg" >
+    <Property name="Text" value="Selecciona Recorrido" />
+    <Property name="TitlebarFont" value="DejaVuSans-12" />
+    <Property name="TitlebarEnabled" value="True" />
+    <Property name="Area" value="{{0.133,0},{0.027,0},{0.320,300},{0.127,300}}" />
+  
+    
+    <Window type="OgreTray/ItemListbox" name="ResListbox" >
+      <Property name="Area" value="{{0.02,0},{0.06,0},{0.3,0},{0.8,0}}" />
+      <Window type="OgreTray/ListboxItem" name="Item1">
+	   <Property name="Text" value="1024x768"/>
+      </Window>
+      <Window type="OgreTray/ListboxItem" name="Item2">
+	<Property name="Text" value="800x600"/>
+      </Window>
+    </Window>
+    <!-- Exit button -->
+    <Window type="OgreTray/Button" name="ExitButton" >
+      <Property name="Text" value="Exit" />
+      <Property name="Area" value="{{0.784,0},{0.825,0},{0.968,0},{0.966,0}}" />
+    </Window>
+    <!-- Apply button -->
+    <Window type="OgreTray/Button" name="ApplyButton" >
+      <Property name="Text" value="Apply" />
+      <Property name="Area" value="{{0.583,0},{0.825,0},{0.768,0},{0.969,0}}" />
+    </Window>
+  </Window>
+</GUILayout>
