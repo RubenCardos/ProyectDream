@@ -30,7 +30,7 @@ PlayState::enter ()
   
    
   //Camara--------------------
-  _camera->setPosition(Ogre::Vector3(-20,10,0));
+  _camera->setPosition(Ogre::Vector3(-40,10,0));
   _camera->lookAt(Ogre::Vector3(100,0,0));
   _camera->setNearClipDistance(5);
   _camera->setFarClipDistance(10000);
@@ -65,6 +65,7 @@ PlayState::enter ()
 
   //Iniciacion Variables---
   _desp = Vector3(0,0,0);
+  _scenario=LevelRoom;
   //-----------------------
   _exitGame = false;
 }
@@ -328,6 +329,13 @@ PlayState::keyPressed
   }
   //-----------------
 
+  // Tecla T --> Test Cambiar Escenario-------
+  if (e.key == OIS::KC_T) {
+    
+    changeScenario(_scenario);
+  }
+  //-----------------
+
   //Movimiento CUBO---------------
   if (e.key == OIS::KC_SPACE) {
     
@@ -490,4 +498,45 @@ PlayState::updatePJ(Vector3 _desp)
   _pj->translate(_desp*_deltaT*20);
   
   
+}
+
+void 
+PlayState::changeScenario(Scenario _scenarioToChange){
+  cout << "Cambio de escenario" << endl;
+
+  //Reajustando personaje---
+  cout << "Ajustando posicion del PJ..." << endl;
+  SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
+  _pj->setPosition(Vector3(0,1.5,0));
+  //------------------------
+
+  //Cambio de escenario---
+  switch(_scenario) {
+    case Menu:
+      /* circle stuff */ 
+      break;
+    case LevelRoom:{
+      _sceneMgr->getRootSceneNode()->removeChild("SNRoom0");
+      break;
+    }
+      
+    case LevelTest:
+       
+      break;
+    }
+  //----------------------
+
+  //Cambio de valor de escenario---
+  switch(_scenario) {
+    case Menu:
+      /* circle stuff */ 
+      break;
+    case LevelRoom:
+      _scenario=LevelTest; 
+      break;
+    case LevelTest:
+      _scenario=LevelRoom; 
+      break;
+  }
+  //-------------------------------
 }

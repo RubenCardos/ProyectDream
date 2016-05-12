@@ -35,6 +35,12 @@
 
 using namespace Ogre;
 
+enum Scenario {
+  Menu,
+  LevelRoom,
+  LevelTest
+};  
+
 class PlayState : public Ogre::Singleton<PlayState>, public GameState
 {
  public:
@@ -89,6 +95,9 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   void updateGUI();
 
   void updatePJ(Vector3 _desp);
+  
+  Scenario _scenario;
+  void changeScenario(Scenario _scenarioToChange);
 
 };
 
