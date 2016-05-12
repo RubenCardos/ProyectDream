@@ -1,12 +1,14 @@
-# Crack-Shot
+# Proyect Dream
 
-Tercer proyecto para el Curso de Experto en Desarollo de Videojuegos de la UCLM
+Proyecto final para el Curso de Experto en Desarollo de Videojuegos de la UCLM
 
 ## Autores
 
 Ruben Rodriguez Cardos (https://github.com/RubenCardos)
 
 Lucia Sanchez Mouriz (https://github.com/luciamouriz)
+
+Enrique Forner Díaz (https://github.com/enriqueforner)
 
 ### Licencia
 

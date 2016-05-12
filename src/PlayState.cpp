@@ -13,6 +13,7 @@ using namespace std;
 template<> PlayState* Ogre::Singleton<PlayState>::msSingleton = 0;
 
 Vector3 _desp ;
+Vector3 *_despPtr;
 
 void
 PlayState::enter ()
@@ -63,8 +64,13 @@ PlayState::enter ()
   createGUI();
   //-------------------
 
+  //Crear el MovementManager
+  _movementManager = new MovementManager(_sceneMgr,_hero,_enemies);
+  //-------------------
   //Iniciacion Variables---
   _desp = Vector3(0,0,0);
+  _despPtr = new Vector3(0,0,0);
+  _despPtr = &_desp;
   _scenario=LevelRoom;
   //-----------------------
   _exitGame = false;
@@ -192,11 +198,19 @@ PlayState::CreateInitialWorld() {
          5.0 /* Masa */, position /* Posicion inicial */,
          Quaternion::IDENTITY /* Orientacion */);
 
+
   rigidBody->setAngularVelocity(Vector3(0,0,0));
+
+  //creamos el Hero para que contenga lo anterior, el sceneNode y el RigidBody
+  _hero = new Hero();
+  _hero->setSceneNode(node);
+  _hero->setRigidBody(rigidBody);
 
   //rigidBody->setLinearVelocity(
   //   _camera->getDerivedDirection().normalisedCopy() * 7.0); 
 
+  //crear el vector de enemigos. De momento, vacio
+  _enemies = new std::vector<Enemy*>();
 
   // Anadimos los objetos a las deques
   _shapes.push_back(bodyShape);   
@@ -225,7 +239,8 @@ PlayState::frameStarted
 
   //Actulizacion Camara---
   //cout << "Desplazamiento: "<< _desp << endl;
-  updatePJ(_desp);
+  //updatePJ(_desp);
+  _movementManager->moveHero(_despPtr,_deltaT);
   //----------------------
   
 
@@ -315,7 +330,7 @@ PlayState::keyPressed
 (const OIS::KeyEvent &e)
 {
 
-  SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
+  //SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
 
   // Tecla p --> PauseState.-------
   if (e.key == OIS::KC_P) {
@@ -489,16 +504,15 @@ PlayState::updateGUI()
   
 }
 
-void
+/*void
 PlayState::updatePJ(Vector3 _desp)
 {
 
   SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
   
   _pj->translate(_desp*_deltaT*20);
-  
-  
-}
+}*/
+
 
 void 
 PlayState::changeScenario(Scenario _scenarioToChange){
@@ -540,3 +554,4 @@ PlayState::changeScenario(Scenario _scenarioToChange){
   }
   //-------------------------------
 }
+
