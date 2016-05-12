@@ -12,7 +12,7 @@ using namespace std;
 
 template<> PlayState* Ogre::Singleton<PlayState>::msSingleton = 0;
 
-OgreBulletDynamics::RigidBody *b = NULL;
+bool _keyPress = false;
 
 void
 PlayState::enter ()
@@ -30,8 +30,8 @@ PlayState::enter ()
   
    
   //Camara--------------------
-  _camera->setPosition(Ogre::Vector3(10,10,10));
-  _camera->lookAt(Ogre::Vector3(0,0,0));
+  _camera->setPosition(Ogre::Vector3(-20,10,0));
+  _camera->lookAt(Ogre::Vector3(100,0,0));
   _camera->setNearClipDistance(5);
   _camera->setFarClipDistance(10000);
   //-----------------------------
@@ -112,7 +112,21 @@ PlayState::CreateInitialWorld() {
   _groundNode->attachObject(_groundEnt);
   _sceneMgr->getRootSceneNode()->addChild(_groundNode);
   //------------------------------------------------------------
- 	
+  
+  //Prueba LVL1-------------------------------------------------
+  for(int i=0;i<3;i++ ){
+    String aux=Ogre::StringConverter::toString(i);
+    Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario.mesh");
+    SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNRoom"+aux);
+    _nodeScn->attachObject(_entScn);
+    _nodeScn->yaw(Degree(270));
+    _nodeScn->setScale(Vector3(10,10,10));
+    _nodeScn->translate(Vector3(200*i,0,0));
+  }
+  
+  //------------------------------------------------------------
+
+
   // Creamos forma de colision para el plano ----------------------- 
   OgreBulletCollisions::CollisionShape *Shape;
   Shape = new OgreBulletCollisions::StaticPlaneCollisionShape
@@ -153,9 +167,10 @@ PlayState::CreateInitialWorld() {
   Entity *entity = _sceneMgr->createEntity("EntCube", "cube.mesh");
   SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube");
   node->attachObject(entity);
+  node->attachObject(_camera);
 
   Vector3 size = Vector3::ZERO; 
-  Vector3 position = Vector3(5,5,5);
+  Vector3 position = Vector3(0,1.5,0);
  
   OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter = NULL; 
   OgreBulletCollisions::CollisionShape *bodyShape = NULL;
@@ -179,7 +194,6 @@ PlayState::CreateInitialWorld() {
   //rigidBody->setLinearVelocity(
   //   _camera->getDerivedDirection().normalisedCopy() * 7.0); 
 
-  b=rigidBody;
 
   // Anadimos los objetos a las deques
   _shapes.push_back(bodyShape);   
@@ -283,7 +297,9 @@ PlayState::frameStarted
   updateGUI();
   //----------------
 
-  
+  //Actulizacion Camara---
+  updateCamera();
+  //----------------------
   
 
   return true;
@@ -372,6 +388,8 @@ PlayState::keyPressed
 (const OIS::KeyEvent &e)
 {
 
+  SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
+
   // Tecla p --> PauseState.-------
   if (e.key == OIS::KC_P) {
     pushState(PauseState::getSingletonPtr());
@@ -386,20 +404,19 @@ PlayState::keyPressed
 
   //Movimiento CUBO---------------
   if (e.key == OIS::KC_SPACE) {
-    b->enableActiveState ();
-    b->setLinearVelocity(Vector3(0,10,0));
+    
   }
   if (e.key == OIS::KC_UP) {
-    b->setLinearVelocity(Vector3(5,0,0));
+    _keyPress = true;
   }
   if (e.key == OIS::KC_DOWN) {
-    b->setLinearVelocity(Vector3(-5,0,0));
+    
   }
   if (e.key == OIS::KC_LEFT) {
-    b->setLinearVelocity(Vector3(0,0,-5));
+    
   }
   if (e.key == OIS::KC_RIGHT) {
-    b->setLinearVelocity(Vector3(0,0,5));
+    
   }
   //-------------------------------- 
 
@@ -427,6 +444,12 @@ PlayState::keyReleased
   }
   //-------------------------------
   
+  //Movimiento---------------------
+  if (e.key == OIS::KC_UP) {
+    _keyPress = false;
+  }
+  //-------------------------------
+
   //CEGUI--------------------------
   CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(static_cast<CEGUI::Key::Scan>(e.key));
   //-------------------------------
@@ -520,5 +543,16 @@ PlayState::updateGUI()
 {
 
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+  
+}
+
+void
+PlayState::updateCamera()
+{
+
+  SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
+  if(_keyPress){
+    _pj->translate(Vector3(1,0,0)*_deltaT*20);
+  }
   
 }

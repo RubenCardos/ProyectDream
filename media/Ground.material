@@ -10,7 +10,7 @@ material Ground
 			
 			texture_unit
 			{
-				texture ground.jpg
+				texture groundWood.jpg
 			}
 		}
 	}
