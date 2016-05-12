@@ -88,7 +88,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   void createGUI();
   void updateGUI();
 
-  void updateCamera();
+  void updatePJ(Vector3 _desp);
 
 };
 

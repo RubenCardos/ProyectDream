@@ -12,7 +12,7 @@ using namespace std;
 
 template<> PlayState* Ogre::Singleton<PlayState>::msSingleton = 0;
 
-bool _keyPress = false;
+Vector3 _desp ;
 
 void
 PlayState::enter ()
@@ -63,7 +63,9 @@ PlayState::enter ()
   createGUI();
   //-------------------
 
-  
+  //Iniciacion Variables---
+  _desp = Vector3(0,0,0);
+  //-----------------------
   _exitGame = false;
 }
 
@@ -121,7 +123,7 @@ PlayState::CreateInitialWorld() {
     _nodeScn->attachObject(_entScn);
     _nodeScn->yaw(Degree(270));
     _nodeScn->setScale(Vector3(10,10,10));
-    _nodeScn->translate(Vector3(200*i,0,0));
+    _nodeScn->translate(Vector3(250*i,0,0));
   }
   
   //------------------------------------------------------------
@@ -201,84 +203,7 @@ PlayState::CreateInitialWorld() {
 
 }
 
-/*void 
-PlayState::AddStaticObject(Vector3 pos,Quaternion rot) {
-  
-  Entity* entAim = _sceneMgr->createEntity("diana.mesh");
-  SceneNode* nodeAim = _sceneMgr->createSceneNode("Target"+StringConverter::toString(_numEntities)+"SN");
-  nodeAim->attachObject(entAim);
-  _sceneMgr->getRootSceneNode()->addChild(nodeAim);
-  
-  _targets.push_back(nodeAim);
 
-  OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter2 = new 
-  OgreBulletCollisions::StaticMeshToShapeConverter(entAim);
- 
-  OgreBulletCollisions::TriangleMeshCollisionShape *Trimesh2 = trimeshConverter2->createTrimesh();
-
-  OgreBulletDynamics::RigidBody *rigidObject2 = new 
-    OgreBulletDynamics::RigidBody("RigidBodydiana"+StringConverter::toString(_numEntities), _world);
-  rigidObject2->setShape(nodeAim, Trimesh2, 0.5, 0.5, 0,pos,//4º Posicion inicial 
-       rot); //El 5º parametro es la gravedad
-
-  delete trimeshConverter2;
-
-  _numEntities++;
-
-  // Anadimos los objetos a las deques---
-  _shapes.push_back(Trimesh2);   
-  _bodies.push_back(rigidObject2); 
-  //-------------------------------------
-  
-
-}
-
-void 
-PlayState::AddDynamicObject() {
-  _timeLastObject = 0.25;   // Segundos para anadir uno nuevo... 
-
-  Vector3 position = (_camera->getDerivedPosition() + _camera->getDerivedDirection().normalisedCopy() * 10);
- 
-  Entity *entity = _sceneMgr->createEntity("Arrow" + StringConverter::toString(_numEntities), "arrow.mesh");
-  SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("Arrow" + StringConverter::toString(_numEntities)+"SN");
-  node->attachObject(entity);
-
-  //Obtengo la rotacion de la camara para lanzar la flecha correctamente--------------------
-  Vector3 aux=_camera->getDerivedDirection().normalisedCopy(); //Este es el vector direccion
-  Vector3 src = node->getOrientation() * Ogre::Vector3::UNIT_X;//Punto donde aparece la flecha
-  Quaternion quat = src.getRotationTo(aux);//Rotacion
-  //------------------------------------------------------------------------------------------
-  
-  //Colision por Box----------------------------------------------
-  OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter = NULL;
-  OgreBulletCollisions::CollisionShape *boxShape = NULL;
-  trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(entity);
-  
-  AxisAlignedBox boundingB = entity->getBoundingBox();
-  Vector3 size = Vector3(2.0, 0.15, 0.15);//Hacer mas pequeña
-  boxShape = new OgreBulletCollisions::BoxCollisionShape(size);
-
-  OgreBulletDynamics::RigidBody *rigidBox = new OgreBulletDynamics::RigidBody("rigidBodyArrow" + StringConverter::toString(_numEntities), _world);
-  
-  rigidBox->setShape(node, boxShape,0.8 , 0.5 ,50.0 , position ,quat );
-
-  //Compruebo que a fuerza no sea mas que la fuerza maxima permitida---
-  if(_force>_maxForce){
-    _force=_maxForce;
-  }
-  //-------------------------------------------------------------------
-
-  rigidBox->setLinearVelocity(_camera->getDerivedDirection().normalisedCopy() * _force); 
-
-  _numEntities++;
-
-  // Anadimos los objetos a las deques---
-  _shapes.push_back(boxShape);   
-  _bodies.push_back(rigidBox); 
-  //-------------------------------------
-   
-
-}*/
 
 bool
 PlayState::frameStarted
@@ -298,7 +223,8 @@ PlayState::frameStarted
   //----------------
 
   //Actulizacion Camara---
-  updateCamera();
+  //cout << "Desplazamiento: "<< _desp << endl;
+  updatePJ(_desp);
   //----------------------
   
 
@@ -407,16 +333,16 @@ PlayState::keyPressed
     
   }
   if (e.key == OIS::KC_UP) {
-    _keyPress = true;
+    _desp+=Vector3(1,0,0);
   }
   if (e.key == OIS::KC_DOWN) {
-    
+    _desp+=Vector3(-1,0,0);
   }
   if (e.key == OIS::KC_LEFT) {
-    
+    _desp+=Vector3(0,0,-1);
   }
   if (e.key == OIS::KC_RIGHT) {
-    
+    _desp+=Vector3(0,0,1);
   }
   //-------------------------------- 
 
@@ -446,7 +372,16 @@ PlayState::keyReleased
   
   //Movimiento---------------------
   if (e.key == OIS::KC_UP) {
-    _keyPress = false;
+    _desp-=Vector3(1,0,0);
+  }
+  if (e.key == OIS::KC_DOWN) {
+    _desp-=Vector3(-1,0,0);
+  }
+  if (e.key == OIS::KC_LEFT) {
+    _desp-=Vector3(0,0,-1);
+  }
+  if (e.key == OIS::KC_RIGHT) {
+    _desp-=Vector3(0,0,1);
   }
   //-------------------------------
 
@@ -547,12 +482,12 @@ PlayState::updateGUI()
 }
 
 void
-PlayState::updateCamera()
+PlayState::updatePJ(Vector3 _desp)
 {
 
   SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
-  if(_keyPress){
-    _pj->translate(Vector3(1,0,0)*_deltaT*20);
-  }
+  
+  _pj->translate(_desp*_deltaT*20);
+  
   
 }
