@@ -88,6 +88,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   int _numEntities;
   float _timeLastObject;
   float _arrowSpeed;
+  
   Hero* _hero;
   std::vector<Enemy*>* _enemies;
   MovementManager* _movementManager;
@@ -100,8 +101,6 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
 
   void createGUI();
   void updateGUI();
-
-  //void updatePJ(Vector3 _desp);
 
   Scenario _scenario;
   void changeScenario(Scenario _scenarioToChange);

@@ -150,6 +150,41 @@ PlayState::CreateInitialWorld() {
   _shapes.push_back(Shape);  
   _bodies.push_back(rigidBodyPlane);
   
+  //Paredes Laterales--------------------------
+  
+  //Suelo Infinito NO TOCAR---------------------------------
+  Plane plane2(Vector3(0,0,-1), 0);    // Normal y distancia
+  MeshManager::getSingleton().createPlane("p2",
+  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2,
+  800, 450, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
+  //--------------------------------------------------------
+
+  //Suelo Grafico-----------------------------------------------
+  SceneNode* _groundNodeWallRight = _sceneMgr->createSceneNode("WallRight");
+  Entity* _groundEntWallRight = _sceneMgr->createEntity("planeEnt2", "p2");
+  _groundEntWallRight->setMaterialName("Ground");
+  _groundNodeWallRight->attachObject(_groundEntWallRight);
+  _sceneMgr->getRootSceneNode()->addChild(_groundNodeWallRight);
+  //------------------------------------------------------------
+
+  // Creamos forma de colision para el plano ----------------------- 
+  OgreBulletCollisions::CollisionShape *ShapeWallRight;
+  ShapeWallRight = new OgreBulletCollisions::StaticPlaneCollisionShape
+    (Ogre::Vector3(0,0,-1), 0);   // Vector normal y distancia
+  OgreBulletDynamics::RigidBody *rigidBodyPlaneWallRight = new 
+    OgreBulletDynamics::RigidBody("rigidBodyPlaneWallRight", _world);
+
+  // Creamos la forma estatica (forma, Restitucion, Friccion) ------
+  rigidBodyPlaneWallRight->setStaticShape(ShapeWallRight, 0.1, 0.8); 
+
+  // Anadimos los objetos Shape y RigidBody ------------------------
+  _shapes.push_back(ShapeWallRight);  
+  _bodies.push_back(rigidBodyPlaneWallRight);
+  //-------------------------------------------
+
+  //------------------------------------------------------------
+
+
   //SkyBox-------------------------------------
   _sceneMgr->setSkyBox(true, "MaterialSkybox");
   //-------------------------------------------
@@ -237,9 +272,7 @@ PlayState::frameStarted
   updateGUI();
   //----------------
 
-  //Actulizacion Camara---
-  //cout << "Desplazamiento: "<< _desp << endl;
-  //updatePJ(_desp);
+  //Movimiento------------
   _movementManager->moveHero(_despPtr,_deltaT);
   //----------------------
   
@@ -353,7 +386,7 @@ PlayState::keyPressed
 
   //Movimiento CUBO---------------
   if (e.key == OIS::KC_SPACE) {
-    
+    _movementManager->jumpHero();
   }
   if (e.key == OIS::KC_UP) {
     _desp+=Vector3(1,0,0);
@@ -503,15 +536,6 @@ PlayState::updateGUI()
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
   
 }
-
-/*void
-PlayState::updatePJ(Vector3 _desp)
-{
-
-  SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
-  
-  _pj->translate(_desp*_deltaT*20);
-}*/
 
 
 void 

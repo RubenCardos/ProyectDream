@@ -29,6 +29,12 @@ void MovementManager::moveHero(Ogre::Vector3* movement, Ogre::Real deltaT){
 	_hero->getSceneNode()->translate(*movement * deltaT * 20);
 }
 
+void MovementManager::jumpHero(){
+	//de momento, que mueva el sceneNode del Hero, nada mas
+	cout << "Salto" << endl;
+	
+}
+
 void MovementManager::moveEnemies(Ogre::Real deltaT){
 	//mas adelante, cuando esten los enemigos hechos
 }

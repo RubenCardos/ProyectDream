@@ -20,6 +20,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   ~MovementManager();
 
   void moveHero(Ogre::Vector3* movement, Ogre::Real deltaT);
+  void jumpHero();
   void moveEnemies(Ogre::Real deltaT);
 
   Ogre::SceneManager* getSceneManager();
