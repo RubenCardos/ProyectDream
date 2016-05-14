@@ -14,6 +14,8 @@ template<> PlayState* Ogre::Singleton<PlayState>::msSingleton = 0;
 
 Vector3 _desp ;
 Vector3 *_despPtr;
+bool _jump;
+Real _verticalVelocity;
 
 void
 PlayState::enter ()
@@ -74,6 +76,8 @@ PlayState::enter ()
   _scenario=LevelRoom;
   //-----------------------
   _exitGame = false;
+  _jump=false;
+  _verticalVelocity=0;
 }
 
 void
@@ -277,6 +281,20 @@ PlayState::frameStarted
   _movementManager->moveHero(_despPtr,_deltaT);
   //----------------------
   
+  if(_jump==true){
+  	 SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
+			_pj->translate(0, _verticalVelocity * _deltaT, 0, Node::TS_LOCAL);
+			_verticalVelocity -= 90.0f  * _deltaT; //float es la gravedad
+			
+			Vector3 pos = _pj->getPosition();
+			if (pos.y <= 5)
+			{
+				pos.y = 5;
+				_pj->setPosition(pos);
+				
+			}
+
+  }
 
   return true;
 }
@@ -388,6 +406,7 @@ PlayState::keyPressed
   //Movimiento CUBO---------------
   if (e.key == OIS::KC_SPACE) {
     _movementManager->jumpHero();
+    _jump=true;
   }
   if (e.key == OIS::KC_UP) {
     _desp+=Vector3(1,0,0);
@@ -428,6 +447,10 @@ PlayState::keyReleased
   //-------------------------------
   
   //Movimiento---------------------
+  if (e.key == OIS::KC_SPACE) {
+   
+    _jump=false;
+  }
   if (e.key == OIS::KC_UP) {
     _desp-=Vector3(1,0,0);
   }
