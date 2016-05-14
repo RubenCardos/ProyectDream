@@ -1,0 +1,25 @@
+[General]
+FileSystem=media
+FileSystem=media/Lvl1
+FileSystem=media/arco
+FileSystem=media/flecha
+FileSystem=media/skybox
+FileSystem=media/fair1
+FileSystem=media/fair2
+FileSystem=media/wall
+FileSystem=media/xml_schemas
+FileSystem=media/Music
+FileSystem=media/globe
+FileSystem=media/Scenes
+FileSystem=media/Scenes/Level 1
+[Schemes]
+FileSystem=media/schemes
+[Imagesets]
+FileSystem=media/imagesets
+[Fonts]
+FileSystem=media/fonts
+[Layouts]
+FileSystem=media/layouts
+[LookNFeel]
+FileSystem=media/looknfeel
+

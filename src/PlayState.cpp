@@ -125,12 +125,13 @@ PlayState::CreateInitialWorld() {
   //Prueba LVL1-------------------------------------------------
   for(int i=0;i<3;i++ ){
     String aux=Ogre::StringConverter::toString(i);
-    Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario.mesh");
-    SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNRoom"+aux);
-    _nodeScn->attachObject(_entScn);
-    _nodeScn->yaw(Degree(270));
-    _nodeScn->setScale(Vector3(10,10,10));
-    _nodeScn->translate(Vector3(250*i,0,0));
+    Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario1.mesh");
+	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNRoom"+aux);
+	  _nodeScn->attachObject(_entScn);
+	  _nodeScn->yaw(Degree(270));
+	  _nodeScn->setScale(Vector3(3,3,3));
+	  _nodeScn->translate(Vector3(230*i,0,0));
+    
   }
   
   //------------------------------------------------------------

@@ -1,0 +1,35 @@
+// matTemplate genrated by blender2ogre 0.5.8
+
+material matTemplate 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass matTemplate
+        {
+            ambient 0.04809928685426712 0.14205139875411987 0.6146149635314941 1.0
+            diffuse 0.03847943005680188 0.11364112069668053 0.4916919781519766 1.0
+            specular 0.5 0.5 0.5 1.0 12.5
+            emissive 0.0 0.0 0.0 1.0
+
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+
+        }
+    }
+}
