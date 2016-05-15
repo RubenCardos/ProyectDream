@@ -158,7 +158,7 @@ PlayState::CreateInitialWorld() {
   //Paredes Laterales--------------------------
   
   //Suelo Infinito NO TOCAR---------------------------------
-  Plane plane2(Vector3(0,0,-1), 0);    // Normal y distancia
+  Plane plane2(Vector3(0,0,-1), -50);    // Normal y distancia
   MeshManager::getSingleton().createPlane("p2",
   ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2,
   800, 450, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
@@ -175,7 +175,7 @@ PlayState::CreateInitialWorld() {
   // Creamos forma de colision para el plano ----------------------- 
   OgreBulletCollisions::CollisionShape *ShapeWallRight;
   ShapeWallRight = new OgreBulletCollisions::StaticPlaneCollisionShape
-    (Ogre::Vector3(0,0,-1), 0);   // Vector normal y distancia
+    (Ogre::Vector3(0,0,-1), -50);   // Vector normal y distancia
   OgreBulletDynamics::RigidBody *rigidBodyPlaneWallRight = new 
     OgreBulletDynamics::RigidBody("rigidBodyPlaneWallRight", _world);
 
@@ -281,6 +281,7 @@ PlayState::frameStarted
   _movementManager->moveHero(_despPtr,_deltaT);
   //----------------------
   
+  /*
   if(_jump==true){
   	 SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
 			_pj->translate(0, _verticalVelocity * _deltaT, 0, Node::TS_LOCAL);
@@ -294,7 +295,7 @@ PlayState::frameStarted
 				
 			}
 
-  }
+  }*/
 
   return true;
 }
