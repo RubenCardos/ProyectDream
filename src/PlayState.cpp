@@ -239,7 +239,7 @@ PlayState::CreateInitialWorld() {
          Quaternion::IDENTITY /* Orientacion */);
 
 
-  rigidBody->setAngularVelocity(Vector3(0,0,0));
+  rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 
   //creamos el Hero para que contenga lo anterior, el sceneNode y el RigidBody
   _hero = new Hero();
