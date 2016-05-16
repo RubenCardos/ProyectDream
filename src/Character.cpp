@@ -36,6 +36,15 @@ int Character::getLives(){
 	return _lives;
 }
 
+double Character::getMovementSpeed(){
+	return _movementspeed;
+}
+
+
+void Character::setMovementSpeed(double speed){
+	_movementspeed=speed;
+}
+
 void Character::setSceneNode(Ogre::SceneNode* sceneNode){
 	_sNode = sceneNode;
 }

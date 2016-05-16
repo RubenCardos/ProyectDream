@@ -16,6 +16,7 @@ Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreB
 	_collShape = collShape;
 	_lives = INITIAL_LIVES;
 	_score = 0;
+	_movementspeed=50.0;
 	spawn();
 }
 

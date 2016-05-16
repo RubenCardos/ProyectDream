@@ -55,6 +55,7 @@ class Character
   int _lives;
   double _movementspeed;
   double _jumpSpeed;
+  bool _jump;
 };
 
 #endif

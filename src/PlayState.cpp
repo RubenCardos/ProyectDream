@@ -225,23 +225,26 @@ PlayState::CreateInitialWorld() {
          5.0 /* Masa */, position /* Posicion inicial */,
          Quaternion::IDENTITY /* Orientacion */);
 
-
+  //Propiedades del cuerpo fisico--------------------------------------
   rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
+  rigidBody->disableDeactivation();
+  //-------------------------------------------------------------------
 
-  //creamos el Hero para que contenga lo anterior, el sceneNode y el RigidBody
+  //creamos el Hero para que contenga lo anterior, el sceneNode y el RigidBody---
   _hero = new Hero();
   _hero->setSceneNode(node);
   _hero->setRigidBody(rigidBody);
+  _hero->setMovementSpeed(150.0);
+  //-----------------------------------------------------------------------------
 
-  //rigidBody->setLinearVelocity(
-  //   _camera->getDerivedDirection().normalisedCopy() * 7.0); 
-
-  //crear el vector de enemigos. De momento, vacio
+  //crear el vector de enemigos. De momento, vacio---
   _enemies = new std::vector<Enemy*>();
+  //-------------------------------------------------
 
-  // Anadimos los objetos a las deques
+  // Anadimos los objetos a las deques--
   _shapes.push_back(bodyShape);   
   _bodies.push_back(rigidBody);
+  //------------------------------------
 
 }
 

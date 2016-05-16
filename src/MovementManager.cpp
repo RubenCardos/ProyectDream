@@ -27,7 +27,12 @@ MovementManager& MovementManager::getSingleton(void){
 void MovementManager::moveHero(Ogre::Vector3* movement, Ogre::Real deltaT){
 	//de momento, que mueva el sceneNode del Hero, nada mas
 	//_hero->getSceneNode()->translate(*movement * deltaT * 20);
-	_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
+	Ogre::Vector3 _actualVelocity = _hero->getRigidBody()->getLinearVelocity();
+	cout << "Speed" <<_actualVelocity << endl;
+	if(_actualVelocity.squaredLength() < _hero->getMovementSpeed()){
+		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
+	}
+	
 }
 
 void MovementManager::jumpHero(){
