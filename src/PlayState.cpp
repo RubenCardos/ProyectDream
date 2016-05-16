@@ -205,7 +205,6 @@ PlayState::CreateInitialWorld() {
   SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube");
   node->attachObject(entity);
   node->attachObject(_camera);
-  node->yaw(Degree(90));
   
   Vector3 size = Vector3::ZERO; 
   Vector3 position = Vector3(0,1.5,0);
@@ -215,7 +214,8 @@ PlayState::CreateInitialWorld() {
   OgreBulletDynamics::RigidBody *rigidBody = NULL;
 
   AxisAlignedBox boundingB = entity->getBoundingBox();
-  size *= node->getScale(); //Antes boundingB.getSize()
+  size = boundingB.getSize();
+  size *= node->getScale(); 
   size /= 2.0f;   // El tamano en Bullet se indica desde el centro
   bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
   rigidBody = new OgreBulletDynamics::RigidBody("SNCube", _world);
