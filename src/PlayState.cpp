@@ -573,13 +573,28 @@ PlayState::changeScenario(Scenario _scenarioToChange){
   _pj->setPosition(Vector3(0,1.5,0));
   //------------------------
 
+  //TEST------------------
+  /*SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
+  while (it.hasMoreElements()){
+    String  _aux = it.getNext()->getName();
+    cout << "Nodo: " << _aux << endl;
+  }*/
+  //----------------------
+
   //Cambio de escenario---
   switch(_scenario) {
     case Menu:
       /* circle stuff */ 
       break;
     case LevelRoom:{
-      _sceneMgr->getRootSceneNode()->removeChild("SNRoom0");
+      SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
+      while (it.hasMoreElements()){
+        String  _aux = it.getNext()->getName();
+        if(Ogre::StringUtil::startsWith(_aux,"SNRoom")){
+          _sceneMgr->getRootSceneNode()->removeChild(_aux); 
+        }
+      }
+      
       break;
     }
       
