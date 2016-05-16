@@ -1,0 +1,35 @@
+// matNose genrated by blender2ogre 0.5.8
+
+material matNose 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass matNose
+        {
+            ambient 0.039725735783576965 0.06061448156833649 0.36723804473876953 1.0
+            diffuse 0.039725735783576965 0.06061448156833649 0.36723804473876953 1.0
+            specular 0.21578946709632874 0.21578946709632874 0.21578946709632874 1.0 12.5
+            emissive 0.0 0.0 0.0 1.0
+
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+
+        }
+    }
+}

@@ -1,0 +1,35 @@
+// matMouth genrated by blender2ogre 0.5.8
+
+material matMouth 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass matMouth
+        {
+            ambient 0.6873648762702942 0.46247461438179016 0.2933841347694397 1.0
+            diffuse 0.5933044014044029 0.3991886023321065 0.25323682438565953 1.0
+            specular 0.5315789580345154 0.5315789580345154 0.5315789580345154 1.0 12.5
+            emissive 0.0 0.0 0.0 1.0
+
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+
+        }
+    }
+}

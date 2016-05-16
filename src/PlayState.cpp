@@ -14,8 +14,6 @@ template<> PlayState* Ogre::Singleton<PlayState>::msSingleton = 0;
 
 Vector3 _desp ;
 Vector3 *_despPtr;
-bool _jump;
-Real _verticalVelocity;
 
 void
 PlayState::enter ()
@@ -33,8 +31,8 @@ PlayState::enter ()
   
    
   //Camara--------------------
-  _camera->setPosition(Ogre::Vector3(-40,10,0));
-  _camera->lookAt(Ogre::Vector3(100,0,0));
+  _camera->setPosition(Ogre::Vector3(-40,5,0));
+  _camera->lookAt(Ogre::Vector3(30,0,0));
   _camera->setNearClipDistance(5);
   _camera->setFarClipDistance(10000);
   //-----------------------------
@@ -76,8 +74,7 @@ PlayState::enter ()
   _scenario=LevelRoom;
   //-----------------------
   _exitGame = false;
-  _jump=false;
-  _verticalVelocity=0;
+
 }
 
 void
@@ -125,7 +122,8 @@ PlayState::CreateInitialWorld() {
   _groundNode->attachObject(_groundEnt);
   _sceneMgr->getRootSceneNode()->addChild(_groundNode);
   //------------------------------------------------------------
-  
+
+
   //Prueba LVL1-------------------------------------------------
   for(int i=0;i<3;i++ ){
     String aux=Ogre::StringConverter::toString(i);
@@ -146,7 +144,7 @@ PlayState::CreateInitialWorld() {
   Shape = new OgreBulletCollisions::StaticPlaneCollisionShape
     (Ogre::Vector3(0,1,0), 0);   // Vector normal y distancia
   OgreBulletDynamics::RigidBody *rigidBodyPlane = new 
-    OgreBulletDynamics::RigidBody("rigidBodyPlane", _world);
+    OgreBulletDynamics::RigidBody("ground", _world);
 
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
   rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8); 
@@ -177,7 +175,7 @@ PlayState::CreateInitialWorld() {
   ShapeWallRight = new OgreBulletCollisions::StaticPlaneCollisionShape
     (Ogre::Vector3(0,0,-1), -50);   // Vector normal y distancia
   OgreBulletDynamics::RigidBody *rigidBodyPlaneWallRight = new 
-    OgreBulletDynamics::RigidBody("rigidBodyPlaneWallRight", _world);
+    OgreBulletDynamics::RigidBody("WallRight", _world);
 
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
   rigidBodyPlaneWallRight->setStaticShape(ShapeWallRight, 0.1, 0.8); 
@@ -195,29 +193,20 @@ PlayState::CreateInitialWorld() {
   //-------------------------------------------
   
   //LUCES------------------------------------------------
-  Light* _sunLight = _sceneMgr->createLight("SunLight");
-  _sunLight->setPosition(200, 200, 200);
-  _sunLight->setType(Light::LT_SPOTLIGHT);
-  _sunLight->setDiffuseColour(.20, .20, 0);
-  _sunLight->setSpotlightRange(Degree(30), Degree(50));
-
-  Vector3 _dir= -_sunLight->getPosition().normalisedCopy();
-  _sunLight->setDirection(_dir);
-
-
   Light* _directionalLight = _sceneMgr->createLight("DirectionalLight");
   _directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);
-  //directionalLight->setDiffuseColour(.60, .60, 0);
-  _directionalLight->setDirection(Ogre::Vector3(0, -1, 1));
+  //_directionalLight->setDiffuseColour(.60, .60, 0);
+  _directionalLight->setDirection(Ogre::Vector3(0, -1, 0));
 
   //-----------------------------------------------------
 
   //CUBO PRUEBA PJ----------------------------------------
-  Entity *entity = _sceneMgr->createEntity("EntCube", "cube.mesh");
+  Entity *entity = _sceneMgr->createEntity("EntCube", "tedybear.mesh");
   SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube");
   node->attachObject(entity);
   node->attachObject(_camera);
-
+  node->yaw(Degree(90));
+  
   Vector3 size = Vector3::ZERO; 
   Vector3 position = Vector3(0,1.5,0);
  
@@ -226,12 +215,10 @@ PlayState::CreateInitialWorld() {
   OgreBulletDynamics::RigidBody *rigidBody = NULL;
 
   AxisAlignedBox boundingB = entity->getBoundingBox();
-  size = boundingB.getSize(); 
+  size *= node->getScale(); //Antes boundingB.getSize()
   size /= 2.0f;   // El tamano en Bullet se indica desde el centro
   bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-  
-
-  rigidBody = new OgreBulletDynamics::RigidBody("rigidBodyCUBE", _world);
+  rigidBody = new OgreBulletDynamics::RigidBody("SNCube", _world);
 
   rigidBody->setShape(node, bodyShape,
          0.0 /* Restitucion */, 0.6 /* Friccion */,
@@ -281,21 +268,6 @@ PlayState::frameStarted
   _movementManager->moveHero(_despPtr,_deltaT);
   //----------------------
   
-  /*
-  if(_jump==true){
-  	 SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
-			_pj->translate(0, _verticalVelocity * _deltaT, 0, Node::TS_LOCAL);
-			_verticalVelocity -= 90.0f  * _deltaT; //float es la gravedad
-			
-			Vector3 pos = _pj->getPosition();
-			if (pos.y <= 5)
-			{
-				pos.y = 5;
-				_pj->setPosition(pos);
-				
-			}
-
-  }*/
 
   return true;
 }
@@ -407,7 +379,6 @@ PlayState::keyPressed
   //Movimiento CUBO---------------
   if (e.key == OIS::KC_SPACE) {
     _movementManager->jumpHero();
-    _jump=true;
   }
   if (e.key == OIS::KC_UP) {
     _desp+=Vector3(1,0,0);
@@ -449,8 +420,7 @@ PlayState::keyReleased
   
   //Movimiento---------------------
   if (e.key == OIS::KC_SPACE) {
-   
-    _jump=false;
+ 
   }
   if (e.key == OIS::KC_UP) {
     _desp-=Vector3(1,0,0);

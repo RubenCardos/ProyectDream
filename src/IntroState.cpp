@@ -381,7 +381,7 @@ CEGUI::MouseButton IntroState::convertMouseButton(OIS::MouseButtonID id)//METODO
 bool
 IntroState::play(const CEGUI::EventArgs &e)
 {
-  changeState(MenuState::getSingletonPtr());
+  changeState(PlayState::getSingletonPtr());
   return true;
 }
 
