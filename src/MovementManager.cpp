@@ -69,6 +69,18 @@ bool MovementManager::heroHasLanded(){
 	return _jumps > 0;
 }
 
+void MovementManager::reposition(btVector3 position,btQuaternion orientation){
+	btTransform initialTransform;
+
+	initialTransform.setOrigin(position);
+	initialTransform.setRotation(orientation);
+	//initialTransform.setRotation(orientation);
+
+	_hero->getRigidBody()->getBulletRigidBody()->setWorldTransform(initialTransform);
+	_hero->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
+	//mMotionState->setWorldTransform(initialTransform);
+}
+
 void MovementManager::moveEnemies(Ogre::Real deltaT){
 	//mas adelante, cuando esten los enemigos hechos
 }
