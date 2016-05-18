@@ -217,11 +217,16 @@ PlayState::CreateInitialWorld() {
   size = boundingB.getSize();
   size *= node->getScale(); 
   size /= 2.0f;   // El tamano en Bullet se indica desde el centro
-  bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
+
+  trimeshConverter = new
+      OgreBulletCollisions::StaticMeshToShapeConverter(entity);
+  bodyShape = trimeshConverter->createConvex();
+
+  //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
   rigidBody = new OgreBulletDynamics::RigidBody("SNCube", _world);
 
   rigidBody->setShape(node, bodyShape,
-         0.0 /* Restitucion */, 0.6 /* Friccion */,
+         0.0 /* Restitucion */, 0.9 /* Friccion */,
          5.0 /* Masa */, position /* Posicion inicial */,
          Quaternion::IDENTITY /* Orientacion */);
 
