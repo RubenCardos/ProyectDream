@@ -1,11 +1,18 @@
 #include "MovementManager.h"
 using namespace Ogre;
 
+#define N_JUMPS 1
+#define JUMP_EPSILON 0.01
 
 MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies){
 	_sceneMgr = sceneMgr;
 	_hero = hero;
 	_enemies = enemies;
+	_hero->setNumJumps(N_JUMPS);
+	_jumps = _hero->getNumJumps();
+	//_heroCoMPositionY = _hero->getRigidBody()->getCenterOfMassPosition().y;
+	_heroCoMPositionY = _hero->getRigidBody()->getCenterOfMassPosition().y + 2.7;
+	std::cout << "CENTER OF MASS POSITION " << _heroCoMPositionY <<std::endl;
 }
 
 MovementManager::~MovementManager(){
@@ -25,23 +32,41 @@ MovementManager& MovementManager::getSingleton(void){
 }
 
 void MovementManager::moveHero(Ogre::Vector3* movement, Ogre::Real deltaT){
-	//de momento, que mueva el sceneNode del Hero, nada mas
+	//movimiento del heroe
 	//_hero->getSceneNode()->translate(*movement * deltaT * 20);
-	Ogre::Vector3 _actualVelocity = _hero->getRigidBody()->getLinearVelocity();
-	cout << "Speed" <<_actualVelocity << endl;
-	if(_actualVelocity.squaredLength() < _hero->getMovementSpeed()){
+	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
+	//cout << "Speed" <<_currentSpeed << endl;
+	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
 	}
 	
 }
 
 void MovementManager::jumpHero(){
-	//de momento, que mueva el sceneNode del Hero, nada mas
-	cout << "Salto" << endl;
-	Ogre::Vector3 _actualVelocity = _hero->getRigidBody()->getLinearVelocity();
-	_actualVelocity.y = 12.0;
-	_hero->getRigidBody()->setLinearVelocity(_actualVelocity);
-	
+	//salto del heroe
+	//cuando el heroe salte, _jumps--. Cuando termine de saltar, _jumps++.
+	cout << "SALTO" << endl;
+
+	heroHasLanded();
+
+	if(_jumps > 0){
+		Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
+		_currentSpeed.y = 12.0;
+		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
+		_jumps--;
+	}
+}
+
+bool MovementManager::heroHasLanded(){
+	cout << "CoMPosition " << _hero->getRigidBody()->getCenterOfMassPosition().y << " Speed "<< _hero->getRigidBody()->getLinearVelocity().y << endl;
+	//Para ver si el heroe ha caido tras un salto
+	//comprobar que su velocidad es negativa (o nula) en el eje Y y que la posicion de su centro de masa es igual o menor que en reposo
+	std::cout << "CoMPosition: " << (_hero->getRigidBody()->getCenterOfMassPosition().y <= _heroCoMPositionY) << " Speed " << (_hero->getRigidBody()->getLinearVelocity().y <= 0.0) << std::endl;
+	if((_hero->getRigidBody()->getCenterOfMassPosition().y <= _heroCoMPositionY) && (_hero->getRigidBody()->getLinearVelocity().y <= (JUMP_EPSILON))){
+		std::cout << "Heroe ha caido de un salto" << std::endl;
+		_jumps = _hero->getNumJumps();
+	}
+	return _jumps > 0;
 }
 
 void MovementManager::moveEnemies(Ogre::Real deltaT){

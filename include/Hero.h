@@ -16,13 +16,18 @@ class Hero : public Character
 
   int getScore();
   void increaseScore(int amount);
+  int getNumJumps();
+
+  void setNumJumps(int nJumps);
 
   //El comportamiento de el heroe al spawnear y al morir se pondria en estas funciones
   void spawn();
   void die();
 
+
  protected:
   int _score;
+  int _nJumps; //numero de saltos
 };
 
 #endif

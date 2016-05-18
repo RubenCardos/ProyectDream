@@ -22,6 +22,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   void moveHero(Ogre::Vector3* movement, Ogre::Real deltaT);
   void jumpHero();
   void moveEnemies(Ogre::Real deltaT);
+  bool heroHasLanded();
 
   Ogre::SceneManager* getSceneManager();
   Hero* getHero();
@@ -40,6 +41,8 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   Ogre::SceneManager* _sceneMgr;
   Hero* _hero;
   std::vector<Enemy*>* _enemies;
+  int _jumps;
+  Ogre::Real _heroCoMPositionY; //Posicion del centro de masa del heroe (En reposo, con respecto del suelo)
 };
 
 #endif

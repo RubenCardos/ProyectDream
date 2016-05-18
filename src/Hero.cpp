@@ -9,6 +9,7 @@
 #include "Hero.h"
 
 #define INITIAL_LIVES 1
+#define NUM_JUMPS 1
 
 Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreBulletCollisions::CollisionShape* collShape){
 	_sNode = sNode;
@@ -17,6 +18,7 @@ Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreB
 	_lives = INITIAL_LIVES;
 	_score = 0;
 	_movementspeed=50.0;
+	_nJumps = NUM_JUMPS;
 	spawn();
 }
 
@@ -41,4 +43,12 @@ int Hero::getScore(){
 
 void Hero::increaseScore(int amount){
 	_score = _score + amount;
+}
+
+int Hero::getNumJumps(){
+	return _nJumps;
+}
+
+void Hero::setNumJumps(int nJumps){
+	_nJumps = nJumps;
 }
