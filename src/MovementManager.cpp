@@ -11,7 +11,7 @@ MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::
 	_hero->setNumJumps(N_JUMPS);
 	_jumps = _hero->getNumJumps();
 	//_heroCoMPositionY = _hero->getRigidBody()->getCenterOfMassPosition().y;
-	_heroCoMPositionY = _hero->getRigidBody()->getCenterOfMassPosition().y + 2.7;
+	_heroCoMPositionY = _hero->getRigidBody()->getCenterOfMassPosition().y;
 	std::cout << "CENTER OF MASS POSITION " << _heroCoMPositionY <<std::endl;
 }
 
