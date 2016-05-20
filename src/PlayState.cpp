@@ -242,8 +242,50 @@ PlayState::CreateInitialWorld() {
   _hero->setMovementSpeed(150.0);
   //-----------------------------------------------------------------------------
 
-  //crear el vector de enemigos. De momento, vacio---
+  //CUBO PRUEBA Enemigo----------------------------------------
+   Entity *entity1 = _sceneMgr->createEntity("EntCube1", "cube.mesh");
+   SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube1");
+   node1->attachObject(entity1);
+
+   Vector3 size1 = Vector3::ZERO;
+   Vector3 position1 = Vector3(20,1.5,0);
+
+   OgreBulletCollisions::CollisionShape *bodyShape1 = NULL;
+   OgreBulletDynamics::RigidBody *rigidBody1 = NULL;
+
+   AxisAlignedBox boundingB1 = entity1->getBoundingBox();
+   size1 = boundingB1.getSize();
+   size1 *= node1->getScale();
+   size1 /= 2.0f;   // El tamano en Bullet se indica desde el centro
+
+   trimeshConverter = new
+       OgreBulletCollisions::StaticMeshToShapeConverter(entity1);
+   bodyShape1 = trimeshConverter->createConvex();
+
+   //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
+   rigidBody1 = new OgreBulletDynamics::RigidBody("SNCube1", _world);
+
+   rigidBody1->setShape(node1, bodyShape1,
+          0.0 /* Restitucion */, 0.9 /* Friccion */,
+          5.0 /* Masa */, position1 /* Posicion inicial */,
+          Quaternion::IDENTITY /* Orientacion */);
+
+   //Propiedades del cuerpo fisico--------------------------------------
+   rigidBody1->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
+   rigidBody1->disableDeactivation();
+   //-------------------------------------------------------------------
+
+   //creamos el Enemy para que contenga lo anterior, el sceneNode y el RigidBody---
+   Enemy *enemy = new Enemy();
+   enemy->setSceneNode(node1);
+   enemy->setRigidBody(rigidBody1);
+   enemy->setMovementSpeed(150.0);
+   enemy->setSpeed(Ogre::Vector3(-1,0,0));
+   //-----------------------------------------------------------------------------
+
+  //crear el vector de enemigos. De momento, con un enemigo---
   _enemies = new std::vector<Enemy*>();
+  _enemies->push_back(enemy);
   //-------------------------------------------------
 
   // Anadimos los objetos a las deques--
@@ -274,6 +316,7 @@ PlayState::frameStarted
 
   //Movimiento------------
   _movementManager->moveHero(_despPtr,_deltaT);
+  _movementManager->moveEnemies(_deltaT);
   //----------------------
   
 

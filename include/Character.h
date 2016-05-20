@@ -36,6 +36,7 @@ class Character
   int getLives();
   double getMovementSpeed();
   double getJumpSpeed();
+  Ogre::Vector3 getSpeed();
 
   void setSceneNode(Ogre::SceneNode* sceneNode);
   void setCollisionShape(OgreBulletCollisions::CollisionShape* collisionShape);
@@ -43,6 +44,7 @@ class Character
   void loseLife();
   void setMovementSpeed(double speed);
   void setJumpSpeed(double speed);
+  void setSpeed(Ogre::Vector3 speed);
 
   //El comportamiento de que hace cada personaje al spawnear y al morir, que se defina en las clases hijas
   virtual void spawn() = 0;
@@ -56,6 +58,7 @@ class Character
   double _movementspeed;
   double _jumpSpeed;
   bool _jump;
+  Ogre::Vector3 _speed;
 };
 
 #endif

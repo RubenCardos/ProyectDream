@@ -15,6 +15,7 @@ Character::Character(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigB
 	_rigBody = rigBody;
 	_collShape = collShape;
 	_lives = DEFAULT_LIVES;
+	_speed = Ogre::Vector3(0,0,0);
 }
 
 Character::~Character(){
@@ -39,7 +40,9 @@ int Character::getLives(){
 double Character::getMovementSpeed(){
 	return _movementspeed;
 }
-
+Ogre::Vector3 Character::getSpeed(){
+	return _speed;
+}
 
 void Character::setMovementSpeed(double speed){
 	_movementspeed=speed;
@@ -61,4 +64,8 @@ void Character::loseLife(){
 	else{
 		die();
 	}
+}
+
+void Character::setSpeed(Ogre::Vector3 speed){
+	_speed = speed;
 }
