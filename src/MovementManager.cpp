@@ -69,7 +69,7 @@ bool MovementManager::heroHasLanded(){
 	return _jumps > 0;
 }
 
-void MovementManager::reposition(btVector3 position,btQuaternion orientation){
+void MovementManager::repositionHero(btVector3 position,btQuaternion orientation){
 	btTransform initialTransform;
 
 	initialTransform.setOrigin(position);

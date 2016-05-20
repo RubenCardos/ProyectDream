@@ -591,7 +591,7 @@ PlayState::changeScenario(Scenario _scenarioToChange){
   //Reajustando personaje---
   cout << "Ajustando posicion del PJ..." << endl;
   SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
-  _movementManager->reposition(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+  _movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
   //------------------------
 
   //TEST------------------
