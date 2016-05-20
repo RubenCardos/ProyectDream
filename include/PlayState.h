@@ -90,6 +90,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   float _arrowSpeed;
   
   Hero* _hero;
+  //std::vector<Ogre::SceneNode*> _vScenario; //Vector que representa el escenario, compuesto por sceneNodes (Luego habrá que meterle cuerpos fisicos tambien);
   std::vector<Enemy*>* _enemies;
   MovementManager* _movementManager;
 
@@ -102,8 +103,9 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   void createGUI();
   void updateGUI();
 
-  Scenario _scenario;
-  void changeScenario(Scenario _scenarioToChange);
+  Scenario _currentScenario;
+  void changeScenario(Scenario _nextScenario);
+  bool deleteScenario();
 
 };
 

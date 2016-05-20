@@ -71,7 +71,7 @@ PlayState::enter ()
   _desp = Vector3(0,0,0);
   _despPtr = new Vector3(0,0,0);
   _despPtr = &_desp;
-  _scenario=LevelRoom;
+  _currentScenario=LevelRoom;
   //-----------------------
   _exitGame = false;
 
@@ -133,7 +133,9 @@ PlayState::CreateInitialWorld() {
 	  _nodeScn->yaw(Degree(270));
 	  _nodeScn->setScale(Vector3(3,3,3));
 	  _nodeScn->translate(Vector3(230*i,0,0));
-    
+	  /*std::cout << "meter trozo de escenario en vector" << std::endl;
+	  //_vScenario.push_back(_nodeScn);
+	  std::cout << "trozo de escenario en vector metido" << std::endl;*/
   }
   
   //------------------------------------------------------------
@@ -248,7 +250,7 @@ PlayState::CreateInitialWorld() {
    node1->attachObject(entity1);
 
    Vector3 size1 = Vector3::ZERO;
-   Vector3 position1 = Vector3(20,1.5,0);
+   Vector3 position1 = Vector3(30,1.5,3.5);
 
    OgreBulletCollisions::CollisionShape *bodyShape1 = NULL;
    OgreBulletDynamics::RigidBody *rigidBody1 = NULL;
@@ -279,7 +281,7 @@ PlayState::CreateInitialWorld() {
    Enemy *enemy = new Enemy();
    enemy->setSceneNode(node1);
    enemy->setRigidBody(rigidBody1);
-   enemy->setMovementSpeed(150.0);
+   enemy->setMovementSpeed(50.0);
    enemy->setSpeed(Ogre::Vector3(-1,0,0));
    //-----------------------------------------------------------------------------
 
@@ -422,8 +424,7 @@ PlayState::keyPressed
 
   // Tecla T --> Test Cambiar Escenario-------
   if (e.key == OIS::KC_T) {
-    
-    changeScenario(_scenario);
+    changeScenario(_currentScenario);
   }
   //-----------------
 
@@ -585,12 +586,13 @@ PlayState::updateGUI()
 
 
 void 
-PlayState::changeScenario(Scenario _scenarioToChange){
+PlayState::changeScenario(Scenario _nextScenario){
   cout << "Cambio de escenario" << endl;
+  //Ogre::SceneNode* _snIter = new SceneNode("snIter");
 
   //Reajustando personaje---
+  //Volvemos a poner al personaje en la posición (0,0,0)
   cout << "Ajustando posicion del PJ..." << endl;
-  SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
   _movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
   //------------------------
 
@@ -603,40 +605,55 @@ PlayState::changeScenario(Scenario _scenarioToChange){
   //----------------------
 
   //Cambio de escenario---
-  switch(_scenario) {
+  //Primero hay que borrar el escenario anterior y luego cargar el nuevo.
+  switch(_currentScenario) {
     case Menu:
       /* circle stuff */ 
       break;
     case LevelRoom:{
-      SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
+      /*SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
       while (it.hasMoreElements()){
         String  _aux = it.getNext()->getName();
         if(Ogre::StringUtil::startsWith(_aux,"SNRoom")){
-          _sceneMgr->getRootSceneNode()->removeChild(_aux); 
+          _sceneMgr->getRootSceneNode()->removeChild(_aux); //detach node from parent
         }
-      }
-      
+      }*/
+      /*while(_snIter != _vScenario->end()){
+
+      }*/
+      deleteScenario();
       break;
     }
       
     case LevelTest:
-       
+      deleteScenario();
       break;
     }
   //----------------------
 
+
   //Cambio de valor de escenario---
-  switch(_scenario) {
+  switch(_currentScenario) {
     case Menu:
       /* circle stuff */ 
       break;
     case LevelRoom:
-      _scenario=LevelTest; 
+    	_currentScenario=LevelTest;
       break;
     case LevelTest:
-      _scenario=LevelRoom; 
+    	_currentScenario=LevelRoom;
       break;
   }
   //-------------------------------
 }
 
+bool PlayState::deleteScenario(){
+	/*for(unsigned int i=0; i<_vScenario.size(); i++){ //borrar los trozos de escenario
+		delete _vScenario.at(i);
+	}
+
+	_vScenario.clear(); //limpiar vector
+
+	return _vScenario.empty();*/
+	return true;
+}
