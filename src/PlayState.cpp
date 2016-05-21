@@ -661,7 +661,8 @@ PlayState::changeScenario(Scenario _nextScenario){
   cout << "Voy a : " << _currentScenario << endl;
 
   //Creo el nuevo escenario---
-    switch(_currentScenario) {
+  Entity* _ground = _sceneMgr->getEntity("planeEnt");
+  switch(_currentScenario) {
       case Menu:
         /* circle stuff */
         break;
@@ -675,6 +676,7 @@ PlayState::changeScenario(Scenario _nextScenario){
     	  	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
     	  	  _nodeScn->translate(Vector3(230*i,0,0));
     	    }
+    	  _ground->setMaterialName("Ground");
       	break;
       case LevelRoom:
     	  for(int i=0;i<3;i++ ){
@@ -689,6 +691,7 @@ PlayState::changeScenario(Scenario _nextScenario){
     	  	  //_vScenario.push_back(_nodeScn);
     	  	  std::cout << "trozo de escenario en vector metido" << std::endl;*/
     	    }
+    	  _ground->setMaterialName("GroundRoom");
         break;
       case LevelTest:
       	_currentScenario=LevelRoom;
