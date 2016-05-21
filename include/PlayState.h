@@ -42,6 +42,7 @@ using namespace Ogre;
 enum Scenario {
   Menu,
   LevelRoom,
+  LevelGarden,
   LevelTest
 };  
 

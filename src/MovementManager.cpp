@@ -84,7 +84,6 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 void MovementManager::moveEnemies(Ogre::Real deltaT){
 	//mas adelante, cuando esten los enemigos hechos
 	Enemy *enemy = _enemies->at(0);
-	std::cout << "Vector" <<enemy->getSpeed() << std::endl;
 	Ogre::Vector3 _currentSpeed = enemy->getRigidBody()->getLinearVelocity();
 	//enemy->getRigidBody()->setLinearVelocity(enemy->getSpeed());
 	if(_currentSpeed.squaredLength() < enemy->getMovementSpeed()){

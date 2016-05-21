@@ -31,7 +31,7 @@ PlayState::enter ()
   
    
   //Camara--------------------
-  _camera->setPosition(Ogre::Vector3(-20,10,0));
+  _camera->setPosition(Ogre::Vector3(-40,10,0));
   _camera->lookAt(Ogre::Vector3(0,0,0));
   _camera->setNearClipDistance(5);
   _camera->setFarClipDistance(10000);
@@ -71,7 +71,7 @@ PlayState::enter ()
   _desp = Vector3(0,0,0);
   _despPtr = new Vector3(0,0,0);
   _despPtr = &_desp;
-  _currentScenario=LevelRoom;
+  _currentScenario=LevelGarden;
   //-----------------------
   _exitGame = false;
 
@@ -127,8 +127,8 @@ PlayState::CreateInitialWorld() {
   //Prueba LVL1-------------------------------------------------
   for(int i=0;i<3;i++ ){
     String aux=Ogre::StringConverter::toString(i);
-    Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario2.mesh");
-	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNRoom"+aux);
+    Entity* _entScn = _sceneMgr->createEntity("EntGarden"+aux, "escenario2.mesh");
+	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNGarden"+aux);
 	  _nodeScn->attachObject(_entScn);
 	  _nodeScn->yaw(Degree(270));
 	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
@@ -596,55 +596,106 @@ PlayState::changeScenario(Scenario _nextScenario){
   _movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
   //------------------------
 
-  //TEST------------------
-  /*SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
-  while (it.hasMoreElements()){
-    String  _aux = it.getNext()->getName();
-    cout << "Nodo: " << _aux << endl;
-  }*/
-  //----------------------
-
   //Cambio de escenario---
   //Primero hay que borrar el escenario anterior y luego cargar el nuevo.
+
+  SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
+  Ogre::SceneManager::MovableObjectIterator iterator = _sceneMgr->getMovableObjectIterator("Entity");
+
   switch(_currentScenario) {
     case Menu:
       /* circle stuff */ 
       break;
-    case LevelRoom:{
-      /*SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
-      while (it.hasMoreElements()){
-        String  _aux = it.getNext()->getName();
-        if(Ogre::StringUtil::startsWith(_aux,"SNRoom")){
-          _sceneMgr->getRootSceneNode()->removeChild(_aux); //detach node from parent
-        }
-      }*/
-      /*while(_snIter != _vScenario->end()){
+    case LevelGarden:
+    	while (it.hasMoreElements()){
+    		String  _aux = it.getNext()->getName();
+    		if(Ogre::StringUtil::startsWith(_aux,"SNGarden")){
+    			_sceneMgr->getRootSceneNode()->removeChild(_aux); //detach node from parent
+    		}
+    	}
+    	while(iterator.hasMoreElements()){
+    	        Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
+    	        if(Ogre::StringUtil::startsWith(e->getName(),"EntGarden")){
+    	        	_sceneMgr->destroyEntity(e); //detach node from parent
+    	        }
+    	}
+    	break;
+    case LevelRoom:
+        	while (it.hasMoreElements()){
+        		String  _aux = it.getNext()->getName();
+        		if(Ogre::StringUtil::startsWith(_aux,"SNRoom")){
+        			_sceneMgr->getRootSceneNode()->removeChild(_aux); //detach node from parent
+        		}
+        	}
+        	while(iterator.hasMoreElements()){
+        		Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
+        			if(Ogre::StringUtil::startsWith(e->getName(),"EntGarden")){
+        				_sceneMgr->destroyEntity(e); //detach node from parent
+        	    	}
+        	    }
+        	break;
+  }
 
-      }*/
-      deleteScenario();
-      break;
-    }
-      
-    case LevelTest:
-      deleteScenario();
-      break;
-    }
+
   //----------------------
 
+  cout << "Vengo de: " << _currentScenario << endl;
 
   //Cambio de valor de escenario---
   switch(_currentScenario) {
     case Menu:
       /* circle stuff */ 
       break;
+    case LevelGarden:
+    	_currentScenario=LevelRoom;
+    	break;
     case LevelRoom:
-    	_currentScenario=LevelTest;
+    	_currentScenario=LevelGarden;
       break;
     case LevelTest:
     	_currentScenario=LevelRoom;
       break;
   }
   //-------------------------------
+
+  cout << "Voy a : " << _currentScenario << endl;
+
+  //Creo el nuevo escenario---
+    switch(_currentScenario) {
+      case Menu:
+        /* circle stuff */
+        break;
+      case LevelGarden:
+    	  for(int i=0;i<3;i++ ){
+    	      String aux=Ogre::StringConverter::toString(i);
+    	      Entity* _entScn = _sceneMgr->createEntity("EntGarden"+aux, "escenario2.mesh");
+    	  	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNGarden"+aux);
+    	  	  _nodeScn->attachObject(_entScn);
+    	  	  _nodeScn->yaw(Degree(270));
+    	  	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
+    	  	  _nodeScn->translate(Vector3(230*i,0,0));
+    	    }
+      	break;
+      case LevelRoom:
+    	  for(int i=0;i<3;i++ ){
+    	      String aux=Ogre::StringConverter::toString(i);
+    	      Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario1.mesh");
+    	  	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNRoom"+aux);
+    	  	  _nodeScn->attachObject(_entScn);
+    	  	  _nodeScn->yaw(Degree(270));
+    	  	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
+    	  	  _nodeScn->translate(Vector3(230*i,0,0));
+    	  	  /*std::cout << "meter trozo de escenario en vector" << std::endl;
+    	  	  //_vScenario.push_back(_nodeScn);
+    	  	  std::cout << "trozo de escenario en vector metido" << std::endl;*/
+    	    }
+        break;
+      case LevelTest:
+      	_currentScenario=LevelRoom;
+        break;
+    }
+    //-------------------------------
+
 }
 
 bool PlayState::deleteScenario(){
