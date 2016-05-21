@@ -1,16 +1,16 @@
-// matHead genrated by blender2ogre 0.5.8
+// matNose genrated by blender2ogre 0.5.8
 
-material matHead 
+material matNose 
 {
     receive_shadows on 
 
     technique
     {
-        pass matHead
+        pass matNose
         {
-            ambient 0.5382245779037476 0.16086344420909882 0.05474076420068741 1.0
-            diffuse 0.4022520711949795 0.12022426375378181 0.04091152036252854 1.0
-            specular 0.0 0.0 0.0 1.0 12.5
+            ambient 0.4479794502258301 0.2126706838607788 0.256523460149765 1.0
+            diffuse 0.4479794502258301 0.2126706838607788 0.256523460149765 1.0
+            specular 0.2970660626888275 0.2970660626888275 0.2970660626888275 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off
@@ -30,13 +30,6 @@ material matHead
             shading gouraud
             transparent_sorting on
 
-            texture_unit 
-            {
-                texture FabricPlain0055_1_S.jpg
-                tex_address_mode wrap
-                scale 1.0 1.0
-                colour_op modulate
-            }
         }
     }
 }

@@ -1,15 +1,15 @@
-// matBody2 genrated by blender2ogre 0.5.8
+// matBody1 genrated by blender2ogre 0.5.8
 
-material matBody2 
+material matBody1 
 {
     receive_shadows on 
 
     technique
     {
-        pass matBody2
+        pass matBody1
         {
-            ambient 0.2541521489620209 0.09084172546863556 0.26635563373565674 1.0
-            diffuse 0.2541521489620209 0.09084172546863556 0.26635563373565674 1.0
+            ambient 0.3285166323184967 0.4091266393661499 0.5277191400527954 1.0
+            diffuse 0.3285166323184967 0.4091266393661499 0.5277191400527954 1.0
             specular 0.0 0.0 0.0 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
@@ -32,7 +32,7 @@ material matBody2
 
             texture_unit 
             {
-                texture fabricTextureNo3409_1024x768.jpg
+                texture background-image-horizontal-lines-and-stripes-seamless-tileable-white-black-22hnve.png
                 tex_address_mode wrap
                 scale 1.0 1.0
                 colour_op modulate

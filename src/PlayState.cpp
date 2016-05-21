@@ -31,8 +31,8 @@ PlayState::enter ()
   
    
   //Camara--------------------
-  _camera->setPosition(Ogre::Vector3(-40,5,0));
-  _camera->lookAt(Ogre::Vector3(30,0,0));
+  _camera->setPosition(Ogre::Vector3(-20,10,0));
+  _camera->lookAt(Ogre::Vector3(0,0,0));
   _camera->setNearClipDistance(5);
   _camera->setFarClipDistance(10000);
   //-----------------------------
@@ -131,7 +131,7 @@ PlayState::CreateInitialWorld() {
 	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNRoom"+aux);
 	  _nodeScn->attachObject(_entScn);
 	  _nodeScn->yaw(Degree(270));
-	  _nodeScn->setScale(Vector3(3,3,3));
+	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
 	  _nodeScn->translate(Vector3(230*i,0,0));
 	  /*std::cout << "meter trozo de escenario en vector" << std::endl;
 	  //_vScenario.push_back(_nodeScn);
@@ -203,7 +203,7 @@ PlayState::CreateInitialWorld() {
   //-----------------------------------------------------
 
   //CUBO PRUEBA PJ----------------------------------------
-  Entity *entity = _sceneMgr->createEntity("EntCube", "tedybear.mesh");
+  Entity *entity = _sceneMgr->createEntity("EntCube", "TeddyBear/tedybear.mesh");
   SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube");
   node->attachObject(entity);
   node->attachObject(_camera);
@@ -245,7 +245,7 @@ PlayState::CreateInitialWorld() {
   //-----------------------------------------------------------------------------
 
   //CUBO PRUEBA Enemigo----------------------------------------
-   Entity *entity1 = _sceneMgr->createEntity("EntCube1", "enemy.mesh");
+   Entity *entity1 = _sceneMgr->createEntity("EntCube1", "Enemies/Level 1/enemy.mesh");
    SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube1");
    node1->attachObject(entity1);
 

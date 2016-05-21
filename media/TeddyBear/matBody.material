@@ -8,8 +8,8 @@ material matBody
     {
         pass matBody
         {
-            ambient 0.5173336267471313 0.15662333369255066 0.0765107125043869 1.0
-            diffuse 0.3975300506759112 0.1203526671392332 0.058792442336221384 1.0
+            ambient 1.0 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0 1.0
             specular 0.09999999403953552 0.09999999403953552 0.09999999403953552 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
@@ -32,7 +32,7 @@ material matBody
 
             texture_unit 
             {
-                texture FabricPlain0055_1_S.jpg
+                texture tedybear.jpg
                 tex_address_mode wrap
                 scale 1.0 1.0
                 colour_op modulate

@@ -1,16 +1,16 @@
-// matEar genrated by blender2ogre 0.5.8
+// matBody genrated by blender2ogre 0.5.8
 
-material matEar 
+material matBodyEnemy 
 {
     receive_shadows on 
 
     technique
     {
-        pass matEar
+        pass matBodyEnemy
         {
-            ambient 0.5277190208435059 0.1541915088891983 0.05196300521492958 1.0
-            diffuse 0.3832906608863311 0.11199172857316331 0.03774155151473413 1.0
-            specular 0.21578946709632874 0.21578946709632874 0.21578946709632874 1.0 12.5
+            ambient 1.0 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0 1.0
+            specular 0.0 0.0 0.0 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off
@@ -32,7 +32,7 @@ material matEar
 
             texture_unit 
             {
-                texture FabricPlain0055_1_S.jpg
+                texture fabricTextureNo3409_1024x768.jpg
                 tex_address_mode wrap
                 scale 1.0 1.0
                 colour_op modulate
