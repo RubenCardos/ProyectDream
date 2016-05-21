@@ -127,7 +127,7 @@ PlayState::CreateInitialWorld() {
   //Prueba LVL1-------------------------------------------------
   for(int i=0;i<3;i++ ){
     String aux=Ogre::StringConverter::toString(i);
-    Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario1.mesh");
+    Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario2.mesh");
 	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNRoom"+aux);
 	  _nodeScn->attachObject(_entScn);
 	  _nodeScn->yaw(Degree(270));
@@ -245,7 +245,7 @@ PlayState::CreateInitialWorld() {
   //-----------------------------------------------------------------------------
 
   //CUBO PRUEBA Enemigo----------------------------------------
-   Entity *entity1 = _sceneMgr->createEntity("EntCube1", "cube.mesh");
+   Entity *entity1 = _sceneMgr->createEntity("EntCube1", "enemy.mesh");
    SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube1");
    node1->attachObject(entity1);
 

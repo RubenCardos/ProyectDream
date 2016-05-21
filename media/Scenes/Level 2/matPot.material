@@ -1,0 +1,35 @@
+// matPot genrated by blender2ogre 0.5.8
+
+material matPot 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass matPot
+        {
+            ambient 0.7356606125831604 0.03219352662563324 0.04338851198554039 1.0
+            diffuse 0.5885284988362862 0.025754821684283336 0.03471081010566368 1.0
+            specular 0.09375 0.09375 0.09375 1.0 12.5
+            emissive 0.0 0.0 0.0 1.0
+
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+
+        }
+    }
+}
