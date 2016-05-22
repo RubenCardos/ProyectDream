@@ -94,6 +94,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   Hero* _hero;
   std::vector<Ogre::SceneNode*> _vScenario; //Vector que representa el escenario, compuesto por sceneNodes (Luego habrá que meterle cuerpos fisicos tambien);
   std::vector<Enemy*>* _enemies;
+
   MovementManager* _movementManager;
   PhysicsManager* _physicsManager;
 

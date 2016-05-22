@@ -232,7 +232,7 @@ PlayState::CreateInitialWorld() {
 
 
   //SkyBox-------------------------------------
-  _sceneMgr->setSkyBox(true, "MaterialSkybox");
+  _sceneMgr->setSkyBox(true, "MatSkyboxlvl2");
   //-------------------------------------------
   
   //LUCES------------------------------------------------
