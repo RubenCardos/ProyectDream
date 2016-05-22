@@ -113,7 +113,7 @@ PlayState::CreateInitialWorld() {
   Plane plane1(Vector3(0,1,0), 0);    // Normal y distancia
   MeshManager::getSingleton().createPlane("p1",
   ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
-  800, 450, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
+  1000, 1000, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
   //--------------------------------------------------------
 
   //Suelo Grafico-----------------------------------------------
@@ -124,6 +124,19 @@ PlayState::CreateInitialWorld() {
   _sceneMgr->getRootSceneNode()->addChild(_groundNode);
   //------------------------------------------------------------
 
+  // Creamos forma de colision para el plano ----------------------- 
+  OgreBulletCollisions::CollisionShape *Shape;
+  Shape = new OgreBulletCollisions::StaticPlaneCollisionShape
+    (Ogre::Vector3(0,1,0), 0);   // Vector normal y distancia
+  OgreBulletDynamics::RigidBody *rigidBodyPlane = new 
+    OgreBulletDynamics::RigidBody("ground", _world);
+
+  // Creamos la forma estatica (forma, Restitucion, Friccion) ------
+  rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8); 
+
+  // Anadimos los objetos Shape y RigidBody ------------------------
+  _shapes.push_back(Shape);  
+  _bodies.push_back(rigidBodyPlane);
 
   //Prueba LVL1-------------------------------------------------
   /*for(int i=0;i<3;i++ ){
@@ -147,41 +160,29 @@ PlayState::CreateInitialWorld() {
   //------------------------------------------------------------
 
 
-  // Creamos forma de colision para el plano ----------------------- 
-  OgreBulletCollisions::CollisionShape *Shape;
-  Shape = new OgreBulletCollisions::StaticPlaneCollisionShape
-    (Ogre::Vector3(0,1,0), 0);   // Vector normal y distancia
-  OgreBulletDynamics::RigidBody *rigidBodyPlane = new 
-    OgreBulletDynamics::RigidBody("ground", _world);
-
-  // Creamos la forma estatica (forma, Restitucion, Friccion) ------
-  rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8); 
-
-  // Anadimos los objetos Shape y RigidBody ------------------------
-  _shapes.push_back(Shape);  
-  _bodies.push_back(rigidBodyPlane);
+  
   
   //Paredes Laterales--------------------------
   
-  //Suelo Infinito NO TOCAR---------------------------------
-  Plane plane2(Vector3(0,0,-1), -50);    // Normal y distancia
+  //Pared Grafica---------------------------------
+  Plane plane2(Vector3(0,0,-1), -10);    // Normal y distancia
   MeshManager::getSingleton().createPlane("p2",
   ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2,
-  800, 450, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
-  //--------------------------------------------------------
-
-  //Suelo Grafico-----------------------------------------------
+  1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
+  
   SceneNode* _groundNodeWallRight = _sceneMgr->createSceneNode("WallRight");
   Entity* _groundEntWallRight = _sceneMgr->createEntity("planeEnt2", "p2");
   _groundEntWallRight->setMaterialName("Ground");
   _groundNodeWallRight->attachObject(_groundEntWallRight);
   _sceneMgr->getRootSceneNode()->addChild(_groundNodeWallRight);
+  _groundNodeWallRight->setVisible(false);
+  
   //------------------------------------------------------------
 
   // Creamos forma de colision para el plano ----------------------- 
   OgreBulletCollisions::CollisionShape *ShapeWallRight;
   ShapeWallRight = new OgreBulletCollisions::StaticPlaneCollisionShape
-    (Ogre::Vector3(0,0,-1), -50);   // Vector normal y distancia
+    (Ogre::Vector3(0,0,-1), -10);   // Vector normal y distancia
   OgreBulletDynamics::RigidBody *rigidBodyPlaneWallRight = new 
     OgreBulletDynamics::RigidBody("WallRight", _world);
 
@@ -191,6 +192,35 @@ PlayState::CreateInitialWorld() {
   // Anadimos los objetos Shape y RigidBody ------------------------
   _shapes.push_back(ShapeWallRight);  
   _bodies.push_back(rigidBodyPlaneWallRight);
+  //-------------------------------------------
+
+  Plane plane2Left(Vector3(0,0,1), -10);    // Normal y distancia
+  MeshManager::getSingleton().createPlane("p2Left",
+  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2Left,
+  1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
+  
+  SceneNode* _groundNodeWallLeft = _sceneMgr->createSceneNode("WallLeft");
+  Entity* _groundEntWallLeft = _sceneMgr->createEntity("planeEntLeft", "p2Left");
+  _groundEntWallLeft->setMaterialName("Ground");
+  _groundNodeWallLeft->attachObject(_groundEntWallLeft);
+  _sceneMgr->getRootSceneNode()->addChild(_groundNodeWallLeft);
+  _groundNodeWallLeft->setVisible(false);
+  
+  //------------------------------------------------------------
+
+  // Creamos forma de colision para el plano ----------------------- 
+  OgreBulletCollisions::CollisionShape *ShapeWallLeft;
+  ShapeWallLeft = new OgreBulletCollisions::StaticPlaneCollisionShape
+    (Ogre::Vector3(0,0,1), -10);   // Vector normal y distancia
+  OgreBulletDynamics::RigidBody *rigidBodyPlaneWallLeft = new 
+    OgreBulletDynamics::RigidBody("WallLeft", _world);
+
+  // Creamos la forma estatica (forma, Restitucion, Friccion) ------
+  rigidBodyPlaneWallLeft->setStaticShape(ShapeWallLeft, 0.1, 0.8); 
+
+  // Anadimos los objetos Shape y RigidBody ------------------------
+  _shapes.push_back(ShapeWallLeft);  
+  _bodies.push_back(rigidBodyPlaneWallLeft);
   //-------------------------------------------
 
   //------------------------------------------------------------

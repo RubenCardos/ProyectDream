@@ -1,0 +1,15 @@
+material Wall
+{
+	
+	technique
+	{
+		pass
+		{
+			ambient 0.75 0.75 0.75
+			diffuse 1 1 1 1
+			
+			scene_blend alpha_blend 
+			alpha_rejection greater 128
+		}
+	}
+}
