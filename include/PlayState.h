@@ -26,6 +26,7 @@
 
 #include "GameState.h"
 #include "MovementManager.h"
+#include "PhysicsManager.h"
 #include "Character.h"
 #include "Enemy.h"
 #include "Hero.h"
@@ -94,19 +95,20 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   std::vector<Ogre::SceneNode*> _vScenario; //Vector que representa el escenario, compuesto por sceneNodes (Luego habrá que meterle cuerpos fisicos tambien);
   std::vector<Enemy*>* _enemies;
   MovementManager* _movementManager;
+  PhysicsManager* _physicsManager;
 
   std::deque <OgreBulletDynamics::RigidBody *>         _bodies;
   std::deque <OgreBulletCollisions::CollisionShape *>  _shapes;
+
+  Scenario _currentScenario;
+  Scenario _nextScenario;
+  int _numModules;
 
   void CreateInitialWorld();
   void DetectCollisionAim();
 
   void createGUI();
   void updateGUI();
-
-  Scenario _currentScenario;
-  Scenario _nextScenario;
-  int _numModules;
 
   void changeScenario(Scenario nextScenario);
   void changeScenarioQ();

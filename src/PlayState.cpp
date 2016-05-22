@@ -67,6 +67,11 @@ PlayState::enter ()
   //Crear el MovementManager
   _movementManager = new MovementManager(_sceneMgr,_hero,_enemies);
   //-------------------
+
+  //Crear el PhysicsManager
+    _physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_enemies);
+  //-------------------
+
   //Iniciacion Variables---
   _desp = Vector3(0,0,0);
   _despPtr = new Vector3(0,0,0);
@@ -345,7 +350,8 @@ PlayState::frameStarted
   _timeLastObject -= _deltaT;
 
   //Deteccion Colisones---
-  DetectCollisionAim();
+  //DetectCollisionAim();
+  _physicsManager->detectHeroCollision();
   //----------------------
 
   //Actualizo GUI---
