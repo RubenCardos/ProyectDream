@@ -72,6 +72,7 @@ PlayState::enter ()
   _despPtr = new Vector3(0,0,0);
   _despPtr = &_desp;
   _currentScenario=LevelGarden;
+  _numModules = 0;
   //-----------------------
   _exitGame = false;
 
@@ -125,7 +126,7 @@ PlayState::CreateInitialWorld() {
 
 
   //Prueba LVL1-------------------------------------------------
-  for(int i=0;i<3;i++ ){
+  /*for(int i=0;i<3;i++ ){
     String aux=Ogre::StringConverter::toString(i);
     Entity* _entScn = _sceneMgr->createEntity("EntGarden"+aux, "escenario2.mesh");
 	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNGarden"+aux);
@@ -133,10 +134,15 @@ PlayState::CreateInitialWorld() {
 	  _nodeScn->yaw(Degree(270));
 	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
 	  _nodeScn->translate(Vector3(230*i,0,0));
-	  /*std::cout << "meter trozo de escenario en vector" << std::endl;
-	  //_vScenario.push_back(_nodeScn);
-	  std::cout << "trozo de escenario en vector metido" << std::endl;*/
-  }
+
+	  std::cout << "meter trozo de escenario en vector" << std::endl;
+	  _vScenario.push_back(_nodeScn);
+	  std::cout << "trozo de escenario en vector metido" << std::endl;
+  }*/
+
+  _currentScenario = Menu;
+  _nextScenario = LevelGarden;
+  createScenario();
   
   //------------------------------------------------------------
 
@@ -424,7 +430,7 @@ PlayState::keyPressed
 
   // Tecla T --> Test Cambiar Escenario-------
   if (e.key == OIS::KC_T) {
-    changeScenario(_currentScenario);
+    changeScenarioQ();
   }
   //-----------------
 
@@ -636,7 +642,6 @@ PlayState::changeScenario(Scenario _nextScenario){
         	break;
   }
 
-
   //----------------------
 
   cout << "Vengo de: " << _currentScenario << endl;
@@ -701,13 +706,143 @@ PlayState::changeScenario(Scenario _nextScenario){
 
 }
 
+void PlayState::changeScenarioQ(){
+	cout << "Cambio de escenario" << endl;
+
+	//Volvemos a poner al personaje en la posición (0,0,0)
+	cout << "Ajustando posicion del PJ..." << endl;
+	_movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+	//------------------------
+
+	//Cambio de escenario---
+	//Primero hay que borrar el escenario anterior y luego cargar el nuevo.
+
+	SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
+	Ogre::SceneManager::MovableObjectIterator iterator = _sceneMgr->getMovableObjectIterator("Entity");
+
+	cout << "Vengo de: " << _currentScenario << endl;
+	deleteScenario();
+
+	cout << "Voy a : " << _nextScenario << endl;
+	createScenario();
+
+}
+
 bool PlayState::deleteScenario(){
-	/*for(unsigned int i=0; i<_vScenario.size(); i++){ //borrar los trozos de escenario
-		delete _vScenario.at(i);
+
+	std::cout << "Borrando escenario " << _currentScenario <<std::endl;
+
+	/*Borrar vector*/
+		for(unsigned int i=0; i<_vScenario.size(); i++){ //borrar los trozos de escenario
+			delete _vScenario.at(i);
+		}
+
+		_vScenario.clear(); //limpiar vector
+
+	/*Borrar nodos*/
+
+	SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
+	Ogre::SceneManager::MovableObjectIterator iterator = _sceneMgr->getMovableObjectIterator("Entity");
+	std::string sAux = "";
+
+	switch(_currentScenario) {
+	    case Menu:
+	      /* circle stuff */
+	      break;
+	    case LevelGarden:
+	    	//iterator = _sceneMgr->getMovableObjectIterator("Entity");
+	    	while(iterator.hasMoreElements()){
+	    	        Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
+	    	        if(Ogre::StringUtil::startsWith(e->getName(),"LevelGardenEnt")){
+	    	        	_sceneMgr->destroyEntity(e); //detach node from parent
+	    	        }
+	    	}
+	    	while (it.hasMoreElements()){
+	    		sAux = it.getNext()->getName();
+	    		if(Ogre::StringUtil::startsWith(sAux,"LevelGardenSN")){
+	    			_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
+	    			_sceneMgr->destroySceneNode(sAux);
+	    		}
+	    	}
+	    	break;
+	    case LevelRoom:
+	    	while(iterator.hasMoreElements()){
+	    		Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
+	    		if(Ogre::StringUtil::startsWith(e->getName(),"LevelRoomEnt")){
+	    			_sceneMgr->destroyEntity(e); //detach node from parent
+	    		}
+	    	}
+	    	while (it.hasMoreElements()){
+	    		sAux = it.getNext()->getName();
+	    		if(Ogre::StringUtil::startsWith(sAux,"LevelRoomSN")){
+	    			_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
+	    		 	_sceneMgr->destroySceneNode(sAux);
+	    		}
+	    	}
+	    	break;
 	}
 
-	_vScenario.clear(); //limpiar vector
-
-	return _vScenario.empty();*/
-	return true;
+	printAll();
+	return _vScenario.empty();
 }
+
+void PlayState::createScenario(){
+	//por si acaso, antes de crear, borrar.
+	//deleteScenario();
+
+	std::cout << "Creando escenario " << _nextScenario <<std::endl;
+	//Creo el nuevo escenario---
+	Entity* _ground = _sceneMgr->getEntity("planeEnt");
+	switch(_nextScenario) {
+		case Menu:
+			/* circle stuff */
+			break;
+		case LevelGarden:
+			for(int i=0;i<3;i++ ){
+				String aux=Ogre::StringConverter::toString(i + _numModules);
+				Entity* _entScn = _sceneMgr->createEntity("LevelGardenEnt"+aux, "escenario2.mesh");
+				SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("LevelGardenSN"+aux);
+				_nodeScn->attachObject(_entScn);
+				_nodeScn->yaw(Degree(270));
+				_nodeScn->setScale(Vector3(2.5,2.5,2.5));
+				_nodeScn->translate(Vector3(230*i,0,0));
+
+				_vScenario.push_back(_nodeScn);
+			}
+			_ground->setMaterialName("Ground");
+			_currentScenario = _nextScenario;
+			_nextScenario = LevelRoom;
+			_numModules += 3;
+			break;
+		case LevelRoom:
+			for(int i=0;i<3;i++ ){
+				String aux=Ogre::StringConverter::toString(i + _numModules);
+				Entity* _entScn = _sceneMgr->createEntity("LevelRoomEnt"+aux, "escenario1.mesh");
+				SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("LevelRoomSN"+aux);
+				_nodeScn->attachObject(_entScn);
+				_nodeScn->yaw(Degree(270));
+				_nodeScn->setScale(Vector3(2.5,2.5,2.5));
+				_nodeScn->translate(Vector3(230*i,0,0));
+
+				_vScenario.push_back(_nodeScn);
+			}
+			_ground->setMaterialName("GroundRoom");
+			_currentScenario = _nextScenario;
+			_nextScenario = LevelGarden;
+			_numModules += 3;
+			break;
+	}
+	//-------------------------------
+	std::cout << "currentScenario: "<< _currentScenario << " nextScenario "<< _nextScenario <<std::endl;
+	printAll();
+}
+
+void PlayState::printAll(){
+	SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
+	std::cout << "Printing all children of root" << std::endl;
+	while (it.hasMoreElements()){
+		String  _aux = it.getNext()->getName();
+		std::cout << "	-"<< _aux << std::endl;
+	}
+}
+//Arreglado fallo al volver a un nivel en el que ya has estado (los SceneNode no se destruyen bien). Creado método para crear escenarios, cambios en el método para destruir escenarios y creado nuevo método para cambiar escenarios.
