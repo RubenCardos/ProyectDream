@@ -3,13 +3,13 @@
 
 #include <Ogre.h>
 #include <OgreSingleton.h>
-#include "Character.h"
 #include "Enemy.h"
 #include "Hero.h"
 
 #include <OgreBulletDynamicsRigidBody.h>
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
+#include "GameEntity.h"
 
 using namespace Ogre;
 

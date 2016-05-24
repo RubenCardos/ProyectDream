@@ -87,7 +87,7 @@ void MovementManager::moveEnemies(Ogre::Real deltaT){
 	Ogre::Vector3 _currentSpeed = enemy->getRigidBody()->getLinearVelocity();
 	//enemy->getRigidBody()->setLinearVelocity(enemy->getSpeed());
 	if(_currentSpeed.squaredLength() < enemy->getMovementSpeed()){
-		enemy->getRigidBody()->applyImpulse(enemy->getSpeed(),enemy->getRigidBody()->getCenterOfMassPosition());
+		enemy->getRigidBody()->applyImpulse(enemy->getSpeed() ,enemy->getRigidBody()->getCenterOfMassPosition());
 	}
 }
 

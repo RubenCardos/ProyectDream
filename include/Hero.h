@@ -1,13 +1,13 @@
 #ifndef Hero_H
 #define Hero_H
 
-#include <Character.h>
+#include "GameEntity.h"
 
 using namespace Ogre;
 using namespace OgreBulletCollisions;
 using namespace OgreBulletDynamics;
 
-class Hero : public Character
+class Hero : public GameEntity
 {
  public:
   Hero() {}
@@ -17,8 +17,16 @@ class Hero : public Character
   int getScore();
   void increaseScore(int amount);
   int getNumJumps();
+  int getLives();
+  double getMovementSpeed();
+  double getJumpSpeed();
+  Ogre::Vector3 getSpeed();
 
   void setNumJumps(int nJumps);
+  void loseLife();
+  void setMovementSpeed(double speed);
+  void setJumpSpeed(double speed);
+  void setSpeed(Ogre::Vector3 speed);
 
   //El comportamiento de el heroe al spawnear y al morir se pondria en estas funciones
   void spawn();
@@ -28,6 +36,11 @@ class Hero : public Character
  protected:
   int _score;
   int _nJumps; //numero de saltos
+  int _lives;
+  double _movementspeed;
+  double _jumpSpeed;
+  bool _jump;
+  Ogre::Vector3 _speed;
 };
 
 #endif

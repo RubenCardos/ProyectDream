@@ -27,9 +27,9 @@
 #include "GameState.h"
 #include "MovementManager.h"
 #include "PhysicsManager.h"
-#include "Character.h"
 #include "Enemy.h"
 #include "Hero.h"
+#include "Wall.h"
 
 #include <CEGUI.h>
 #include <RendererModules/Ogre/Renderer.h>
@@ -37,6 +37,9 @@
 #include <OgreBulletDynamicsRigidBody.h>
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
+
+#include <string>
+#include "GameEntity.h"
 
 using namespace Ogre;
 
@@ -94,6 +97,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   Hero* _hero;
   std::vector<Ogre::SceneNode*> _vScenario; //Vector que representa el escenario, compuesto por sceneNodes (Luego habrá que meterle cuerpos fisicos tambien);
   std::vector<Enemy*>* _enemies;
+  std::vector<Wall*>* _walls;
 
   MovementManager* _movementManager;
   PhysicsManager* _physicsManager;
@@ -115,6 +119,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   void changeScenarioQ();
   bool deleteScenario();
   void createScenario();
+  void createAllWalls();
+  GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position);
   void printAll();
 
 };
