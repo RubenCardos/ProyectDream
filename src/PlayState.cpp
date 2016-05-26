@@ -664,7 +664,52 @@ PlayState::createGUI()
   // Interfaz Intro--------------------
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 
+  //Interfaz Cegui Cabecera--------------------------------------
+  CEGUI::Window* sheetBG =  CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd2");
+  sheetBG->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0.0f),CEGUI::UDim(0.0, 0)));
+  sheetBG->setSize( CEGUI::USize(CEGUI::UDim(1.0, 0), CEGUI::UDim(0.10, 0)));
+  //sheetBG->setProperty("Image","Background");
+  sheetBG->setProperty("FrameEnabled","False");
+  sheetBG->setProperty("BackgroundEnabled", "False");
+
+  CEGUI::Window* pauseButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","PauseButton");
+  pauseButton->setText("Pause");
+  pauseButton->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.5,0)));
+  pauseButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.6,0),CEGUI::UDim(0.3,0)));
+  //pauseButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::pauseB,this));
+
+  CEGUI::Window* quitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","QuitButton");
+  quitButton->setText("Exit");
+  quitButton->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.5,0)));
+  quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.8,0),CEGUI::UDim(0.3,0)));
+ // quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::quit,this));
+
+  CEGUI::Window* textPoints = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textPoints");
+  textPoints->setText("SCORE 000");
+  textPoints->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
+  textPoints->setXPosition(CEGUI::UDim(0.43f, 0.0f));
+  textPoints->setYPosition(CEGUI::UDim(0.35f, 0.0f));
+  textPoints->setProperty("FrameEnabled","False");
+  textPoints->setProperty("BackgroundEnabled", "False");
+  textPoints->setProperty("VertFormatting", "TopAligned");
+
+  CEGUI::Window* textLives = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textLives");
+  textLives->setText("LIVES 0");
+  textLives->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
+  textLives->setXPosition(CEGUI::UDim(0.1f, 0.0f));
+  textLives->setYPosition(CEGUI::UDim(0.35f, 0.0f));
+  textLives->setProperty("FrameEnabled","False");
+  textLives->setProperty("BackgroundEnabled", "False");
+  textLives->setProperty("VertFormatting", "TopAligned");
+  //-----------------------------------------------------------------------------------------------------
   
+  //Add Cegui-----------------
+  sheetBG->addChild(textPoints);
+  sheetBG->addChild(textLives);
+  sheetBG->addChild(pauseButton);
+  sheetBG->addChild(quitButton);
+  sheet->addChild(sheetBG);
+  //--------------------------------
 }
 
 void
