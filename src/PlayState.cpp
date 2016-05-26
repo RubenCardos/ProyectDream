@@ -180,7 +180,7 @@ PlayState::CreateInitialWorld() {
   //Paredes Laterales--------------------------
   
   //Pared Grafica---------------------------------
-  /*Plane plane2(Vector3(0,0,-1), -10);    // Normal y distancia
+  Plane plane2(Vector3(0,0,-1), -20);    // Normal y distancia
   MeshManager::getSingleton().createPlane("p2",
   ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2,
   1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
@@ -197,7 +197,7 @@ PlayState::CreateInitialWorld() {
   // Creamos forma de colision para el plano ----------------------- 
   OgreBulletCollisions::CollisionShape *ShapeWallRight;
   ShapeWallRight = new OgreBulletCollisions::StaticPlaneCollisionShape
-    (Ogre::Vector3(0,0,-1), -10);   // Vector normal y distancia
+    (Ogre::Vector3(0,0,-1), -20);   // Vector normal y distancia
   OgreBulletDynamics::RigidBody *rigidBodyPlaneWallRight = new 
     OgreBulletDynamics::RigidBody("WallRight", _world);
 
@@ -209,7 +209,7 @@ PlayState::CreateInitialWorld() {
   _bodies.push_back(rigidBodyPlaneWallRight);
   //-------------------------------------------
 
-  Plane plane2Left(Vector3(0,0,1), -10);    // Normal y distancia
+  Plane plane2Left(Vector3(0,0,1), -13);    // Normal y distancia
   MeshManager::getSingleton().createPlane("p2Left",
   ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2Left,
   1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
@@ -226,7 +226,7 @@ PlayState::CreateInitialWorld() {
   // Creamos forma de colision para el plano ----------------------- 
   OgreBulletCollisions::CollisionShape *ShapeWallLeft;
   ShapeWallLeft = new OgreBulletCollisions::StaticPlaneCollisionShape
-    (Ogre::Vector3(0,0,1), -10);   // Vector normal y distancia
+    (Ogre::Vector3(0,0,1), -13);   // Vector normal y distancia
   OgreBulletDynamics::RigidBody *rigidBodyPlaneWallLeft = new 
     OgreBulletDynamics::RigidBody("WallLeft", _world);
 
@@ -237,7 +237,7 @@ PlayState::CreateInitialWorld() {
   _shapes.push_back(ShapeWallLeft);  
   _bodies.push_back(rigidBodyPlaneWallLeft);
   //-------------------------------------------
-  */
+  
 
   //CREAR LAS PAREDES
   createAllWalls();
@@ -729,7 +729,7 @@ PlayState::changeScenario(Scenario _nextScenario){
     	  	  _nodeScn->attachObject(_entScn);
     	  	  _nodeScn->yaw(Degree(270));
     	  	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
-    	  	  _nodeScn->translate(Vector3(230*i,0,0));
+    	  	  _nodeScn->translate(Vector3(205*i,0,0));
     	    }
     	  _ground->setMaterialName("Ground");
       	break;
