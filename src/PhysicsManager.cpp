@@ -41,6 +41,10 @@ void PhysicsManager::detectHeroCollision(){
 		btCollisionObject* obB =
 				(btCollisionObject*)(contactManifold->getBody1());
 
+		//EXTRA--------------------------------------------------------
+		btCollisionObject* _aux;
+		//-------------------------------------------------------------
+
 		//Compruebo colisiones con el hero -----------------------------
 		OgreBulletCollisions::Object *obHero = _world->findObject(_hero->getSceneNode());
 		OgreBulletCollisions::Object *obOB_A = _world->findObject(obA);
@@ -50,19 +54,34 @@ void PhysicsManager::detectHeroCollision(){
 			Ogre::SceneNode* node = NULL;
 			if ((obOB_A != obHero) && (obOB_A)) {
 				node = obOB_A->getRootNode();
+				_aux=obA;
 				//delete obOB_A;
-				if (Ogre::StringUtil::startsWith(node->getName(),"sceneThread")) { //Prueba
+				/*if (Ogre::StringUtil::startsWith(node->getName(),"sceneThread")) { //Prueba
 					node->setVisible(false); //Destruir aqui el scenenode
 					// _sceneMgr->destroySceneNode(node->getName()); //Cuando destruyes scenenode peta
 	    			
-				}
+				}*/
 			}
 			else if ((obOB_B != obHero) && (obOB_B)) {
 				node = obOB_B->getRootNode();
 				//delete obOB_B;
+				_aux=obB;
 			}
 			if (node) {
 				cout << "Nodo que colisiona con el hero: " << node->getName() << "\n" << endl;
+				if(Ogre::StringUtil::startsWith(node->getName(),"sceneThread")){
+
+					//Eliminar SceneNode, Entity y Cuerpo Fisico asi--------------
+					Entity* _e = static_cast<Entity*>(node->getAttachedObject(0));
+					_sceneMgr->destroyEntity(_e);
+					_sceneMgr->getRootSceneNode()->removeChild(node);
+					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
+					//Sumo puntuacion---
+					_hero->increaseScore(10);
+					cout << "Puntuacion : " << _hero->getScore() << endl;
+					//------------------
+					//-------------------------------------------------------------
+				}
 			}
 
 		}
