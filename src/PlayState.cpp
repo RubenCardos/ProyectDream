@@ -236,12 +236,48 @@ PlayState::CreateInitialWorld() {
   // Anadimos los objetos Shape y RigidBody ------------------------
   _shapes.push_back(ShapeWallLeft);  
   _bodies.push_back(rigidBodyPlaneWallLeft);
-  //-------------------------------------------
+
+  //---------------------------------------------------------------------
+
+
+  //HILO-------------------------------------------------------------------------------
+  Entity *entityThread = _sceneMgr->createEntity("EntThread", "thread.mesh");
+  SceneNode *nodeThread = _sceneMgr->getRootSceneNode()->createChildSceneNode("sceneThread");
+  nodeThread->attachObject(entityThread);
   
+  Vector3 sizeThread = Vector3::ZERO; 
+  Vector3 positionThread = Vector3(5,3,0);
+ 
+  OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterThread = NULL; 
+  OgreBulletCollisions::CollisionShape *bodyShapeThread = NULL;
+  OgreBulletDynamics::RigidBody *rigidBodyThread = NULL;
+
+  AxisAlignedBox boundingBThread = entityThread->getBoundingBox();
+  sizeThread = boundingBThread.getSize();
+  sizeThread *= nodeThread->getScale(); 
+  sizeThread /= 2.0f;   // El tamano en Bullet se indica desde el centro
+
+  trimeshConverterThread = new
+      OgreBulletCollisions::StaticMeshToShapeConverter(entityThread);
+  bodyShapeThread = trimeshConverterThread->createConvex();
+
+  //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
+  rigidBodyThread = new OgreBulletDynamics::RigidBody("sceneThread", _world);
+
+  rigidBodyThread->setShape(nodeThread, bodyShapeThread,
+         0.0 /* Restitucion */, 0.9 /* Friccion */,
+         0.0 /* Masa */, positionThread /* Posicion inicial */,
+         Quaternion::IDENTITY /* Orientacion */);
+
+  //Propiedades del cuerpo fisico--------------------------------------
+  rigidBodyThread->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
+  rigidBodyThread->disableDeactivation();
+  //-------------------------------------------------------------------
+  //------------------------------------------------------------------------------------
+
 
   //CREAR LAS PAREDES
-  createAllWalls();
-
+  //createAllWalls();
   //------------------------------------------------------------
 
 
@@ -299,7 +335,7 @@ PlayState::CreateInitialWorld() {
   _hero->setMovementSpeed(150.0);
   //-----------------------------------------------------------------------------
 
-  //CUBO PRUEBA Enemigo----------------------------------------
+  //Enemigo----------------------------------------
    Entity *entity1 = _sceneMgr->createEntity("EntCube1", "Enemies/Level 1/enemy.mesh");
    SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube1");
    node1->attachObject(entity1);
@@ -363,10 +399,9 @@ PlayState::frameStarted
   _world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
   _timeLastObject -= _deltaT;
 
-  //Deteccion Colisones---
-  //DetectCollisionAim();
+  //Deteccion Colisones---------
   _physicsManager->detectHeroCollision();
-  //----------------------
+  //---------------------------
 
   //Actualizo GUI---
   updateGUI();

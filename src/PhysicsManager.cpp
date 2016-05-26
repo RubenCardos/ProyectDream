@@ -51,6 +51,11 @@ void PhysicsManager::detectHeroCollision(){
 			if ((obOB_A != obHero) && (obOB_A)) {
 				node = obOB_A->getRootNode();
 				//delete obOB_A;
+				if (Ogre::StringUtil::startsWith(node->getName(),"sceneThread")) { //Prueba
+					node->setVisible(false); //Destruir aqui el scenenode
+					// _sceneMgr->destroySceneNode(node->getName()); //Cuando destruyes scenenode peta
+	    			
+				}
 			}
 			else if ((obOB_B != obHero) && (obOB_B)) {
 				node = obOB_B->getRootNode();
@@ -59,6 +64,7 @@ void PhysicsManager::detectHeroCollision(){
 			if (node) {
 				cout << "Nodo que colisiona con el hero: " << node->getName() << "\n" << endl;
 			}
+
 		}
 		//------------------------------------------------
 	}
