@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "Hero.h"
 
+
 #include <OgreBulletDynamicsRigidBody.h>
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>

@@ -1,4 +1,5 @@
 #include "PhysicsManager.h"
+#include "PlayState.h"
 using namespace Ogre;
 
 #define N_JUMPS 1
@@ -55,12 +56,7 @@ void PhysicsManager::detectHeroCollision(){
 			if ((obOB_A != obHero) && (obOB_A)) {
 				node = obOB_A->getRootNode();
 				_aux=obA;
-				//delete obOB_A;
-				/*if (Ogre::StringUtil::startsWith(node->getName(),"sceneThread")) { //Prueba
-					node->setVisible(false); //Destruir aqui el scenenode
-					// _sceneMgr->destroySceneNode(node->getName()); //Cuando destruyes scenenode peta
-	    			
-				}*/
+				
 			}
 			else if ((obOB_B != obHero) && (obOB_B)) {
 				node = obOB_B->getRootNode();
@@ -69,7 +65,7 @@ void PhysicsManager::detectHeroCollision(){
 			}
 			if (node) {
 				cout << "Nodo que colisiona con el hero: " << node->getName() << "\n" << endl;
-				if(Ogre::StringUtil::startsWith(node->getName(),"sceneThread")){
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){
 
 					//Eliminar SceneNode, Entity y Cuerpo Fisico asi--------------
 					Entity* _e = static_cast<Entity*>(node->getAttachedObject(0));
@@ -81,6 +77,14 @@ void PhysicsManager::detectHeroCollision(){
 					cout << "Puntuacion : " << _hero->getScore() << endl;
 					//------------------
 					//-------------------------------------------------------------
+				}
+
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
+
+					
+					PlayState::getSingletonPtr()->changeScenarioQ();
+
+
 				}
 			}
 

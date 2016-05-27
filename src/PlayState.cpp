@@ -93,6 +93,12 @@ PlayState::enter ()
   //-----------------------
   _exitGame = false;
 
+  //Animations---------------------------------------------------------------
+  _animEnemy = _sceneMgr->getEntity("E_Enemy")->getAnimationState("walkEnemy");
+  _animEnemy->setEnabled(true);
+  _animEnemy->setLoop(true);
+  _animEnemy->setTimePosition(0.0);
+  //---------------------------------------------------------------------------
 }
 
 void
@@ -244,7 +250,7 @@ PlayState::CreateInitialWorld() {
 
   //HILO-------------------------------------------------------------------------------
   Entity *entityThread = _sceneMgr->createEntity("EntThread", "thread.mesh");
-  SceneNode *nodeThread = _sceneMgr->getRootSceneNode()->createChildSceneNode("sceneThread");
+  SceneNode *nodeThread = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Thread");
   nodeThread->attachObject(entityThread);
   
   Vector3 sizeThread = Vector3::ZERO; 
@@ -264,7 +270,7 @@ PlayState::CreateInitialWorld() {
   bodyShapeThread = trimeshConverterThread->createConvex();
 
   //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-  rigidBodyThread = new OgreBulletDynamics::RigidBody("sceneThread", _world);
+  rigidBodyThread = new OgreBulletDynamics::RigidBody("SN_Thread", _world);
 
   rigidBodyThread->setShape(nodeThread, bodyShapeThread,
          0.0 /* Restitucion */, 0.9 /* Friccion */,
@@ -274,6 +280,41 @@ PlayState::CreateInitialWorld() {
   //Propiedades del cuerpo fisico--------------------------------------
   rigidBodyThread->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
   rigidBodyThread->disableDeactivation();
+  //-------------------------------------------------------------------
+  //------------------------------------------------------------------------------------
+
+  //HILO-------------------------------------------------------------------------------
+  Entity *entityReel = _sceneMgr->createEntity("EntReel", "Bobina.mesh");
+  SceneNode *nodeReel = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Reel");
+  nodeReel->attachObject(entityReel);
+  
+  Vector3 sizeReel = Vector3::ZERO; 
+  Vector3 positionReel = Vector3(20,3,0);
+ 
+  OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterReel = NULL; 
+  OgreBulletCollisions::CollisionShape *bodyShapeReel = NULL;
+  OgreBulletDynamics::RigidBody *rigidBodyReel = NULL;
+
+  AxisAlignedBox boundingBReel = entityReel->getBoundingBox();
+  sizeReel = boundingBReel.getSize();
+  sizeReel *= nodeReel->getScale(); 
+  sizeReel /= 2.0f;   // El tamano en Bullet se indica desde el centro
+
+  trimeshConverterReel = new
+      OgreBulletCollisions::StaticMeshToShapeConverter(entityReel);
+  bodyShapeReel = trimeshConverterReel->createConvex();
+
+  //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
+  rigidBodyReel = new OgreBulletDynamics::RigidBody("SN_Reel", _world);
+
+  rigidBodyReel->setShape(nodeReel, bodyShapeReel,
+         0.0 /* Restitucion */, 0.9 /* Friccion */,
+         0.0 /* Masa */, positionReel /* Posicion inicial */,
+         Quaternion::IDENTITY /* Orientacion */);
+
+  //Propiedades del cuerpo fisico--------------------------------------
+  rigidBodyReel->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
+  rigidBodyReel->disableDeactivation();
   //-------------------------------------------------------------------
   //------------------------------------------------------------------------------------
 
@@ -416,6 +457,18 @@ PlayState::frameStarted
   _movementManager->moveEnemies(_deltaT);
   //----------------------
   
+
+  //Animations--------------------------------
+  if (_animEnemy != NULL) {
+    if (_animEnemy->hasEnded()) {
+      _animEnemy->setTimePosition(0.0);
+      _animEnemy->setEnabled(false);
+    }
+    else {
+      _animEnemy->addTime(_deltaT);
+    }
+  }
+  //--------------------------------------------
 
   return true;
 }
@@ -951,7 +1004,7 @@ void PlayState::createScenario(){
 		case LevelRoom:
 			for(int i=0;i<3;i++ ){
 				String aux=Ogre::StringConverter::toString(i + _numModules);
-				Entity* _entScn = _sceneMgr->createEntity("LevelRoomEnt"+aux, "escenario1.mesh");
+				Entity* _entScn = _sceneMgr->createEntity("LevelRoomEnt"+aux, "escenario.mesh");
 				SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("LevelRoomSN"+aux);
 				_nodeScn->attachObject(_entScn);
 				_nodeScn->yaw(Degree(270));

@@ -70,7 +70,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
 
   bool frameStarted (const Ogre::FrameEvent& evt);
   bool frameEnded (const Ogre::FrameEvent& evt);
-
+  void changeScenarioQ();
+  
   // Heredados de Ogre::Singleton.
   static PlayState& getSingleton ();
   static PlayState* getSingletonPtr ();
@@ -82,7 +83,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   Ogre::SceneManager* _sceneMgr;
   Ogre::Viewport* _viewport;
   Ogre::Camera* _camera;
-  Ogre::AnimationState *_animBowNormal;
+  Ogre::AnimationState *_animEnemy;
   
   Real _deltaT;
   bool _exitGame;
@@ -117,7 +118,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   void updateGUI();
 
   void changeScenario(Scenario nextScenario);
-  void changeScenarioQ();
+  
   bool deleteScenario();
   void createScenario();
   void createAllWalls();
