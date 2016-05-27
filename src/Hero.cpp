@@ -10,7 +10,7 @@
 
 #define INITIAL_LIVES 1
 #define NUM_JUMPS 1
-#define DEFAULT_LIVES 1
+#define DEFAULT_LIVES 3
 
 Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreBulletCollisions::CollisionShape* collShape){
 	_sNode = sNode;

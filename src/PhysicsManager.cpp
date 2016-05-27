@@ -1,5 +1,6 @@
 #include "PhysicsManager.h"
 #include "PlayState.h"
+#include "MovementManager.h"
 using namespace Ogre;
 
 #define N_JUMPS 1
@@ -64,7 +65,7 @@ void PhysicsManager::detectHeroCollision(){
 				_aux=obB;
 			}
 			if (node) {
-				cout << "Nodo que colisiona con el hero: " << node->getName() << "\n" << endl;
+				//cout << "Nodo que colisiona con el hero: " << node->getName() << "\n" << endl;
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){
 
 					//Eliminar SceneNode, Entity y Cuerpo Fisico asi--------------
@@ -80,12 +81,15 @@ void PhysicsManager::detectHeroCollision(){
 				}
 
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
-
-					
 					PlayState::getSingletonPtr()->changeScenarioQ();
-
-
 				}
+				//Colision con enemigo------------------------------------------
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
+					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+					_hero->loseLife();
+					cout << "Vidas : " << _hero->getLives() << endl;
+				}
+				//--------------------------------------------------------------
 			}
 
 		}

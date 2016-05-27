@@ -289,7 +289,7 @@ PlayState::CreateInitialWorld() {
   nodeReel->attachObject(entityReel);
   
   Vector3 sizeReel = Vector3::ZERO; 
-  Vector3 positionReel = Vector3(20,3,0);
+  Vector3 positionReel = Vector3(20,6,-10);
  
   OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterReel = NULL; 
   OgreBulletCollisions::CollisionShape *bodyShapeReel = NULL;
