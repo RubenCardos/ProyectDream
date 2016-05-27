@@ -75,11 +75,13 @@ PlayState::enter ()
   //-------------------
 
   //Crear el MovementManager
-  _movementManager = new MovementManager(_sceneMgr,_hero,_enemies);
+  //_movementManager = new MovementManager(_sceneMgr,_hero,_enemies);
+  _movementManager = new MovementManager(_sceneMgr,_hero,_gameEntities);
   //-------------------
 
   //Crear el PhysicsManager
-    _physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_enemies);
+    //_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_enemies);
+  _physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_gameEntities);
   //-------------------
 
   //Iniciacion Variables---
@@ -294,8 +296,8 @@ PlayState::CreateInitialWorld() {
   //-----------------------------------------------------
 
   //CUBO PRUEBA PJ----------------------------------------
-  Entity *entity = _sceneMgr->createEntity("EntCube", "TeddyBear/tedybear.mesh");
-  SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube");
+  Entity *entity = _sceneMgr->createEntity("E_Hero", "TeddyBear/tedybear.mesh");
+  SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Hero");
   node->attachObject(entity);
   node->attachObject(_camera);
   
@@ -316,7 +318,7 @@ PlayState::CreateInitialWorld() {
   bodyShape = trimeshConverter->createConvex();
 
   //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-  rigidBody = new OgreBulletDynamics::RigidBody("SNCube", _world);
+  rigidBody = new OgreBulletDynamics::RigidBody("RB_Hero", _world);
 
   rigidBody->setShape(node, bodyShape,
          0.0 /* Restitucion */, 0.9 /* Friccion */,
@@ -336,8 +338,8 @@ PlayState::CreateInitialWorld() {
   //-----------------------------------------------------------------------------
 
   //Enemigo----------------------------------------
-   Entity *entity1 = _sceneMgr->createEntity("EntCube1", "Enemies/Level 1/enemy.mesh");
-   SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNCube1");
+   Entity *entity1 = _sceneMgr->createEntity("E_Enemy", "Enemies/Level 1/enemy.mesh");
+   SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Enemy");
    node1->attachObject(entity1);
 
    Vector3 size1 = Vector3::ZERO;
@@ -356,7 +358,7 @@ PlayState::CreateInitialWorld() {
    bodyShape1 = trimeshConverter->createConvex();
 
    //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-   rigidBody1 = new OgreBulletDynamics::RigidBody("SNCube1", _world);
+   rigidBody1 = new OgreBulletDynamics::RigidBody("RB_Enemy", _world);
 
    rigidBody1->setShape(node1, bodyShape1,
           0.0 /* Restitucion */, 0.9 /* Friccion */,
@@ -379,6 +381,8 @@ PlayState::CreateInitialWorld() {
   //crear el vector de enemigos. De momento, con un enemigo---
   _enemies = new std::vector<Enemy*>();
   _enemies->push_back(enemy);
+  _gameEntities = new std::vector<GameEntity*>();
+  _gameEntities->push_back(enemy);
   //-------------------------------------------------
 
   // Anadimos los objetos a las deques--
@@ -884,7 +888,7 @@ bool PlayState::deleteScenario(){
 	    	while(iterator.hasMoreElements()){
 	    	        Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
 	    	        if(Ogre::StringUtil::startsWith(e->getName(),"LevelGardenEnt")){
-	    	        	_sceneMgr->destroyEntity(e); //detach node from parent
+	    	        	_sceneMgr->destroyEntity(e);
 	    	        }
 	    	}
 	    	while (it.hasMoreElements()){
@@ -899,7 +903,7 @@ bool PlayState::deleteScenario(){
 	    	while(iterator.hasMoreElements()){
 	    		Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
 	    		if(Ogre::StringUtil::startsWith(e->getName(),"LevelRoomEnt")){
-	    			_sceneMgr->destroyEntity(e); //detach node from parent
+	    			_sceneMgr->destroyEntity(e);
 	    		}
 	    	}
 	    	while (it.hasMoreElements()){

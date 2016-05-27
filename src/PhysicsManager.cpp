@@ -4,18 +4,18 @@ using namespace Ogre;
 #define N_JUMPS 1
 #define JUMP_EPSILON 0.01
 
-PhysicsManager::PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<Enemy*>* enemies){
+PhysicsManager::PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<GameEntity*>* gameEntities){
 	_sceneMgr = sceneMgr;
 	_world = world;
 	_hero = hero;
-	_enemies = enemies;
+	_gameEntities = gameEntities;
 }
 
 PhysicsManager::~PhysicsManager(){
 	/*delete _sceneMgr;
 	delete _world
 	delete _hero;
-	delete _enemies;*/
+	delete _gameEntities;*/
 }
 
 template<> PhysicsManager* Ogre::Singleton<PhysicsManager>::msSingleton = 0;
@@ -98,8 +98,8 @@ Hero* PhysicsManager::getHero(){
 	return _hero;
 }
 
-std::vector<Enemy*>* PhysicsManager::getEnemies(){
-	return _enemies;
+std::vector<GameEntity*>* PhysicsManager::getGameEntities(){
+	return _gameEntities;
 }
 
 void PhysicsManager::setSceneManager(Ogre::SceneManager* sceneMgr){
@@ -110,6 +110,23 @@ void PhysicsManager::setHero(Hero* hero){
 	_hero = hero;
 }
 
-void PhysicsManager::setEnemies(std::vector<Enemy*>* enemies){
-	_enemies = enemies;
+void PhysicsManager::setGameEntities(std::vector<GameEntity*>* gameEntities){
+	_gameEntities = gameEntities;
+}
+void PhysicsManager::removeGameEntity(unsigned int index){
+	//GameEntity* gameEntity = new GameEntity();
+	//gameEntity = _gameEntities->at(index);
+	std::string sAux = _gameEntities->at(index)->getSceneNode()->getName();
+	Entity* entity = static_cast<Entity*>(_gameEntities->at(index)->getSceneNode()->getAttachedObject(0));
+	//remove entity
+	_sceneMgr->destroyEntity(entity);
+	//remove sceneNode
+	_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
+	_sceneMgr->destroySceneNode(sAux);
+	//remove GameEntity
+	delete _gameEntities->at(index);
+	_gameEntities->erase(_gameEntities->begin()+index);
+	//delete gameEntity;
+
+
 }

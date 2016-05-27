@@ -16,7 +16,8 @@ using namespace Ogre;
 class MovementManager : public Ogre::Singleton<MovementManager>
 {
  public:
-  MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies);
+  //MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies);
+  MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<GameEntity*>* gameEntities);
   ~MovementManager();
 
   void moveHero(Ogre::Vector3* movement, Ogre::Real deltaT);
@@ -26,11 +27,13 @@ class MovementManager : public Ogre::Singleton<MovementManager>
 
   Ogre::SceneManager* getSceneManager();
   Hero* getHero();
-  std::vector<Enemy*>* getEnemies();
+  //std::vector<Enemy*>* getEnemies();
+  std::vector<GameEntity*>* getGameEntities();
 
   void setSceneManager(Ogre::SceneManager* sceneMgr);
   void setHero(Hero* hero);
-  void setEnemies(std::vector<Enemy*>* enemies);
+  //void setEnemies(std::vector<Enemy*>* enemies);
+  void setGameEntities(std::vector<GameEntity*>* gameEntities);
   
   // Heredados de Ogre::Singleton.
   static MovementManager& getSingleton ();
@@ -41,7 +44,8 @@ class MovementManager : public Ogre::Singleton<MovementManager>
  protected:
   Ogre::SceneManager* _sceneMgr;
   Hero* _hero;
-  std::vector<Enemy*>* _enemies;
+  //std::vector<Enemy*>* _enemies;
+  std::vector<GameEntity*>* _gameEntities;
   int _jumps;
   Ogre::Real _heroCoMPositionY; //Posicion del centro de masa del heroe (En reposo, con respecto del suelo)
 };

@@ -4,13 +4,13 @@ using namespace Ogre;
 #define N_JUMPS 1
 #define JUMP_EPSILON 0.01
 
-MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies){
+MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<GameEntity*>* gameEntities){
 	_sceneMgr = sceneMgr;
 	_hero = hero;
-	_enemies = enemies;
+	//_enemies = enemies;
+	_gameEntities = gameEntities;
 	_hero->setNumJumps(N_JUMPS);
 	_jumps = _hero->getNumJumps();
-	//_heroCoMPositionY = _hero->getRigidBody()->getCenterOfMassPosition().y;
 	_heroCoMPositionY = _hero->getRigidBody()->getCenterOfMassPosition().y;
 	std::cout << "CENTER OF MASS POSITION " << _heroCoMPositionY <<std::endl;
 }
@@ -83,11 +83,17 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 
 void MovementManager::moveEnemies(Ogre::Real deltaT){
 	//mas adelante, cuando esten los enemigos hechos
-	Enemy *enemy = _enemies->at(0);
-	Ogre::Vector3 _currentSpeed = enemy->getRigidBody()->getLinearVelocity();
-	//enemy->getRigidBody()->setLinearVelocity(enemy->getSpeed());
-	if(_currentSpeed.squaredLength() < enemy->getMovementSpeed()){
-		enemy->getRigidBody()->applyImpulse(enemy->getSpeed() ,enemy->getRigidBody()->getCenterOfMassPosition());
+	std::string s_aux = "";
+	for(unsigned int i=0; i<_gameEntities->size();i++){
+		s_aux = _gameEntities->at(i)->getSceneNode()->getName();
+		if(Ogre::StringUtil::startsWith(s_aux,"SN_Enemy")){
+			Enemy* enemy = static_cast<Enemy*>(_gameEntities->at(i));
+			Ogre::Vector3 _currentSpeed = enemy->getRigidBody()->getLinearVelocity();
+			//enemy->getRigidBody()->setLinearVelocity(enemy->getSpeed());
+			if(_currentSpeed.squaredLength() < enemy->getMovementSpeed()){
+				enemy->getRigidBody()->applyImpulse(enemy->getSpeed() ,enemy->getRigidBody()->getCenterOfMassPosition());
+			}
+		}
 	}
 }
 
@@ -99,8 +105,8 @@ Hero* MovementManager::getHero(){
 	return _hero;
 }
 
-std::vector<Enemy*>* MovementManager::getEnemies(){
-	return _enemies;
+std::vector<GameEntity*>* MovementManager::getGameEntities(){
+	return _gameEntities;
 }
 
 void MovementManager::setSceneManager(Ogre::SceneManager* sceneMgr){
@@ -111,6 +117,6 @@ void MovementManager::setHero(Hero* hero){
 	_hero = hero;
 }
 
-void MovementManager::setEnemies(std::vector<Enemy*>* enemies){
-	_enemies = enemies;
+void MovementManager::setGameEntities(std::vector<GameEntity*>* gameEntities){
+	_gameEntities = gameEntities;
 }

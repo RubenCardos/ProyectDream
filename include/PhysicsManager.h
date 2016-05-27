@@ -16,21 +16,23 @@ using namespace Ogre;
 class PhysicsManager : public Ogre::Singleton<PhysicsManager>
 {
  public:
-  PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<Enemy*>* enemies);
+  PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<GameEntity*>* gameEntities);
   ~PhysicsManager();
 
   void detectHeroCollision();
 
   Ogre::SceneManager* getSceneManager();
   Hero* getHero();
-  std::vector<Enemy*>* getEnemies();
+  std::vector<GameEntity*>* getGameEntities();
   OgreBulletDynamics::DynamicsWorld * getWorld();
 
   void setSceneManager(Ogre::SceneManager* sceneMgr);
   void setHero(Hero* hero);
-  void setEnemies(std::vector<Enemy*>* enemies);
+  void setGameEntities(std::vector<GameEntity*>* gameEntities);
   void setWorld(OgreBulletDynamics::DynamicsWorld * world);
-  
+
+  void removeGameEntity(unsigned int index);
+
   // Heredados de Ogre::Singleton.
   static PhysicsManager& getSingleton ();
   static PhysicsManager* getSingletonPtr ();
@@ -38,7 +40,7 @@ class PhysicsManager : public Ogre::Singleton<PhysicsManager>
  protected:
   Ogre::SceneManager* _sceneMgr;
   Hero* _hero;
-  std::vector<Enemy*>* _enemies;
+  std::vector<GameEntity*>* _gameEntities;
   OgreBulletDynamics::DynamicsWorld * _world;
 };
 
