@@ -6,12 +6,18 @@
 #include "Shapes/OgreBulletCollisionsTrimeshShape.h"    
 #include "Utils/OgreBulletCollisionsMeshToShapeConverter.h"
 #include "Shapes/OgreBulletCollisionsSphereShape.h"
+#include "Shapes/OgreBulletCollisionsBoxShape.h"
 #include "OgreBulletCollisionsRay.h"
 
-#define FLOOR_POSITION_Y -10.0;  // PONERLO BIEN
-#define FLOOR_POSITION_Z 0.0;
-#define LWALL_POSITION_Z 0.0;
-#define RWALL_POSITION_Z 10.0;
+#define FLOOR_POSITION_Y -12.0;  // PONERLO BIEN
+#define FLOOR_POSITION_Z 4.0;
+//#define WALLL_POSITION_Z -13.0;
+//#define WALLR_POSITION_Z -20.0;
+#define WALLL_POSITION_Y 5.0;
+#define WALLL_POSITION_Z -13.0;
+#define WALLR_POSITION_Y 5.0;
+#define WALLR_POSITION_Z 19.0;
+
 
 using namespace std;
 
@@ -133,7 +139,7 @@ void
 PlayState::CreateInitialWorld() {
   
   //Suelo Infinito NO TOCAR---------------------------------
-  Plane plane1(Vector3(0,1,0), 0);    // Normal y distancia
+  Plane plane1(Vector3(0,1,0), -3);    // Normal y distancia  (antes estaba a 0)
   MeshManager::getSingleton().createPlane("p1",
   ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
   1000, 1000, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
@@ -150,15 +156,15 @@ PlayState::CreateInitialWorld() {
   // Creamos forma de colision para el plano ----------------------- 
   OgreBulletCollisions::CollisionShape *Shape;
   Shape = new OgreBulletCollisions::StaticPlaneCollisionShape
-    (Ogre::Vector3(0,1,0), 0);   // Vector normal y distancia
+    (Ogre::Vector3(0,1,0), -3);   // Vector normal y distancia (antes estaba a 0)
   OgreBulletDynamics::RigidBody *rigidBodyPlane = new 
     OgreBulletDynamics::RigidBody("ground", _world);
 
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
-  rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8); 
+  rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8);
 
   // Anadimos los objetos Shape y RigidBody ------------------------
-  _shapes.push_back(Shape);  
+  _shapes.push_back(Shape);
   _bodies.push_back(rigidBodyPlane);
 
   //Prueba LVL1-------------------------------------------------
@@ -254,7 +260,7 @@ PlayState::CreateInitialWorld() {
   nodeThread->attachObject(entityThread);
   
   Vector3 sizeThread = Vector3::ZERO; 
-  Vector3 positionThread = Vector3(5,3,0);
+  Vector3 positionThread = Vector3(8,3,0);
  
   OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterThread = NULL; 
   OgreBulletCollisions::CollisionShape *bodyShapeThread = NULL;
@@ -320,7 +326,7 @@ PlayState::CreateInitialWorld() {
 
 
   //CREAR LAS PAREDES
-  //createAllWalls();
+  createAllWalls();
   //------------------------------------------------------------
 
 
@@ -1042,24 +1048,33 @@ void PlayState::createAllWalls(){
 	_walls->clear();
 
 	//Muro de la izquierda
-	position.z = LWALL_POSITION_Z;
+	position.z = WALLL_POSITION_Z;
+	position.y = WALLL_POSITION_Y;
 	name = LeftWall;
-	gameEntity = createGameEntity("LWall", "cube.mesh", position);
-	wall = new Wall(gameEntity->getSceneNode(), gameEntity->getRigidBody(), gameEntity->getCollisionShape(), name);
+	gameEntity = createGameEntity("WallL", "cube.mesh", position);
+	wall = new Wall();
+	wall->setSceneNode(gameEntity->getSceneNode());
+	wall->setRigidBody(gameEntity->getRigidBody());
 	_walls->push_back(wall);
 
 	//Muro de la derecha
-	position.z = RWALL_POSITION_Z;
+	position.z = WALLR_POSITION_Z;
+	position.y = WALLR_POSITION_Y;
 	name = RightWall;
-	gameEntity = createGameEntity("RWall", "cube.mesh", position);
-	wall = new Wall(gameEntity->getSceneNode(), gameEntity->getRigidBody(), gameEntity->getCollisionShape(), name);
+	gameEntity = createGameEntity("WallR", "cube.mesh", position);
+	wall = new Wall();
+	wall->setSceneNode(gameEntity->getSceneNode());
+	wall->setRigidBody(gameEntity->getRigidBody());
 	_walls->push_back(wall);
 
 	//Suelo
 	position.z = FLOOR_POSITION_Z;
+	position.y = FLOOR_POSITION_Y;
 	name = Floor;
 	gameEntity = createGameEntity("Floor", "cube.mesh", position);
-	wall = new Wall(gameEntity->getSceneNode(), gameEntity->getRigidBody(), gameEntity->getCollisionShape(), name);
+	wall = new Wall();
+	wall->setSceneNode(gameEntity->getSceneNode());
+	wall->setRigidBody(gameEntity->getRigidBody());
 	_walls->push_back(wall);
 
 }
@@ -1069,27 +1084,51 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
 	GameEntity* gameEntity;
 	Ogre::SceneNode* node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_" + name);
-	node->scale(5.0,5.0,1.0);
 	Entity *entity = _sceneMgr->createEntity("E_" + name, "cube.mesh");
 	node->attachObject(entity);
 
-	OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter =
-			new OgreBulletCollisions::StaticMeshToShapeConverter(entity);
-	OgreBulletCollisions::CollisionShape *bodyShape = trimeshConverter->createConvex();
+	OgreBulletDynamics::RigidBody* rigidBody;
+	OgreBulletCollisions::BoxCollisionShape* bodyShape;
 
-	OgreBulletDynamics::RigidBody* rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world);
+	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor")){
+		if(Ogre::StringUtil::startsWith(name,"WallB")){
+			//para la pared trasera, (1,10,20) quiza
+			node->scale(1,10,20);
+			bodyShape = new OgreBulletCollisions::BoxCollisionShape(Ogre::Vector3(1,10,20));
+		}
+		else if(Ogre::StringUtil::startsWith(name,"Floor")){
+			//para el suelo, (40,1,20) quiza (cambiar el 20 por la longitud de 2 0 3 modulos)
+			node->scale(40,1,16);
+			bodyShape = new OgreBulletCollisions::BoxCollisionShape(Ogre::Vector3(40,1,16));
+		}
+		else{
+			node->scale(40,10,1); //para paredes laterales //cambiar el 40 por la longitud de 2 o 3 modulos de nivel
+			bodyShape = new OgreBulletCollisions::BoxCollisionShape(Ogre::Vector3(40,10,1));
+		}
 
-	rigidBody->setShape(node, bodyShape,
-			0.0 /* Restitucion */, 0.9 /* Friccion */,
-			100.0 /* Masa */, position /* Posicion inicial */,
-			Quaternion::IDENTITY /* Orientacion */);
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world);
+		rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.6f/*Friccion*/, 100.0f/*Masa*/, position);
+	}
+	else{
+		OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter =
+					new OgreBulletCollisions::StaticMeshToShapeConverter(entity);
+		OgreBulletCollisions::CollisionShape *bodyShape = trimeshConverter->createConvex();
+
+		OgreBulletDynamics::RigidBody* rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world);
+
+		rigidBody->setShape(node, bodyShape,
+				0.0 /* Restitucion */, 0.9 /* Friccion */,
+				100.0 /* Masa */, position /* Posicion inicial */,
+				Quaternion::IDENTITY /* Orientacion */);
+	}
+
+
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBody->disableDeactivation();
 
-	gameEntity = new GameEntity(node, rigidBody, bodyShape);
+	gameEntity = new GameEntity();
+	gameEntity->setSceneNode(node);
+	gameEntity->setRigidBody(rigidBody);
 
 	return gameEntity;
 }
-
-
-//Arreglado fallo al volver a un nivel en el que ya has estado (los SceneNode no se destruyen bien). Creado método para crear escenarios, cambios en el método para destruir escenarios y creado nuevo método para cambiar escenarios.

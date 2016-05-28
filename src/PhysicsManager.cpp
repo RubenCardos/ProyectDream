@@ -80,11 +80,7 @@ void PhysicsManager::detectHeroCollision(){
 				}
 
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
-
-					
 					PlayState::getSingletonPtr()->changeScenarioQ();
-
-
 				}
 			}
 
