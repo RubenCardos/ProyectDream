@@ -27,20 +27,17 @@ class GameEntity
 {
  public:
   GameEntity() {}
-  GameEntity(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreBulletCollisions::CollisionShape* collShape);
+  GameEntity(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody);
   ~GameEntity();
 
   Ogre::SceneNode* getSceneNode();
-  OgreBulletCollisions::CollisionShape* getCollisionShape();
   OgreBulletDynamics::RigidBody* getRigidBody();
 
   void setSceneNode(Ogre::SceneNode* sceneNode);
-  void setCollisionShape(OgreBulletCollisions::CollisionShape* collisionShape);
   void setRigidBody(OgreBulletDynamics::RigidBody* rigidBody);
 
  protected:
   Ogre::SceneNode* _sNode;
-  OgreBulletCollisions::CollisionShape* _collShape;
   OgreBulletDynamics::RigidBody* _rigBody;
 };
 

@@ -78,10 +78,11 @@ void MovementManager::moveEnemies(Ogre::Real deltaT){
 }
 
 void MovementManager::moveWalls(Ogre::Vector3* movement, Ogre::Real deltaT){
-	Ogre::Vector3 mov = *movement;
+	Ogre::Vector3 mov = _hero->getRigidBody()->getLinearVelocity();
 	mov.z = 0.0;
 	for(unsigned int i=0; i<_walls->size();i++){
-		_walls->at(i)->getRigidBody()->applyImpulse(mov * 20, _walls->at(i)->getRigidBody()->getCenterOfMassPosition());
+		//_walls->at(i)->getRigidBody()->applyImpulse(mov * 20, _walls->at(i)->getRigidBody()->getCenterOfMassPosition());
+		_walls->at(i)->getRigidBody()->setLinearVelocity(mov);
 	}
 }
 
