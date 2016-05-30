@@ -65,44 +65,33 @@ void PhysicsManager::detectHeroCollision(){
 				_aux=obB;
 			}
 			if (node) {
-				//cout << "Nodo que colisiona con el hero: " << node->getName() << "\n" << endl;
+				cout << "Hero choca con: " << node->getName() << "\n" << endl;
 
-				//Colision con el suelo nuevo--
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
-					//cout << "Colision con el suelo" << "\n" << endl;
+					if(_hero->getRigidBody()->getLinearVelocity().z < 0.0){
+						if(_hero->getNumJumps() < N_JUMPS){
+							_hero->setNumJumps(N_JUMPS);
+						}
+					}
 				}
-				//-----------------------------
-
-				//Colision con paredes nuevas--
-				if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallR")){
-					//cout << "Colision derecha" << "\n" << endl;
-				}
-				//----------------------------
-
-				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){
-
+				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){
 					//Eliminar SceneNode, Entity y Cuerpo Fisico asi--------------
 					Entity* _e = static_cast<Entity*>(node->getAttachedObject(0));
 					_sceneMgr->destroyEntity(_e);
 					_sceneMgr->getRootSceneNode()->removeChild(node);
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
-					//Sumo puntuacion---
+					//------------------------------------------------------------
 					_hero->increaseScore(10);
-					cout << "Puntuacion : " << _hero->getScore() << endl;
-					//------------------
-					//-------------------------------------------------------------
+					//Actualizar los puntos en la UI
 				}
-
-				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
+				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
 					PlayState::getSingletonPtr()->changeScenarioQ();
 				}
-				//Colision con enemigo------------------------------------------
-				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
-					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
 					_hero->loseLife();
-					cout << "Vidas : " << _hero->getLives() << endl;
+					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+					//Actualizar las vidas en la UI
 				}
-				//--------------------------------------------------------------
 			}
 
 		}
@@ -135,8 +124,6 @@ void PhysicsManager::setGameEntities(std::vector<GameEntity*>* gameEntities){
 	_gameEntities = gameEntities;
 }
 void PhysicsManager::removeGameEntity(unsigned int index){
-	//GameEntity* gameEntity = new GameEntity();
-	//gameEntity = _gameEntities->at(index);
 	std::string sAux = _gameEntities->at(index)->getSceneNode()->getName();
 	Entity* entity = static_cast<Entity*>(_gameEntities->at(index)->getSceneNode()->getAttachedObject(0));
 	//remove entity
