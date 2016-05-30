@@ -160,7 +160,7 @@ PlayState::CreateInitialWorld() {
   Shape = new OgreBulletCollisions::StaticPlaneCollisionShape
     (Ogre::Vector3(0,1,0), -3);   // Vector normal y distancia (antes estaba a 0)
   OgreBulletDynamics::RigidBody *rigidBodyPlane = new 
-    OgreBulletDynamics::RigidBody("ground", _world,PhysicsMask::COL_StaticWalls);
+    OgreBulletDynamics::RigidBody("ground", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
 
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
   rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8);
@@ -215,7 +215,7 @@ PlayState::CreateInitialWorld() {
   ShapeWallRight = new OgreBulletCollisions::StaticPlaneCollisionShape
     (Ogre::Vector3(0,0,-1), -20);   // Vector normal y distancia
   OgreBulletDynamics::RigidBody *rigidBodyPlaneWallRight = new 
-    OgreBulletDynamics::RigidBody("WallRight", _world,PhysicsMask::COL_StaticWalls);
+    OgreBulletDynamics::RigidBody("WallRight", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
 
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
   rigidBodyPlaneWallRight->setStaticShape(ShapeWallRight, 0.1, 0.8); 
@@ -244,7 +244,7 @@ PlayState::CreateInitialWorld() {
   ShapeWallLeft = new OgreBulletCollisions::StaticPlaneCollisionShape
     (Ogre::Vector3(0,0,1), -13);   // Vector normal y distancia
   OgreBulletDynamics::RigidBody *rigidBodyPlaneWallLeft = new 
-    OgreBulletDynamics::RigidBody("WallLeft", _world,PhysicsMask::COL_StaticWalls);
+    OgreBulletDynamics::RigidBody("WallLeft", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
 
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
   rigidBodyPlaneWallLeft->setStaticShape(ShapeWallLeft, 0.1, 0.8); 
@@ -278,7 +278,7 @@ PlayState::CreateInitialWorld() {
   bodyShapeThread = trimeshConverterThread->createConvex();
 
   //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-  rigidBodyThread = new OgreBulletDynamics::RigidBody("SN_Thread", _world,PhysicsMask::COL_Thread);
+  rigidBodyThread = new OgreBulletDynamics::RigidBody("SN_Thread", _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
 
   rigidBodyThread->setShape(nodeThread, bodyShapeThread,
          0.0 /* Restitucion */, 0.9 /* Friccion */,
@@ -313,7 +313,7 @@ PlayState::CreateInitialWorld() {
   bodyShapeReel = trimeshConverterReel->createConvex();
 
   //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-  rigidBodyReel = new OgreBulletDynamics::RigidBody("SN_Reel", _world,PhysicsMask::COL_Reel);
+  rigidBodyReel = new OgreBulletDynamics::RigidBody("SN_Reel", _world,PhysicsMask::COL_Reel,PhysicsMask::reel_collides_with);
 
   rigidBodyReel->setShape(nodeReel, bodyShapeReel,
          0.0 /* Restitucion */, 0.9 /* Friccion */,
