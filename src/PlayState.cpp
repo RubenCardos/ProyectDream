@@ -84,7 +84,7 @@ PlayState::enter ()
 
   //Crear el MovementManager
   //_movementManager = new MovementManager(_sceneMgr,_hero,_enemies);
-  _movementManager = new MovementManager(_sceneMgr,_hero,_gameEntities,_walls);
+  _movementManager = new MovementManager(_sceneMgr,_hero,_enemies,_walls);
   //-------------------
 
   //Crear el PhysicsManager
@@ -1115,7 +1115,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		}
 
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
-		rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.6f/*Friccion*/, 100.0f/*Masa*/, position);
+		rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
 	}
 	else{
 		OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter =
@@ -1129,7 +1129,6 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 				100.0 /* Masa */, position /* Posicion inicial */,
 				Quaternion::IDENTITY /* Orientacion */);
 	}
-
 
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBody->disableDeactivation();
