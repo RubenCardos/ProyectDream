@@ -11,6 +11,7 @@
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include "GameEntity.h"
+#include "AI_Manager.h"
 
 using namespace Ogre;
 
@@ -46,6 +47,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   Hero* _hero;
   std::vector<Enemy*>* _enemies;
   std::vector<Wall*>* _walls;
+  AI_Manager* _aiManager;
 };
 
 #endif

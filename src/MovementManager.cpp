@@ -10,8 +10,7 @@ MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::
 	_enemies = enemies;
 	_walls= walls;
 	_hero->setNumJumps(N_JUMPS);
-	//std::cout << "CENTER OF MASS POSITION " << _heroCoMPositionY <<std::endl;
-	//luego cambiar lo del reseteo de los saltos de centro de masa a colision con el suelo
+	_aiManager = new AI_Manager(_hero,_enemies);
 }
 
 MovementManager::~MovementManager(){
@@ -19,6 +18,7 @@ MovementManager::~MovementManager(){
 	delete _hero;
 	delete _enemies;
 	delete _walls;
+	delete _aiManager;
 }
 
 template<> MovementManager* Ogre::Singleton<MovementManager>::msSingleton = 0;
@@ -36,9 +36,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement, Ogre::Real deltaT){
 	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
-		if(std::abs(movement->z - 0.0) <= 0.01){ //
-			moveWalls(movement, deltaT);
-		}
+		moveWalls(movement, deltaT);
 	}
 }
 
@@ -61,10 +59,13 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 	_hero->getRigidBody()->getBulletRigidBody()->setWorldTransform(initialTransform);
 	_hero->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
 	//mMotionState->setWorldTransform(initialTransform);
+
+	//Creo que hay que reposicionar las paredes y el suelo tambien
 }
 
 void MovementManager::moveEnemies(Ogre::Real deltaT){
-	//mas adelante, cuando esten los enemigos hechos
+	//Cuando esté hecho el AI_Manager, mover a cada enemigo usando la speed calculada por el AI_Manager
+	_aiManager->updateEnemyMovement(deltaT);
 	for(unsigned int i=0; i<_enemies->size();i++){
 		Enemy* enemy = static_cast<Enemy*>(_enemies->at(i));
 		Ogre::Vector3 _currentSpeed = enemy->getRigidBody()->getLinearVelocity();
@@ -77,9 +78,10 @@ void MovementManager::moveEnemies(Ogre::Real deltaT){
 }
 
 void MovementManager::moveWalls(Ogre::Vector3* movement, Ogre::Real deltaT){
-	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
+	Ogre::Vector3 mov = *movement;
+	mov.z = 0.0;
 	for(unsigned int i=0; i<_walls->size();i++){
-		_walls->at(i)->getRigidBody()->applyImpulse(*movement * 20, _walls->at(i)->getRigidBody()->getCenterOfMassPosition());
+		_walls->at(i)->getRigidBody()->applyImpulse(mov * 20, _walls->at(i)->getRigidBody()->getCenterOfMassPosition());
 	}
 }
 
