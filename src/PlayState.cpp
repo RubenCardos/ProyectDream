@@ -260,7 +260,7 @@ PlayState::CreateInitialWorld() {
   nodeThread->attachObject(entityThread);
   
   Vector3 sizeThread = Vector3::ZERO; 
-  Vector3 positionThread = Vector3(8,3,0);
+  Vector3 positionThread = Vector3(8,3,-10);
  
   OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterThread = NULL; 
   OgreBulletCollisions::CollisionShape *bodyShapeThread = NULL;
@@ -780,6 +780,10 @@ PlayState::updateGUI()
 {
 
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+
+  //Actualizo la puntuacion------------
+  sheet->getChild("background_wnd2")->getChild("textPoints")->setText(Ogre::StringConverter::toString(_hero->getScore()));
+  //----------------------------------
   
 }
 

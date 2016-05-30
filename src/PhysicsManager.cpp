@@ -66,6 +66,19 @@ void PhysicsManager::detectHeroCollision(){
 			}
 			if (node) {
 				//cout << "Nodo que colisiona con el hero: " << node->getName() << "\n" << endl;
+
+				//Colision con el suelo nuevo--
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
+					cout << "Colision con el suelo" << "\n" << endl;
+				}
+				//-----------------------------
+
+				//Colision con paredes nuevas--
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallR")){
+					cout << "Colision derecha" << "\n" << endl;
+				}
+				//----------------------------
+
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){
 
 					//Eliminar SceneNode, Entity y Cuerpo Fisico asi--------------
