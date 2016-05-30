@@ -5,6 +5,7 @@
 #include <OgreSingleton.h>
 #include "Enemy.h"
 #include "Hero.h"
+#include "Wall.h"
 
 #include <OgreBulletDynamicsRigidBody.h>
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
@@ -17,7 +18,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
 {
  public:
   //MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies);
-  MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<GameEntity*>* gameEntities);
+  MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<GameEntity*>* gameEntities,std::vector<Wall*>* walls);
   ~MovementManager();
 
   void moveHero(Ogre::Vector3* movement, Ogre::Real deltaT);
@@ -46,6 +47,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   Hero* _hero;
   //std::vector<Enemy*>* _enemies;
   std::vector<GameEntity*>* _gameEntities;
+  std::vector<Wall*>* _walls;
   int _jumps;
   Ogre::Real _heroCoMPositionY; //Posicion del centro de masa del heroe (En reposo, con respecto del suelo)
 };

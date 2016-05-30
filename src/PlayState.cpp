@@ -82,7 +82,7 @@ PlayState::enter ()
 
   //Crear el MovementManager
   //_movementManager = new MovementManager(_sceneMgr,_hero,_enemies);
-  _movementManager = new MovementManager(_sceneMgr,_hero,_gameEntities);
+  _movementManager = new MovementManager(_sceneMgr,_hero,_gameEntities,_walls);
   //-------------------
 
   //Crear el PhysicsManager

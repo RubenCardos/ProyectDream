@@ -69,13 +69,13 @@ void PhysicsManager::detectHeroCollision(){
 
 				//Colision con el suelo nuevo--
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
-					cout << "Colision con el suelo" << "\n" << endl;
+					//cout << "Colision con el suelo" << "\n" << endl;
 				}
 				//-----------------------------
 
 				//Colision con paredes nuevas--
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallR")){
-					cout << "Colision derecha" << "\n" << endl;
+					//cout << "Colision derecha" << "\n" << endl;
 				}
 				//----------------------------
 

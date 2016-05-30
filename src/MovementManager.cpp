@@ -4,11 +4,12 @@ using namespace Ogre;
 #define N_JUMPS 1
 #define JUMP_EPSILON 0.01
 
-MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<GameEntity*>* gameEntities){
+MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<GameEntity*>* gameEntities,std::vector<Wall*>* walls){
 	_sceneMgr = sceneMgr;
 	_hero = hero;
 	//_enemies = enemies;
 	_gameEntities = gameEntities;
+	_walls= walls;
 	_hero->setNumJumps(N_JUMPS);
 	_jumps = _hero->getNumJumps();
 	_heroCoMPositionY = _hero->getRigidBody()->getCenterOfMassPosition().y;
@@ -39,6 +40,22 @@ void MovementManager::moveHero(Ogre::Vector3* movement, Ogre::Real deltaT){
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
 	}
+	//Muevo los muros a la par que el heroe-------------
+	if(movement->x!=0){
+		for(unsigned int i = 0; i < _walls->size();i++){
+			Wall* _aux = _walls->at(i);
+			cout << "Wall: " << _aux->getSceneNode()->getName() << endl;
+			Vector3 _wallMovement = *movement;
+			_wallMovement.y=0;
+			_wallMovement.z=0;
+			if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
+				_aux->getRigidBody()->applyImpulse(_wallMovement, _aux->getRigidBody()->getCenterOfMassPosition());
+			}
+
+		}
+	}
+
+	//----------------------------------------------------
 	
 }
 
