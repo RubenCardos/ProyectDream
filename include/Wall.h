@@ -34,7 +34,7 @@ class Wall : public GameEntity{
  public:
   Wall() {}
   Wall(WallType type);
-  Wall(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreBulletCollisions::CollisionShape* collShape, WallType type);
+  Wall(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, WallType type);
   ~Wall();
 
   WallType getType();

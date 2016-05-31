@@ -11,16 +11,14 @@
 #define INITIAL_LIVES 1
 #define NUM_JUMPS 1
 
-Wall::Wall(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreBulletCollisions::CollisionShape* collShape, WallType type){
+Wall::Wall(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, WallType type){
 	_sNode = sNode;
 	_rigBody = rigBody;
-	_collShape = collShape;
 	_type = type;
 }
 
 Wall::~Wall(){
 	delete _sNode;
-	delete _collShape;
 	delete _rigBody;
 }
 

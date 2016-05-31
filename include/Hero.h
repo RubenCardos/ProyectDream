@@ -11,7 +11,7 @@ class Hero : public GameEntity
 {
  public:
   Hero() {}
-  Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreBulletCollisions::CollisionShape* collShape);
+  Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody);
   ~Hero();
 
   int getScore();

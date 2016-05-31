@@ -11,7 +11,7 @@ class Enemy : public GameEntity
 {
  public:
   Enemy() {}
-  Enemy(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreBulletCollisions::CollisionShape* collShape, std::string type);
+  Enemy(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, std::string type);
   ~Enemy();
 
   std::string getType();

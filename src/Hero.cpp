@@ -12,10 +12,9 @@
 #define NUM_JUMPS 1
 #define DEFAULT_LIVES 3
 
-Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreBulletCollisions::CollisionShape* collShape){
+Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
 	_sNode = sNode;
 	_rigBody = rigBody;
-	_collShape = collShape;
 	_lives = INITIAL_LIVES;
 	_score = 0;
 	_movementspeed=50.0;
@@ -27,7 +26,6 @@ Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreB
 
 Hero::~Hero(){
 	delete _sNode;
-	delete _collShape;
 	delete _rigBody;
 }
 

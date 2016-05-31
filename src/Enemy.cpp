@@ -11,10 +11,9 @@
 #define DEFAULT_LIVES 1
 #define DEFAULT_POINTS 10
 
-Enemy::Enemy(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, OgreBulletCollisions::CollisionShape* collShape, std::string type){
+Enemy::Enemy(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, std::string type){
 	_sNode = sNode;
 	_rigBody = rigBody;
-	_collShape = collShape;
 	_type = type;
 	_points = DEFAULT_POINTS;
 	_movementspeed=50.0;
@@ -24,7 +23,6 @@ Enemy::Enemy(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, Ogr
 
 Enemy::~Enemy(){
 	delete _sNode;
-	delete _collShape;
 	delete _rigBody;
 }
 
