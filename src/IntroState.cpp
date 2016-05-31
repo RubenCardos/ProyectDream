@@ -302,7 +302,7 @@ IntroState::keyPressed
   // Transición al siguiente estado.
   // Espacio --> PlayState
   if (e.key == OIS::KC_SPACE) {
-    changeState(MenuState::getSingletonPtr());
+    changeState(PlayState::getSingletonPtr());
   }
 
   CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyDown(static_cast<CEGUI::Key::Scan>(e.key));

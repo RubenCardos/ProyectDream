@@ -63,6 +63,20 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 	//Creo que hay que reposicionar las paredes y el suelo tambien
 }
 
+void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 position,btQuaternion orientation){
+	btTransform initialTransform;
+
+	initialTransform.setOrigin(position);
+	initialTransform.setRotation(orientation);
+	//initialTransform.setRotation(orientation);
+
+	gameentity->getRigidBody()->getBulletRigidBody()->setWorldTransform(initialTransform);
+	gameentity->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
+	//mMotionState->setWorldTransform(initialTransform);
+
+	//Creo que hay que reposicionar las paredes y el suelo tambien
+}
+
 void MovementManager::moveEnemies(Ogre::Real deltaT){
 	//Cuando esté hecho el AI_Manager, mover a cada enemigo usando la speed calculada por el AI_Manager
 	_aiManager->updateEnemyMovement(deltaT);
@@ -80,6 +94,7 @@ void MovementManager::moveEnemies(Ogre::Real deltaT){
 void MovementManager::moveWalls(Ogre::Vector3* movement, Ogre::Real deltaT){
 	Ogre::Vector3 mov = _hero->getRigidBody()->getLinearVelocity();
 	mov.z = 0.0;
+	mov.y = 0.0;
 	for(unsigned int i=0; i<_walls->size();i++){
 		//_walls->at(i)->getRigidBody()->applyImpulse(mov * 20, _walls->at(i)->getRigidBody()->getCenterOfMassPosition());
 		_walls->at(i)->getRigidBody()->setLinearVelocity(mov);

@@ -41,6 +41,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   static MovementManager* getSingletonPtr ();
 
   void repositionHero(btVector3 position,btQuaternion orientation);
+  void repositionGameEntity(GameEntity* gameentity,btVector3 position,btQuaternion orientation);
   
  protected:
   Ogre::SceneManager* _sceneMgr;

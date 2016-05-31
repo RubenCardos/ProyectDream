@@ -131,6 +131,8 @@ void PhysicsManager::removeGameEntity(unsigned int index){
 	//remove sceneNode
 	_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
 	_sceneMgr->destroySceneNode(sAux);
+	//remove rigidbody
+	
 	//remove GameEntity
 	delete _gameEntities->at(index);
 	_gameEntities->erase(_gameEntities->begin()+index);
