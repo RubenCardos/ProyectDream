@@ -20,17 +20,19 @@ MenuState::enter ()
   
    
   //Camara--------------------
-  _camera->setNearClipDistance(5);
-  _camera->setFarClipDistance(10000);
-  //-----------------------------
+    _camera->setPosition(Ogre::Vector3(-40,10,0));
+    _camera->lookAt(Ogre::Vector3(0,0,0));
+    _camera->setNearClipDistance(5);
+    _camera->setFarClipDistance(10000);
+    //-----------------------------
 
   // Creacion de los elementos iniciales del mundo
   CreateInitialWorld();
   createGUI();
 
   _exitGame = false;
-
   
+
     
 }
 
@@ -61,8 +63,32 @@ MenuState::resume()
 
 void 
 MenuState::CreateInitialWorld() {
+	//Luces--------------------------------------------------------------
+	Light* _sunLight = _sceneMgr->createLight("SunLight");
+	_sunLight->setPosition(200, 200, 200);
+	_sunLight->setType(Light::LT_SPOTLIGHT);
+	_sunLight->setDiffuseColour(.20, .20, 0);
+	_sunLight->setSpotlightRange(Degree(30), Degree(50));
+
+	Ogre::Vector3 _dir= -_sunLight->getPosition().normalisedCopy();
+	_sunLight->setDirection(_dir);
+
+
+	Light* _directionalLight = _sceneMgr->createLight("DirectionalLight");
+	_directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);
+    _directionalLight->setDirection(Ogre::Vector3(0, -1, 1));
+     //------------------------------------------------------------------------------
+
+     //Doors-------------------------------------------------------------------------------
+     Entity* _entDoorR = _sceneMgr->createEntity("E_doorRoom","doorRoom.mesh");
+     SceneNode* _sneceDoorR = _sceneMgr->createSceneNode("SN_doorRoom");
+     _sneceDoorR->attachObject(_entDoorR);
+     _sceneMgr->getRootSceneNode()->addChild(_sneceDoorR);
+     //---------------------------------------------------------------------
 
 }
+
+
 
 bool
 MenuState::frameStarted
