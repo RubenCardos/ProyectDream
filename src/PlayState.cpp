@@ -1304,13 +1304,15 @@ void PlayState::createTestGameEntities(){
 
 	//2 GameEntities de Lucia
 	GameEntity* gameEntity = new GameEntity();
-	Ogre::Vector3 positionRoom(25,0,5);
+	Ogre::Vector3 positionRoom(25,0,7);
 	Ogre::Vector3 scaleRoom = Ogre::Vector3(1,1,1);
 	gameEntity = createGameEntity("doorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
+	gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 
-	Ogre::Vector3 positionGarden(25,0,-5);
+	Ogre::Vector3 positionGarden(25,0,-7);
 	Ogre::Vector3 scaleGarden = Ogre::Vector3(1,1,1);
 	gameEntity = createGameEntity("doorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
+	gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 }
 
 
