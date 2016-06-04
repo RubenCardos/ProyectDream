@@ -199,7 +199,7 @@ PlayState::CreateInitialWorld() {
   //Paredes Laterales--------------------------
   
   //Pared Grafica---------------------------------
-  Plane plane2(Vector3(0,0,-1), -20);    // Normal y distancia
+  /*Plane plane2(Vector3(0,0,-1), -20);    // Normal y distancia
   MeshManager::getSingleton().createPlane("p2",
   ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2,
   1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
@@ -222,6 +222,7 @@ PlayState::CreateInitialWorld() {
 
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
   rigidBodyPlaneWallRight->setStaticShape(ShapeWallRight, 0.1, 0.8); 
+
 
   // Anadimos los objetos Shape y RigidBody ------------------------
   _shapes.push_back(ShapeWallRight);  
@@ -252,9 +253,11 @@ PlayState::CreateInitialWorld() {
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
   rigidBodyPlaneWallLeft->setStaticShape(ShapeWallLeft, 0.1, 0.8); 
 
+
+
   // Anadimos los objetos Shape y RigidBody ------------------------
   _shapes.push_back(ShapeWallLeft);  
-  _bodies.push_back(rigidBodyPlaneWallLeft);
+  _bodies.push_back(rigidBodyPlaneWallLeft);*/
 
   //---------------------------------------------------------------------
 
@@ -1154,15 +1157,32 @@ void PlayState::createBossRoom(){
 		GameEntity* gameEntity = new GameEntity();
 		Wall* wall;
 
-		/*for(int i=0; i<_walls->size(); i++){
-			_physicsManager->removeGameEntity(_walls->at(i)->getSceneNode()->getName());
-		}*/
+
+		//Aviso al MovementManager-----------------
+		_movementManager->setBossRoom(true);
+		//-----------------------------------------
+
+		//Hay que eliminar todas las GameEntities-------------------------------------------------------------
+
+		//----------------------------------------------------------------------------------------------------
+
+		//Elimino Muros Antiguos-------------------------------------------------------------------------------
+		for(int i=0; i<_walls->size(); i++){
+			Wall* aux = _walls->at(i);
+			//Elimino el SceneNode, la entidad y el cuerpo de colision---
+			Entity* _e = static_cast<Entity*>(aux->getSceneNode()->getAttachedObject(0));
+			_sceneMgr->destroyEntity(_e);
+			_sceneMgr->getRootSceneNode()->removeChild(aux->getSceneNode());
+			_world->getBulletDynamicsWorld()->removeCollisionObject(aux->getRigidBody()->getBulletObject());
+			//------------------------------------------------------------
+		}
+		//--------------------------------------------------------------------------------------------------------
 
 		_walls = new std::vector<Wall*>();
 		_walls->clear();
 
 		//Muro de la izquierda--------
-		position.z = WALLL_POSITION_Z + BOSS_ROOM;
+		/*position.z = WALLL_POSITION_Z + BOSS_ROOM;
 		position.y = WALLL_POSITION_Y;
 		//name = LeftWall;
 		scale = Ogre::Vector3(40,10,1);
@@ -1180,7 +1200,7 @@ void PlayState::createBossRoom(){
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
-		_walls->push_back(wall);
+		_walls->push_back(wall);*/
 
 		/*
 		//Muro delantero--------
@@ -1208,7 +1228,7 @@ void PlayState::createBossRoom(){
 		position.z = FLOOR_POSITION_Z + BOSS_ROOM;
 		position.y = FLOOR_POSITION_Y;
 		//name = Floor;
-		scale = Ogre::Vector3(40,1,16);
+		scale = Ogre::Vector3(100,1,100);
 		gameEntity = createGameEntity("FloorBoss", "cube.mesh", position, scale);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
@@ -1228,4 +1248,7 @@ void PlayState::createBossRoom(){
 		_movementManager->setWalls(_walls);
 		_bossRoom = true;
 	}
+
+
 }
+

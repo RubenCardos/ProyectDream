@@ -1,4 +1,6 @@
 #include "MovementManager.h"
+#include "PlayState.h"
+
 using namespace Ogre;
 
 #define N_JUMPS 1
@@ -11,6 +13,7 @@ MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::
 	_walls= walls;
 	_hero->setNumJumps(N_JUMPS);
 	_aiManager = new AI_Manager(_hero,_enemies);
+	_inBossRoom = false;
 }
 
 MovementManager::~MovementManager(){
@@ -36,7 +39,10 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
-		moveWalls();
+		if(_inBossRoom==false){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
+			moveWalls();
+		}
+
 	}
 }
 
@@ -132,4 +138,8 @@ void MovementManager::setEnemies(std::vector<Enemy*>* enemies){
 
 void MovementManager::setWalls(std::vector<Wall*>* walls){
 	_walls = walls;
+}
+
+void MovementManager::setBossRoom(bool aux){
+	_inBossRoom=aux;
 }
