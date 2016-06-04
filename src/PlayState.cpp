@@ -98,17 +98,16 @@ PlayState::enter ()
   _desp = Vector3(0,0,0);
   _despPtr = new Vector3(0,0,0);
   _despPtr = &_desp;
-  _currentScenario=LevelGarden;
   _numModules = 0;
   _bossRoom = false;
   //-----------------------
   _exitGame = false;
 
   //Animations---------------------------------------------------------------
-  _animEnemy = _sceneMgr->getEntity("E_Enemy")->getAnimationState("walkEnemy");
-  _animEnemy->setEnabled(true);
-  _animEnemy->setLoop(true);
-  _animEnemy->setTimePosition(0.0);
+  //_animEnemy = _sceneMgr->getEntity("E_Enemy")->getAnimationState("walkEnemy");
+  //_animEnemy->setEnabled(true);
+  //_animEnemy->setLoop(true);
+  //_animEnemy->setTimePosition(0.0);
   //---------------------------------------------------------------------------
 }
 
@@ -143,6 +142,7 @@ PlayState::resume()
 void 
 PlayState::CreateInitialWorld() {
   
+  
   //Suelo Infinito NO TOCAR---------------------------------
   Plane plane1(Vector3(0,1,0), -3);    // Normal y distancia  (antes estaba a 0)
   MeshManager::getSingleton().createPlane("p1",
@@ -172,30 +172,15 @@ PlayState::CreateInitialWorld() {
   _shapes.push_back(Shape);
   _bodies.push_back(rigidBodyPlane);
 
-  //Prueba LVL1-------------------------------------------------
-  /*for(int i=0;i<3;i++ ){
-    String aux=Ogre::StringConverter::toString(i);
-    Entity* _entScn = _sceneMgr->createEntity("EntGarden"+aux, "escenario2.mesh");
-	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNGarden"+aux);
-	  _nodeScn->attachObject(_entScn);
-	  _nodeScn->yaw(Degree(270));
-	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
-	  _nodeScn->translate(Vector3(230*i,0,0));
-
-	  std::cout << "meter trozo de escenario en vector" << std::endl;
-	  _vScenario.push_back(_nodeScn);
-	  std::cout << "trozo de escenario en vector metido" << std::endl;
-  }*/
-
-  _currentScenario = Menu;
-  _nextScenario = LevelGarden;
-  createScenario();
+  
   
   //------------------------------------------------------------
 
 
   
-  
+  _currentScenario = Menu;
+  _nextScenario = LevelGarden;
+  createScenario(_currentScenario);
   //Paredes Laterales--------------------------
   
   //Pared Grafica---------------------------------
@@ -262,85 +247,10 @@ PlayState::CreateInitialWorld() {
   //---------------------------------------------------------------------
 
 
-  //HILO-------------------------------------------------------------------------------
-  Entity *entityThread = _sceneMgr->createEntity("EntThread", "thread.mesh");
-  SceneNode *nodeThread = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Thread");
-  nodeThread->attachObject(entityThread);
   
-  Vector3 sizeThread = Vector3::ZERO; 
-  Vector3 positionThread = Vector3(8,3,0);
- 
-  OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterThread = NULL; 
-  OgreBulletCollisions::CollisionShape *bodyShapeThread = NULL;
-  OgreBulletDynamics::RigidBody *rigidBodyThread = NULL;
 
-  AxisAlignedBox boundingBThread = entityThread->getBoundingBox();
-  sizeThread = boundingBThread.getSize();
-  sizeThread *= nodeThread->getScale(); 
-  sizeThread /= 2.0f;   // El tamano en Bullet se indica desde el centro
 
-  trimeshConverterThread = new
-      OgreBulletCollisions::StaticMeshToShapeConverter(entityThread);
-  bodyShapeThread = trimeshConverterThread->createConvex();
-
-  //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-  rigidBodyThread = new OgreBulletDynamics::RigidBody("SN_Thread", _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
-
-  rigidBodyThread->setShape(nodeThread, bodyShapeThread,
-         0.0 /* Restitucion */, 0.9 /* Friccion */,
-         0.0 /* Masa */, positionThread /* Posicion inicial */,
-         Quaternion::IDENTITY /* Orientacion */);
-
-  //Propiedades del cuerpo fisico--------------------------------------
-  rigidBodyThread->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
-  rigidBodyThread->disableDeactivation();
-  //-------------------------------------------------------------------
-  //------------------------------------------------------------------------------------
-
-  //HILO-------------------------------------------------------------------------------
-  Entity *entityReel = _sceneMgr->createEntity("EntReel", "Bobina.mesh");
-  SceneNode *nodeReel = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Reel");
-  nodeReel->attachObject(entityReel);
   
-  Vector3 sizeReel = Vector3::ZERO; 
-  Vector3 positionReel = Vector3(20,6,0);
- 
-  OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterReel = NULL; 
-  OgreBulletCollisions::CollisionShape *bodyShapeReel = NULL;
-  OgreBulletDynamics::RigidBody *rigidBodyReel = NULL;
-
-  AxisAlignedBox boundingBReel = entityReel->getBoundingBox();
-  sizeReel = boundingBReel.getSize();
-  sizeReel *= nodeReel->getScale(); 
-  sizeReel /= 2.0f;   // El tamano en Bullet se indica desde el centro
-
-  trimeshConverterReel = new
-      OgreBulletCollisions::StaticMeshToShapeConverter(entityReel);
-  bodyShapeReel = trimeshConverterReel->createConvex();
-
-  //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-  rigidBodyReel = new OgreBulletDynamics::RigidBody("SN_Reel", _world,PhysicsMask::COL_Reel,PhysicsMask::reel_collides_with);
-
-  rigidBodyReel->setShape(nodeReel, bodyShapeReel,
-         0.0 /* Restitucion */, 0.9 /* Friccion */,
-         0.0 /* Masa */, positionReel /* Posicion inicial */,
-         Quaternion::IDENTITY /* Orientacion */);
-
-  //Propiedades del cuerpo fisico--------------------------------------
-  rigidBodyReel->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
-  rigidBodyReel->disableDeactivation();
-  //-------------------------------------------------------------------
-  //------------------------------------------------------------------------------------
-
-
-  //CREAR LAS PAREDES
-  createAllWalls();
-  //------------------------------------------------------------
-
-
-  //SkyBox-------------------------------------
-  _sceneMgr->setSkyBox(true, "MatSkyboxlvl2");
-  //-------------------------------------------
   
   //LUCES------------------------------------------------
   Light* _directionalLight = _sceneMgr->createLight("DirectionalLight");
@@ -351,7 +261,7 @@ PlayState::CreateInitialWorld() {
   //-----------------------------------------------------
 
   //PJ----------------------------------------
-  Entity *entity = _sceneMgr->createEntity("E_Hero", "TeddyBear/tedybear.mesh");
+  Entity *entity = _sceneMgr->createEntity("E_Hero", "tedybear.mesh");
   SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Hero");
   node->attachObject(entity);
   node->attachObject(_camera);
@@ -394,53 +304,7 @@ PlayState::CreateInitialWorld() {
   _hero->setMovementSpeed(150.0);
   //-----------------------------------------------------------------------------
 
-  //Enemigo----------------------------------------
-   Entity *entity1 = _sceneMgr->createEntity("E_Enemy", "Enemies/Level 1/enemy.mesh");
-   SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Enemy");
-   node1->attachObject(entity1);
-
-   Vector3 size1 = Vector3::ZERO;
-   Vector3 position1 = Vector3(30,1.5,3.5);
-
-   OgreBulletCollisions::CollisionShape *bodyShape1 = NULL;
-   OgreBulletDynamics::RigidBody *rigidBody1 = NULL;
-
-   AxisAlignedBox boundingB1 = entity1->getBoundingBox();
-   size1 = boundingB1.getSize();
-   size1 *= node1->getScale();
-   size1 /= 2.0f;   // El tamano en Bullet se indica desde el centro
-
-   trimeshConverter = new
-       OgreBulletCollisions::StaticMeshToShapeConverter(entity1);
-   bodyShape1 = trimeshConverter->createConvex();
-
-   //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-   rigidBody1 = new OgreBulletDynamics::RigidBody("RB_Enemy", _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
-
-   rigidBody1->setShape(node1, bodyShape1,
-          0.0 /* Restitucion */, 0.9 /* Friccion */,
-          5.0 /* Masa */, position1 /* Posicion inicial */,
-          Quaternion::IDENTITY /* Orientacion */);
-
-   //Propiedades del cuerpo fisico--------------------------------------
-   rigidBody1->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
-   rigidBody1->disableDeactivation();
-   //-------------------------------------------------------------------
-
-   //creamos el Enemy para que contenga lo anterior, el sceneNode y el RigidBody---
-   Enemy *enemy = new Enemy();
-   enemy->setSceneNode(node1);
-   enemy->setRigidBody(rigidBody1);
-   enemy->setMovementSpeed(50.0);
-   enemy->setSpeed(Ogre::Vector3(-1,0,0));
-   //-----------------------------------------------------------------------------
-
-  //crear el vector de enemigos. De momento, con un enemigo---
-  _enemies = new std::vector<Enemy*>();
-  _enemies->push_back(enemy);
-  _gameEntities = new std::vector<GameEntity*>();
-  _gameEntities->push_back(enemy);
-  //-------------------------------------------------
+  
 
   // Anadimos los objetos a las deques--
   _shapes.push_back(bodyShape);   
@@ -470,7 +334,7 @@ PlayState::frameStarted
 
   //Movimiento------------
   _movementManager->moveHero(_despPtr);
-  _movementManager->moveEnemies();
+  //_movementManager->moveEnemies();
   //----------------------
   
 
@@ -937,7 +801,7 @@ void PlayState::changeScenarioQ(){
 	deleteScenario();
 
 	cout << "Voy a : " << _nextScenario << endl;
-	createScenario();
+	createScenario(_nextScenario);
 
 }
 
@@ -956,11 +820,37 @@ bool PlayState::deleteScenario(){
 
 	SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
 	Ogre::SceneManager::MovableObjectIterator iterator = _sceneMgr->getMovableObjectIterator("Entity");
+  std::deque<OgreBulletDynamics::RigidBody *>::iterator itBody = _bodies.begin();
 	std::string sAux = "";
+  SceneNode node= NULL;
 
 	switch(_currentScenario) {
 	    case Menu:
-	      /* circle stuff */
+        while(iterator.hasMoreElements()){
+                Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
+                if(Ogre::StringUtil::startsWith(e->getName(),"E_doorRoom") || Ogre::StringUtil::startsWith(e->getName(),"E_doorGarden")){
+                  _sceneMgr->destroyEntity(e);
+                }
+        }
+        while (it.hasMoreElements()){
+          sAux = it.getNext()->getName();
+          if(Ogre::StringUtil::startsWith(sAux,"SN_doorGarden") || Ogre::StringUtil::startsWith(sAux,"E_doorGarden")){
+            _sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
+            _sceneMgr->destroySceneNode(sAux);
+
+          }
+        }
+
+      /*  while (_bodies.end() != itBody)
+        {   
+          node = itBody.getSceneNode();
+          if(Ogre::StringUtil::startsWith(sAux,"RB_doorGarden") || Ogre::StringUtil::startsWith(sAux,"RB_doorGarden")){
+            delete *itBody; 
+            
+
+          }
+            ++itBody;
+        }    */
 	      break;
 	    case LevelGarden:
 	    	//iterator = _sceneMgr->getMovableObjectIterator("Entity");
@@ -999,7 +889,7 @@ bool PlayState::deleteScenario(){
 	return _vScenario.empty();
 }
 
-void PlayState::createScenario(){
+void PlayState::createScenario(Scenario _nextScenario){
 	//por si acaso, antes de crear, borrar.
 	//deleteScenario();
 
@@ -1007,10 +897,22 @@ void PlayState::createScenario(){
 	//Creo el nuevo escenario---
 	Entity* _ground = _sceneMgr->getEntity("planeEnt");
 	switch(_nextScenario) {
-		case Menu:
-			/* circle stuff */
+		case Menu:{
+      std::cout << "Menu " << _nextScenario <<std::endl;
+      createAllWalls();
+      _nextScenario=LevelGarden;
+
+      GameEntity* gameEntity = new GameEntity();
+      Ogre::Vector3 positionRoom(25,0,5);
+      Ogre::Vector3 scaleRoom = Ogre::Vector3(1,1,1);
+      gameEntity = createGameEntity("doorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
+
+      Ogre::Vector3 positionGarden(25,0,-5);
+      Ogre::Vector3 scaleGarden = Ogre::Vector3(1,1,1);
+      gameEntity = createGameEntity("doorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
 			break;
-		case LevelGarden:
+    }
+		case LevelGarden:{
 			for(int i=0;i<3;i++ ){
 				String aux=Ogre::StringConverter::toString(i + _numModules);
 				Entity* _entScn = _sceneMgr->createEntity("LevelGardenEnt"+aux, "escenario2.mesh");
@@ -1026,7 +928,126 @@ void PlayState::createScenario(){
 			_currentScenario = _nextScenario;
 			_nextScenario = LevelRoom;
 			_numModules += 3;
+     // createAllWalls();
+      _sceneMgr->setSkyBox(true, "MatSkyboxlvl2");
+      //HILO-------------------------------------------------------------------------------
+      Entity* entityThread = _sceneMgr->createEntity("EntThread", "thread.mesh");
+      SceneNode* nodeThread = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Thread");
+      nodeThread->attachObject(entityThread);
+      
+      Vector3 sizeThread = Vector3::ZERO; 
+      Vector3 positionThread = Vector3(8,3,0);
+     
+      OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterThread = NULL; 
+      OgreBulletCollisions::CollisionShape *bodyShapeThread = NULL;
+      OgreBulletDynamics::RigidBody *rigidBodyThread = NULL;
+
+      AxisAlignedBox boundingBThread = entityThread->getBoundingBox();
+      sizeThread = boundingBThread.getSize();
+      sizeThread *= nodeThread->getScale(); 
+      sizeThread /= 2.0f;   // El tamano en Bullet se indica desde el centro
+
+      trimeshConverterThread = new
+          OgreBulletCollisions::StaticMeshToShapeConverter(entityThread);
+      bodyShapeThread = trimeshConverterThread->createConvex();
+
+      //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
+      rigidBodyThread = new OgreBulletDynamics::RigidBody("SN_Thread", _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
+
+      rigidBodyThread->setShape(nodeThread, bodyShapeThread,
+             0.0 /* Restitucion */, 0.9 /* Friccion */,
+             0.0 /* Masa */, positionThread /* Posicion inicial */,
+             Quaternion::IDENTITY /* Orientacion */);
+
+      //Propiedades del cuerpo fisico--------------------------------------
+      rigidBodyThread->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
+      rigidBodyThread->disableDeactivation();
+      //-------------------------------------------------------------------
+      //------------------------------------------------------------------------------------
+
+      //BOBINA-------------------------------------------------------------------------------
+      Entity *entityReel = _sceneMgr->createEntity("EntReel", "Bobina.mesh");
+      SceneNode *nodeReel = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Reel");
+      nodeReel->attachObject(entityReel);
+      
+      Vector3 sizeReel = Vector3::ZERO; 
+      Vector3 positionReel = Vector3(20,6,0);
+     
+      OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterReel = NULL; 
+      OgreBulletCollisions::CollisionShape *bodyShapeReel = NULL;
+      OgreBulletDynamics::RigidBody *rigidBodyReel = NULL;
+
+      AxisAlignedBox boundingBReel = entityReel->getBoundingBox();
+      sizeReel = boundingBReel.getSize();
+      sizeReel *= nodeReel->getScale(); 
+      sizeReel /= 2.0f;   // El tamano en Bullet se indica desde el centro
+
+      trimeshConverterReel = new
+          OgreBulletCollisions::StaticMeshToShapeConverter(entityReel);
+      bodyShapeReel = trimeshConverterReel->createConvex();
+
+      //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
+      rigidBodyReel = new OgreBulletDynamics::RigidBody("SN_Reel", _world,PhysicsMask::COL_Reel,PhysicsMask::reel_collides_with);
+
+      rigidBodyReel->setShape(nodeReel, bodyShapeReel,
+             0.0 /* Restitucion */, 0.9 /* Friccion */,
+             0.0 /* Masa */, positionReel /* Posicion inicial */,
+             Quaternion::IDENTITY /* Orientacion */);
+
+      //Propiedades del cuerpo fisico--------------------------------------
+      rigidBodyReel->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
+      rigidBodyReel->disableDeactivation();
+      //-------------------------------------------------------------------
+      //------------------------------------------------------------------------------------
+      //Enemigo----------------------------------------
+     Entity *entity1 = _sceneMgr->createEntity("E_Enemy", "enemy.mesh");
+     SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Enemy");
+     node1->attachObject(entity1);
+
+     Vector3 size1 = Vector3::ZERO;
+     Vector3 position1 = Vector3(30,1.5,3.5);
+
+     OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter = NULL; 
+     OgreBulletCollisions::CollisionShape *bodyShape1 = NULL;
+     OgreBulletDynamics::RigidBody *rigidBody1 = NULL;
+
+     AxisAlignedBox boundingB1 = entity1->getBoundingBox();
+     size1 = boundingB1.getSize();
+     size1 *= node1->getScale();
+     size1 /= 2.0f;   // El tamano en Bullet se indica desde el centro
+
+     trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(entity1);
+     bodyShape1 = trimeshConverter->createConvex();
+
+     //bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
+     rigidBody1 = new OgreBulletDynamics::RigidBody("RB_Enemy", _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
+
+     rigidBody1->setShape(node1, bodyShape1,
+            0.0 /* Restitucion */, 0.9 /* Friccion */,
+            5.0 /* Masa */, position1 /* Posicion inicial */,
+            Quaternion::IDENTITY /* Orientacion */);
+
+     //Propiedades del cuerpo fisico--------------------------------------
+     rigidBody1->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
+     rigidBody1->disableDeactivation();
+     //-------------------------------------------------------------------
+
+     //creamos el Enemy para que contenga lo anterior, el sceneNode y el RigidBody---
+     Enemy *enemy = new Enemy();
+     enemy->setSceneNode(node1);
+     enemy->setRigidBody(rigidBody1);
+     enemy->setMovementSpeed(50.0);
+     enemy->setSpeed(Ogre::Vector3(-1,0,0));
+     //-----------------------------------------------------------------------------
+
+    //crear el vector de enemigos. De momento, con un enemigo---
+    _enemies = new std::vector<Enemy*>();
+    _enemies->push_back(enemy);
+    _gameEntities = new std::vector<GameEntity*>();
+    _gameEntities->push_back(enemy);
+    //-------------------------------------------------
 			break;
+    }
 		case LevelRoom:
 			for(int i=0;i<3;i++ ){
 				String aux=Ogre::StringConverter::toString(i + _numModules);
@@ -1043,6 +1064,8 @@ void PlayState::createScenario(){
 			_currentScenario = _nextScenario;
 			_nextScenario = LevelGarden;
 			_numModules += 3;
+      //createAllWalls();
+      _sceneMgr->setSkyBox(true, "MaterialSkybox");
 			break;
 	}
 	//-------------------------------
@@ -1111,7 +1134,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
 	GameEntity* gameEntity;
 	Ogre::SceneNode* node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_" + name);
-	Entity *entity = _sceneMgr->createEntity("E_" + name, "cube.mesh");
+	Entity *entity = _sceneMgr->createEntity("E_" + name, mesh);
 	node->attachObject(entity);
 
 	OgreBulletDynamics::RigidBody* rigidBody;
@@ -1131,7 +1154,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world);
 		rigidBody->setShape(node, bodyShape,
 				0.0 /* Restitucion */, 0.9 /* Friccion */,
-				100.0 /* Masa */, position /* Posicion inicial */,
+				0.0 /* Masa */, position /* Posicion inicial */,
 				Quaternion::IDENTITY /* Orientacion */);
 	}
 

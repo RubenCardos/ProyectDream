@@ -92,6 +92,13 @@ void PhysicsManager::detectHeroCollision(){
 					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					//Actualizar las vidas en la UI
 				}
+				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_doorRoom")){
+					
+					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+					PlayState::getSingletonPtr()->changeScenarioQ();
+
+
+				}
 			}
 
 		}

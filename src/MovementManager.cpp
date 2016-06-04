@@ -87,6 +87,7 @@ void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 posi
 void MovementManager::moveEnemies(){
 	//Cuando esté hecho el AI_Manager, mover a cada enemigo usando la speed calculada por el AI_Manager
 	_aiManager->updateEnemyMovement();
+	
 	for(unsigned int i=0; i<_enemies->size();i++){
 		Enemy* enemy = static_cast<Enemy*>(_enemies->at(i));
 		Ogre::Vector3 _currentSpeed = enemy->getRigidBody()->getLinearVelocity();
