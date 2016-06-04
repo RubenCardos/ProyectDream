@@ -830,16 +830,36 @@ bool PlayState::deleteScenario(){
 
 	SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
 	Ogre::SceneManager::MovableObjectIterator iterator = _sceneMgr->getMovableObjectIterator("Entity");
-  std::deque<OgreBulletDynamics::RigidBody *>::iterator itBody = _bodies.begin();
 	std::string sAux = "";
-  SceneNode node= NULL;
+  std::string sAux2 = "";
 
 	switch(_currentScenario) {
-	    case Menu:
+	    case Menu:{
+
+
+        for (int i=0;i<_bodies.size();i++) {  
+            
+            OgreBulletDynamics::RigidBody * rigidBody = static_cast<OgreBulletDynamics::RigidBody *>(_bodies.at(i));
+            cout << "ENTRO 1" << endl;
+            if(rigidBody!=NULL){
+              sAux2=rigidBody->getSceneNode()->getName();
+              cout << "ENTRO 2" << endl;
+              if(Ogre::StringUtil::startsWith(sAux2,"RB_doorGarden") || Ogre::StringUtil::startsWith(sAux2,"RB_doorGarden")){
+                  delete rigidBody;
+                  cout << "ELIMINO RigidBody" << endl;
+              }
+              cout << "ESTOY EN EL FOR" << endl;
+            }
+            
+            
+          }
+       cout << "SALGO DE FOR" << endl;
+
         while(iterator.hasMoreElements()){
                 Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
                 if(Ogre::StringUtil::startsWith(e->getName(),"E_doorRoom") || Ogre::StringUtil::startsWith(e->getName(),"E_doorGarden")){
                   _sceneMgr->destroyEntity(e);
+                 
                 }
         }
         while (it.hasMoreElements()){
@@ -847,21 +867,14 @@ bool PlayState::deleteScenario(){
           if(Ogre::StringUtil::startsWith(sAux,"SN_doorGarden") || Ogre::StringUtil::startsWith(sAux,"E_doorGarden")){
             _sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
             _sceneMgr->destroySceneNode(sAux);
-
-          }
-        }
-
-      /*  while (_bodies.end() != itBody)
-        {   
-          node = itBody.getSceneNode();
-          if(Ogre::StringUtil::startsWith(sAux,"RB_doorGarden") || Ogre::StringUtil::startsWith(sAux,"RB_doorGarden")){
-            delete *itBody; 
             
 
           }
-            ++itBody;
-        }    */
+        }
+      
+
 	      break;
+      }
 	    case LevelGarden:
 	    	//iterator = _sceneMgr->getMovableObjectIterator("Entity");
 	    	while(iterator.hasMoreElements()){
