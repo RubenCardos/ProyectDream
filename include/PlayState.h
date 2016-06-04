@@ -125,6 +125,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   void createScenario(Scenario nextScenario);
   void createAllWalls();
   void createBossRoom();
+  void createTestGameEntities();
   GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale);
   void printAll();
 

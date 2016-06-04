@@ -65,7 +65,7 @@ void PhysicsManager::detectHeroCollision(){
 				_aux=obB;
 			}
 			if (node) {
-				cout << "Hero choca con: " << node->getName() << "\n" << endl;
+				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
 
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
 					if(_hero->getRigidBody()->getLinearVelocity().z < 0.0){
