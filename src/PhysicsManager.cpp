@@ -96,8 +96,6 @@ void PhysicsManager::detectHeroCollision(){
 					
 					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					PlayState::getSingletonPtr()->changeScenarioQ();
-
-
 				}
 			}
 

@@ -837,7 +837,7 @@ bool PlayState::deleteScenario(){
 	    case Menu:{
 
 
-        for (int i=0;i<_bodies.size();i++) {  
+        /*for (int i=0;i<_bodies.size();i++) {
             
             OgreBulletDynamics::RigidBody * rigidBody = static_cast<OgreBulletDynamics::RigidBody *>(_bodies.at(i));
             cout << "ENTRO 1" << endl;
@@ -852,8 +852,19 @@ bool PlayState::deleteScenario(){
             }
             
             
-          }
+          }*/
        cout << "SALGO DE FOR" << endl;
+
+	    //Elimino las puertas-------------------------------------------------------------------------------------
+	    SceneNode* sndoorR = _sceneMgr->getSceneNode("SN_doorRoom");
+	    OgreBulletCollisions::Object* OBdoorRoom =_world->findObject(sndoorR);
+	    _world->getBulletDynamicsWorld()->removeCollisionObject(OBdoorRoom->getBulletObject());
+
+	    SceneNode* sndoorG = _sceneMgr->getSceneNode("SN_doorGarden");
+	    OgreBulletCollisions::Object* OBdoorGarden =_world->findObject(sndoorG);
+	    _world->getBulletDynamicsWorld()->removeCollisionObject(OBdoorGarden->getBulletObject());
+
+	    //--------------------------------------------------------------------------------------------------------
 
         while(iterator.hasMoreElements()){
                 Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
@@ -864,7 +875,7 @@ bool PlayState::deleteScenario(){
         }
         while (it.hasMoreElements()){
           sAux = it.getNext()->getName();
-          if(Ogre::StringUtil::startsWith(sAux,"SN_doorGarden") || Ogre::StringUtil::startsWith(sAux,"E_doorGarden")){
+          if(Ogre::StringUtil::startsWith(sAux,"SN_doorGarden") || Ogre::StringUtil::startsWith(sAux,"SN_doorGarden")){
             _sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
             _sceneMgr->destroySceneNode(sAux);
             
