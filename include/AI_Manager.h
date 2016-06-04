@@ -20,7 +20,7 @@ class AI_Manager : public Ogre::Singleton<AI_Manager>
   AI_Manager(Hero* hero, std::vector<Enemy*>* enemies);
   ~AI_Manager();
 
-  void updateEnemyMovement(Ogre::Real deltaT);
+  void updateEnemyMovement();
 
   Hero* getHero();
   std::vector<Enemy*>* getEnemies();

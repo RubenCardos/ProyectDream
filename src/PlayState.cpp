@@ -19,6 +19,8 @@
 #define WALLL_POSITION_Z -13.0;
 #define WALLR_POSITION_Y 5.0;
 #define WALLR_POSITION_Z 19.0;
+#define BOSS_ROOM 100.0;
+#define BOSS_ROOM_SCALE 3.0;
 
 
 using namespace std;
@@ -98,6 +100,7 @@ PlayState::enter ()
   _despPtr = &_desp;
   _currentScenario=LevelGarden;
   _numModules = 0;
+  _bossRoom = false;
   //-----------------------
   _exitGame = false;
 
@@ -463,8 +466,8 @@ PlayState::frameStarted
   //----------------
 
   //Movimiento------------
-  _movementManager->moveHero(_despPtr,_deltaT);
-  _movementManager->moveEnemies(_deltaT);
+  _movementManager->moveHero(_despPtr);
+  _movementManager->moveEnemies();
   //----------------------
   
 
@@ -583,6 +586,12 @@ PlayState::keyPressed
   // Tecla T --> Test Cambiar Escenario-------
   if (e.key == OIS::KC_T) {
     changeScenarioQ();
+  }
+  //-----------------
+
+  // Tecla B --> Boss Room-------
+  if (e.key == OIS::KC_B) {
+    createBossRoom();
   }
   //-----------------
 
@@ -1049,17 +1058,21 @@ void PlayState::printAll(){
 
 void PlayState::createAllWalls(){
 	Ogre::Vector3 position(0,1.5,0);
+	Ogre::Vector3 scale(1,1,1);
 	WallType name;
 	GameEntity* gameEntity = new GameEntity();
 	Wall* wall;
 	_walls = new std::vector<Wall*>();
 	_walls->clear();
 
+	//para paredes laterales //cambiar el 40 por la longitud de 2 o 3 modulos de nivel
+
 	//Muro de la izquierda
 	position.z = WALLL_POSITION_Z;
 	position.y = WALLL_POSITION_Y;
+	scale = Ogre::Vector3(40,10,1);
 	name = LeftWall;
-	gameEntity = createGameEntity("WallL", "cube.mesh", position);
+	gameEntity = createGameEntity("WallL", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
@@ -1069,25 +1082,28 @@ void PlayState::createAllWalls(){
 	position.z = WALLR_POSITION_Z;
 	position.y = WALLR_POSITION_Y;
 	name = RightWall;
-	gameEntity = createGameEntity("WallR", "cube.mesh", position);
+	gameEntity = createGameEntity("WallR", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
 	_walls->push_back(wall);
 
 	//Suelo
+	//para el suelo, (40,1,20) quiza (cambiar el 20 por la longitud de 2 0 3 modulos)
 	position.z = FLOOR_POSITION_Z;
 	position.y = FLOOR_POSITION_Y;
+	scale = Ogre::Vector3(40,1,16);
 	name = Floor;
-	gameEntity = createGameEntity("Floor", "cube.mesh", position);
+	gameEntity = createGameEntity("Floor", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
 	_walls->push_back(wall);
 
+	//para la pared trasera, (1,10,20) quiza
 }
 
-GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position){
+GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale){
 	std::cout << "Creando GameEntity " << name << std::endl;
 
 	GameEntity* gameEntity;
@@ -1096,23 +1112,10 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 	node->attachObject(entity);
 
 	OgreBulletDynamics::RigidBody* rigidBody;
-	OgreBulletCollisions::BoxCollisionShape* bodyShape;
 
 	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor")){
-		if(Ogre::StringUtil::startsWith(name,"WallB")){
-			//para la pared trasera, (1,10,20) quiza
-			node->scale(1,10,20);
-			bodyShape = new OgreBulletCollisions::BoxCollisionShape(Ogre::Vector3(1,10,20));
-		}
-		else if(Ogre::StringUtil::startsWith(name,"Floor")){
-			//para el suelo, (40,1,20) quiza (cambiar el 20 por la longitud de 2 0 3 modulos)
-			node->scale(40,1,16);
-			bodyShape = new OgreBulletCollisions::BoxCollisionShape(Ogre::Vector3(40,1,16));
-		}
-		else{
-			node->scale(40,10,1); //para paredes laterales //cambiar el 40 por la longitud de 2 o 3 modulos de nivel
-			bodyShape = new OgreBulletCollisions::BoxCollisionShape(Ogre::Vector3(40,10,1));
-		}
+		node->scale(scale);
+		OgreBulletCollisions::BoxCollisionShape* bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
 
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
 		rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
@@ -1122,8 +1125,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 					new OgreBulletCollisions::StaticMeshToShapeConverter(entity);
 		OgreBulletCollisions::CollisionShape *bodyShape = trimeshConverter->createConvex();
 
-		OgreBulletDynamics::RigidBody* rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world);
-
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world);
 		rigidBody->setShape(node, bodyShape,
 				0.0 /* Restitucion */, 0.9 /* Friccion */,
 				100.0 /* Masa */, position /* Posicion inicial */,
@@ -1137,5 +1139,93 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 	gameEntity->setSceneNode(node);
 	gameEntity->setRigidBody(rigidBody);
 
+	std::cout << gameEntity->getSceneNode()->getName() << " " << gameEntity->getRigidBody()->getName() << std::endl;
+	//std::cout << node->getName() << " " << rigidBody->getName() << std::endl;
+	//_gameEntities->push_back(gameEntity);
+
 	return gameEntity;
+}
+
+void PlayState::createBossRoom(){
+	if(!_bossRoom){
+		Ogre::Vector3 position(0,1.5,0);
+		Ogre::Vector3 scale(1,1,1);
+		//WallType name = "";
+		GameEntity* gameEntity = new GameEntity();
+		Wall* wall;
+
+		/*for(int i=0; i<_walls->size(); i++){
+			_physicsManager->removeGameEntity(_walls->at(i)->getSceneNode()->getName());
+		}*/
+
+		_walls = new std::vector<Wall*>();
+		_walls->clear();
+
+		//Muro de la izquierda--------
+		position.z = WALLL_POSITION_Z + BOSS_ROOM;
+		position.y = WALLL_POSITION_Y;
+		//name = LeftWall;
+		scale = Ogre::Vector3(40,10,1);
+		gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
+		wall = new Wall();
+		wall->setSceneNode(gameEntity->getSceneNode());
+		wall->setRigidBody(gameEntity->getRigidBody());
+		_walls->push_back(wall);
+
+		//Muro de la derecha----------
+		position.z = WALLR_POSITION_Z + BOSS_ROOM;
+		position.y = WALLR_POSITION_Y;
+		//name = RightWall;
+		gameEntity = createGameEntity("WallRBoss", "cube.mesh", position, scale);
+		wall = new Wall();
+		wall->setSceneNode(gameEntity->getSceneNode());
+		wall->setRigidBody(gameEntity->getRigidBody());
+		_walls->push_back(wall);
+
+		/*
+		//Muro delantero--------
+		position.z = WALLL_POSITION_Z;
+		position.y = WALLL_POSITION_Y;
+		//name = FrontWall;
+		gameEntity = createGameEntity("WallFBoss", "cube.mesh", position);
+		wall = new Wall();
+		wall->setSceneNode(gameEntity->getSceneNode());
+		wall->setRigidBody(gameEntity->getRigidBody());
+		_walls->push_back(wall);
+
+		//Muro trasero----------
+		position.z = WALLR_POSITION_Z;
+		position.y = WALLR_POSITION_Y;
+		//name = BackWall;
+		gameEntity = createGameEntity("WallBBoss", "cube.mesh", position);
+		wall = new Wall();
+		wall->setSceneNode(gameEntity->getSceneNode());
+		wall->setRigidBody(gameEntity->getRigidBody());
+		_walls->push_back(wall);
+		 */
+
+		//Suelo-----------------------
+		position.z = FLOOR_POSITION_Z + BOSS_ROOM;
+		position.y = FLOOR_POSITION_Y;
+		//name = Floor;
+		scale = Ogre::Vector3(40,1,16);
+		gameEntity = createGameEntity("FloorBoss", "cube.mesh", position, scale);
+		wall = new Wall();
+		wall->setSceneNode(gameEntity->getSceneNode());
+		wall->setRigidBody(gameEntity->getRigidBody());
+		_walls->push_back(wall);
+
+		_movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+		/*//Cambiar posicion de la camara--------------------
+		int y = 10 + BOSS_ROOM;
+		_camera->setPosition(Ogre::Vector3(-40,y,0));
+		y = BOSS_ROOM;
+		_camera->lookAt(Ogre::Vector3(0,y,0));
+		_camera->setNearClipDistance(5);
+		_camera->setFarClipDistance(10000);
+		//-----------------------------*/
+
+		_movementManager->setWalls(_walls);
+		_bossRoom = true;
+	}
 }

@@ -124,19 +124,55 @@ void PhysicsManager::setGameEntities(std::vector<GameEntity*>* gameEntities){
 	_gameEntities = gameEntities;
 }
 void PhysicsManager::removeGameEntity(unsigned int index){
-	std::string sAux = _gameEntities->at(index)->getSceneNode()->getName();
-	Entity* entity = static_cast<Entity*>(_gameEntities->at(index)->getSceneNode()->getAttachedObject(0));
-	//remove entity
-	_sceneMgr->destroyEntity(entity);
-	//remove sceneNode
-	_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
-	_sceneMgr->destroySceneNode(sAux);
-	//remove rigidbody
-	
-	//remove GameEntity
-	delete _gameEntities->at(index);
-	_gameEntities->erase(_gameEntities->begin()+index);
-	//delete gameEntity;
+	if(index < _gameEntities->size() && index >= 0){
+		std::string sAux = _gameEntities->at(index)->getSceneNode()->getName();
+		Entity* entity = static_cast<Entity*>(_gameEntities->at(index)->getSceneNode()->getAttachedObject(0));
+		//remove entity
+		_sceneMgr->destroyEntity(entity);
+		//remove sceneNode
+		_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
+		_sceneMgr->destroySceneNode(sAux);
+		//remove rigidbody
 
+		//remove GameEntity
+		delete _gameEntities->at(index);
+		_gameEntities->erase(_gameEntities->begin()+index);
+		//delete gameEntity;
+	}
+	else{
+		std::cout << "No existe una GameEntity con ese indice"<< std::endl;
+	}
+}
+
+void PhysicsManager::removeGameEntity(std::string name){
+	GameEntity* gameEntity = new GameEntity();
+	int index = 0;
+	bool found = false;
+
+	for(std::vector<GameEntity*>::iterator it = _gameEntities->begin(); it != _gameEntities->end(); ++it) {
+		if(gameEntity->getSceneNode()->getName().compare(name) != 0){
+			index++;
+		}
+		else{
+			found = true;
+			break;
+		}
+	}
+
+	if(found){
+		std::string sAux = _gameEntities->at(index)->getSceneNode()->getName();
+		Entity* entity = static_cast<Entity*>(_gameEntities->at(index)->getSceneNode()->getAttachedObject(0));
+		//remove entity
+		_sceneMgr->destroyEntity(entity);
+		//remove sceneNode
+		_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
+		_sceneMgr->destroySceneNode(sAux);
+		//remove rigidbody
+
+		//remove GameEntity
+		delete _gameEntities->at(index);
+		_gameEntities->erase(_gameEntities->begin()+index);
+		//delete gameEntity;
+	}
 
 }

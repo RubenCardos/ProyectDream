@@ -94,6 +94,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   int _numEntities;
   float _timeLastObject;
   float _arrowSpeed;
+  bool _bossRoom;
   
   Hero* _hero;
   std::vector<Ogre::SceneNode*> _vScenario; //Vector que representa el escenario, compuesto por sceneNodes (Luego habrá que meterle cuerpos fisicos tambien);
@@ -122,7 +123,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   bool deleteScenario();
   void createScenario();
   void createAllWalls();
-  GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position);
+  void createBossRoom();
+  GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale);
   void printAll();
 
 };

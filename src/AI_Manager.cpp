@@ -37,7 +37,7 @@ void AI_Manager::setEnemies(std::vector<Enemy*>* enemies){
 	_enemies = enemies;
 }
 
-void AI_Manager::updateEnemyMovement(Ogre::Real deltaT){
+void AI_Manager::updateEnemyMovement(){
 	//Aquí actualizar el Speed de cada Enemy según el tipo de enemy y el tipo de ia que tenga
 	//Quizá hacer un metodo privado para cada tipo de IA de enemigo y llamarlos desde este
 	//Luego mover cada enemigo con el metodo moveEnemies del movementmanager usando la nueva speed

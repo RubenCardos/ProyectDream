@@ -31,12 +31,12 @@ MovementManager& MovementManager::getSingleton(void){
     assert( msSingleton );  return ( *msSingleton );  
 }
 
-void MovementManager::moveHero(Ogre::Vector3* movement, Ogre::Real deltaT){
+void MovementManager::moveHero(Ogre::Vector3* movement){
 	//movimiento del heroe
 	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
-		moveWalls(movement, deltaT);
+		moveWalls();
 	}
 }
 
@@ -47,6 +47,7 @@ void MovementManager::jumpHero(){
 		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
 		_hero->setNumJumps(_hero->getNumJumps()-1);
 	}
+	moveWalls();
 }
 
 void MovementManager::repositionHero(btVector3 position,btQuaternion orientation){
@@ -77,9 +78,9 @@ void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 posi
 	//Creo que hay que reposicionar las paredes y el suelo tambien
 }
 
-void MovementManager::moveEnemies(Ogre::Real deltaT){
+void MovementManager::moveEnemies(){
 	//Cuando esté hecho el AI_Manager, mover a cada enemigo usando la speed calculada por el AI_Manager
-	_aiManager->updateEnemyMovement(deltaT);
+	_aiManager->updateEnemyMovement();
 	for(unsigned int i=0; i<_enemies->size();i++){
 		Enemy* enemy = static_cast<Enemy*>(_enemies->at(i));
 		Ogre::Vector3 _currentSpeed = enemy->getRigidBody()->getLinearVelocity();
@@ -91,7 +92,7 @@ void MovementManager::moveEnemies(Ogre::Real deltaT){
 	}
 }
 
-void MovementManager::moveWalls(Ogre::Vector3* movement, Ogre::Real deltaT){
+void MovementManager::moveWalls(){
 	Ogre::Vector3 mov = _hero->getRigidBody()->getLinearVelocity();
 	mov.z = 0.0;
 	mov.y = 0.0;

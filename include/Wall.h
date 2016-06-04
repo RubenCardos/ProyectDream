@@ -26,8 +26,9 @@ using namespace OgreBulletDynamics;
 enum WallType {
   LeftWall,
   RightWall,
+  BackWall,
+  FrontWall,
   Floor,
-  BackWall
 };
 
 class Wall : public GameEntity{

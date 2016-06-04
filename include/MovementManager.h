@@ -21,10 +21,10 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Wall*>* walls);
   ~MovementManager();
 
-  void moveHero(Ogre::Vector3* movement, Ogre::Real deltaT);
+  void moveHero(Ogre::Vector3* movement);
   void jumpHero();
-  void moveEnemies(Ogre::Real deltaT);
-  void moveWalls(Ogre::Vector3* movement, Ogre::Real deltaT);
+  void moveEnemies();
+  void moveWalls();
 
   Ogre::SceneManager* getSceneManager();
   Hero* getHero();
