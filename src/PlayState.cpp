@@ -94,7 +94,7 @@ PlayState::enter ()
   _physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_gameEntities);
   //-------------------
 
-  createTestGameEntities();
+ 
 
   //Iniciacion Variables---
   _desp = Vector3(0,0,0);
@@ -183,6 +183,7 @@ PlayState::CreateInitialWorld() {
   _currentScenario = Menu;
   _nextScenario = LevelGarden;
   createScenario(_currentScenario);
+  createAllWalls();
   //Paredes Laterales--------------------------
   
   //Pared Grafica---------------------------------
@@ -454,7 +455,7 @@ PlayState::keyPressed
 
   // Tecla T --> Test Cambiar Escenario-------
   if (e.key == OIS::KC_T) {
-    changeScenarioQ();
+    //changeScenarioQ();
   }
   //-----------------
 
@@ -793,7 +794,7 @@ PlayState::changeScenario(Scenario _nextScenario){
 
 }
 
-void PlayState::changeScenarioQ(){
+void PlayState::changeScenarioQ(Scenario _nextScenario){
 	cout << "Cambio de escenario" << endl;
 
 	//Volvemos a poner al personaje en la posición (0,0,0)
@@ -803,10 +804,6 @@ void PlayState::changeScenarioQ(){
 
 	//Cambio de escenario---
 	//Primero hay que borrar el escenario anterior y luego cargar el nuevo.
-
-	SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
-	Ogre::SceneManager::MovableObjectIterator iterator = _sceneMgr->getMovableObjectIterator("Entity");
-
 	cout << "Vengo de: " << _currentScenario << endl;
 	deleteScenario();
 
@@ -932,13 +929,23 @@ void PlayState::createScenario(Scenario _nextScenario){
 	Entity* _ground = _sceneMgr->getEntity("planeEnt");
 
 	switch(_nextScenario) {
-	case Menu:
+	case Menu:{
 		std::cout << "Menu " << _nextScenario <<std::endl;
-		createAllWalls();
-		_nextScenario=LevelGarden;
-		break;
+    //En el menu no aparecen hilos ni enemigos ni nada. Luego cuando se escoja nivel si
+    GameEntity* gameEntity = new GameEntity();
+    Ogre::Vector3 positionRoom(25,0,7);
+    Ogre::Vector3 scaleRoom = Ogre::Vector3(1,1,1);
+    gameEntity = createGameEntity("doorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
+    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 
+    Ogre::Vector3 positionGarden(25,0,-7);
+    Ogre::Vector3 scaleGarden = Ogre::Vector3(1,1,1);
+    gameEntity = createGameEntity("doorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
+    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		break;
+}
 	case LevelGarden:
+    createTestGameEntities();
 		for(int i=0;i<3;i++ ){
 			String aux=Ogre::StringConverter::toString(i + _numModules);
 			Entity* _entScn = _sceneMgr->createEntity("LevelGardenEnt"+aux, "escenario2.mesh");
@@ -953,12 +960,12 @@ void PlayState::createScenario(Scenario _nextScenario){
 
 		_ground->setMaterialName("Ground");
 		_currentScenario = _nextScenario;
-		_nextScenario = LevelRoom;
 		_numModules += 3;
-		// createAllWalls();
+    _sceneMgr->setSkyBox(true, "MatSkyboxlvl2");
 		break;
 
 	case LevelRoom:
+    createTestGameEntities();
 		for(int i=0;i<3;i++ ){
 			String aux=Ogre::StringConverter::toString(i + _numModules);
 			Entity* _entScn = _sceneMgr->createEntity("LevelRoomEnt"+aux, "escenario.mesh");
@@ -972,9 +979,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 		}
 		_ground->setMaterialName("GroundRoom");
 		_currentScenario = _nextScenario;
-		_nextScenario = LevelGarden;
 		_numModules += 3;
-		//createAllWalls();
 		_sceneMgr->setSkyBox(true, "MaterialSkybox");
 		break;
 	}
@@ -1184,7 +1189,7 @@ void PlayState::createBossRoom(){
 }
 
 void PlayState::createTestGameEntities(){
-	_sceneMgr->setSkyBox(true, "MatSkyboxlvl2");
+	
 	//HILO-------------------------------------------------------------------------------
 	Entity* entityThread = _sceneMgr->createEntity("EntThread", "thread.mesh");
 	SceneNode* nodeThread = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Thread");
@@ -1302,17 +1307,7 @@ void PlayState::createTestGameEntities(){
 	_gameEntities->push_back(enemy);
 	//-------------------------------------------------
 
-	//2 GameEntities de Lucia
-	GameEntity* gameEntity = new GameEntity();
-	Ogre::Vector3 positionRoom(25,0,7);
-	Ogre::Vector3 scaleRoom = Ogre::Vector3(1,1,1);
-	gameEntity = createGameEntity("doorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
-	gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
-
-	Ogre::Vector3 positionGarden(25,0,-7);
-	Ogre::Vector3 scaleGarden = Ogre::Vector3(1,1,1);
-	gameEntity = createGameEntity("doorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
-	gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+	
 }
 
 

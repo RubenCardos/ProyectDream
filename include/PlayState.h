@@ -70,7 +70,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
 
   bool frameStarted (const Ogre::FrameEvent& evt);
   bool frameEnded (const Ogre::FrameEvent& evt);
-  void changeScenarioQ();
+  void changeScenarioQ(Scenario nextScenario);
   
   // Heredados de Ogre::Singleton.
   static PlayState& getSingleton ();

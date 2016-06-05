@@ -85,7 +85,7 @@ void PhysicsManager::detectHeroCollision(){
 					//Actualizar los puntos en la UI
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
-					PlayState::getSingletonPtr()->changeScenarioQ();
+					//PlayState::getSingletonPtr()->changeScenarioQ();
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
 					_hero->loseLife();
@@ -93,9 +93,15 @@ void PhysicsManager::detectHeroCollision(){
 					//Actualizar las vidas en la UI
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_doorRoom")){
-					
-					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
-					PlayState::getSingletonPtr()->changeScenarioQ();
+					Scenario scenario = LevelRoom;
+					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
+					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
+
+				}
+				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_doorGarden")){
+					Scenario scenario = LevelGarden;
+					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
+					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
 				}
 			}
 
