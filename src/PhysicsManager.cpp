@@ -57,7 +57,7 @@ void PhysicsManager::detectHeroCollision(){
 			if ((obOB_A != obHero) && (obOB_A)) {
 				node = obOB_A->getRootNode();
 				_aux=obA;
-				
+
 			}
 			else if ((obOB_B != obHero) && (obOB_B)) {
 				node = obOB_B->getRootNode();
@@ -68,7 +68,7 @@ void PhysicsManager::detectHeroCollision(){
 				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
 
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
-					if(_hero->getRigidBody()->getLinearVelocity().z < 0.0){
+					if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
 						if(_hero->getNumJumps() < N_JUMPS){
 							_hero->setNumJumps(N_JUMPS);
 						}
@@ -102,6 +102,23 @@ void PhysicsManager::detectHeroCollision(){
 					Scenario scenario = LevelGarden;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
+				}
+				//Para hacer que no se pegue a la pared
+				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Wall")){
+					Ogre::Vector3 vec(0,0,0);
+					vec = _hero->getRigidBody()->getLinearVelocity();
+					if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallL") && vec.z < 0.0){
+						vec.z = 0.0;
+						_hero->getRigidBody()->setLinearVelocity(vec);
+					}
+					else if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallR") && vec.z > 0.0){
+						vec.z = 0.0;
+						_hero->getRigidBody()->setLinearVelocity(vec);
+					}
+					else if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallB") && vec.x < 0.0){
+						vec.x = 0;
+						_hero->getRigidBody()->setLinearVelocity(vec);
+					}
 				}
 			}
 
@@ -187,3 +204,4 @@ void PhysicsManager::removeGameEntity(std::string name){
 	}
 
 }
+

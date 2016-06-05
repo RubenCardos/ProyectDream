@@ -1,6 +1,7 @@
 #include "MovementManager.h"
 #include "PlayState.h"
 
+
 using namespace Ogre;
 
 #define N_JUMPS 1
@@ -101,11 +102,13 @@ void MovementManager::moveEnemies(){
 
 void MovementManager::moveWalls(){
 	Ogre::Vector3 mov = _hero->getRigidBody()->getLinearVelocity();
-	mov.z = 0.0;
-	mov.y = 0.0;
-	for(unsigned int i=0; i<_walls->size();i++){
-		//_walls->at(i)->getRigidBody()->applyImpulse(mov * 20, _walls->at(i)->getRigidBody()->getCenterOfMassPosition());
-		_walls->at(i)->getRigidBody()->setLinearVelocity(mov);
+	if(mov.x >= 0){
+		mov.z = 0.0;
+		mov.y = 0.0;
+		for(unsigned int i=0; i<_walls->size();i++){
+			//_walls->at(i)->getRigidBody()->applyImpulse(mov * 20, _walls->at(i)->getRigidBody()->getCenterOfMassPosition());
+			_walls->at(i)->getRigidBody()->setLinearVelocity(mov);
+		}
 	}
 }
 

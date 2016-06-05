@@ -11,14 +11,19 @@
 
 #include "PhysicsMask.h"
 
-#define FLOOR_POSITION_Y -12.0;  // PONERLO BIEN
+#define FLOOR_POSITION_Y 0.0;  // PONERLO BIEN (todos los define, meterlos en un archivo de configuracion)
 #define FLOOR_POSITION_Z 4.0;
-//#define WALLL_POSITION_Z -13.0;
-//#define WALLR_POSITION_Z -20.0;
+
+#define WALLB_POSITION_Y 0.0;
+#define WALLB_POSITION_Z 4.0;
+#define WALLB_POSITION_X -39.0;
+
 #define WALLL_POSITION_Y 5.0;
 #define WALLL_POSITION_Z -13.0;
+
 #define WALLR_POSITION_Y 5.0;
 #define WALLR_POSITION_Z 19.0;
+
 #define BOSS_ROOM 100.0;
 #define BOSS_ROOM_SCALE 3.0;
 
@@ -102,8 +107,10 @@ PlayState::enter ()
   _despPtr = &_desp;
   _numModules = 0;
   _bossRoom = false;
+  _wallsAreVisible = true;
+
   //-----------------------
-  _exitGame = false;
+
 
   //Animations---------------------------------------------------------------
   //_animEnemy = _sceneMgr->getEntity("E_Enemy")->getAnimationState("walkEnemy");
@@ -465,11 +472,15 @@ PlayState::keyPressed
   }
   //-----------------
 
-  // Tecla S --> Print current scenario-------
+  // Tecla S --> Print current scenario and change backwall visibility-------
   if (e.key == OIS::KC_S) {
 	  if(_vScenario.size() > 0){
 		  std::cout << "ESCENARIO " << _currentScenario << _vScenario.at(0)<< std::endl;
 	  }
+	  for(int i=0; i<_walls->size(); i++){
+		  _walls->at(i)->getSceneNode()->setVisible(!_wallsAreVisible);
+	  }
+	  _wallsAreVisible = !_wallsAreVisible;
   }
   //-----------------
 
@@ -1042,6 +1053,17 @@ void PlayState::createAllWalls(){
 	_walls->push_back(wall);
 
 	//para la pared trasera, (1,10,20) quiza
+	position.z = WALLB_POSITION_Z;
+	position.y = WALLB_POSITION_Y;
+	position.x = WALLB_POSITION_X;
+	scale = Ogre::Vector3(1,10,16);
+	name = BackWall;
+	gameEntity = createGameEntity("WallB", "cube.mesh", position, scale);
+	wall = new Wall();
+	wall->setSceneNode(gameEntity->getSceneNode());
+	wall->setRigidBody(gameEntity->getRigidBody());
+	_walls->push_back(wall);
+
 }
 
 GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale){
@@ -1081,7 +1103,6 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 	gameEntity->setRigidBody(rigidBody);
 
 	std::cout << gameEntity->getSceneNode()->getName() << " " << gameEntity->getRigidBody()->getName() << std::endl;
-	//std::cout << node->getName() << " " << rigidBody->getName() << std::endl;
 	//_gameEntities->push_back(gameEntity);
 
 	return gameEntity;

@@ -50,8 +50,7 @@ enum Scenario {
   LevelTest
 };  
 
-class PlayState : public Ogre::Singleton<PlayState>, public GameState
-{
+class PlayState : public Ogre::Singleton<PlayState>, public GameState{
  public:
   PlayState () {}
 
@@ -112,6 +111,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   Scenario _currentScenario;
   Scenario _nextScenario;
   int _numModules;
+  bool _wallsAreVisible;
 
   void CreateInitialWorld();
   void DetectCollisionAim();
@@ -128,7 +128,6 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   void createTestGameEntities();
   GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale);
   void printAll();
-
 
 };
 
