@@ -19,3 +19,7 @@ You can redistribute and/or modify this file under the terms of the GNU General 
 ### Aviso
 
 Debido al gran peso de algunos archivos ha sido necesario el uso del plugin git lfs por lo que para descargar este repositorio es necesario tener instalado dicho pulgin y descargarlo mediante la opcion git clone.
+
+###Video Entregable 1
+
+https://youtu.be/0kgsmTu3edM
