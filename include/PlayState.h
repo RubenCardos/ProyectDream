@@ -27,6 +27,7 @@
 #include "GameState.h"
 #include "MovementManager.h"
 #include "PhysicsManager.h"
+#include "AI_Manager.h"
 #include "Enemy.h"
 #include "Hero.h"
 #include "Wall.h"
@@ -101,9 +102,11 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   std::vector<Enemy*>* _enemies;
   std::vector<Wall*>* _walls;
   std::vector<GameEntity*>* _gameEntities;
+  std::vector<Boss*>* _bossPieces;
 
   MovementManager* _movementManager;
   PhysicsManager* _physicsManager;
+  AI_Manager* _aiManager;
 
   std::deque <OgreBulletDynamics::RigidBody *>         _bodies;
   std::deque <OgreBulletCollisions::CollisionShape *>  _shapes;

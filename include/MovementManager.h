@@ -19,13 +19,14 @@ using namespace Ogre;
 class MovementManager : public Ogre::Singleton<MovementManager>
 {
  public:
-  MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Wall*>* walls);
+  MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Boss*>* bossPieces, std::vector<Wall*>* walls);
   ~MovementManager();
 
   void moveHero(Ogre::Vector3* movement);
   void jumpHero();
   void moveEnemies();
   void moveWalls();
+  void moveBoss();
 
   Ogre::SceneManager* getSceneManager();
   Hero* getHero();
@@ -36,6 +37,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   void setHero(Hero* hero);
   void setEnemies(std::vector<Enemy*>* enemies);
   void setWalls(std::vector<Wall*>* walls);
+  void setAI_Manager(AI_Manager* aiManager);
   
   // Heredados de Ogre::Singleton.
   static MovementManager& getSingleton ();
@@ -51,6 +53,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   Hero* _hero;
   std::vector<Enemy*>* _enemies;
   std::vector<Wall*>* _walls;
+  std::vector<Boss*>* _bossPieces;
   AI_Manager* _aiManager;
   bool _inBossRoom;
 };

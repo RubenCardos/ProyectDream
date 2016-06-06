@@ -32,10 +32,8 @@ class Boss : public GameEntity
   double getMovementspeed();
   Ogre::Real getRageTimer();
   Ogre::Vector3* getVSpeed();
-  int getTargetIndex();
   int getCurrentIndex();
   Ogre::Vector3* getTargetPosition();
-  Ogre::Vector3* getCurrentPosition();
 
   void setType(BossType type);
   void loseHealth();
@@ -43,10 +41,8 @@ class Boss : public GameEntity
   void setRageTimer(Ogre::Real rageTimer);
   void setVulnerable(bool vulnerable);
   void setV_Speed(Ogre::Vector3* vSpeed);
-  void setTargetIndex(int targetIndex);
   void setCurrentIndex(int currentIndex);
   void setTargetPosition(Ogre::Vector3* targetPosition);
-  void setCurrentPosition(Ogre::Vector3* currentPosition);
 
  protected:
   BossType _type;
@@ -56,10 +52,8 @@ class Boss : public GameEntity
   Ogre::Real _rageTimer;
   bool _vulnerable;
   Ogre::Vector3* _vSpeed;
-  int _targetIndex;
   int _currentIndex;
   Ogre::Vector3* _targetPosition;
-  Ogre::Vector3* _currentPosition;
 };
 
 #endif

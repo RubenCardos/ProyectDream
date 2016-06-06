@@ -29,12 +29,10 @@ void Boss::spawn(){
 	_points = DEFAULT_POINTS;
 	_health = DEFAULT_HEALTH;
 	_vulnerable = false;
-	_targetIndex = 0;
 	_currentIndex = -1;
 	_rageTimer = 0.0;
 	_movementSpeed=50.0;
 	_vSpeed = new Ogre::Vector3(0,0,0);
-	_currentPosition = new Ogre::Vector3(0,0,0);
 	_targetPosition = new Ogre::Vector3(0,0,0);
 }
 
@@ -72,17 +70,11 @@ Ogre::Real Boss::getRageTimer(){
 Ogre::Vector3* Boss::getVSpeed(){
 	return _vSpeed;
 }
-int Boss::getTargetIndex(){
-	return _targetIndex;
-}
 int Boss::getCurrentIndex(){
 	return _currentIndex;
 }
 Ogre::Vector3* Boss::getTargetPosition(){
 	return _targetPosition;
-}
-Ogre::Vector3* Boss::getCurrentPosition(){
-	return _currentPosition;
 }
 
 void Boss::setType(BossType type){
@@ -108,15 +100,10 @@ void Boss::setVulnerable(bool vulnerable){
 void Boss::setV_Speed(Ogre::Vector3* vSpeed){
 	_vSpeed = vSpeed;
 }
-void Boss::setTargetIndex(int targetIndex){
-	_targetIndex = targetIndex;
-}
 void Boss::setCurrentIndex(int currentIndex){
 	_currentIndex = currentIndex;
 }
 void Boss::setTargetPosition(Ogre::Vector3* targetPosition){
 	_targetPosition = targetPosition;
 }
-void Boss::setCurrentPosition(Ogre::Vector3* currentPosition){
-	_currentPosition = currentPosition;
-}
+

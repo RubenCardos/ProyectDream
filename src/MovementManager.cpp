@@ -7,13 +7,14 @@ using namespace Ogre;
 #define N_JUMPS 1
 #define JUMP_EPSILON 0.01
 
-MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies,std::vector<Wall*>* walls){
+MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Boss*>* bossPieces, std::vector<Wall*>* walls){
 	_sceneMgr = sceneMgr;
 	_hero = hero;
 	_enemies = enemies;
+	_bossPieces = bossPieces;
 	_walls= walls;
 	_hero->setNumJumps(N_JUMPS);
-	_aiManager = new AI_Manager(_hero,_enemies);
+	_aiManager = new AI_Manager(_hero,_bossPieces,_enemies);
 	_inBossRoom = false;
 }
 
@@ -43,7 +44,6 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		if(_inBossRoom==false){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
 			moveWalls();
 		}
-
 	}
 }
 
@@ -113,6 +113,22 @@ void MovementManager::moveWalls(){
 			//_walls->at(i)->getRigidBody()->applyImpulse(mov * 20, _walls->at(i)->getRigidBody()->getCenterOfMassPosition());
 			_walls->at(i)->getRigidBody()->setLinearVelocity(mov);
 		}
+	}
+}
+
+void MovementManager::moveBoss(){
+	_aiManager->loadBossRoute();
+	_aiManager->updateBossMovement();
+
+	Ogre::Vector3 origin(0,0,0);
+	Ogre::Vector3 *target = new Ogre::Vector3(0,0,0);
+	Ogre::Vector3 velocity(0,0,0);
+
+	for(int i=0; i<_bossPieces->size(); i++){
+		origin = _bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition();
+		target = _bossPieces->at(i)->getTargetPosition();
+		velocity = *target - origin;
+		_bossPieces->at(i)->getRigidBody()->setAngularVelocity(velocity);
 	}
 }
 

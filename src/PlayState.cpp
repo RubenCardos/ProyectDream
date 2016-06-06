@@ -90,15 +90,13 @@ PlayState::enter ()
 
   //Crear el MovementManager
   //_movementManager = new MovementManager(_sceneMgr,_hero,_enemies);
-  _movementManager = new MovementManager(_sceneMgr,_hero,_enemies,_walls);
+  _movementManager = new MovementManager(_sceneMgr,_hero,_enemies,_bossPieces,_walls);
   //-------------------
 
   //Crear el PhysicsManager
     //_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_enemies);
   _physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_gameEntities);
   //-------------------
-
- 
 
   //Iniciacion Variables---
   _desp = Vector3(0,0,0);
@@ -149,8 +147,6 @@ PlayState::resume()
 
 void 
 PlayState::CreateInitialWorld() {
-  
-  
   //Suelo Infinito NO TOCAR---------------------------------
   Plane plane1(Vector3(0,1,0), -3);    // Normal y distancia  (antes estaba a 0)
   MeshManager::getSingleton().createPlane("p1",
@@ -183,9 +179,6 @@ PlayState::CreateInitialWorld() {
   
   
   //------------------------------------------------------------
-
-
-  
   _currentScenario = Menu;
   _nextScenario = LevelGarden;
   createScenario(_currentScenario);
@@ -255,12 +248,6 @@ PlayState::CreateInitialWorld() {
 
   //---------------------------------------------------------------------
 
-
-  
-
-
-  
-  
   //LUCES------------------------------------------------
   Light* _directionalLight = _sceneMgr->createLight("DirectionalLight");
   _directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);
@@ -343,6 +330,9 @@ PlayState::frameStarted
 
   //Movimiento------------
   _movementManager->moveHero(_despPtr);
+  if(_bossRoom){
+	  //_movementManager->moveBoss();
+  }
   //_movementManager->moveEnemies();
   //----------------------
   
@@ -1202,6 +1192,32 @@ void PlayState::createBossRoom(){
 
 		_movementManager->setWalls(_walls);
 		_bossRoom = true;
+
+		//Crear Boss------------------------------------------------------
+		_bossPieces = new std::vector<Boss*>();
+		_bossPieces->clear();
+		gameEntity = new GameEntity();
+		Boss* bossLocomotive = new Boss();
+		Boss* bossWagon = new Boss();
+
+		gameEntity = createGameEntity("BossLocomotive", "cube.mesh", position, Ogre::Vector3(1,1,1));
+		bossLocomotive->setSceneNode(gameEntity->getSceneNode());
+		bossLocomotive->setRigidBody(gameEntity->getRigidBody());
+		_bossPieces->push_back(bossLocomotive);
+		position.x += 6.0;
+
+		gameEntity = createGameEntity("BossWagon1", "cube.mesh", position, Ogre::Vector3(1,1,1));
+		bossWagon->setSceneNode(gameEntity->getSceneNode());
+		bossWagon->setRigidBody(gameEntity->getRigidBody());
+		_bossPieces->push_back(bossWagon);
+		position.x += 6.0;
+
+		gameEntity = createGameEntity("BossWagon2", "cube.mesh", position, Ogre::Vector3(1,1,1));
+		bossWagon->setSceneNode(gameEntity->getSceneNode());
+		bossWagon->setRigidBody(gameEntity->getRigidBody());
+		_bossPieces->push_back(bossWagon);
+
+		//----------------------------------------------------------------
 	}
 }
 
@@ -1324,7 +1340,6 @@ void PlayState::createTestGameEntities(){
 	_gameEntities->push_back(enemy);
 	//-------------------------------------------------
 
-	
 }
 
 
