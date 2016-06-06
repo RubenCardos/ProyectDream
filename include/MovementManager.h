@@ -44,7 +44,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   void repositionHero(btVector3 position,btQuaternion orientation);
   void repositionGameEntity(GameEntity* gameentity,btVector3 position,btQuaternion orientation);
   
-  void setBossRoom(bool aux);
+  void inBossRoom();
 
  protected:
   Ogre::SceneManager* _sceneMgr;

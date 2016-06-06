@@ -69,6 +69,10 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 	//mMotionState->setWorldTransform(initialTransform);
 
 	//Creo que hay que reposicionar las paredes y el suelo tambien
+	/*for(int i=0; i<_walls->size(); i++){
+		_walls->at(i)->getRigidBody()->getBulletRigidBody()->setWorldTransform(initialTransform);
+		_walls->at(i)->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
+	}*/
 }
 
 void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 position,btQuaternion orientation){
@@ -144,6 +148,6 @@ void MovementManager::setWalls(std::vector<Wall*>* walls){
 	_walls = walls;
 }
 
-void MovementManager::setBossRoom(bool aux){
-	_inBossRoom=aux;
+void MovementManager::inBossRoom(){
+	_inBossRoom=true;
 }

@@ -14,14 +14,13 @@
 #define FLOOR_POSITION_Y 0.0;  // PONERLO BIEN (todos los define, meterlos en un archivo de configuracion)
 #define FLOOR_POSITION_Z 4.0;
 
-#define WALLB_POSITION_Y 0.0;
-#define WALLB_POSITION_Z 4.0;
+#define WALLB_POSITION_Z 2.0;
 #define WALLB_POSITION_X -39.0;
 
-#define WALLL_POSITION_Y 5.0;
+#define WALLL_POSITION_Y 0.15;
 #define WALLL_POSITION_Z -13.0;
 
-#define WALLR_POSITION_Y 5.0;
+#define WALLR_POSITION_Y 0.15;
 #define WALLR_POSITION_Z 19.0;
 
 #define BOSS_ROOM 100.0;
@@ -1044,7 +1043,7 @@ void PlayState::createAllWalls(){
 	//para el suelo, (40,1,20) quiza (cambiar el 20 por la longitud de 2 0 3 modulos)
 	position.z = FLOOR_POSITION_Z;
 	position.y = FLOOR_POSITION_Y;
-	scale = Ogre::Vector3(40,1,16);
+	scale = Ogre::Vector3(40,0.10,16);
 	name = Floor;
 	gameEntity = createGameEntity("Floor", "cube.mesh", position, scale);
 	wall = new Wall();
@@ -1054,7 +1053,6 @@ void PlayState::createAllWalls(){
 
 	//para la pared trasera, (1,10,20) quiza
 	position.z = WALLB_POSITION_Z;
-	position.y = WALLB_POSITION_Y;
 	position.x = WALLB_POSITION_X;
 	scale = Ogre::Vector3(1,10,16);
 	name = BackWall;
@@ -1116,10 +1114,8 @@ void PlayState::createBossRoom(){
 		GameEntity* gameEntity = new GameEntity();
 		Wall* wall;
 
-
-		//Aviso al MovementManager-----------------
-		_movementManager->setBossRoom(true);
-		//-----------------------------------------
+		//Aviso al MovementManager
+		_movementManager->inBossRoom();
 
 		//Hay que eliminar todas las GameEntities-------------------------------------------------------------
 
@@ -1187,7 +1183,7 @@ void PlayState::createBossRoom(){
 		position.z = FLOOR_POSITION_Z + BOSS_ROOM;
 		position.y = FLOOR_POSITION_Y;
 		//name = Floor;
-		scale = Ogre::Vector3(100,1,100);
+		scale = Ogre::Vector3(100,0.10,100);
 		gameEntity = createGameEntity("FloorBoss", "cube.mesh", position, scale);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
