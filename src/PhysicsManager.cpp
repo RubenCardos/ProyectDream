@@ -36,34 +36,31 @@ void PhysicsManager::detectHeroCollision(){
 	int numManifolds = bulletWorld->getDispatcher()->getNumManifolds();
 
 	for (int i=0;i<numManifolds;i++) {
-		btPersistentManifold* contactManifold =
-				bulletWorld->getDispatcher()->getManifoldByIndexInternal(i);
-		btCollisionObject* obA =
-				(btCollisionObject*)(contactManifold->getBody0());
-		btCollisionObject* obB =
-				(btCollisionObject*)(contactManifold->getBody1());
+		btPersistentManifold* contactManifold = bulletWorld->getDispatcher()->getManifoldByIndexInternal(i);
+		btCollisionObject* obA = (btCollisionObject*)(contactManifold->getBody0());
+		btCollisionObject* obB = (btCollisionObject*)(contactManifold->getBody1());
 
 		//EXTRA--------------------------------------------------------
 		btCollisionObject* _aux;
 		//-------------------------------------------------------------
-
-		//Compruebo colisiones con el hero -----------------------------
 		OgreBulletCollisions::Object *obHero = _world->findObject(_hero->getSceneNode());
-		OgreBulletCollisions::Object *obOB_A = _world->findObject(obA);
 		OgreBulletCollisions::Object *obOB_B = _world->findObject(obB);
-
-		if ((obOB_A == obHero) || (obOB_B == obHero)) {  //si uno de los objetos colisionados es el hero
+    	OgreBulletCollisions::Object *obOB_A = _world->findObject(obA);
+         
+        if ((obOB_A == obHero) || (obOB_B == obHero)) {  //si uno de los objetos colisionados es el hero
 			Ogre::SceneNode* node = NULL;
 			if ((obOB_A != obHero) && (obOB_A)) {
-				node = obOB_A->getRootNode();
+				node = static_cast<Ogre::SceneNode*>(obA -> getUserPointer());
 				_aux=obA;
 
-			}
+				}
 			else if ((obOB_B != obHero) && (obOB_B)) {
-				node = obOB_B->getRootNode();
-				//delete obOB_B;
+				node = static_cast<Ogre::SceneNode*>(obB -> getUserPointer());
 				_aux=obB;
-			}
+				}
+			
+
+     		std::cout << "Colision Hero con: " << node -> getName() << std::endl;
 			if (node) {
 				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
 
@@ -122,7 +119,8 @@ void PhysicsManager::detectHeroCollision(){
 				}
 			}
 
-		}
+		  
+   		}
 		//------------------------------------------------
 	}
 }

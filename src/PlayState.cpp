@@ -167,14 +167,15 @@ PlayState::CreateInitialWorld() {
   Shape = new OgreBulletCollisions::StaticPlaneCollisionShape
     (Ogre::Vector3(0,1,0), -3);   // Vector normal y distancia (antes estaba a 0)
   OgreBulletDynamics::RigidBody *rigidBodyPlane = new 
-    OgreBulletDynamics::RigidBody("ground", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
+    OgreBulletDynamics::RigidBody("RB_ground", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
 
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
   rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8);
-
+  rigidBodyPlane->getBulletObject()->setUserPointer((void *) _groundNode);
   // Anadimos los objetos Shape y RigidBody ------------------------
   _shapes.push_back(Shape);
   _bodies.push_back(rigidBodyPlane);
+  
 
   
   
@@ -291,6 +292,7 @@ PlayState::CreateInitialWorld() {
   //Propiedades del cuerpo fisico--------------------------------------
   rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
   rigidBody->disableDeactivation();
+  rigidBody->getBulletObject()->setUserPointer((void *) node);
   //-------------------------------------------------------------------
 
   //creamos el Hero para que contenga lo anterior, el sceneNode y el RigidBody---
@@ -931,17 +933,17 @@ void PlayState::createScenario(Scenario _nextScenario){
 	switch(_nextScenario) {
 	case Menu:{
 		std::cout << "Menu " << _nextScenario <<std::endl;
-    //En el menu no aparecen hilos ni enemigos ni nada. Luego cuando se escoja nivel si
-    GameEntity* gameEntity = new GameEntity();
-    Ogre::Vector3 positionRoom(25,0,7);
-    Ogre::Vector3 scaleRoom = Ogre::Vector3(1,1,1);
-    gameEntity = createGameEntity("doorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
-    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+	    //En el menu no aparecen hilos ni enemigos ni nada. Luego cuando se escoja nivel si
+	    GameEntity* gameEntity = new GameEntity();
+	    Ogre::Vector3 positionRoom(25,0,7);
+	    Ogre::Vector3 scaleRoom = Ogre::Vector3(1,1,1);
+	    gameEntity = createGameEntity("doorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
+	    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 
-    Ogre::Vector3 positionGarden(25,0,-7);
-    Ogre::Vector3 scaleGarden = Ogre::Vector3(1,1,1);
-    gameEntity = createGameEntity("doorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
-    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+	    Ogre::Vector3 positionGarden(25,0,-7);
+	    Ogre::Vector3 scaleGarden = Ogre::Vector3(1,1,1);
+	    gameEntity = createGameEntity("doorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
+	    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 		break;
 }
 	case LevelGarden:
@@ -1031,7 +1033,7 @@ void PlayState::createAllWalls(){
 
 	//Suelo
 	//para el suelo, (40,1,20) quiza (cambiar el 20 por la longitud de 2 0 3 modulos)
-	position.z = FLOOR_POSITION_Z;
+	/*position.z = FLOOR_POSITION_Z;
 	position.y = FLOOR_POSITION_Y;
 	scale = Ogre::Vector3(40,0.10,16);
 	name = Floor;
@@ -1039,7 +1041,7 @@ void PlayState::createAllWalls(){
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
-	_walls->push_back(wall);
+	_walls->push_back(wall);*/
 
 	//para la pared trasera, (1,10,20) quiza
 	position.z = WALLB_POSITION_Z;
@@ -1085,6 +1087,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBody->disableDeactivation();
+	rigidBody->getBulletObject()->setUserPointer((void *) node);
 
 	gameEntity = new GameEntity();
 	gameEntity->setSceneNode(node);
@@ -1255,6 +1258,7 @@ void PlayState::createTestGameEntities(){
 	//Propiedades del cuerpo fisico--------------------------------------
 	rigidBodyThread->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBodyThread->disableDeactivation();
+	rigidBodyThread->getBulletObject()->setUserPointer((void *) nodeThread);
 	//-------------------------------------------------------------------
 	//------------------------------------------------------------------------------------
 
@@ -1290,6 +1294,7 @@ void PlayState::createTestGameEntities(){
 	//Propiedades del cuerpo fisico--------------------------------------
 	rigidBodyReel->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBodyReel->disableDeactivation();
+	rigidBodyReel->getBulletObject()->setUserPointer((void *) nodeReel);
 	//-------------------------------------------------------------------
 	//------------------------------------------------------------------------------------
 	//Enemigo----------------------------------------
@@ -1323,6 +1328,7 @@ void PlayState::createTestGameEntities(){
 	//Propiedades del cuerpo fisico--------------------------------------
 	rigidBody1->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBody1->disableDeactivation();
+	rigidBody1->getBulletObject()->setUserPointer((void *) node1);
 	//-------------------------------------------------------------------
 
 	//creamos el Enemy para que contenga lo anterior, el sceneNode y el RigidBody---
