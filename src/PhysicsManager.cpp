@@ -90,7 +90,9 @@ void PhysicsManager::detectHeroCollision(){
 					//Actualizar los puntos en la UI
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
-					//PlayState::getSingletonPtr()->changeScenarioQ();
+					Scenario scenario = Menu;
+					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
+					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
 					_hero->loseLife();

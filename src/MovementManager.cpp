@@ -42,7 +42,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
 		if(_inBossRoom==false){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
-			//moveWalls();
+			moveWalls();
 		}
 	}
 }

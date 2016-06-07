@@ -181,7 +181,7 @@ PlayState::CreateInitialWorld() {
   _currentScenario = Menu;
   _nextScenario = LevelGarden;
   createScenario(_currentScenario);
-  createAllWalls();
+  
   //Paredes Laterales--------------------------
   
   //Pared Grafica---------------------------------
@@ -607,9 +607,13 @@ PlayState::updateGUI()
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 
   //Actualizo la puntuacion------------
-  sheet->getChild("background_wnd2")->getChild("textPoints")->setText(Ogre::StringConverter::toString(_hero->getScore()));
+  sheet->getChild("background_wnd2")->getChild("textPoints")->setText("SCORE: "+Ogre::StringConverter::toString(_hero->getScore()));
   //----------------------------------
-  
+  if(_currentScenario==Menu){
+  	 sheet->getChild("background_wnd2")->setVisible(false);
+  }else{
+  	 sheet->getChild("background_wnd2")->setVisible(true);
+  }
 }
 
 
@@ -762,7 +766,7 @@ bool PlayState::deleteScenario(){
 	SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
 	Ogre::SceneManager::MovableObjectIterator iterator = _sceneMgr->getMovableObjectIterator("Entity");
 	std::string sAux = "";
-  std::string sAux2 = "";
+  	std::string sAux2 = "";
 
 	switch(_currentScenario) {
 	    case Menu:{
@@ -784,8 +788,7 @@ bool PlayState::deleteScenario(){
             
             
           }*/
-       cout << "SALGO DE FOR" << endl;
-
+     
 	    //Elimino las puertas-------------------------------------------------------------------------------------
 	    SceneNode* sndoorR = _sceneMgr->getSceneNode("SN_DoorRoom");
 	    OgreBulletCollisions::Object* OBdoorRoom =_world->findObject(sndoorR);
@@ -821,13 +824,19 @@ bool PlayState::deleteScenario(){
 	    	//iterator = _sceneMgr->getMovableObjectIterator("Entity");
 	    	while(iterator.hasMoreElements()){
 	    	        Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
-	    	        if(Ogre::StringUtil::startsWith(e->getName(),"E_LevelGarden")){
+	    	        if(Ogre::StringUtil::startsWith(e->getName(),"E_LevelGarden") 
+	    	        	|| Ogre::StringUtil::startsWith(e->getName(),"E_Reel") 
+	    	        	|| Ogre::StringUtil::startsWith(e->getName(),"E_Thread")
+	    	        	|| Ogre::StringUtil::startsWith(e->getName(),"E_Enemy")){
 	    	        	_sceneMgr->destroyEntity(e);
 	    	        }
 	    	}
 	    	while (it.hasMoreElements()){
 	    		sAux = it.getNext()->getName();
-	    		if(Ogre::StringUtil::startsWith(sAux,"SN_LevelGarden")){
+	    		if(Ogre::StringUtil::startsWith(sAux,"SN_LevelGarden")
+	    				|| Ogre::StringUtil::startsWith(sAux,"SN_Reel") 
+	    	        	|| Ogre::StringUtil::startsWith(sAux,"SN_Thread")
+	    	        	|| Ogre::StringUtil::startsWith(sAux,"SN_Enemy")){
 	    			_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
 	    			_sceneMgr->destroySceneNode(sAux);
 	    		}
@@ -836,13 +845,19 @@ bool PlayState::deleteScenario(){
 	    case LevelRoom:
 	    	while(iterator.hasMoreElements()){
 	    		Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
-	    		if(Ogre::StringUtil::startsWith(e->getName(),"E_LevelRoom")){
+	    		if(Ogre::StringUtil::startsWith(e->getName(),"E_LevelRoom")
+	    				|| Ogre::StringUtil::startsWith(e->getName(),"E_Reel") 
+	    	        	|| Ogre::StringUtil::startsWith(e->getName(),"E_Thread")
+	    	        	|| Ogre::StringUtil::startsWith(e->getName(),"E_Enemy")){
 	    			_sceneMgr->destroyEntity(e);
 	    		}
 	    	}
 	    	while (it.hasMoreElements()){
 	    		sAux = it.getNext()->getName();
-	    		if(Ogre::StringUtil::startsWith(sAux,"SN_LevelRoom")){
+	    		if(Ogre::StringUtil::startsWith(sAux,"SN_LevelRoom")
+	    				|| Ogre::StringUtil::startsWith(sAux,"SN_Reel") 
+	    	        	|| Ogre::StringUtil::startsWith(sAux,"SN_Thread")
+	    	        	|| Ogre::StringUtil::startsWith(sAux,"SN_Enemy")){
 	    			_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
 	    		 	_sceneMgr->destroySceneNode(sAux);
 	    		}
@@ -867,19 +882,22 @@ void PlayState::createScenario(Scenario _nextScenario){
 		std::cout << "Menu " << _nextScenario <<std::endl;
 	    //En el menu no aparecen hilos ni enemigos ni nada. Luego cuando se escoja nivel si
 	    GameEntity* gameEntity = new GameEntity();
-	    Ogre::Vector3 positionRoom(25,0,7);
-	    Ogre::Vector3 scaleRoom = Ogre::Vector3(1,1,1);
+	    Ogre::Vector3 positionRoom(25,-2,15);
+	    Ogre::Vector3 scaleRoom = Ogre::Vector3(3,3,3);
 	    gameEntity = createGameEntity("DoorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
-	    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+	    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
 
-	    Ogre::Vector3 positionGarden(25,0,-7);
-	    Ogre::Vector3 scaleGarden = Ogre::Vector3(1,1,1);
+	    Ogre::Vector3 positionGarden(25,-2,-15);
+	    Ogre::Vector3 scaleGarden = Ogre::Vector3(3,3,3);
 	    gameEntity = createGameEntity("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
-	    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+	    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
+	    _ground->setMaterialName("GroundRoom");
+	   
 		break;
 }
 	case LevelGarden:
-    createTestGameEntities();
+	    createTestGameEntities();
+	    createAllWalls();
 		for(unsigned int i=0;i<3;i++ ){
 			String aux=Ogre::StringConverter::toString(i + _numModules);
 			Entity* _entScn = _sceneMgr->createEntity("E_LevelGarden"+aux, "escenario2.mesh");
@@ -899,7 +917,8 @@ void PlayState::createScenario(Scenario _nextScenario){
 		break;
 
 	case LevelRoom:
-    createTestGameEntities();
+	    createTestGameEntities();
+	    createAllWalls();
 		for(unsigned int i=0;i<3;i++){
 			String aux=Ogre::StringConverter::toString(i + _numModules);
 			Entity* _entScn = _sceneMgr->createEntity("E_LevelRoom"+aux, "escenario.mesh");
@@ -1150,7 +1169,7 @@ void PlayState::createBossRoom(){
 void PlayState::createTestGameEntities(){
 	
 	//HILO-------------------------------------------------------------------------------
-	Entity* entityThread = _sceneMgr->createEntity("EntThread", "thread.mesh");
+	Entity* entityThread = _sceneMgr->createEntity("E_Thread", "thread.mesh");
 	SceneNode* nodeThread = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Thread");
 	nodeThread->attachObject(entityThread);
 
@@ -1186,12 +1205,12 @@ void PlayState::createTestGameEntities(){
 	//------------------------------------------------------------------------------------
 
 	//BOBINA-------------------------------------------------------------------------------
-	Entity *entityReel = _sceneMgr->createEntity("EntReel", "Bobina.mesh");
+	Entity *entityReel = _sceneMgr->createEntity("E_Reel", "Bobina.mesh");
 	SceneNode *nodeReel = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Reel");
 	nodeReel->attachObject(entityReel);
 
 	Vector3 sizeReel = Vector3::ZERO;
-	Vector3 positionReel = Vector3(20,6,0);
+	Vector3 positionReel = Vector3(50,0,0);
 
 	OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterReel = NULL;
 	OgreBulletCollisions::CollisionShape *bodyShapeReel = NULL;
