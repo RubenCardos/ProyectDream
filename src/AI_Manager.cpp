@@ -13,6 +13,7 @@ AI_Manager::AI_Manager (Hero* hero, std::vector<Boss*>* bossPieces,std::vector<E
 AI_Manager::~AI_Manager(){
 	delete _hero;
 	delete _enemies;
+	delete _bossPieces;
 }
 
 template<> AI_Manager* Ogre::Singleton<AI_Manager>::msSingleton = 0;
@@ -67,9 +68,17 @@ void AI_Manager::loadBossRoute(){
 		_bossRoute.push_back(routePoint);
 		//--------------------------------------
 
+		std::cout << "tamaño del vector de ruta: " << _bossRoute.size() << std::endl;
+		std::cout << "tamaño del vector de piezas de boss: " << _bossPieces->size() << std::endl;
+		std::cout << "puntos de ruta metidos en el vector: " << std::endl;
+
+		for(int i=0; i<_bossRoute.size(); i++){
+			std::cout << "Punto " <<_bossRoute.at(i) << std::endl;
+		}
+
 		//Inicializo los targets de cada parte del boss----------------
+		*ptrRoutePoint = _bossRoute.at(0);
 		for(int i=0; i<_bossPieces->size(); i++){
-			*ptrRoutePoint = _bossRoute.at(i);
 			_bossPieces->at(i)->setTargetPosition(ptrRoutePoint);
 		}
 		//----------------------------------------------------------------------------
@@ -82,7 +91,7 @@ void AI_Manager::updateBossMovement(){
 	for(int i=0; i<_bossPieces->size(); i++){
 		//Si has llegado a uno de los puntos de la ruta, te diriges al otro
 		pos = _bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition();
-		if(std::abs(pos.x - _bossPieces->at(i)->getTargetPosition()->y) <= EPSILON){
+		if(std::abs(pos.x - _bossPieces->at(i)->getTargetPosition()->x) <= EPSILON){
 			if(std::abs(pos.z - _bossPieces->at(i)->getTargetPosition()->z) <= EPSILON){
 				if(_bossPieces->at(i)->getCurrentIndex() <= _bossRoute.size()){
 					_bossPieces->at(i)->setTargetPosition(_bossPieces->at(i)->getTargetPosition()+1);

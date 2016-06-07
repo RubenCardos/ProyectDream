@@ -14,10 +14,10 @@ PhysicsManager::PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics:
 }
 
 PhysicsManager::~PhysicsManager(){
-	/*delete _sceneMgr;
-	delete _world
+	delete _sceneMgr;
+	delete _world;
 	delete _hero;
-	delete _gameEntities;*/
+	delete _gameEntities;
 }
 
 template<> PhysicsManager* Ogre::Singleton<PhysicsManager>::msSingleton = 0;
@@ -60,17 +60,25 @@ void PhysicsManager::detectHeroCollision(){
 				}
 			
 
-     		std::cout << "Colision Hero con: " << node -> getName() << std::endl;
-			if (node) {
+     		if (node) {
 				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
-
-				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
+				
+				/*if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
 					if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
 						if(_hero->getNumJumps() < N_JUMPS){
 							_hero->setNumJumps(N_JUMPS);
 						}
 					}
-				}
+				}*/
+
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Ground")){
+					if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
+						if(_hero->getNumJumps() < N_JUMPS){
+							_hero->setNumJumps(N_JUMPS);
+						}
+					}
+				}	
+
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){
 					//Eliminar SceneNode, Entity y Cuerpo Fisico asi--------------
 					Entity* _e = static_cast<Entity*>(node->getAttachedObject(0));
@@ -89,13 +97,13 @@ void PhysicsManager::detectHeroCollision(){
 					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					//Actualizar las vidas en la UI
 				}
-				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_doorRoom")){
+				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorRoom")){
 					Scenario scenario = LevelRoom;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
 
 				}
-				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_doorGarden")){
+				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorGarden")){
 					Scenario scenario = LevelGarden;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
@@ -118,8 +126,6 @@ void PhysicsManager::detectHeroCollision(){
 					}
 				}
 			}
-
-		  
    		}
 		//------------------------------------------------
 	}

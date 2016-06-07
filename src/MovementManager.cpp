@@ -14,8 +14,8 @@ MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::
 	_bossPieces = bossPieces;
 	_walls= walls;
 	_hero->setNumJumps(N_JUMPS);
-	_aiManager = new AI_Manager(_hero,_bossPieces,_enemies);
 	_inBossRoom = false;
+	_aiManager = new AI_Manager(_hero,_bossPieces,_enemies);
 }
 
 MovementManager::~MovementManager(){
@@ -124,11 +124,13 @@ void MovementManager::moveBoss(){
 	Ogre::Vector3 *target = new Ogre::Vector3(0,0,0);
 	Ogre::Vector3 velocity(0,0,0);
 
-	for(int i=0; i<_bossPieces->size(); i++){
+	for(unsigned int i=0; i<_bossPieces->size(); i++){
 		origin = _bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition();
 		target = _bossPieces->at(i)->getTargetPosition();
 		velocity = *target - origin;
-		_bossPieces->at(i)->getRigidBody()->setAngularVelocity(velocity);
+		velocity = velocity;
+		//_bossPieces->at(i)->getRigidBody()->setAngularVelocity(velocity);
+		_bossPieces->at(i)->getRigidBody()->setLinearVelocity(velocity);
 	}
 }
 
@@ -162,6 +164,11 @@ void MovementManager::setEnemies(std::vector<Enemy*>* enemies){
 
 void MovementManager::setWalls(std::vector<Wall*>* walls){
 	_walls = walls;
+}
+
+void MovementManager::setBossPieces(std::vector<Boss*>* bossPieces){
+	_bossPieces = bossPieces;
+	//_aiManager->setBossPieces(bossPieces);
 }
 
 void MovementManager::inBossRoom(){

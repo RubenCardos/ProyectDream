@@ -99,10 +99,10 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   
   Hero* _hero;
   std::vector<Ogre::SceneNode*> _vScenario; //Vector que representa el escenario, compuesto por sceneNodes (Luego habrá que meterle cuerpos fisicos tambien);
-  std::vector<Enemy*>* _enemies;
-  std::vector<Wall*>* _walls;
-  std::vector<GameEntity*>* _gameEntities;
-  std::vector<Boss*>* _bossPieces;
+  std::vector<Enemy*> _enemies;
+  std::vector<Wall*> _walls;
+  std::vector<GameEntity*> _gameEntities;
+  std::vector<Boss*> _bossPieces;
 
   MovementManager* _movementManager;
   PhysicsManager* _physicsManager;
@@ -117,7 +117,6 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   bool _wallsAreVisible;
 
   void CreateInitialWorld();
-  void DetectCollisionAim();
 
   void createGUI();
   void updateGUI();

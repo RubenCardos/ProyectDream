@@ -11,20 +11,20 @@
 
 #include "PhysicsMask.h"
 
-#define FLOOR_POSITION_Y 0.0;  // PONERLO BIEN (todos los define, meterlos en un archivo de configuracion)
-#define FLOOR_POSITION_Z 4.0;
+#define FLOOR_POSITION_Y 0.0  // PONERLO BIEN (todos los define, meterlos en un archivo de configuracion)
+#define FLOOR_POSITION_Z 4.0
 
-#define WALLB_POSITION_Z 2.0;
-#define WALLB_POSITION_X -39.0;
+#define WALLB_POSITION_Z 2.0
+#define WALLB_POSITION_X -39.0
 
-#define WALLL_POSITION_Y 0.15;
-#define WALLL_POSITION_Z -13.0;
+#define WALLL_POSITION_Y 0.15
+#define WALLL_POSITION_Z -13.0
 
-#define WALLR_POSITION_Y 0.15;
-#define WALLR_POSITION_Z 19.0;
+#define WALLR_POSITION_Y 0.15
+#define WALLR_POSITION_Z 19.0
 
-#define BOSS_ROOM 100.0;
-#define BOSS_ROOM_SCALE 3.0;
+#define BOSS_ROOM 100.0
+#define BOSS_ROOM_SCALE 3.0
 
 
 using namespace std;
@@ -90,12 +90,12 @@ PlayState::enter ()
 
   //Crear el MovementManager
   //_movementManager = new MovementManager(_sceneMgr,_hero,_enemies);
-  _movementManager = new MovementManager(_sceneMgr,_hero,_enemies,_bossPieces,_walls);
+  _movementManager = new MovementManager(_sceneMgr,_hero,&_enemies,&_bossPieces,&_walls);
   //-------------------
 
   //Crear el PhysicsManager
     //_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_enemies);
-  _physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_gameEntities);
+  _physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,&_gameEntities);
   //-------------------
 
   //Iniciacion Variables---
@@ -155,8 +155,8 @@ PlayState::CreateInitialWorld() {
   //--------------------------------------------------------
 
   //Suelo Grafico-----------------------------------------------
-  SceneNode* _groundNode = _sceneMgr->createSceneNode("ground");
-  Entity* _groundEnt = _sceneMgr->createEntity("planeEnt", "p1");
+  SceneNode* _groundNode = _sceneMgr->createSceneNode("SN_Ground");
+  Entity* _groundEnt = _sceneMgr->createEntity("E_Ground", "p1");
   _groundEnt->setMaterialName("Ground");
   _groundNode->attachObject(_groundEnt);
   _sceneMgr->getRootSceneNode()->addChild(_groundNode);
@@ -167,7 +167,7 @@ PlayState::CreateInitialWorld() {
   Shape = new OgreBulletCollisions::StaticPlaneCollisionShape
     (Ogre::Vector3(0,1,0), -3);   // Vector normal y distancia (antes estaba a 0)
   OgreBulletDynamics::RigidBody *rigidBodyPlane = new 
-    OgreBulletDynamics::RigidBody("RB_ground", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
+    OgreBulletDynamics::RigidBody("RB_Ground", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
 
   // Creamos la forma estatica (forma, Restitucion, Friccion) ------
   rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8);
@@ -176,10 +176,8 @@ PlayState::CreateInitialWorld() {
   _shapes.push_back(Shape);
   _bodies.push_back(rigidBodyPlane);
   
-
-  
-  
   //------------------------------------------------------------
+ 
   _currentScenario = Menu;
   _nextScenario = LevelGarden;
   createScenario(_currentScenario);
@@ -302,15 +300,12 @@ PlayState::CreateInitialWorld() {
   _hero->setMovementSpeed(150.0);
   //-----------------------------------------------------------------------------
 
-  
-
   // Anadimos los objetos a las deques--
   _shapes.push_back(bodyShape);   
   _bodies.push_back(rigidBody);
   //------------------------------------
 
 }
-
 
 
 bool
@@ -333,12 +328,11 @@ PlayState::frameStarted
   //Movimiento------------
   _movementManager->moveHero(_despPtr);
   if(_bossRoom){
-	  //_movementManager->moveBoss();
+	  _movementManager->moveBoss();
   }
-  //_movementManager->moveEnemies();
+  _movementManager->moveEnemies();
   //----------------------
   
-
   //Animations--------------------------------
   if (_animEnemy != NULL) {
     if (_animEnemy->hasEnded()) {
@@ -354,69 +348,7 @@ PlayState::frameStarted
   return true;
 }
 
-void PlayState::DetectCollisionAim() {
-  //Colisiones------------------------------
-  btCollisionWorld *bulletWorld = _world->getBulletCollisionWorld();
-  int numManifolds = bulletWorld->getDispatcher()->getNumManifolds();
 
-  for (int i=0;i<numManifolds;i++) {
-    btPersistentManifold* contactManifold = 
-      bulletWorld->getDispatcher()->getManifoldByIndexInternal(i);
-    btCollisionObject* obA = 
-      (btCollisionObject*)(contactManifold->getBody0());
-    btCollisionObject* obB = 
-      (btCollisionObject*)(contactManifold->getBody1());
-    
-    //Compruebo con todas dianas-----------------------------
-    /*for(unsigned int i=0;i<_targets.size();i++){
-      Ogre::SceneNode* drain = _targets[i];
-
-      OgreBulletCollisions::Object *obDrain = _world->findObject(drain);
-      OgreBulletCollisions::Object *obOB_A = _world->findObject(obA);
-      OgreBulletCollisions::Object *obOB_B = _world->findObject(obB);
-
-      if ((obOB_A == obDrain) || (obOB_B == obDrain)) {
-        Ogre::SceneNode* node = NULL;
-        if ((obOB_A != obDrain) && (obOB_A)) {
-          node = obOB_A->getRootNode(); delete obOB_A;
-        }
-        else if ((obOB_B != obDrain) && (obOB_B)) {
-          node = obOB_B->getRootNode(); delete obOB_B;
-        }
-        if (node) {
-          cout << "Nodo que colisiona: " << node->getName() << "\n" << endl;
-          
-          //Creo una flecha en la misma posicion y rotacion---
-          Entity *ent = _sceneMgr->createEntity("Arrow" + StringConverter::toString(_numEntities), "arrow.mesh");
-          SceneNode *nod = _sceneMgr->getRootSceneNode()->createChildSceneNode("Arrow" + StringConverter::toString(_numEntities)+"SN");
-          nod->attachObject(ent);
-          nod->setPosition(node->getPosition());
-          nod->setOrientation(node->getOrientation());
-          _numEntities++;
-          //--------------------------------------------------
-          
-          //Aumento la puntuacion-----------------------------
-          _punt+=100;
-          //-------------------------------------------------
-          
-          //Muestro lbl de impacto---------------------------
-          _impact=true;
-          //-------------------------------------------------
-
-          //Cargo y reproduzco el sonido---
-          GameManager::getSingletonPtr()->_simpleEffect = GameManager::getSingletonPtr()->_pSoundFXManager->load("ArrowImpact.wav");
-          GameManager::getSingletonPtr()->_simpleEffect->play();
-          //-------------------------------
-          _sceneMgr->getRootSceneNode()->removeAndDestroyChild (node->getName());
-        }
-      }
-    }
-    //------------------------------------------------
-
-     */
-  }
-  //----------------------------------------  
-}
 bool
 PlayState::frameEnded
 (const Ogre::FrameEvent& evt)
@@ -468,14 +400,14 @@ PlayState::keyPressed
 	  if(_vScenario.size() > 0){
 		  std::cout << "ESCENARIO " << _currentScenario << _vScenario.at(0)<< std::endl;
 	  }
-	  for(int i=0; i<_walls->size(); i++){
-		  _walls->at(i)->getSceneNode()->setVisible(!_wallsAreVisible);
+	  for(unsigned int i=0; i<_walls.size(); i++){
+		  _walls.at(i)->getSceneNode()->setVisible(!_wallsAreVisible);
 	  }
 	  _wallsAreVisible = !_wallsAreVisible;
   }
   //-----------------
 
-  //Movimiento CUBO---------------
+  //Movimiento PJ---------------
   if (e.key == OIS::KC_SPACE) {
     _movementManager->jumpHero();
   }
@@ -506,9 +438,9 @@ PlayState::keyReleased
 {
   
   //Recargo flechas---------------
-  if (e.key == OIS::KC_R) {
+  /*if (e.key == OIS::KC_R) {
     
-  }
+  }*/
   //------------------------------
 
   //Salgo del juego---------------
@@ -518,9 +450,9 @@ PlayState::keyReleased
   //-------------------------------
   
   //Movimiento---------------------
-  if (e.key == OIS::KC_SPACE) {
+  /*if (e.key == OIS::KC_SPACE) {
  
-  }
+  }*/
   if (e.key == OIS::KC_UP) {
     _desp-=Vector3(1,0,0);
   }
@@ -705,13 +637,13 @@ PlayState::changeScenario(Scenario _nextScenario){
     case LevelGarden:
     	while (it.hasMoreElements()){
     		String  _aux = it.getNext()->getName();
-    		if(Ogre::StringUtil::startsWith(_aux,"SNGarden")){
+    		if(Ogre::StringUtil::startsWith(_aux,"SN_Garden")){
     			_sceneMgr->getRootSceneNode()->removeChild(_aux); //detach node from parent
     		}
     	}
     	while(iterator.hasMoreElements()){
     	        Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
-    	        if(Ogre::StringUtil::startsWith(e->getName(),"EntGarden")){
+    	        if(Ogre::StringUtil::startsWith(e->getName(),"E_Garden")){
     	        	_sceneMgr->destroyEntity(e); //detach node from parent
     	        }
     	}
@@ -719,13 +651,13 @@ PlayState::changeScenario(Scenario _nextScenario){
     case LevelRoom:
         	while (it.hasMoreElements()){
         		String  _aux = it.getNext()->getName();
-        		if(Ogre::StringUtil::startsWith(_aux,"SNRoom")){
+        		if(Ogre::StringUtil::startsWith(_aux,"SN_Room")){
         			_sceneMgr->getRootSceneNode()->removeChild(_aux); //detach node from parent
         		}
         	}
         	while(iterator.hasMoreElements()){
         		Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
-        			if(Ogre::StringUtil::startsWith(e->getName(),"EntGarden")){
+        			if(Ogre::StringUtil::startsWith(e->getName(),"E_Garden")){
         				_sceneMgr->destroyEntity(e); //detach node from parent
         	    	}
         	    }
@@ -756,16 +688,16 @@ PlayState::changeScenario(Scenario _nextScenario){
   cout << "Voy a : " << _currentScenario << endl;
 
   //Creo el nuevo escenario---
-  Entity* _ground = _sceneMgr->getEntity("planeEnt");
+  Entity* _ground = _sceneMgr->getEntity("E_Ground");
   switch(_currentScenario) {
       case Menu:
         /* circle stuff */
         break;
       case LevelGarden:
-    	  for(int i=0;i<3;i++ ){
+    	  for(unsigned int i=0;i<3;i++ ){
     	      String aux=Ogre::StringConverter::toString(i);
-    	      Entity* _entScn = _sceneMgr->createEntity("EntGarden"+aux, "escenario2.mesh");
-    	  	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNGarden"+aux);
+    	      Entity* _entScn = _sceneMgr->createEntity("E_Garden"+aux, "escenario2.mesh");
+    	  	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Garden"+aux);
     	  	  _nodeScn->attachObject(_entScn);
     	  	  _nodeScn->yaw(Degree(270));
     	  	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
@@ -774,10 +706,10 @@ PlayState::changeScenario(Scenario _nextScenario){
     	  _ground->setMaterialName("Ground");
       	break;
       case LevelRoom:
-    	  for(int i=0;i<3;i++ ){
+    	  for(unsigned int i=0;i<3;i++ ){
     	      String aux=Ogre::StringConverter::toString(i);
     	      Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario1.mesh");
-    	  	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SNRoom"+aux);
+    	  	  SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Room"+aux);
     	  	  _nodeScn->attachObject(_entScn);
     	  	  _nodeScn->yaw(Degree(270));
     	  	  _nodeScn->setScale(Vector3(2.5,2.5,2.5));
@@ -855,11 +787,11 @@ bool PlayState::deleteScenario(){
        cout << "SALGO DE FOR" << endl;
 
 	    //Elimino las puertas-------------------------------------------------------------------------------------
-	    SceneNode* sndoorR = _sceneMgr->getSceneNode("SN_doorRoom");
+	    SceneNode* sndoorR = _sceneMgr->getSceneNode("SN_DoorRoom");
 	    OgreBulletCollisions::Object* OBdoorRoom =_world->findObject(sndoorR);
 	    _world->getBulletDynamicsWorld()->removeCollisionObject(OBdoorRoom->getBulletObject());
 
-	    SceneNode* sndoorG = _sceneMgr->getSceneNode("SN_doorGarden");
+	    SceneNode* sndoorG = _sceneMgr->getSceneNode("SN_DoorGarden");
 	    OgreBulletCollisions::Object* OBdoorGarden =_world->findObject(sndoorG);
 	    _world->getBulletDynamicsWorld()->removeCollisionObject(OBdoorGarden->getBulletObject());
 
@@ -867,14 +799,14 @@ bool PlayState::deleteScenario(){
 
         while(iterator.hasMoreElements()){
                 Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
-                if(Ogre::StringUtil::startsWith(e->getName(),"E_doorRoom") || Ogre::StringUtil::startsWith(e->getName(),"E_doorGarden")){
+                if(Ogre::StringUtil::startsWith(e->getName(),"E_DoorRoom") || Ogre::StringUtil::startsWith(e->getName(),"E_DoorGarden")){
                   _sceneMgr->destroyEntity(e);
                  
                 }
         }
         while (it.hasMoreElements()){
           sAux = it.getNext()->getName();
-          if(Ogre::StringUtil::startsWith(sAux,"SN_doorGarden") || Ogre::StringUtil::startsWith(sAux,"SN_doorGarden")){
+          if(Ogre::StringUtil::startsWith(sAux,"SN_DoorRoom") || Ogre::StringUtil::startsWith(sAux,"SN_DoorGarden")){
             _sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
             _sceneMgr->destroySceneNode(sAux);
             
@@ -889,13 +821,13 @@ bool PlayState::deleteScenario(){
 	    	//iterator = _sceneMgr->getMovableObjectIterator("Entity");
 	    	while(iterator.hasMoreElements()){
 	    	        Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
-	    	        if(Ogre::StringUtil::startsWith(e->getName(),"LevelGardenEnt")){
+	    	        if(Ogre::StringUtil::startsWith(e->getName(),"E_LevelGarden")){
 	    	        	_sceneMgr->destroyEntity(e);
 	    	        }
 	    	}
 	    	while (it.hasMoreElements()){
 	    		sAux = it.getNext()->getName();
-	    		if(Ogre::StringUtil::startsWith(sAux,"LevelGardenSN")){
+	    		if(Ogre::StringUtil::startsWith(sAux,"SN_LevelGarden")){
 	    			_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
 	    			_sceneMgr->destroySceneNode(sAux);
 	    		}
@@ -904,13 +836,13 @@ bool PlayState::deleteScenario(){
 	    case LevelRoom:
 	    	while(iterator.hasMoreElements()){
 	    		Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
-	    		if(Ogre::StringUtil::startsWith(e->getName(),"LevelRoomEnt")){
+	    		if(Ogre::StringUtil::startsWith(e->getName(),"E_LevelRoom")){
 	    			_sceneMgr->destroyEntity(e);
 	    		}
 	    	}
 	    	while (it.hasMoreElements()){
 	    		sAux = it.getNext()->getName();
-	    		if(Ogre::StringUtil::startsWith(sAux,"LevelRoomSN")){
+	    		if(Ogre::StringUtil::startsWith(sAux,"SN_LevelRoom")){
 	    			_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
 	    		 	_sceneMgr->destroySceneNode(sAux);
 	    		}
@@ -928,7 +860,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 
 	std::cout << "Creando escenario " << _nextScenario <<std::endl;
 	//Creo el nuevo escenario---
-	Entity* _ground = _sceneMgr->getEntity("planeEnt");
+	Entity* _ground = _sceneMgr->getEntity("E_Ground");
 
 	switch(_nextScenario) {
 	case Menu:{
@@ -937,21 +869,21 @@ void PlayState::createScenario(Scenario _nextScenario){
 	    GameEntity* gameEntity = new GameEntity();
 	    Ogre::Vector3 positionRoom(25,0,7);
 	    Ogre::Vector3 scaleRoom = Ogre::Vector3(1,1,1);
-	    gameEntity = createGameEntity("doorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
+	    gameEntity = createGameEntity("DoorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
 	    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 
 	    Ogre::Vector3 positionGarden(25,0,-7);
 	    Ogre::Vector3 scaleGarden = Ogre::Vector3(1,1,1);
-	    gameEntity = createGameEntity("doorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
+	    gameEntity = createGameEntity("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
 	    gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 		break;
 }
 	case LevelGarden:
     createTestGameEntities();
-		for(int i=0;i<3;i++ ){
+		for(unsigned int i=0;i<3;i++ ){
 			String aux=Ogre::StringConverter::toString(i + _numModules);
-			Entity* _entScn = _sceneMgr->createEntity("LevelGardenEnt"+aux, "escenario2.mesh");
-			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("LevelGardenSN"+aux);
+			Entity* _entScn = _sceneMgr->createEntity("E_LevelGarden"+aux, "escenario2.mesh");
+			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_LevelGarden"+aux);
 			_nodeScn->attachObject(_entScn);
 			_nodeScn->yaw(Degree(270));
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
@@ -968,10 +900,10 @@ void PlayState::createScenario(Scenario _nextScenario){
 
 	case LevelRoom:
     createTestGameEntities();
-		for(int i=0;i<3;i++ ){
+		for(unsigned int i=0;i<3;i++){
 			String aux=Ogre::StringConverter::toString(i + _numModules);
-			Entity* _entScn = _sceneMgr->createEntity("LevelRoomEnt"+aux, "escenario.mesh");
-			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("LevelRoomSN"+aux);
+			Entity* _entScn = _sceneMgr->createEntity("E_LevelRoom"+aux, "escenario.mesh");
+			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_LevelRoom"+aux);
 			_nodeScn->attachObject(_entScn);
 			_nodeScn->yaw(Degree(270));
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
@@ -1005,8 +937,6 @@ void PlayState::createAllWalls(){
 	WallType name;
 	GameEntity* gameEntity = new GameEntity();
 	Wall* wall;
-	_walls = new std::vector<Wall*>();
-	_walls->clear();
 
 	//para paredes laterales //cambiar el 40 por la longitud de 2 o 3 modulos de nivel
 
@@ -1019,7 +949,7 @@ void PlayState::createAllWalls(){
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
-	_walls->push_back(wall);
+	_walls.push_back(wall);
 
 	//Muro de la derecha
 	position.z = WALLR_POSITION_Z;
@@ -1029,7 +959,7 @@ void PlayState::createAllWalls(){
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
-	_walls->push_back(wall);
+	_walls.push_back(wall);
 
 	//Suelo
 	//para el suelo, (40,1,20) quiza (cambiar el 20 por la longitud de 2 0 3 modulos)
@@ -1041,7 +971,7 @@ void PlayState::createAllWalls(){
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
-	_walls->push_back(wall);*/
+	_walls.push_back(wall);*/
 
 	//para la pared trasera, (1,10,20) quiza
 	position.z = WALLB_POSITION_Z;
@@ -1052,12 +982,16 @@ void PlayState::createAllWalls(){
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
-	_walls->push_back(wall);
+	_walls.push_back(wall);
 
 }
 
 GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale){
 	std::cout << "Creando GameEntity " << name << std::endl;
+  double mass = 5.0;
+  if(Ogre::StringUtil::startsWith(name,"Door")){
+    mass = 0.0;
+  }
 
 	GameEntity* gameEntity;
 	Ogre::SceneNode* node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_" + name);
@@ -1081,7 +1015,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world);
 		rigidBody->setShape(node, bodyShape,
 				0.0 /* Restitucion */, 0.9 /* Friccion */,
-				0.0 /* Masa */, position /* Posicion inicial */,
+				mass /* Masa */, position /* Posicion inicial */,
 				Quaternion::IDENTITY /* Orientacion */);
 	}
 
@@ -1094,7 +1028,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 	gameEntity->setRigidBody(rigidBody);
 
 	std::cout << gameEntity->getSceneNode()->getName() << " " << gameEntity->getRigidBody()->getName() << std::endl;
-	//_gameEntities->push_back(gameEntity);
+	_gameEntities.push_back(gameEntity);
 
 	return gameEntity;
 }
@@ -1115,8 +1049,8 @@ void PlayState::createBossRoom(){
 		//----------------------------------------------------------------------------------------------------
 
 		//Elimino Muros Antiguos-------------------------------------------------------------------------------
-		for(int i=0; i<_walls->size(); i++){
-			Wall* aux = _walls->at(i);
+		for(unsigned int i=0; i<_walls.size(); i++){
+			Wall* aux = _walls.at(i);
 			//Elimino el SceneNode, la entidad y el cuerpo de colision---
 			Entity* _e = static_cast<Entity*>(aux->getSceneNode()->getAttachedObject(0));
 			_sceneMgr->destroyEntity(_e);
@@ -1125,9 +1059,6 @@ void PlayState::createBossRoom(){
 			//------------------------------------------------------------
 		}
 		//--------------------------------------------------------------------------------------------------------
-
-		_walls = new std::vector<Wall*>();
-		_walls->clear();
 
 		//Muro de la izquierda--------
 		/*position.z = WALLL_POSITION_Z + BOSS_ROOM;
@@ -1138,7 +1069,7 @@ void PlayState::createBossRoom(){
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
-		_walls->push_back(wall);
+		_walls.push_back(wall);
 
 		//Muro de la derecha----------
 		position.z = WALLR_POSITION_Z + BOSS_ROOM;
@@ -1148,7 +1079,7 @@ void PlayState::createBossRoom(){
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
-		_walls->push_back(wall);*/
+		_walls.push_back(wall);*/
 
 		/*
 		//Muro delantero--------
@@ -1159,7 +1090,7 @@ void PlayState::createBossRoom(){
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
-		_walls->push_back(wall);
+		_walls.push_back(wall);
 
 		//Muro trasero----------
 		position.z = WALLR_POSITION_Z;
@@ -1169,7 +1100,7 @@ void PlayState::createBossRoom(){
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
-		_walls->push_back(wall);
+		_walls.push_back(wall);
 		 */
 
 		//Suelo-----------------------
@@ -1181,7 +1112,7 @@ void PlayState::createBossRoom(){
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
-		_walls->push_back(wall);
+		_walls.push_back(wall);
 
 		_movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 		/*//Cambiar posicion de la camara--------------------
@@ -1193,12 +1124,10 @@ void PlayState::createBossRoom(){
 		_camera->setFarClipDistance(10000);
 		//-----------------------------*/
 
-		_movementManager->setWalls(_walls);
+		_movementManager->setWalls(&_walls);
 		_bossRoom = true;
 
 		//Crear Boss------------------------------------------------------
-		_bossPieces = new std::vector<Boss*>();
-		_bossPieces->clear();
 		gameEntity = new GameEntity();
 		Boss* bossLocomotive = new Boss();
 		Boss* bossWagon = new Boss();
@@ -1206,19 +1135,13 @@ void PlayState::createBossRoom(){
 		gameEntity = createGameEntity("BossLocomotive", "cube.mesh", position, Ogre::Vector3(1,1,1));
 		bossLocomotive->setSceneNode(gameEntity->getSceneNode());
 		bossLocomotive->setRigidBody(gameEntity->getRigidBody());
-		_bossPieces->push_back(bossLocomotive);
+		_bossPieces.push_back(bossLocomotive);
 		position.x += 6.0;
 
 		gameEntity = createGameEntity("BossWagon1", "cube.mesh", position, Ogre::Vector3(1,1,1));
 		bossWagon->setSceneNode(gameEntity->getSceneNode());
 		bossWagon->setRigidBody(gameEntity->getRigidBody());
-		_bossPieces->push_back(bossWagon);
-		position.x += 6.0;
-
-		gameEntity = createGameEntity("BossWagon2", "cube.mesh", position, Ogre::Vector3(1,1,1));
-		bossWagon->setSceneNode(gameEntity->getSceneNode());
-		bossWagon->setRigidBody(gameEntity->getRigidBody());
-		_bossPieces->push_back(bossWagon);
+		_bossPieces.push_back(bossWagon);
 
 		//----------------------------------------------------------------
 	}
@@ -1340,10 +1263,8 @@ void PlayState::createTestGameEntities(){
 	//-----------------------------------------------------------------------------
 
 	//crear el vector de enemigos. De momento, con un enemigo---
-	_enemies = new std::vector<Enemy*>();
-	_enemies->push_back(enemy);
-	_gameEntities = new std::vector<GameEntity*>();
-	_gameEntities->push_back(enemy);
+	_enemies.push_back(enemy);
+	_gameEntities.push_back(enemy);
 	//-------------------------------------------------
 
 }

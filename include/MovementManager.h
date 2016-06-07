@@ -37,6 +37,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   void setHero(Hero* hero);
   void setEnemies(std::vector<Enemy*>* enemies);
   void setWalls(std::vector<Wall*>* walls);
+  void setBossPieces(std::vector<Boss*>* bossPieces);
   void setAI_Manager(AI_Manager* aiManager);
   
   // Heredados de Ogre::Singleton.
