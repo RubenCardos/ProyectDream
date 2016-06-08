@@ -1376,6 +1376,8 @@ PlayState::populateObstacles(String _path){
 	      GameEntity* ge = new GameEntity();
 	      ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",aux,scale);
 
+	      Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
+	      e->setMaterialName("Ground");
 	      index++;
 
 	    }
