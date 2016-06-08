@@ -133,6 +133,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale);
   void printAll();
 
+  void populateObstacles(String _path);
+
 };
 
 #endif

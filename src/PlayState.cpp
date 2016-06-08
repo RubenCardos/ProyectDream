@@ -935,6 +935,10 @@ void PlayState::createScenario(Scenario _nextScenario){
     _currentScenario = _nextScenario;
     _numModules += 3;
     _sceneMgr->setSkyBox(true, "MatSkyboxlvl2");
+
+    //Obstaculos--------------------------------
+    populateObstacles("data/Levels/ObstaclesLvlGarden.txt");
+    //------------------------------------------
     break;
 
   case LevelRoom:
@@ -1040,7 +1044,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
   OgreBulletDynamics::RigidBody* rigidBody;
 
-  if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor") || Ogre::StringUtil::startsWith(name,"Boss")){
+  if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor") || Ogre::StringUtil::startsWith(name,"Boss")|| Ogre::StringUtil::startsWith(name,"Obstacle")){
     node->scale(scale);
     OgreBulletCollisions::BoxCollisionShape* bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
 
@@ -1049,12 +1053,17 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
       rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 20.0f/*Masa*/, position);
     }
     else{
-      rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
-      if(Ogre::StringUtil::startsWith(name,"Wall")){
-        rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.1f/*Friccion*/, 100.0f/*Masa*/, position);
-      }
-      else{
-        rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
+    	if(Ogre::StringUtil::startsWith(name,"Obstacle")){
+    	      rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+    	      rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 200.0f/*Masa*/, position);
+    	}else{
+    	  rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+    	  if(Ogre::StringUtil::startsWith(name,"Wall")){
+    		  rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.1f/*Friccion*/, 100.0f/*Masa*/, position);
+    	  }
+    	  else{
+    		  rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
+    	  }
       }
     }
   }
@@ -1329,4 +1338,38 @@ void PlayState::createBoss(){
   _bossPieces.push_back(bossWagon);
 
   //----------------------------------------------------------------
+}
+
+void
+PlayState::populateObstacles(String _path){
+	//Leo el fichero-----------------------------------
+	  fstream fichero;//Fichero
+	  string frase;//Auxiliar
+	  fichero.open(_path.c_str(),ios::in);
+	  int index=0;
+	  if (fichero.is_open()) {
+	    while (getline (fichero,frase)) {
+	      int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+	      int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+	      int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+
+	      int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+
+	      int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+	      int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+	      int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+
+	      Vector3 aux = Vector3(x,y,z);
+	      Quaternion q = Quaternion(Quaternion::IDENTITY);
+	      Vector3 scale = Vector3(Sx,Sy,Sz);
+
+	      GameEntity* ge = new GameEntity();
+	      ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",aux,scale);
+
+	      index++;
+
+	    }
+	    fichero.close();
+	  }
+	  //-------------------------------------------------
 }
