@@ -1286,7 +1286,7 @@ void PlayState::createTestGameEntities(){
 
 	*/
 	//BOBINA-------------------------------------------------------------------------------
-	Entity *entityReel = _sceneMgr->createEntity("E_Reel", "Bobina.mesh");
+	Entity *entityReel = _sceneMgr->createEntity("E_Reel"+ Ogre::StringConverter::toString(_numEntities), "Bobina.mesh");
 	SceneNode *nodeReel = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Reel"+ Ogre::StringConverter::toString(_numEntities));
 	nodeReel->attachObject(entityReel);
 
@@ -1307,7 +1307,7 @@ void PlayState::createTestGameEntities(){
 	bodyShapeReel = trimeshConverterReel->createConvex();
 
 	//bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-	rigidBodyReel = new OgreBulletDynamics::RigidBody("SN_Reel", _world,PhysicsMask::COL_Reel,PhysicsMask::reel_collides_with);
+	rigidBodyReel = new OgreBulletDynamics::RigidBody("RB_Reel"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Reel,PhysicsMask::reel_collides_with);
 
 	rigidBodyReel->setShape(nodeReel, bodyShapeReel,
 			0.0 /* Restitucion */, 0.9 /* Friccion */,
@@ -1323,7 +1323,7 @@ void PlayState::createTestGameEntities(){
 
 	//------------------------------------------------------------------------------------
 	//Enemigo----------------------------------------
-	Entity *entity1 = _sceneMgr->createEntity("E_Enemy", "enemy.mesh");
+	Entity *entity1 = _sceneMgr->createEntity("E_Enemy"+ Ogre::StringConverter::toString(_numEntities), "enemy.mesh");
 	SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Enemy"+ Ogre::StringConverter::toString(_numEntities));
 	node1->attachObject(entity1);
 
@@ -1343,7 +1343,7 @@ void PlayState::createTestGameEntities(){
 	bodyShape1 = trimeshConverter->createConvex();
 
 	//bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-	rigidBody1 = new OgreBulletDynamics::RigidBody("RB_Enemy", _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
+	rigidBody1 = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
 
 	rigidBody1->setShape(node1, bodyShape1,
 			0.0 /* Restitucion */, 0.9 /* Friccion */,
