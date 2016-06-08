@@ -777,6 +777,18 @@ bool PlayState::deleteScenario(){
 
 	std::cout << "Borrando escenario " << _currentScenario <<std::endl;
 
+	switch(_currentScenario){
+	case Menu:
+		cout << "\n\nVENGO DE MENU\n\n" << endl;
+		break;
+	case LevelRoom:
+		cout << "\n\nVENGO DE ROOM\n\n" << endl;
+		break;
+	case LevelGarden:
+		cout << "\n\nVENGO DE GARDEN\n\n" << endl;
+		break;
+	}
+
 	/*Borrar vector*/
 	for(unsigned int i=0; i<_vScenario.size(); i++){ //borrar los trozos de escenario
 		delete _vScenario.at(i);
@@ -794,24 +806,7 @@ bool PlayState::deleteScenario(){
 	switch(_currentScenario) {
 	case Menu:{
 
-
-		/*for (int i=0;i<_bodies.size();i++) {
-
-            OgreBulletDynamics::RigidBody * rigidBody = static_cast<OgreBulletDynamics::RigidBody *>(_bodies.at(i));
-            cout << "ENTRO 1" << endl;
-            if(rigidBody!=NULL){
-              sAux2=rigidBody->getSceneNode()->getName();
-              cout << "ENTRO 2" << endl;
-              if(Ogre::StringUtil::startsWith(sAux2,"RB_doorGarden") || Ogre::StringUtil::startsWith(sAux2,"RB_doorGarden")){
-                  delete rigidBody;
-                  cout << "ELIMINO RigidBody" << endl;
-              }
-              cout << "ESTOY EN EL FOR" << endl;
-            }
-
-
-          }*/
-		cout << "SALGO DE FOR" << endl;
+		cout << "\n\nENTRO BIEN\n\n" << endl;
 
 		//Elimino las puertas-------------------------------------------------------------------------------------
 
@@ -827,14 +822,6 @@ bool PlayState::deleteScenario(){
 						_sceneMgr->getRootSceneNode()->removeChild(_aux);
 					}
 				}
-
-		/*SceneNode* sndoorR = _sceneMgr->getSceneNode("SN_DoorRoom");
-		OgreBulletCollisions::Object* OBdoorRoom =_world->findObject(sndoorR);
-		_world->getBulletDynamicsWorld()->removeCollisionObject(OBdoorRoom->getBulletObject());
-
-		SceneNode* sndoorG = _sceneMgr->getSceneNode("SN_DoorGarden");
-		OgreBulletCollisions::Object* OBdoorGarden =_world->findObject(sndoorG);
-		_world->getBulletDynamicsWorld()->removeCollisionObject(OBdoorGarden->getBulletObject());*/
 
 		//--------------------------------------------------------------------------------------------------------
 
@@ -861,7 +848,9 @@ bool PlayState::deleteScenario(){
 		while ( it.hasMoreElements() ) {//Recorro el iterador
 			SceneNode* _aux = static_cast<SceneNode*>(it.getNext());
 
-			if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Obstacle") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Thread") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Reel")|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Enemy") ){
+			if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Obstacle") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Thread")
+				|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Reel")|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Enemy")
+				|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall")){
 				Entity* _e = static_cast<Entity*>(_aux->getAttachedObject(0));//Recupero la entidad
 				OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
 				_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
@@ -945,6 +934,8 @@ void PlayState::createScenario(Scenario _nextScenario){
 		Ogre::Vector3 scaleGarden = Ogre::Vector3(3,3,3);
 		gameEntity = createGameEntity("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
 		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
+
+		_currentScenario=Menu;
 		break;
 	}
 	case LevelGarden:
@@ -963,7 +954,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 		}
 
 		_ground->setMaterialName("Ground");
-		_currentScenario = _nextScenario;
+		_currentScenario = LevelGarden;
 		_numModules += 3;
 		_sceneMgr->setSkyBox(true, "MatSkyboxlvl2");
 
@@ -991,7 +982,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 			_vScenario.push_back(_nodeScn);
 		}
 		_ground->setMaterialName("GroundRoom");
-		_currentScenario = _nextScenario;
+		_currentScenario = LevelRoom;
 		_numModules += 3;
 		_sceneMgr->setSkyBox(true, "MaterialSkybox");
 		break;
