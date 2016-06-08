@@ -328,6 +328,7 @@ PlayState::frameStarted
 
   //Movimiento------------
   _movementManager->moveHero(_despPtr);
+  _movementManager->moveWalls();
   if(_bossRoom){
     _movementManager->moveBoss(); //ACTIVAR
   }
@@ -1036,10 +1037,6 @@ void PlayState::createAllWalls(){
 
 GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale){
   std::cout << "Creando GameEntity " << name << std::endl;
-  double mass = 5.0;
-  if(Ogre::StringUtil::startsWith(name,"Door")){
-    mass = 0.0;
-  }
 
   GameEntity* gameEntity;
   Ogre::SceneNode* node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_" + name);
@@ -1058,23 +1055,23 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
     }
     else{
     	if(Ogre::StringUtil::startsWith(name,"Obstacle")){
-    	      rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
-    	      rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 200.0f/*Masa*/, position);
+    		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+    		rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 200.0f/*Masa*/, position);
     	}else{
     		if(Ogre::StringUtil::startsWith(name,"Thread")){
-    		      rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
-    		      rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 0.0f/*Masa*/, position);
-    		    }else{
-
-    	  rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
-    	  if(Ogre::StringUtil::startsWith(name,"Wall")){
-    		  rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.1f/*Friccion*/, 100.0f/*Masa*/, position);
-    	  }
-    	  else{
-    		  rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
-    	  }
-    		    }
-      }
+    			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
+    			rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 0.0f/*Masa*/, position);
+    		}
+    		else{
+    			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+    			if(Ogre::StringUtil::startsWith(name,"Wall")){
+    				rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
+    			}
+    			else{
+    				rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
+    			}
+    		}
+    	}
     }
   }
   else{
@@ -1083,10 +1080,20 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
     OgreBulletCollisions::CollisionShape *bodyShape = trimeshConverter->createConvex();
 
     rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world);
-    rigidBody->setShape(node, bodyShape,
-        0.0 /* Restitucion */, 0.9 /* Friccion */,
-        mass /* Masa */, position /* Posicion inicial */,
-        Quaternion::IDENTITY /* Orientacion */);
+
+    if(Ogre::StringUtil::startsWith(name,"Door")){
+    	rigidBody->setShape(node, bodyShape,
+    	        0.0 /* Restitucion */, 0.9 /* Friccion */,
+    	        0.0 /* Masa */, position /* Posicion inicial */,
+    	        Quaternion::IDENTITY /* Orientacion */);
+    }
+    else{
+    	rigidBody->setShape(node, bodyShape,
+    		0.0 /* Restitucion */, 0.9 /* Friccion */,
+    	    5.0 /* Masa */, position /* Posicion inicial */,
+    	    Quaternion::IDENTITY /* Orientacion */);
+    }
+
   }
 
   rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));

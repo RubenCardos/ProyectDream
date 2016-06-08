@@ -93,6 +93,7 @@ void PhysicsManager::detectHeroCollision(){
 					//PlayState::getSingletonPtr()->changeScenarioQ();
 					Scenario scenario = Menu;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
+					cout << "CAMBIANDO AL ESCENARIO DE MENU" <<endl;
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){

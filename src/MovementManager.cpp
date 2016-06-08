@@ -54,7 +54,7 @@ void MovementManager::jumpHero(){
 		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
 		_hero->setNumJumps(_hero->getNumJumps()-1);
 	}
-	moveWalls();
+	//moveWalls();
 }
 
 void MovementManager::repositionHero(btVector3 position,btQuaternion orientation){
