@@ -134,6 +134,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   void printAll();
 
   void populateObstacles(String _path);
+  void populateThreads(String _path);
 
 };
 

@@ -939,6 +939,10 @@ void PlayState::createScenario(Scenario _nextScenario){
     //Obstaculos--------------------------------
     populateObstacles("data/Levels/ObstaclesLvlGarden.txt");
     //------------------------------------------
+
+    //Hilos--------------------------------------
+    populateThreads("data/Levels/ThreadsGarden.txt");
+    //-------------------------------------------
     break;
 
   case LevelRoom:
@@ -1044,7 +1048,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
   OgreBulletDynamics::RigidBody* rigidBody;
 
-  if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor") || Ogre::StringUtil::startsWith(name,"Boss")|| Ogre::StringUtil::startsWith(name,"Obstacle")){
+  if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor") || Ogre::StringUtil::startsWith(name,"Boss")|| Ogre::StringUtil::startsWith(name,"Obstacle")|| Ogre::StringUtil::startsWith(name,"Thread")){
     node->scale(scale);
     OgreBulletCollisions::BoxCollisionShape* bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
 
@@ -1057,6 +1061,11 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
     	      rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
     	      rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 200.0f/*Masa*/, position);
     	}else{
+    		if(Ogre::StringUtil::startsWith(name,"Thread")){
+    		      rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
+    		      rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 0.0f/*Masa*/, position);
+    		    }else{
+
     	  rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name, _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
     	  if(Ogre::StringUtil::startsWith(name,"Wall")){
     		  rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.1f/*Friccion*/, 100.0f/*Masa*/, position);
@@ -1064,6 +1073,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
     	  else{
     		  rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
     	  }
+    		    }
       }
     }
   }
@@ -1233,7 +1243,7 @@ void PlayState::createTestGameEntities(){
   nodeReel->attachObject(entityReel);
 
   Vector3 sizeReel = Vector3::ZERO;
-  Vector3 positionReel = Vector3(50,0,0);
+  Vector3 positionReel = Vector3(250,0,0);
 
   OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterReel = NULL;
   OgreBulletCollisions::CollisionShape *bodyShapeReel = NULL;
@@ -1365,6 +1375,40 @@ PlayState::populateObstacles(String _path){
 
 	      GameEntity* ge = new GameEntity();
 	      ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",aux,scale);
+
+	      index++;
+
+	    }
+	    fichero.close();
+	  }
+	  //-------------------------------------------------
+}
+
+void
+PlayState::populateThreads(String _path){
+	//Leo el fichero-----------------------------------
+	  fstream fichero;//Fichero
+	  string frase;//Auxiliar
+	  fichero.open(_path.c_str(),ios::in);
+	  int index=0;
+	  if (fichero.is_open()) {
+	    while (getline (fichero,frase)) {
+	      int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+	      int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+	      int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+
+	      int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+
+	      int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+	      int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+	      int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+
+	      Vector3 aux = Vector3(x,y,z);
+	      Quaternion q = Quaternion(Quaternion::IDENTITY);
+	      Vector3 scale = Vector3(Sx,Sy,Sz);
+
+	      GameEntity* ge = new GameEntity();
+	      ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
 
 	      index++;
 
