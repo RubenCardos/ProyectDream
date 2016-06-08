@@ -8,8 +8,8 @@ using namespace OgreBulletCollisions;
 using namespace OgreBulletDynamics;
 
 enum BossType {
-	Wagon,
-	Locomotive
+  Wagon,
+  Locomotive
 };
 
 class Boss : public GameEntity
@@ -29,7 +29,7 @@ class Boss : public GameEntity
   BossType getType();
   int getPoints();
   int getHealth();
-  double getMovementspeed();
+  double getMovementSpeed();
   Ogre::Real getRageTimer();
   Ogre::Vector3* getVSpeed();
   int getCurrentIndex();
@@ -37,7 +37,7 @@ class Boss : public GameEntity
 
   void setType(BossType type);
   void loseHealth();
-  void setMovementspeed(double movementspeed);
+  void setMovementSpeed(double movementSpeed);
   void setRageTimer(Ogre::Real rageTimer);
   void setVulnerable(bool vulnerable);
   void setV_Speed(Ogre::Vector3* vSpeed);

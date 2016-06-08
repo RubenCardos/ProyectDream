@@ -31,6 +31,7 @@ class AI_Manager : public Ogre::Singleton<AI_Manager>
   
   void updateEnemyMovement();
   void loadBossRoute();
+  void initializeBossMovement(Ogre::Real* deltaT);
   void updateBossMovement();
 
   // Heredados de Ogre::Singleton.

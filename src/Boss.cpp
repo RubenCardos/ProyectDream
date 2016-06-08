@@ -61,7 +61,7 @@ int Boss::getPoints(){
 int Boss::getHealth(){
 	return _health;
 }
-double Boss::getMovementspeed(){
+double Boss::getMovementSpeed(){
 	return _movementSpeed;
 }
 Ogre::Real Boss::getRageTimer(){
@@ -88,8 +88,8 @@ void Boss::loseHealth(){
 		}
 	}
 }
-void Boss::setMovementspeed(double movementspeed){
-	_movementSpeed = movementspeed;
+void Boss::setMovementSpeed(double movementSpeed){
+	_movementSpeed = movementSpeed;
 }
 void Boss::setRageTimer(Ogre::Real rageTimer){
 	_rageTimer = rageTimer;

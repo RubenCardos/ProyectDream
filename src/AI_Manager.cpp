@@ -54,11 +54,13 @@ void AI_Manager::updateEnemyMovement(){
 
 void AI_Manager::loadBossRoute(){
 	//Habría que cargarlo desde un archivo. De momento, lo meto a mano
+	double centerOfMass_y = 0.0;
+	centerOfMass_y = _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().y;
+
 	if(_bossRoute.size() == 0){
 		//Creo la ruta--------------------------
 		_bossRoute.clear();
-		Ogre::Vector3 routePoint(1,1,BOSS_ROOM);
-		Ogre::Vector3* ptrRoutePoint = new Ogre::Vector3();
+		Ogre::Vector3 routePoint(1,centerOfMass_y,BOSS_ROOM);
 		_bossRoute.push_back(routePoint);
 		routePoint.z += 10;
 		_bossRoute.push_back(routePoint);
@@ -70,36 +72,67 @@ void AI_Manager::loadBossRoute(){
 
 		std::cout << "tamaño del vector de ruta: " << _bossRoute.size() << std::endl;
 		std::cout << "tamaño del vector de piezas de boss: " << _bossPieces->size() << std::endl;
-		std::cout << "puntos de ruta metidos en el vector: " << std::endl;
+		//std::cout << "puntos de ruta metidos en el vector: " << std::endl;
 
-		for(int i=0; i<_bossRoute.size(); i++){
+		/*for(int i=0; i<_bossRoute.size(); i++){
 			std::cout << "Punto " <<_bossRoute.at(i) << std::endl;
-		}
-
-		//Inicializo los targets de cada parte del boss----------------
-		*ptrRoutePoint = _bossRoute.at(0);
-		for(int i=0; i<_bossPieces->size(); i++){
-			_bossPieces->at(i)->setTargetPosition(ptrRoutePoint);
-		}
-		//----------------------------------------------------------------------------
+		}*/
 	}
-
 }
 
 void AI_Manager::updateBossMovement(){
-	Ogre::Vector3 pos(0,0,0);
-	for(int i=0; i<_bossPieces->size(); i++){
+	Ogre::Vector3 posPiece(0,0,0);
+	Ogre::Vector3 posRoutePoint(0,0,0);
+
+	for(unsigned int i=0; i<_bossPieces->size(); i++){
 		//Si has llegado a uno de los puntos de la ruta, te diriges al otro
-		pos = _bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition();
-		if(std::abs(pos.x - _bossPieces->at(i)->getTargetPosition()->x) <= EPSILON){
-			if(std::abs(pos.z - _bossPieces->at(i)->getTargetPosition()->z) <= EPSILON){
-				if(_bossPieces->at(i)->getCurrentIndex() <= _bossRoute.size()){
-					_bossPieces->at(i)->setTargetPosition(_bossPieces->at(i)->getTargetPosition()+1);
-				}
-				else{
-					_bossPieces->at(i)->setTargetPosition(0);
-				}
+		posPiece = _bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition();
+		posRoutePoint = _bossRoute.at(_bossPieces->at(i)->getCurrentIndex() + 1);
+		if(posPiece.distance(posRoutePoint) <= EPSILON){
+			if(_bossPieces->at(i)->getCurrentIndex() < (_bossRoute.size() - 1)){
+				_bossPieces->at(i)->setCurrentIndex(_bossPieces->at(i)->getCurrentIndex() + 1);
+				_bossPieces->at(i)->setTargetPosition(&(_bossRoute.at(_bossPieces->at(i)->getCurrentIndex())));
+			}
+			else{
+				//Vuelvo a iniciar la ruta desde el primer punto
+				_bossPieces->at(i)->setTargetPosition(&(_bossRoute.at(0)));
+				_bossPieces->at(i)->setCurrentIndex(-1);
 			}
 		}
+	}
+}
+
+void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
+	if(_bossRoute.size() != 0){
+		Ogre::Vector3* ptrPosition = new Ogre::Vector3();
+		ptrPosition = &_bossRoute.at(0);
+		Ogre::Vector3* ptrSpeed = new Ogre::Vector3();
+		Ogre::Vector3 speed(0,0,0);
+
+		//Inicializo los targets de cada parte del boss----------------
+		for(unsigned int i=0; i<_bossPieces->size(); i++){
+			_bossPieces->at(i)->setTargetPosition(ptrPosition);
+			_bossPieces->at(i)->setCurrentIndex(-1);
+		}
+		//----------------------------------------------------------------------------
+
+		//inicializo el vector de velocidad de la locomotora y los vagones-------------------------
+		//calculo el vector unitario de velocidad de la locomotora (que va a ser el que use el resto, de momento)
+		speed = _bossRoute.at(0) - _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition();
+		speed = speed.normalisedCopy();
+		ptrSpeed = &speed;
+
+
+		cout << "IMPRIMIENDO MIERDAS DE LOCOMOTORA" << endl;
+		cout << "	target = " << *(_bossPieces->at(0)->getTargetPosition()) << endl;
+		cout << "	t_bossRoute(0) = " << _bossRoute.at(0) << endl;
+		std::cout << "	speed " << speed << " ptrSpeed " << *ptrSpeed << endl;
+
+		if(_bossRoute.size() > 0){
+			for(unsigned int i=0; i<_bossPieces->size();i++){
+				_bossPieces->at(i)->setV_Speed(ptrSpeed);
+			}
+		}
+		//---------------------------------------------------------------------------
 	}
 }

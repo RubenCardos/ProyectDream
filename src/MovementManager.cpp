@@ -42,7 +42,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
 		if(_inBossRoom==false){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
-			moveWalls();
+			//moveWalls();
 		}
 	}
 }
@@ -117,20 +117,12 @@ void MovementManager::moveWalls(){
 }
 
 void MovementManager::moveBoss(){
-	_aiManager->loadBossRoute();
 	_aiManager->updateBossMovement();
-
-	Ogre::Vector3 origin(0,0,0);
-	Ogre::Vector3 *target = new Ogre::Vector3(0,0,0);
-	Ogre::Vector3 velocity(0,0,0);
-
+	//cout << "IMPRIMIENDO MIERDAS" << endl;
 	for(unsigned int i=0; i<_bossPieces->size(); i++){
-		origin = _bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition();
-		target = _bossPieces->at(i)->getTargetPosition();
-		velocity = *target - origin;
-		velocity = velocity;
 		//_bossPieces->at(i)->getRigidBody()->setAngularVelocity(velocity);
-		_bossPieces->at(i)->getRigidBody()->setLinearVelocity(velocity);
+		//_bossPieces->at(i)->getRigidBody()->setLinearVelocity(*(_bossPieces->at(i)->getVSpeed()));
+		//cout << "	VMov = " << _bossPieces->at(i)->getMovementSpeed() << "	VSpeed = " << *(_bossPieces->at(i)->getVSpeed()) << endl;
 	}
 }
 
@@ -173,4 +165,9 @@ void MovementManager::setBossPieces(std::vector<Boss*>* bossPieces){
 
 void MovementManager::inBossRoom(){
 	_inBossRoom=true;
+}
+
+void MovementManager::initializeBossMovement(Ogre::Real* deltaT){
+	_aiManager->loadBossRoute();
+	_aiManager->initializeBossMovement(deltaT);
 }

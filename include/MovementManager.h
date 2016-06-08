@@ -27,6 +27,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   void moveEnemies();
   void moveWalls();
   void moveBoss();
+  void initializeBossMovement(Ogre::Real* deltaT);
 
   Ogre::SceneManager* getSceneManager();
   Hero* getHero();
