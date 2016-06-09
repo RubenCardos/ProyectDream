@@ -88,6 +88,8 @@ void PhysicsManager::detectHeroCollision(){
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
 					//------------------------------------------------------------
 					_hero->increaseScore(10);
+
+
 					//Actualizar los puntos en la UI
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){

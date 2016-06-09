@@ -1208,11 +1208,21 @@ void PlayState::createBossRoom(){
 
 		//--------------------------------------------------------------------------------------------------------
 
-		//Muro de la izquierda--------
-		/*position.z = WALLL_POSITION_Z + BOSS_ROOM;
+	//Suelo-----------------------
+	position.z = FLOOR_POSITION_Z + BOSS_ROOM;
+	position.y = FLOOR_POSITION_Y;
+	//name = Floor;
+	scale = Ogre::Vector3(100,0.10,100);
+	gameEntity = createGameEntity("FloorBoss", "cube.mesh", position, scale);
+	wall->setSceneNode(gameEntity->getSceneNode());
+	wall->setRigidBody(gameEntity->getRigidBody());
+	_walls.push_back(wall);
+
+	//Muro de la izquierda--------
+	position.z = 0;
     position.y = WALLL_POSITION_Y;
     //name = LeftWall;
-    scale = Ogre::Vector3(40,10,1);
+    scale = Ogre::Vector3(BOSS_ROOM,10,1);
     gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
@@ -1220,46 +1230,41 @@ void PlayState::createBossRoom(){
     _walls.push_back(wall);
 
     //Muro de la derecha----------
-    position.z = WALLR_POSITION_Z + BOSS_ROOM;
+    position.z =  BOSS_ROOM*2;
     position.y = WALLR_POSITION_Y;
     //name = RightWall;
     gameEntity = createGameEntity("WallRBoss", "cube.mesh", position, scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
-    _walls.push_back(wall);*/
+    _walls.push_back(wall);
 
-		/*
+
     //Muro delantero--------
-    position.z = WALLL_POSITION_Z;
+    position.z = BOSS_ROOM;
+    position.x = BOSS_ROOM;
     position.y = WALLL_POSITION_Y;
     //name = FrontWall;
-    gameEntity = createGameEntity("WallFBoss", "cube.mesh", position);
+    scale = Ogre::Vector3(1,10,100);
+    gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
     _walls.push_back(wall);
 
     //Muro trasero----------
-    position.z = WALLR_POSITION_Z;
+    position.z = BOSS_ROOM;
     position.y = WALLR_POSITION_Y;
+    position.x = - BOSS_ROOM;
     //name = BackWall;
-    gameEntity = createGameEntity("WallBBoss", "cube.mesh", position);
+    gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
     _walls.push_back(wall);
-		 */
 
-		//Suelo-----------------------
-		position.z = FLOOR_POSITION_Z + BOSS_ROOM;
-		position.y = FLOOR_POSITION_Y;
-		//name = Floor;
-		scale = Ogre::Vector3(100,0.10,100);
-		gameEntity = createGameEntity("FloorBoss", "cube.mesh", position, scale);
-		wall->setSceneNode(gameEntity->getSceneNode());
-		wall->setRigidBody(gameEntity->getRigidBody());
-		_walls.push_back(wall);
+
+
 
 		_movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 		/*//Cambiar posicion de la camara--------------------
@@ -1524,6 +1529,7 @@ void PlayState::deleteScenarioContent(){
 	_bossRoom = false;
 	_bossCreated = false;
 
+	_gameEntities.clear();//¿Esta el heroe aqui?
 	//restauro el score y las vidas?
 	//_hero->resetScore();
 	//_hero->resetLives();
