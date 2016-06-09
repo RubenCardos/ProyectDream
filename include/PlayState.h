@@ -117,6 +117,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   bool _wallsAreVisible;
   bool _bossCreated;
 
+  SceneNode* _cameraPivot;
+
   void CreateInitialWorld();
 
   void createGUI();

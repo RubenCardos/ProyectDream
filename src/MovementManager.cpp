@@ -44,6 +44,19 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		if(_inBossRoom==false){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
 		}
 	}
+	if(_currentSpeed.z >0){//Hacia la derecha
+		_hero->getRigidBody()->setOrientation(Quaternion(Degree(-90),Vector3::UNIT_Y));
+	}
+	if(_currentSpeed.z <0){//Hacia la derecha
+		_hero->getRigidBody()->setOrientation(Quaternion(Degree(90),Vector3::UNIT_Y));
+	}
+	if(_currentSpeed.x >0){//Hacia la derecha
+		_hero->getRigidBody()->setOrientation(Quaternion(Degree(0),Vector3::UNIT_Y));
+	}
+	if(_currentSpeed.x <0){//Hacia la derecha
+		_hero->getRigidBody()->setOrientation(Quaternion(Degree(180),Vector3::UNIT_Y));
+	}
+
 }
 
 void MovementManager::jumpHero(){
@@ -98,6 +111,11 @@ void MovementManager::moveEnemies(){
 			cout << "		Velocidad del enemigo = " << _enemies->at(i)->getSpeed() <<endl;
 			_enemies->at(i)->getRigidBody()->applyImpulse(_enemies->at(i)->getSpeed() ,_enemies->at(i)->getRigidBody()->getCenterOfMassPosition());
 
+		}
+		if(_currentSpeed.z >0){//Hacia la derecha
+			_enemies->at(i)->getRigidBody()->setOrientation(Quaternion(Degree(90),Vector3::UNIT_Y));
+		}else{
+			_enemies->at(i)->getRigidBody()->setOrientation(Quaternion(Degree(-90),Vector3::UNIT_Y));
 		}
 	}
 }

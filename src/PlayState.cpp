@@ -111,6 +111,10 @@ PlayState::enter ()
 
 	//-----------------------
 
+	//CameraPivote---
+	_cameraPivot = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_CameraPivot");
+	_cameraPivot->attachObject(_camera);
+	//---------------
 
 	//Animations---------------------------------------------------------------
 	//_animEnemy = _sceneMgr->getEntity("E_Enemy")->getAnimationState("walkEnemy");
@@ -262,7 +266,7 @@ PlayState::CreateInitialWorld() {
 	Entity *entity = _sceneMgr->createEntity("E_Hero", "tedybear.mesh");
 	SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Hero");
 	node->attachObject(entity);
-	node->attachObject(_camera);
+	//node->attachObject(_camera);
 
 	Vector3 size = Vector3::ZERO;
 	Vector3 position = Vector3(0,1.5,0);
@@ -319,6 +323,10 @@ PlayState::frameStarted
 
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
+
+	//Actualizo camara---
+	_cameraPivot->setPosition(_hero->getSceneNode()->getPosition());
+	//-------------------
 
 	//Deteccion Colisones---------
 	_physicsManager->detectHeroCollision();
@@ -448,9 +456,11 @@ PlayState::keyPressed
 	}
 	if (e.key == OIS::KC_LEFT) {
 		_desp+=Vector3(0,0,-1);
+		_hero->getRigidBody()->setOrientation(Quaternion(Degree(90),Vector3::UNIT_Y));
 	}
 	if (e.key == OIS::KC_RIGHT) {
 		_desp+=Vector3(0,0,1);
+		_hero->getRigidBody()->setOrientation(Quaternion(Degree(90),Vector3::UNIT_Y));
 	}
 	//--------------------------------
 

@@ -199,6 +199,7 @@ void PhysicsManager::detectEnemiesCollision(){
 						vel.z = - std::abs(vel.z);
 						_enemies->at(j)->setSpeed(vel);
 						std::cout << "	la velocidad es " << _enemies->at(j)->getSpeed() << std::endl;
+
 					}
 				}
 			}
