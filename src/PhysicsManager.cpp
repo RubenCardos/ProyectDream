@@ -1,6 +1,5 @@
 #include "PhysicsManager.h"
 #include "PlayState.h"
-#include "MovementManager.h"
 using namespace Ogre;
 
 #define N_JUMPS 1
@@ -98,7 +97,7 @@ void PhysicsManager::detectHeroCollision(){
 					if(_hero->getNReel()==2){
 						cout << "\n\nAqui pasaria al boss\n\n" << endl;
 					}
-					Scenario scenario = Menu;
+					Scenario::Scenario scenario = Scenario::Menu;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
 					cout << "CAMBIANDO AL ESCENARIO DE MENU" <<endl;
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
@@ -114,19 +113,20 @@ void PhysicsManager::detectHeroCollision(){
 							_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
 							_sceneMgr->destroyEntity(_e);
 							_sceneMgr->getRootSceneNode()->removeChild(_gameEntities->at(i)->getSceneNode());
+							_gameEntities->erase(_gameEntities->begin() + i);
 						}
 					}
 					//----------------------------------------------------------
 					//Actualizar las vidas en la UI
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorRoom")){
-					Scenario scenario = LevelRoom;
+					Scenario::Scenario scenario = Scenario::LevelRoom;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
 
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorGarden")){
-					Scenario scenario = LevelGarden;
+					Scenario::Scenario scenario = Scenario::LevelGarden;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
 				}

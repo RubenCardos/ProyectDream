@@ -1,6 +1,4 @@
 #include "MovementManager.h"
-#include "PlayState.h"
-
 
 using namespace Ogre;
 
@@ -39,12 +37,14 @@ MovementManager& MovementManager::getSingleton(void){
 void MovementManager::moveHero(Ogre::Vector3* movement){
 	//movimiento del heroe
 	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
+	_hero->setSpeed(_currentSpeed);
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
 		if(_inBossRoom==false){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
 		}
 	}
-	if(_currentSpeed.z >0){//Hacia la derecha
+	rotateHero();
+	/*if(_currentSpeed.z >0){//Hacia la derecha
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(-90),Vector3::UNIT_Y));
 	}
 	if(_currentSpeed.z <0){//Hacia la derecha
@@ -55,7 +55,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	}
 	if(_currentSpeed.x <0){//Hacia la derecha
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(180),Vector3::UNIT_Y));
-	}
+	}*/
 
 }
 
@@ -189,4 +189,13 @@ void MovementManager::inBossRoom(){
 void MovementManager::initializeBossMovement(Ogre::Real* deltaT){
 	_aiManager->loadBossRoute();
 	_aiManager->initializeBossMovement(deltaT);
+}
+
+void MovementManager::rotateHero(){
+	Ogre::Degree degrees = Ogre::Degree(0);
+	Ogre::Vector3 vel(0,0,0);
+	vel = _hero->getSpeed();
+	//calculo los grados entre el vector de velocidad del personaje y el unitario en Z
+	degrees = vel.angleBetween(Ogre::Vector3::UNIT_X);
+	_hero->getRigidBody()->setOrientation(Quaternion(Degree(degrees),Vector3::UNIT_Y));
 }

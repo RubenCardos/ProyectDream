@@ -13,6 +13,7 @@
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include "GameEntity.h"
 #include "AI_Manager.h"
+#include "Scenario.h"
 
 using namespace Ogre;
 
@@ -28,6 +29,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   void moveWalls();
   void moveBoss();
   void initializeBossMovement(Ogre::Real* deltaT);
+  void rotateHero();
 
   Ogre::SceneManager* getSceneManager();
   Hero* getHero();

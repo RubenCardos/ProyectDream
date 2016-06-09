@@ -9,8 +9,6 @@
 #include "Shapes/OgreBulletCollisionsBoxShape.h"
 #include "OgreBulletCollisionsRay.h"
 
-#include "PhysicsMask.h"
-
 #define FLOOR_POSITION_Y -2.8  // PONERLO BIEN (todos los define, meterlos en un archivo de configuracion)
 #define FLOOR_POSITION_Z 4.0
 
@@ -91,13 +89,15 @@ PlayState::enter ()
 	//-------------------
 
 	//Crear el MovementManager
-	//_movementManager = new MovementManager(_sceneMgr,_hero,_enemies);
 	_movementManager = new MovementManager(_sceneMgr,_hero,&_enemies,&_bossPieces,&_walls);
 	//-------------------
 
 	//Crear el PhysicsManager
-	//_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_enemies);
 	_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,&_gameEntities, &_enemies);
+	//-------------------
+
+	//Crear el AnimationManager
+	_animationManager = new AnimationManager(_sceneMgr, &_currentScenario);
 	//-------------------
 
 	//Iniciacion Variables---
@@ -185,8 +185,8 @@ PlayState::CreateInitialWorld() {
 
 	//------------------------------------------------------------
 
-	_currentScenario = Menu;
-	_nextScenario = LevelGarden;
+	_currentScenario = Scenario::Menu;
+	_nextScenario = Scenario::LevelGarden;
 	createScenario(_currentScenario);
 	//createAllWalls();
 	//Paredes Laterales--------------------------
@@ -650,7 +650,7 @@ PlayState::updateGUI()
 	sheet->getChild("background_wnd2")->getChild("textLives")->setText("LIVES: "+Ogre::StringConverter::toString(_hero->getLives()));
 	//----------------------------------
 
-	if(_currentScenario==Menu){
+	if(_currentScenario==Scenario::Menu){
 		sheet->getChild("background_wnd2")->setVisible(false);
 	}else{
 		sheet->getChild("background_wnd2")->setVisible(true);
@@ -659,7 +659,7 @@ PlayState::updateGUI()
 
 
 void 
-PlayState::changeScenario(Scenario _nextScenario){
+PlayState::changeScenario(Scenario::Scenario _nextScenario){
 	cout << "Cambio de escenario" << endl;
 	//Ogre::SceneNode* _snIter = new SceneNode("snIter");
 
@@ -676,10 +676,10 @@ PlayState::changeScenario(Scenario _nextScenario){
 	Ogre::SceneManager::MovableObjectIterator iterator = _sceneMgr->getMovableObjectIterator("Entity");
 
 	switch(_currentScenario) {
-	case Menu:
+	case Scenario::Menu:
 		/* circle stuff */
 		break;
-	case LevelGarden:
+	case Scenario::LevelGarden:
 		while (it.hasMoreElements()){
 			String  _aux = it.getNext()->getName();
 			if(Ogre::StringUtil::startsWith(_aux,"SN_Garden")){
@@ -693,7 +693,7 @@ PlayState::changeScenario(Scenario _nextScenario){
 			}
 		}
 		break;
-	case LevelRoom:
+	case Scenario::LevelRoom:
 		while (it.hasMoreElements()){
 			String  _aux = it.getNext()->getName();
 			if(Ogre::StringUtil::startsWith(_aux,"SN_Room")){
@@ -715,17 +715,17 @@ PlayState::changeScenario(Scenario _nextScenario){
 
 	//Cambio de valor de escenario---
 	switch(_currentScenario) {
-	case Menu:
+	case Scenario::Menu:
 		/* circle stuff */
 		break;
-	case LevelGarden:
-		_currentScenario=LevelRoom;
+	case Scenario::LevelGarden:
+		_currentScenario=Scenario::LevelRoom;
 		break;
-	case LevelRoom:
-		_currentScenario=LevelGarden;
+	case Scenario::LevelRoom:
+		_currentScenario=Scenario::LevelGarden;
 		break;
-	case LevelTest:
-		_currentScenario=LevelRoom;
+	case Scenario::LevelTest:
+		_currentScenario=Scenario::LevelRoom;
 		break;
 	}
 	//-------------------------------
@@ -735,10 +735,10 @@ PlayState::changeScenario(Scenario _nextScenario){
 	//Creo el nuevo escenario---
 	Entity* _ground = _sceneMgr->getEntity("E_Ground");
 	switch(_currentScenario) {
-	case Menu:
+	case Scenario::Menu:
 		/* circle stuff */
 		break;
-	case LevelGarden:
+	case Scenario::LevelGarden:
 		for(unsigned int i=0;i<3;i++ ){
 			String aux=Ogre::StringConverter::toString(i);
 			Entity* _entScn = _sceneMgr->createEntity("E_Garden"+aux, "escenario2.mesh");
@@ -750,7 +750,7 @@ PlayState::changeScenario(Scenario _nextScenario){
 		}
 		_ground->setMaterialName("Ground");
 		break;
-	case LevelRoom:
+	case Scenario::LevelRoom:
 		for(unsigned int i=0;i<3;i++ ){
 			String aux=Ogre::StringConverter::toString(i);
 			Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario1.mesh");
@@ -765,15 +765,15 @@ PlayState::changeScenario(Scenario _nextScenario){
 		}
 		_ground->setMaterialName("GroundRoom");
 		break;
-	case LevelTest:
-		_currentScenario=LevelRoom;
+	case Scenario::LevelTest:
+		_currentScenario=Scenario::LevelRoom;
 		break;
 	}
 	//-------------------------------
 
 }
 
-void PlayState::changeScenarioQ(Scenario _nextScenario){
+void PlayState::changeScenarioQ(Scenario::Scenario _nextScenario){
 	cout << "Cambio de escenario" << endl;
 
 	//Volvemos a poner al personaje en la posición (0,0,0)
@@ -796,13 +796,13 @@ bool PlayState::deleteCurrentScenario(){
 	std::cout << "Borrando escenario " << _currentScenario <<std::endl;
 
 	switch(_currentScenario){
-	case Menu:
+	case Scenario::Menu:
 		cout << "\n\nVENGO DE MENU\n\n" << endl;
 		break;
-	case LevelRoom:
+	case Scenario::LevelRoom:
 		cout << "\n\nVENGO DE ROOM\n\n" << endl;
 		break;
-	case LevelGarden:
+	case Scenario::LevelGarden:
 		cout << "\n\nVENGO DE GARDEN\n\n" << endl;
 		break;
 	}
@@ -816,7 +816,7 @@ bool PlayState::deleteCurrentScenario(){
 
 
 	switch(_currentScenario) {
-	case Menu:{
+	case Scenario::Menu:{
 
 		cout << "\n\nENTRO BIEN\n\n" << endl;
 
@@ -854,7 +854,7 @@ bool PlayState::deleteCurrentScenario(){
 
 		break;
 	}
-	case LevelGarden:{
+	case Scenario::LevelGarden:{
 		deleteScenarioContent();
 	/*	Ogre::SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();//Recupero el tablero del jugador en un iterador
 		while ( it.hasMoreElements() ) {//Recorro el iterador
@@ -896,7 +896,7 @@ bool PlayState::deleteCurrentScenario(){
 			}
 		}*/
 		break;}
-	case LevelRoom:
+	case Scenario::LevelRoom:
 		deleteScenarioContent();
 	/*	Ogre::SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();//Recupero el tablero del jugador en un iterador
 		while ( it.hasMoreElements() ) {//Recorro el iterador
@@ -940,7 +940,7 @@ bool PlayState::deleteCurrentScenario(){
 	return _vScenario.empty();
 }
 
-void PlayState::createScenario(Scenario _nextScenario){
+void PlayState::createScenario(Scenario::Scenario _nextScenario){
 	//por si acaso, antes de crear, borrar.
 	//deleteScenario();
 
@@ -949,7 +949,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 	Entity* _ground = _sceneMgr->getEntity("E_Ground");
 
 	switch(_nextScenario) {
-	case Menu:{
+	case Scenario::Menu:{
 		std::cout << "Menu " << _nextScenario <<std::endl;
 		//En el menu no aparecen hilos ni enemigos ni nada. Luego cuando se escoja nivel si
 		GameEntity* gameEntity = new GameEntity();
@@ -963,10 +963,10 @@ void PlayState::createScenario(Scenario _nextScenario){
 		gameEntity = createGameEntity("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
 		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
 
-		_currentScenario=Menu;
+		_currentScenario=Scenario::Menu;
 		break;
 	}
-	case LevelGarden:
+	case Scenario::LevelGarden:
 		createTestGameEntities();
 		createAllWalls();
 		for(unsigned int i=0;i<3;i++ ){
@@ -983,7 +983,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 		}
 
 		_ground->setMaterialName("Ground");
-		_currentScenario = LevelGarden;
+		_currentScenario = Scenario::LevelGarden;
 		_numModules += 3;
 		_sceneMgr->setSkyBox(true, "MatSkyboxlvl2");
 
@@ -996,7 +996,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 		//-------------------------------------------
 		break;
 
-	case LevelRoom:
+	case Scenario::LevelRoom:
 		createTestGameEntities();
 		createAllWalls();
 		for(unsigned int i=0;i<3;i++){
@@ -1012,7 +1012,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 			_vScenario.push_back(_nodeScn);
 		}
 		_ground->setMaterialName("GroundRoom");
-		_currentScenario = LevelRoom;
+		_currentScenario = Scenario::LevelRoom;
 		_numModules += 3;
 		_sceneMgr->setSkyBox(true, "MaterialSkybox");
 		break;
@@ -1520,6 +1520,7 @@ void PlayState::deleteScenarioContent(){
 			_sceneMgr->getRootSceneNode()->removeChild(_aux);
 		}
 	}
+	_enemies.clear();
 	_bossRoom = false;
 	_bossCreated = false;
 

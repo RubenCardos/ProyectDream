@@ -28,6 +28,7 @@
 #include "MovementManager.h"
 #include "PhysicsManager.h"
 #include "AI_Manager.h"
+#include "AnimationManager.h"
 #include "Enemy.h"
 #include "Hero.h"
 #include "Wall.h"
@@ -41,15 +42,10 @@
 
 #include <string>
 #include "GameEntity.h"
+#include "PhysicsMask.h"
+#include "Scenario.h"
 
 using namespace Ogre;
-
-enum Scenario {
-  Menu,
-  LevelRoom,
-  LevelGarden,
-  LevelTest
-};  
 
 class PlayState : public Ogre::Singleton<PlayState>, public GameState{
  public:
@@ -70,7 +66,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
 
   bool frameStarted (const Ogre::FrameEvent& evt);
   bool frameEnded (const Ogre::FrameEvent& evt);
-  void changeScenarioQ(Scenario nextScenario);
+  void changeScenarioQ(Scenario::Scenario nextScenario);
   
   // Heredados de Ogre::Singleton.
   static PlayState& getSingleton ();
@@ -107,12 +103,13 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   MovementManager* _movementManager;
   PhysicsManager* _physicsManager;
   AI_Manager* _aiManager;
+  AnimationManager* _animationManager;
 
   std::deque <OgreBulletDynamics::RigidBody *>         _bodies;
   std::deque <OgreBulletCollisions::CollisionShape *>  _shapes;
 
-  Scenario _currentScenario;
-  Scenario _nextScenario;
+  Scenario::Scenario _currentScenario;
+  Scenario::Scenario _nextScenario;
   int _numModules;
   bool _wallsAreVisible;
   bool _bossCreated;
@@ -124,11 +121,11 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   void createGUI();
   void updateGUI();
 
-  void changeScenario(Scenario nextScenario);
+  void changeScenario(Scenario::Scenario nextScenario);
   
   bool deleteCurrentScenario();
   void deleteScenarioContent();
-  void createScenario(Scenario nextScenario);
+  void createScenario(Scenario::Scenario nextScenario);
   void createAllWalls();
   void createBossRoom();
   void createBoss();

@@ -5,12 +5,13 @@
 #include <OgreSingleton.h>
 #include "Enemy.h"
 #include "Hero.h"
-
+#include "MovementManager.h"
 
 #include <OgreBulletDynamicsRigidBody.h>
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include "GameEntity.h"
+#include "Scenario.h"
 
 using namespace Ogre;
 
