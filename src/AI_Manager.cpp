@@ -50,6 +50,8 @@ void AI_Manager::updateEnemyMovement(){
 	//Quizá hacer un metodo privado para cada tipo de IA de enemigo y llamarlos desde este
 	//Luego mover cada enemigo con el metodo moveEnemies del movementmanager usando la nueva speed
 	//de cada enemy
+
+
 }
 
 void AI_Manager::loadBossRoute(){

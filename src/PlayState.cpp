@@ -97,7 +97,7 @@ PlayState::enter ()
 
 	//Crear el PhysicsManager
 	//_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,_enemies);
-	_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,&_gameEntities);
+	_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,&_gameEntities, &_enemies);
 	//-------------------
 
 	//Iniciacion Variables---
@@ -322,6 +322,7 @@ PlayState::frameStarted
 
 	//Deteccion Colisones---------
 	_physicsManager->detectHeroCollision();
+	_physicsManager->detectEnemiesCollision();
 	//---------------------------
 
 	//Actualizo GUI---
@@ -1379,7 +1380,7 @@ void PlayState::createTestGameEntities(){
 	enemy->setSceneNode(node1);
 	enemy->setRigidBody(rigidBody1);
 	enemy->setMovementSpeed(50.0);
-	enemy->setSpeed(Ogre::Vector3(-1,0,0));
+	enemy->setSpeed(Ogre::Vector3(0,0,-1));
 	_numEntities++;
 	//-----------------------------------------------------------------------------
 

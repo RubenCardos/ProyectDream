@@ -6,10 +6,11 @@ using namespace Ogre;
 #define N_JUMPS 1
 #define JUMP_EPSILON 0.01
 
-PhysicsManager::PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<GameEntity*>* gameEntities){
+PhysicsManager::PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<GameEntity*>* gameEntities, std::vector<Enemy*>* enemies){
 	_sceneMgr = sceneMgr;
 	_world = world;
 	_hero = hero;
+	_enemies = enemies;
 	_gameEntities = gameEntities;
 }
 
@@ -17,6 +18,7 @@ PhysicsManager::~PhysicsManager(){
 	delete _sceneMgr;
 	delete _world;
 	delete _hero;
+	delete _enemies;
 	delete _gameEntities;
 }
 
@@ -104,6 +106,17 @@ void PhysicsManager::detectHeroCollision(){
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
 					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					_hero->loseLife();
+					//Elimino el enemigo con el que te chocas-------------------
+					for(unsigned int i=0; i<_gameEntities->size(); i++){
+						if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){
+							Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
+							OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
+							_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
+							_sceneMgr->destroyEntity(_e);
+							_sceneMgr->getRootSceneNode()->removeChild(_gameEntities->at(i)->getSceneNode());
+						}
+					}
+					//----------------------------------------------------------
 					//Actualizar las vidas en la UI
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorRoom")){
@@ -141,6 +154,58 @@ void PhysicsManager::detectHeroCollision(){
 }
 //----------------------------------------
 
+void PhysicsManager::detectEnemiesCollision(){
+	btCollisionWorld *bulletWorld = _world->getBulletCollisionWorld();
+	int numManifolds = bulletWorld->getDispatcher()->getNumManifolds();
+
+	Ogre::Vector3 vel(0,0,0);
+
+	for (int i=0;i<numManifolds;i++) {
+		btPersistentManifold* contactManifold = bulletWorld->getDispatcher()->getManifoldByIndexInternal(i);
+		btCollisionObject* obA = (btCollisionObject*)(contactManifold->getBody0());
+		btCollisionObject* obB = (btCollisionObject*)(contactManifold->getBody1());
+
+		//EXTRA--------------------------------------------------------
+		btCollisionObject* _aux;
+		//-------------------------------------------------------------
+		OgreBulletCollisions::Object *obOB_B = _world->findObject(obB);
+		OgreBulletCollisions::Object *obOB_A = _world->findObject(obA);
+
+		for(unsigned int j=0; j<_enemies->size(); j++){
+			OgreBulletCollisions::Object *obEnemy = _world->findObject(_enemies->at(j)->getSceneNode());
+			if ((obOB_A == obEnemy) || (obOB_B == obEnemy)) {  //si uno de los objetos colisionados es el hero
+				Ogre::SceneNode* node = NULL;
+				if ((obOB_A != obEnemy) && (obOB_A)) {
+					node = static_cast<Ogre::SceneNode*>(obA -> getUserPointer());
+					_aux=obA;
+
+				}
+				else if ((obOB_B != obEnemy) && (obOB_B)) {
+					node = static_cast<Ogre::SceneNode*>(obB -> getUserPointer());
+					_aux=obB;
+				}
+
+				if (node) {
+					if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallL")){
+						std::cout << "	EL ENEMIGO HA CHOCADO CON UN WALL L" << std::endl;
+						vel = _enemies->at(j)->getSpeed();
+						vel.z = std::abs(vel.z);
+						_enemies->at(j)->setSpeed(vel);
+						std::cout << "	la velocidad es " << _enemies->at(j)->getSpeed() << std::endl;
+					}
+					else if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallR")){
+						std::cout << "	EL ENEMIGO HA CHOCADO CON UN WALL R" << std::endl;
+						vel = _enemies->at(j)->getSpeed();
+						vel.z = - std::abs(vel.z);
+						_enemies->at(j)->setSpeed(vel);
+						std::cout << "	la velocidad es " << _enemies->at(j)->getSpeed() << std::endl;
+					}
+				}
+			}
+		}
+	}
+}
+
 Ogre::SceneManager* PhysicsManager::getSceneManager(){
 	return _sceneMgr;
 }
@@ -159,6 +224,9 @@ void PhysicsManager::setSceneManager(Ogre::SceneManager* sceneMgr){
 
 void PhysicsManager::setHero(Hero* hero){
 	_hero = hero;
+}
+void PhysicsManager::setEnemies(std::vector<Enemy*>* enemies){
+	_enemies = enemies;
 }
 
 void PhysicsManager::setGameEntities(std::vector<GameEntity*>* gameEntities){

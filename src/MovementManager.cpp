@@ -92,13 +92,13 @@ void MovementManager::moveEnemies(){
 	_aiManager->updateEnemyMovement();
 	
 	for(unsigned int i=0; i<_enemies->size();i++){
-		Enemy* enemy = static_cast<Enemy*>(_enemies->at(i));
-		Ogre::Vector3 _currentSpeed = enemy->getRigidBody()->getLinearVelocity();
+		Ogre::Vector3 _currentSpeed = _enemies->at(i)->getRigidBody()->getLinearVelocity();
 		//enemy->getRigidBody()->setLinearVelocity(enemy->getSpeed());
-		if(_currentSpeed.squaredLength() < enemy->getMovementSpeed()){
-			enemy->getRigidBody()->applyImpulse(enemy->getSpeed() ,enemy->getRigidBody()->getCenterOfMassPosition());
-		}
+		if(_currentSpeed.squaredLength() < _enemies->at(i)->getMovementSpeed()){
+			cout << "		Velocidad del enemigo = " << _enemies->at(i)->getSpeed() <<endl;
+			_enemies->at(i)->getRigidBody()->applyImpulse(_enemies->at(i)->getSpeed() ,_enemies->at(i)->getRigidBody()->getCenterOfMassPosition());
 
+		}
 	}
 }
 
