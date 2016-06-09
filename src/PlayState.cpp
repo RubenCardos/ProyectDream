@@ -838,8 +838,6 @@ bool PlayState::deleteCurrentScenario(){
 			}
 		}*/
 
-		_bossRoom = false;
-		_bossCreated = false;
 		break;
 	}
 	case LevelGarden:{
@@ -859,8 +857,6 @@ bool PlayState::deleteCurrentScenario(){
 			}
 		}
 */
-		_bossRoom = false;
-		_bossCreated = false;
 		//-----------------------------
 
 		//iterator = _sceneMgr->getMovableObjectIterator("Entity");
@@ -903,8 +899,6 @@ bool PlayState::deleteCurrentScenario(){
 			}
 		}
 */
-		_bossRoom = false;
-		_bossCreated = false;
 		/*while(iterator.hasMoreElements()){
 			Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
 			if(Ogre::StringUtil::startsWith(e->getName(),"E_LevelRoom")
@@ -1394,6 +1388,7 @@ void PlayState::createTestGameEntities(){
 
 void PlayState::createBoss(){
 	//Crear Boss------------------------------------------------------
+	_bossPieces.clear();
 	GameEntity* gameEntity = new GameEntity();
 	Boss* bossLocomotive = new Boss();
 	Ogre::Vector3 position(0,3.0,BOSS_ROOM);
@@ -1510,4 +1505,10 @@ void PlayState::deleteScenarioContent(){
 			_sceneMgr->getRootSceneNode()->removeChild(_aux);
 		}
 	}
+	_bossRoom = false;
+	_bossCreated = false;
+
+	//restauro el score y las vidas?
+	//_hero->resetScore();
+	//_hero->resetLives();
 }

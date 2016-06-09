@@ -10,7 +10,7 @@ using namespace OgreBulletDynamics;
 class Hero : public GameEntity
 {
  public:
-  Hero() {}
+  Hero();
   Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody);
   ~Hero();
 
@@ -27,11 +27,12 @@ class Hero : public GameEntity
   void setMovementSpeed(double speed);
   void setJumpSpeed(double speed);
   void setSpeed(Ogre::Vector3 speed);
+  void resetScore();
+  void resetLives();
 
   //El comportamiento de el heroe al spawnear y al morir se pondria en estas funciones
   void spawn();
   void die();
-
 
  protected:
   int _score;
@@ -39,7 +40,6 @@ class Hero : public GameEntity
   int _lives;
   double _movementspeed;
   double _jumpSpeed;
-  bool _jump;
   Ogre::Vector3 _speed;
 };
 

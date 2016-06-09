@@ -8,9 +8,16 @@
 
 #include "Hero.h"
 
-#define INITIAL_LIVES 1
+#define INITIAL_LIVES 3
 #define NUM_JUMPS 1
-#define DEFAULT_LIVES 3
+
+Hero::Hero(){
+	_lives = INITIAL_LIVES;
+	_score = 0;
+	_movementspeed=50.0;
+	_nJumps = NUM_JUMPS;
+	_speed = Ogre::Vector3(0,0,0);
+}
 
 Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
 	_sNode = sNode;
@@ -19,7 +26,6 @@ Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
 	_score = 0;
 	_movementspeed=50.0;
 	_nJumps = NUM_JUMPS;
-	_lives = DEFAULT_LIVES;
 	_speed = Ogre::Vector3(0,0,0);
 	spawn();
 }
@@ -67,8 +73,10 @@ void Hero::setMovementSpeed(double speed){
 void Hero::loseLife(){
 	if(_lives >1){
 		_lives--;
+		cout << "Hero pierde una vida " << " vida actual: " << _lives << endl;
 	}
 	else{
+		cout << "Hero muere " << " vida actual: " << _lives << endl;
 		die();
 	}
 }
@@ -76,3 +84,10 @@ void Hero::setSpeed(Ogre::Vector3 speed){
 	_speed = speed;
 }
 
+void Hero::resetScore(){
+	_score = 0;
+}
+
+void Hero::resetLives(){
+	_lives = INITIAL_LIVES;
+}
