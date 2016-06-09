@@ -124,7 +124,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
 
   void changeScenario(Scenario nextScenario);
   
-  bool deleteScenario();
+  bool deleteCurrentScenario();
+  void deleteScenarioContent();
   void createScenario(Scenario nextScenario);
   void createAllWalls();
   void createBossRoom();
