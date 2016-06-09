@@ -55,8 +55,10 @@ PlayState::enter ()
 
 
 	//Camara--------------------
-	_camera->setPosition(Ogre::Vector3(-40,10,0));
-	_camera->lookAt(Ogre::Vector3(0,0,0));
+	//_camera->setPosition(Ogre::Vector3(-40,10,0));
+	//_camera->lookAt(Ogre::Vector3(0,0,0));
+	_camera->setPosition(Ogre::Vector3(-40,30,0));
+	_camera->lookAt(Ogre::Vector3(15,0,0));
 	_camera->setNearClipDistance(5);
 	_camera->setFarClipDistance(10000);
 	//-----------------------------
