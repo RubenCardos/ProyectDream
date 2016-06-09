@@ -91,3 +91,13 @@ void Hero::resetScore(){
 void Hero::resetLives(){
 	_lives = INITIAL_LIVES;
 }
+
+int Hero::getNRell(){
+	return _nReel;
+}
+
+void Hero::setNRell(int _addReel){
+	_nReel+=_addReel;
+}
+
+

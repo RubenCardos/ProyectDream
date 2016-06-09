@@ -632,8 +632,8 @@ PlayState::updateGUI()
 	CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 
 	//Actualizo la puntuacion------------
-	sheet->getChild("background_wnd2")->getChild("textPoints")->setText(Ogre::StringConverter::toString(_hero->getScore()));
 	sheet->getChild("background_wnd2")->getChild("textPoints")->setText("SCORE: "+Ogre::StringConverter::toString(_hero->getScore()));
+	sheet->getChild("background_wnd2")->getChild("textLives")->setText("LIVES: "+Ogre::StringConverter::toString(_hero->getLives()));
 	//----------------------------------
 
 	if(_currentScenario==Menu){
