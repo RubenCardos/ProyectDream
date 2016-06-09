@@ -1083,39 +1083,33 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
 	OgreBulletDynamics::RigidBody* rigidBody;
 
-	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor") || Ogre::StringUtil::startsWith(name,"Boss")|| Ogre::StringUtil::startsWith(name,"Obstacle")|| Ogre::StringUtil::startsWith(name,"Thread")){
+	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor") || Ogre::StringUtil::startsWith(name,"Obstacle")|| Ogre::StringUtil::startsWith(name,"Thread")){
 		node->scale(scale);
 		OgreBulletCollisions::BoxCollisionShape* bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
 
-		if(Ogre::StringUtil::startsWith(name,"Boss")){
-			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Boss,PhysicsMask::boss_collides_with);
-			rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 20.0f/*Masa*/, position);
+		if(Ogre::StringUtil::startsWith(name,"Obstacle")){
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
+			rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 200.0f/*Masa*/, position);
 		}
 		else{
-			if(Ogre::StringUtil::startsWith(name,"Obstacle")){
-				rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
-				rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 200.0f/*Masa*/, position);
-			}else{
-				if(Ogre::StringUtil::startsWith(name,"Thread")){
-					rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
-					rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 0.0f/*Masa*/, position);
-				}
-				else{
-
-					if(Ogre::StringUtil::startsWith(name,"Wall")){
-
-						if(Ogre::StringUtil::startsWith(name,"WallB")){
-							rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_BackWall,PhysicsMask::backwall_collides_with);
-							rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
-						}else{
-							rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
-							rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
-						}
+			if(Ogre::StringUtil::startsWith(name,"Thread")){
+				rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
+				rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 0.0f/*Masa*/, position);
+			}
+			else{
+				if(Ogre::StringUtil::startsWith(name,"Wall")){
+					if(Ogre::StringUtil::startsWith(name,"WallB")){
+						rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_BackWall,PhysicsMask::backwall_collides_with);
+						rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
 					}
 					else{
 						rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
 						rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
 					}
+				}
+				else{
+					rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+					rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
 				}
 			}
 		}
@@ -1125,7 +1119,12 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 				new OgreBulletCollisions::StaticMeshToShapeConverter(entity);
 		OgreBulletCollisions::CollisionShape *bodyShape = trimeshConverter->createConvex();
 
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
+		if(Ogre::StringUtil::startsWith(name,"Boss")){
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Boss,PhysicsMask::boss_collides_with);
+		}
+		else{
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
+		}
 
 		if(Ogre::StringUtil::startsWith(name,"Door")){
 			rigidBody->setShape(node, bodyShape,
@@ -1136,7 +1135,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		else{
 			rigidBody->setShape(node, bodyShape,
 					0.0 /* Restitucion */, 0.9 /* Friccion */,
-					5.0 /* Masa */, position /* Posicion inicial */,
+					15.0 /* Masa */, position /* Posicion inicial */,
 					Quaternion::IDENTITY /* Orientacion */);
 		}
 
