@@ -123,7 +123,7 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 		ptrSpeed = &speed;
 
 
-		cout << "IMPRIMIENDO MIERDAS DE LOCOMOTORA" << endl;
+		cout << "IMPRIMIENDO DATOS DE LOCOMOTORA" << endl;
 		cout << "	target = " << *(_bossPieces->at(0)->getTargetPosition()) << endl;
 		cout << "	t_bossRoute(0) = " << _bossRoute.at(0) << endl;
 		std::cout << "	speed " << speed << " ptrSpeed " << *ptrSpeed << endl;

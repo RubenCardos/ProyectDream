@@ -118,7 +118,7 @@ void MovementManager::moveWalls(){
 
 void MovementManager::moveBoss(){
 	_aiManager->updateBossMovement();
-	//cout << "IMPRIMIENDO MIERDAS" << endl;
+	//cout << "IMPRIMIENDO DATOS DE LAS PIEZAS DEL BOSS" << endl;
 	for(unsigned int i=0; i<_bossPieces->size(); i++){
 		//_bossPieces->at(i)->getRigidBody()->setAngularVelocity(velocity);
 		//_bossPieces->at(i)->getRigidBody()->setLinearVelocity(*(_bossPieces->at(i)->getVSpeed()));

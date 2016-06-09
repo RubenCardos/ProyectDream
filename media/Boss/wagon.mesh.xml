@@ -6789,7 +6789,7 @@
         </vertexbuffer>
     </sharedgeometry>
     <submeshes>
-        <submesh usesharedvertices="true" material="matYelloeCoach" use32bitindexes="False" operationtype="triangle_list">
+        <submesh usesharedvertices="true" material="matYellowWagon" use32bitindexes="False" operationtype="triangle_list">
             <faces count="24">
                 <face v1="0" v2="1" v3="2"/>
                 <face v1="0" v2="2" v3="3"/>
@@ -6817,7 +6817,7 @@
                 <face v1="855" v2="848" v3="851"/>
             </faces>
         </submesh>
-        <submesh usesharedvertices="true" material="matGrayCoach" use32bitindexes="False" operationtype="triangle_list">
+        <submesh usesharedvertices="true" material="matGrayWagon" use32bitindexes="False" operationtype="triangle_list">
             <faces count="1872">
                 <face v1="8" v2="9" v3="10"/>
                 <face v1="8" v2="10" v3="11"/>
@@ -8693,7 +8693,7 @@
                 <face v1="1588" v2="1590" v3="1591"/>
             </faces>
         </submesh>
-        <submesh usesharedvertices="true" material="matWhiteCoach" use32bitindexes="False" operationtype="triangle_list">
+        <submesh usesharedvertices="true" material="matWhiteWagon" use32bitindexes="False" operationtype="triangle_list">
             <faces count="920">
                 <face v1="32" v2="33" v3="34"/>
                 <face v1="32" v2="34" v3="35"/>
@@ -9617,7 +9617,7 @@
                 <face v1="1635" v2="1613" v3="1612"/>
             </faces>
         </submesh>
-        <submesh usesharedvertices="true" material="matRedCoach" use32bitindexes="False" operationtype="triangle_list">
+        <submesh usesharedvertices="true" material="matRedWagon" use32bitindexes="False" operationtype="triangle_list">
             <faces count="272">
                 <face v1="788" v2="789" v3="790"/>
                 <face v1="788" v2="790" v3="791"/>
@@ -9895,13 +9895,13 @@
         </submesh>
     </submeshes>
     <submeshnames>
-        <submesh index="0" name="matYelloeCoach">
+        <submesh index="0" name="matYellowWagon">
         </submesh>
-        <submesh index="1" name="matGrayCoach">
+        <submesh index="1" name="matGrayWagon">
         </submesh>
-        <submesh index="2" name="matWhiteCoach">
+        <submesh index="2" name="matWhiteWagon">
         </submesh>
-        <submesh index="3" name="matRedCoach">
+        <submesh index="3" name="matRedWagon">
         </submesh>
     </submeshnames>
 </mesh>

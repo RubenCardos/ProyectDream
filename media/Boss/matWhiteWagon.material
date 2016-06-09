@@ -1,12 +1,12 @@
-// matWhiteCoach genrated by blender2ogre 0.5.8
+// matWhiteWagon genrated by blender2ogre 0.5.8
 
-material matWhiteCoach 
+material matWhiteWagon 
 {
     receive_shadows on 
 
     technique
     {
-        pass matWhiteCoach
+        pass matWhiteWagon
         {
             ambient 1.0 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0 1.0

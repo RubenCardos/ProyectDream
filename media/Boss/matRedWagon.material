@@ -1,12 +1,12 @@
-// matRedCoach genrated by blender2ogre 0.5.8
+// matRedWagon genrated by blender2ogre 0.5.8
 
-material matRedCoach 
+material matRedWagon 
 {
     receive_shadows on 
 
     technique
     {
-        pass matRedCoach
+        pass matRedWagon
         {
             ambient 0.8000000715255737 0.020694594830274582 0.03710940107703209 1.0
             diffuse 0.8000000715255737 0.020694594830274582 0.03710940107703209 1.0

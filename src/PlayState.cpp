@@ -1409,7 +1409,7 @@ void PlayState::createBoss(){
 	position.x += 10.0;
 
 	Boss* bossWagon = new Boss();
-	gameEntity = createGameEntity("BossWagon1", "coach.mesh", position, scale);
+	gameEntity = createGameEntity("BossWagon1", "wagon.mesh", position, scale);
 	bossWagon->setSceneNode(gameEntity->getSceneNode());
 	bossWagon->setRigidBody(gameEntity->getRigidBody());
 	bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad

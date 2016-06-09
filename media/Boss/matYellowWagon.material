@@ -1,16 +1,16 @@
-// matGrayCoach genrated by blender2ogre 0.5.8
+// matYellowWagon genrated by blender2ogre 0.5.8
 
-material matGrayCoach 
+material matYellowWagon 
 {
     receive_shadows on 
 
     technique
     {
-        pass matGrayCoach
+        pass matYellowWagon
         {
-            ambient 0.2079155594110489 0.2079155594110489 0.2079155594110489 1.0
-            diffuse 0.2079155594110489 0.2079155594110489 0.2079155594110489 1.0
-            specular 0.0624999925494194 0.0624999925494194 0.0624999925494194 1.0 12.5
+            ambient 0.8000000715255737 0.7380768656730652 0.06661283224821091 1.0
+            diffuse 0.8000000715255737 0.7380768656730652 0.06661283224821091 1.0
+            specular 0.2395833432674408 0.2395833432674408 0.2395833432674408 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off
