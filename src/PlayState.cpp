@@ -962,6 +962,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_LevelGarden"+aux);
 			_nodeScn->attachObject(_entScn);
 			_nodeScn->yaw(Degree(270));
+			_nodeScn->setPosition(0,-2,0);
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->translate(Vector3(230*i,0,0));
 
@@ -991,6 +992,7 @@ void PlayState::createScenario(Scenario _nextScenario){
 			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_LevelRoom"+aux);
 			_nodeScn->attachObject(_entScn);
 			_nodeScn->yaw(Degree(270));
+			_nodeScn->setPosition(0,-2,0);
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->translate(Vector3(230*i,0,0));
 
@@ -1408,7 +1410,7 @@ void PlayState::createBoss(){
 	position.x += 10.0;
 
 	Boss* bossWagon = new Boss();
-	gameEntity = createGameEntity("BossWagon1", "cube.mesh", position, scale);
+	gameEntity = createGameEntity("BossWagon1", "coach.mesh", position, scale);
 	bossWagon->setSceneNode(gameEntity->getSceneNode());
 	bossWagon->setRigidBody(gameEntity->getRigidBody());
 	bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad
