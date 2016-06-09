@@ -21,7 +21,7 @@ class Hero : public GameEntity
   double getMovementSpeed();
   double getJumpSpeed();
   Ogre::Vector3 getSpeed();
-  int getNRell();
+  int getNReel();
 
   void setNumJumps(int nJumps);
   void loseLife();
@@ -30,7 +30,7 @@ class Hero : public GameEntity
   void setSpeed(Ogre::Vector3 speed);
   void resetScore();
   void resetLives();
-  void setNRell(int _addReel);
+  void setNReel(int _addReel);
 
   //El comportamiento de el heroe al spawnear y al morir se pondria en estas funciones
   void spawn();

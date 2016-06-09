@@ -92,11 +92,11 @@ void Hero::resetLives(){
 	_lives = INITIAL_LIVES;
 }
 
-int Hero::getNRell(){
+int Hero::getNReel(){
 	return _nReel;
 }
 
-void Hero::setNRell(int _addReel){
+void Hero::setNReel(int _addReel){
 	_nReel+=_addReel;
 }
 

@@ -404,6 +404,7 @@ PlayState::keyPressed
 	// Tecla N --> Boss Creation-------
 	if (e.key == OIS::KC_N) {
 		if(!_bossCreated){
+			createBossRoom();
 			createBoss();
 			_bossCreated = true;
 		}

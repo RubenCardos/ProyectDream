@@ -91,9 +91,9 @@ void PhysicsManager::detectHeroCollision(){
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
 					//PlayState::getSingletonPtr()->changeScenarioQ();
-					_hero->setNRell(1);
-					cout << "\n\nNum Bobinas recogidas: " <<_hero->getNRell() << endl;
-					if(_hero->getNRell()==2){
+					_hero->setNReel(1);
+					cout << "\n\nNum Bobinas recogidas: " <<_hero->getNReel() << endl;
+					if(_hero->getNReel()==2){
 						cout << "\n\nAqui pasaria al boss\n\n" << endl;
 					}
 					Scenario scenario = Menu;
