@@ -31,7 +31,7 @@ void Boss::spawn(){
 	_vulnerable = false;
 	_currentIndex = -1;
 	_rageTimer = 0.0;
-	_movementSpeed=50.0;
+	_movementSpeed=5.0;
 	_vSpeed = new Ogre::Vector3(0,0,0);
 	_targetPosition = new Ogre::Vector3(0,0,0);
 }

@@ -42,7 +42,6 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
 		if(_inBossRoom==false){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
-			//moveWalls();
 		}
 	}
 }
@@ -54,7 +53,6 @@ void MovementManager::jumpHero(){
 		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
 		_hero->setNumJumps(_hero->getNumJumps()-1);
 	}
-	//moveWalls();
 }
 
 void MovementManager::repositionHero(btVector3 position,btQuaternion orientation){
@@ -117,12 +115,15 @@ void MovementManager::moveWalls(){
 }
 
 void MovementManager::moveBoss(){
-	_aiManager->updateBossMovement();
+	//_aiManager->updateBossMovement();
+
 	//cout << "IMPRIMIENDO DATOS DE LAS PIEZAS DEL BOSS" << endl;
 	for(unsigned int i=0; i<_bossPieces->size(); i++){
 		//_bossPieces->at(i)->getRigidBody()->setAngularVelocity(velocity);
 		//_bossPieces->at(i)->getRigidBody()->setLinearVelocity(*(_bossPieces->at(i)->getVSpeed()));
-		//cout << "	VMov = " << _bossPieces->at(i)->getMovementSpeed() << "	VSpeed = " << *(_bossPieces->at(i)->getVSpeed()) << endl;
+		_bossPieces->at(i)->getRigidBody()->setLinearVelocity(2,0,0);
+		cout << "	VMov = " << _bossPieces->at(i)->getMovementSpeed() << "	VSpeed = " << *(_bossPieces->at(i)->getVSpeed()) << endl;
+		cout << "	target = " << *(_bossPieces->at(i)->getTargetPosition()) << " current = " << _bossPieces->at(i)->getCurrentIndex() << endl;
 	}
 }
 

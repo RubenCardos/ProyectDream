@@ -1393,7 +1393,7 @@ void PlayState::createBoss(){
 	_bossPieces.clear();
 	GameEntity* gameEntity = new GameEntity();
 	Boss* bossLocomotive = new Boss();
-	Ogre::Vector3 position(0,3.0,BOSS_ROOM);
+	Ogre::Vector3 position(0,FLOOR_POSITION_Y,BOSS_ROOM -10);
 	Ogre::Vector3 scale(1,1,1);
 
 	scale *= 2;
@@ -1401,7 +1401,7 @@ void PlayState::createBoss(){
 	gameEntity = createGameEntity("BossLocomotive", "cube.mesh", position, scale);
 	bossLocomotive->setSceneNode(gameEntity->getSceneNode());
 	bossLocomotive->setRigidBody(gameEntity->getRigidBody());
-	bossLocomotive->setMovementSpeed(1.0);
+	bossLocomotive->setMovementSpeed(0.5);
 	cout << "locomotive movementSpeed " << bossLocomotive->getMovementSpeed() <<endl;
 	//bossLocomotive->getRigidBody()->setLinearVelocity(bossLocomotive->getMovementSpeed(),0,0);
 	//bossLocomotive->getRigidBody()->setAngularVelocity(1,1,1);
