@@ -50,7 +50,7 @@ PlayState::enter ()
 	_camera = _sceneMgr->createCamera("PlayCamera");
 	_viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
 	_sceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-
+	//_sceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
 
 	//Camara--------------------
 	//_camera->setPosition(Ogre::Vector3(-40,10,0));
@@ -255,10 +255,10 @@ PlayState::CreateInitialWorld() {
 	//---------------------------------------------------------------------
 
 	//LUCES------------------------------------------------
-	Light* _directionalLight = _sceneMgr->createLight("DirectionalLight");
-	_directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);
-	//_directionalLight->setDiffuseColour(.60, .60, 0);
-	_directionalLight->setDirection(Ogre::Vector3(0, -1, 0));
+	Ogre::Light* light = _sceneMgr->createLight();
+	light->setType(Ogre::Light::LT_DIRECTIONAL);
+	light->setSpecularColour(Ogre::ColourValue::White);
+	light->setDirection(Ogre::Vector3(1,-1,0));
 
 	//-----------------------------------------------------
 
@@ -1003,7 +1003,7 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_LevelRoom"+aux);
 			_nodeScn->attachObject(_entScn);
 			_nodeScn->yaw(Degree(270));
-			_nodeScn->setPosition(0,-2,0);
+			_nodeScn->setPosition(0,-3,0);
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->translate(Vector3(230*i,0,0));
 

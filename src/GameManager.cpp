@@ -130,7 +130,7 @@ GameManager::configure ()
     }
   }
   
-  _renderWindow = _root->initialise(true, "Crack Shot");
+  _renderWindow = _root->initialise(true, "Toy Quest");
   
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
   

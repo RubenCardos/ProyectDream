@@ -30,14 +30,10 @@ IntroState::enter ()
   _sunLight->setDiffuseColour(.20, .20, 0);
   _sunLight->setSpotlightRange(Degree(30), Degree(50));
 
-  Ogre::Vector3 _dir= -_sunLight->getPosition().normalisedCopy();
-  _sunLight->setDirection(_dir);
-
-
-  Light* _directionalLight = _sceneMgr->createLight("DirectionalLight");
-  _directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);
-  //directionalLight->setDiffuseColour(.60, .60, 0);
-  _directionalLight->setDirection(Ogre::Vector3(0, -1, 1));
+  Ogre::Light* light = _sceneMgr->createLight();
+  light->setType(Ogre::Light::LT_DIRECTIONAL);
+  light->setSpecularColour(Ogre::ColourValue::White);
+  light->setDirection(Ogre::Vector3(1,-1,0));
 
   //-----------------------------------------------------
 
@@ -93,8 +89,8 @@ void IntroState::createGUI()
 
   //Sheet
   Window* sheetBG =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd");
-  sheetBG->setPosition(CEGUI::UVector2(CEGUI::UDim(0.14, 0),CEGUI::UDim(0.06, 0)));
-  sheetBG->setSize( CEGUI::USize(CEGUI::UDim(0.70, 0), CEGUI::UDim(0.45, 0)));
+  sheetBG->setPosition(CEGUI::UVector2(CEGUI::UDim(0.27, 0),CEGUI::UDim(0, 0)));
+  sheetBG->setSize( CEGUI::USize(CEGUI::UDim(0.50, 0), CEGUI::UDim(0.50, 0)));
   sheetBG->setProperty("Image","BackgroundImage");
   sheetBG->setProperty("FrameEnabled","False");
   sheetBG->setProperty("BackgroundEnabled", "False");

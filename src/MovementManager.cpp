@@ -203,7 +203,5 @@ void MovementManager::rotateHero(){
 	else{
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(-degrees),Vector3::UNIT_Y));
 	}
-	if(vel.z==0){
-		_hero->getRigidBody()->setOrientation(Quaternion(Degree(0),Vector3::UNIT_Y));
-	}
+	
 }
