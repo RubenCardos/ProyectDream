@@ -197,5 +197,10 @@ void MovementManager::rotateHero(){
 	vel = _hero->getSpeed();
 	//calculo los grados entre el vector de velocidad del personaje y el unitario en Z
 	degrees = vel.angleBetween(Ogre::Vector3::UNIT_X);
-	_hero->getRigidBody()->setOrientation(Quaternion(Degree(degrees),Vector3::UNIT_Y));
+	if(vel.z < 0){
+		_hero->getRigidBody()->setOrientation(Quaternion(Degree(degrees),Vector3::UNIT_Y));
+	}
+	else{
+		_hero->getRigidBody()->setOrientation(Quaternion(Degree(-degrees),Vector3::UNIT_Y));
+	}
 }
