@@ -157,14 +157,14 @@ PlayState::CreateInitialWorld() {
 	//Suelo Infinito NO TOCAR---------------------------------
 	Plane plane1(Vector3(0,1,0), -3);    // Normal y distancia  (antes estaba a 0)
 	MeshManager::getSingleton().createPlane("p1",
-			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
-			1000, 1000, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
+	ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
+	1000, 1000, 1, 1, true, 1, 50, 50, Vector3::UNIT_Z);
 	//--------------------------------------------------------
 
 	//Suelo Grafico-----------------------------------------------
 	SceneNode* _groundNode = _sceneMgr->createSceneNode("SN_Ground");
 	Entity* _groundEnt = _sceneMgr->createEntity("E_Ground", "p1");
-	_groundEnt->setMaterialName("Ground");
+	_groundEnt->setMaterialName("GroundRoom");
 	_groundNode->attachObject(_groundEnt);
 	_sceneMgr->getRootSceneNode()->addChild(_groundNode);
 	//------------------------------------------------------------
@@ -456,11 +456,9 @@ PlayState::keyPressed
 	}
 	if (e.key == OIS::KC_LEFT) {
 		_desp+=Vector3(0,0,-1);
-		_hero->getRigidBody()->setOrientation(Quaternion(Degree(90),Vector3::UNIT_Y));
 	}
 	if (e.key == OIS::KC_RIGHT) {
 		_desp+=Vector3(0,0,1);
-		_hero->getRigidBody()->setOrientation(Quaternion(Degree(90),Vector3::UNIT_Y));
 	}
 	//--------------------------------
 
