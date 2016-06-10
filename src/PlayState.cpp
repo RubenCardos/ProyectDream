@@ -50,7 +50,8 @@ PlayState::enter ()
 	_camera = _sceneMgr->createCamera("PlayCamera");
 	_viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
 	_sceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-	//_sceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
+	_sceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE); //AQUI SE ACTIVAN LAS SOMBRAS
+	
 
 	//Camara--------------------
 	//_camera->setPosition(Ogre::Vector3(-40,10,0));
@@ -973,7 +974,7 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_LevelGarden"+aux);
 			_nodeScn->attachObject(_entScn);
 			_nodeScn->yaw(Degree(270));
-			_nodeScn->setPosition(0,-2,0);
+			_nodeScn->setPosition(0,-3,0);
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->translate(Vector3(230*i,0,0));
 
