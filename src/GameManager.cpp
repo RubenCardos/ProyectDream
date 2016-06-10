@@ -130,7 +130,7 @@ GameManager::configure ()
     }
   }
   
-  _renderWindow = _root->initialise(true, "Toy Quest");
+   _renderWindow = _root->initialise(true, "Toy Quest");
   
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
   

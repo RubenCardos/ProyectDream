@@ -30,6 +30,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   void moveBoss();
   void initializeBossMovement(Ogre::Real* deltaT);
   void rotateHero();
+  void rotateBoss();
 
   Ogre::SceneManager* getSceneManager();
   Hero* getHero();

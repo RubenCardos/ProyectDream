@@ -18,7 +18,7 @@ using namespace Ogre;
 class AI_Manager : public Ogre::Singleton<AI_Manager>
 {
  public:
-  AI_Manager(Hero* hero, std::vector<Boss*>* bossPieces, std::vector<Enemy*>* enemies);
+  AI_Manager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Boss*>* bossPieces, std::vector<Enemy*>* enemies);
   ~AI_Manager();
 
   Hero* getHero();
@@ -28,6 +28,7 @@ class AI_Manager : public Ogre::Singleton<AI_Manager>
   void setHero(Hero* hero);
   void setEnemies(std::vector<Enemy*>* enemies);
   void setBossPieces(std::vector<Boss*>* bossPieces);
+  void setSceneManager(Ogre::SceneManager* sceneMgr);
   
   void updateEnemyMovement();
   void loadBossRoute();
@@ -43,6 +44,7 @@ class AI_Manager : public Ogre::Singleton<AI_Manager>
   std::vector<Enemy*>* _enemies;
   std::vector<Boss*>* _bossPieces;
   std::vector<Ogre::Vector3> _bossRoute;
+  Ogre::SceneManager* _sceneMgr;
 };
 
 #endif

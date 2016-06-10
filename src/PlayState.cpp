@@ -50,8 +50,7 @@ PlayState::enter ()
 	_camera = _sceneMgr->createCamera("PlayCamera");
 	_viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
 	_sceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-	_sceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE); //AQUI SE ACTIVAN LAS SOMBRAS
-	
+	_sceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
 
 	//Camara--------------------
 	//_camera->setPosition(Ogre::Vector3(-40,10,0));
@@ -158,8 +157,8 @@ PlayState::CreateInitialWorld() {
 	//Suelo Infinito NO TOCAR---------------------------------
 	Plane plane1(Vector3(0,1,0), -3);    // Normal y distancia  (antes estaba a 0)
 	MeshManager::getSingleton().createPlane("p1",
-	ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
-	1000, 1000, 1, 1, true, 1, 50, 50, Vector3::UNIT_Z);
+			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
+			1000, 1000, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
 	//--------------------------------------------------------
 
 	//Suelo Grafico-----------------------------------------------
@@ -407,12 +406,12 @@ PlayState::keyPressed
 	}
 	//-----------------
 
-	// Tecla B --> Boss Room-------
+	/*// Tecla B --> Boss Room-------
 	if (e.key == OIS::KC_B) {
 		createBossRoom();
 	}
 	//-----------------
-
+	*/
 	// Tecla N --> Boss Creation-------
 	if (e.key == OIS::KC_N) {
 		if(!_bossCreated){
@@ -1003,7 +1002,6 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 			Entity* _entScn = _sceneMgr->createEntity("E_LevelRoom"+aux, "escenario.mesh");
 			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_LevelRoom"+aux);
 			_nodeScn->attachObject(_entScn);
-			_nodeScn->yaw(Degree(270));
 			_nodeScn->setPosition(0,-3,0);
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->translate(Vector3(230*i,0,0));
@@ -1089,7 +1087,9 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 	std::cout << "Creando GameEntity " << name << std::endl;
 
 	GameEntity* gameEntity;
+
 	Ogre::SceneNode* node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_" + name + Ogre::StringConverter::toString(_numEntities));
+
 	Entity *entity = _sceneMgr->createEntity("E_" + name, mesh);
 	node->attachObject(entity);
 
@@ -1262,11 +1262,8 @@ void PlayState::createBossRoom(){
     wall->setRigidBody(gameEntity->getRigidBody());
     _walls.push_back(wall);
 
-
-
-
-		_movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
-		/*//Cambiar posicion de la camara--------------------
+	_movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+	/*//Cambiar posicion de la camara--------------------
     int y = 10 + BOSS_ROOM;
     _camera->setPosition(Ogre::Vector3(-40,y,0));
     y = BOSS_ROOM;
@@ -1274,8 +1271,8 @@ void PlayState::createBossRoom(){
     _camera->setNearClipDistance(5);
     _camera->setFarClipDistance(10000);
     //-----------------------------*/
-		//_movementManager->setWalls(&_walls);
-		_bossRoom = true;
+	//_movementManager->setWalls(&_walls);
+	_bossRoom = true;
 	}
 }
 
@@ -1423,7 +1420,7 @@ void PlayState::createBoss(){
 	//bossLocomotive->getRigidBody()->setLinearVelocity(bossLocomotive->getMovementSpeed(),0,0);
 	//bossLocomotive->getRigidBody()->setAngularVelocity(1,1,1);
 	_bossPieces.push_back(bossLocomotive);
-	position.x += 10.0;
+	position.x -= 10.0;
 
 	Boss* bossWagon = new Boss();
 	gameEntity = createGameEntity("BossWagon1", "wagon.mesh", position, scale);
@@ -1431,7 +1428,6 @@ void PlayState::createBoss(){
 	bossWagon->setRigidBody(gameEntity->getRigidBody());
 	bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad
 	_bossPieces.push_back(bossWagon);
-
 	//----------------------------------------------------------------
 }
 

@@ -4,6 +4,7 @@ using namespace Ogre;
 
 #define N_JUMPS 1
 #define JUMP_EPSILON 0.01
+#define DISTANCE_BETWEEN_WAGONS 10
 
 MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Boss*>* bossPieces, std::vector<Wall*>* walls){
 	_sceneMgr = sceneMgr;
@@ -13,7 +14,7 @@ MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::
 	_walls= walls;
 	_hero->setNumJumps(N_JUMPS);
 	_inBossRoom = false;
-	_aiManager = new AI_Manager(_hero,_bossPieces,_enemies);
+	_aiManager = new AI_Manager(sceneMgr, _hero,_bossPieces,_enemies);
 }
 
 MovementManager::~MovementManager(){
@@ -40,7 +41,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	_hero->setSpeed(_currentSpeed);
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
-		if(_inBossRoom==false){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
+		if(!_inBossRoom){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
 		}
 	}
 	rotateHero();
@@ -133,16 +134,22 @@ void MovementManager::moveWalls(){
 }
 
 void MovementManager::moveBoss(){
-	//_aiManager->updateBossMovement();
+	_aiManager->updateBossMovement();
+	for(unsigned int i=0; i<_bossPieces->size(); i++){
+		_bossPieces->at(i)->getRigidBody()->setLinearVelocity(*(_bossPieces->at(i)->getVSpeed()));
+	}
+	rotateBoss();
+
+	//std::cout << "	velocidad obtenida de la locomotora"<< _bossPieces->at(0)->getVSpeed() << "o" << *(_bossPieces->at(0)->getVSpeed()) << std::endl;
 
 	//cout << "IMPRIMIENDO DATOS DE LAS PIEZAS DEL BOSS" << endl;
-	for(unsigned int i=0; i<_bossPieces->size(); i++){
+	/*for(unsigned int i=0; i<_bossPieces->size(); i++){
 		//_bossPieces->at(i)->getRigidBody()->setAngularVelocity(velocity);
 		//_bossPieces->at(i)->getRigidBody()->setLinearVelocity(*(_bossPieces->at(i)->getVSpeed()));
 		_bossPieces->at(i)->getRigidBody()->setLinearVelocity(2,0,0);
 		cout << "	VMov = " << _bossPieces->at(i)->getMovementSpeed() << "	VSpeed = " << *(_bossPieces->at(i)->getVSpeed()) << endl;
 		cout << "	target = " << *(_bossPieces->at(i)->getTargetPosition()) << " current = " << _bossPieces->at(i)->getCurrentIndex() << endl;
-	}
+	}*/
 }
 
 Ogre::SceneManager* MovementManager::getSceneManager(){
@@ -187,7 +194,7 @@ void MovementManager::inBossRoom(){
 }
 
 void MovementManager::initializeBossMovement(Ogre::Real* deltaT){
-	_aiManager->loadBossRoute();
+	//_aiManager->loadBossRoute();
 	_aiManager->initializeBossMovement(deltaT);
 }
 
@@ -197,11 +204,26 @@ void MovementManager::rotateHero(){
 	vel = _hero->getSpeed();
 	//calculo los grados entre el vector de velocidad del personaje y el unitario en Z
 	degrees = vel.angleBetween(Ogre::Vector3::UNIT_X);
-	if(vel.z < 0){
+	if(vel.z <= 0){
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(degrees),Vector3::UNIT_Y));
 	}
 	else{
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(-degrees),Vector3::UNIT_Y));
 	}
-	
+}
+
+void MovementManager::rotateBoss(){
+	Ogre::Degree degrees = Ogre::Degree(0);
+	Ogre::Vector3* vel = new Ogre::Vector3(0,0,0);
+	for(unsigned i=0; i<_bossPieces->size(); i++){
+		vel = _bossPieces->at(i)->getVSpeed();
+		//calculo los grados entre el vector de velocidad del personaje y el unitario en Z
+		degrees = vel->angleBetween(Ogre::Vector3::UNIT_X);
+		if(vel->z < 0){
+			_bossPieces->at(i)->getRigidBody()->setOrientation(Quaternion(Degree(degrees),Vector3::UNIT_Y));
+		}
+		else{
+			_bossPieces->at(i)->getRigidBody()->setOrientation(Quaternion(Degree(-degrees),Vector3::UNIT_Y));
+		}
+	}
 }
