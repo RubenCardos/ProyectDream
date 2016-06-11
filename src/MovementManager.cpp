@@ -1,5 +1,5 @@
 #include "MovementManager.h"
-
+#include "PlayState.h"
 using namespace Ogre;
 
 #define N_JUMPS 1
@@ -43,6 +43,10 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	_hero->setSpeed(_currentSpeed);
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
+
+		
+
+
 		if(!_inBossRoom){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
 		}
 	}

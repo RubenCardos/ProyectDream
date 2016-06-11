@@ -1,16 +1,16 @@
-// matCapa genrated by blender2ogre 0.5.8
+// matThreadHero genrated by blender2ogre 0.5.8
 
-material matCapa 
+material matThreadHero 
 {
     receive_shadows on 
 
     technique
     {
-        pass matCapa
+        pass matThreadHero
         {
-            ambient 0.8000000715255737 0.009557384997606277 0.0 1.0
-            diffuse 0.8000000715255737 0.009557384997606277 0.0 1.0
-            specular 0.0894736796617508 0.0894736796617508 0.0894736796617508 1.0 12.5
+            ambient 0.0 0.0 0.0 1.0
+            diffuse 0.0 0.0 0.0 1.0
+            specular 0.2052631676197052 0.2052631676197052 0.2052631676197052 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off

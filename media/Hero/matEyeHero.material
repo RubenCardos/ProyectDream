@@ -1,16 +1,16 @@
-// matThread genrated by blender2ogre 0.5.8
+// matEyeHero genrated by blender2ogre 0.5.8
 
-material matThread 
+material matEyeHero 
 {
     receive_shadows on 
 
     technique
     {
-        pass matThread
+        pass matEyeHero
         {
-            ambient 0.0 0.0 0.0 1.0
-            diffuse 0.0 0.0 0.0 1.0
-            specular 0.2052631676197052 0.2052631676197052 0.2052631676197052 1.0 12.5
+            ambient 1.0 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0 1.0
+            specular 0.24110852181911469 0.24110852181911469 0.24110852181911469 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off

@@ -21,7 +21,12 @@ void AnimationManager::setCurrentScenario(Scenario::Scenario* currentScenario){
 }
 
 void AnimationManager::playAnimations(){
-	//COSITAS
+	
+	
+
+
+
+	
 }
 
 template<> AnimationManager* Ogre::Singleton<AnimationManager>::msSingleton = 0;

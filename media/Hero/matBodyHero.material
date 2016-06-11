@@ -1,16 +1,16 @@
-// matBody genrated by blender2ogre 0.5.8
+// matBodyHero genrated by blender2ogre 0.5.8
 
-material matBody 
+material matBodyHero 
 {
     receive_shadows on 
 
     technique
     {
-        pass matBody
+        pass matBodyHero
         {
             ambient 1.0 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0 1.0
-            specular 0.09999999403953552 0.09999999403953552 0.09999999403953552 1.0 12.5
+            specular 0.022535204887390137 0.022535204887390137 0.022535204887390137 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off

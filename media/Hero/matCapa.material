@@ -1,16 +1,16 @@
-// matNose genrated by blender2ogre 0.5.8
+// matCapa genrated by blender2ogre 0.5.8
 
-material matNose 
+material matCapa 
 {
     receive_shadows on 
 
     technique
     {
-        pass matNose
+        pass matCapa
         {
-            ambient 0.039725735783576965 0.06061448156833649 0.36723804473876953 1.0
-            diffuse 0.039725735783576965 0.06061448156833649 0.36723804473876953 1.0
-            specular 0.21578946709632874 0.21578946709632874 0.21578946709632874 1.0 12.5
+            ambient 0.8000000715255737 0.009557384997606277 0.0 1.0
+            diffuse 0.8000000715255737 0.009557384997606277 0.0 1.0
+            specular 0.3077835142612457 0.3077835142612457 0.3077835142612457 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off

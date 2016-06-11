@@ -1,16 +1,16 @@
-// matMouth genrated by blender2ogre 0.5.8
+// matNoseHero genrated by blender2ogre 0.5.8
 
-material matMouth 
+material matNoseHero 
 {
     receive_shadows on 
 
     technique
     {
-        pass matMouth
+        pass matNoseHero
         {
-            ambient 0.6873648762702942 0.46247461438179016 0.2933841347694397 1.0
-            diffuse 0.6873648762702942 0.46247461438179016 0.2933841347694397 1.0
-            specular 0.15320059657096863 0.15320059657096863 0.15320059657096863 1.0 12.5
+            ambient 0.039725735783576965 0.06061448156833649 0.36723804473876953 1.0
+            diffuse 0.039725735783576965 0.06061448156833649 0.36723804473876953 1.0
+            specular 0.21578946709632874 0.21578946709632874 0.21578946709632874 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off
