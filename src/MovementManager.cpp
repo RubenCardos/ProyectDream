@@ -40,28 +40,21 @@ MovementManager& MovementManager::getSingleton(void){
 void MovementManager::moveHero(Ogre::Vector3* movement){
 	//movimiento del heroe
 	//cout <<"Velocidad Y = " << _hero->getRigidBody()->getLinearVelocity().y <<endl;
-	cout <<"DESP = " << *movement <<endl;
+	//cout <<"DESP = " << *movement <<endl;
 	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
 	_hero->setSpeed(_currentSpeed);
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
 		if(!_inBossRoom){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
-
 		}
-		
-		
 	}
-	
 	if(_hero->getRigidBody()->getLinearVelocity() == Vector3(0,0,0)){
 		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
-
-	}else{
+	}
+	else{
 		//IRA LA ANIMACION DE IDLE
 	}
-
-
-
 	rotateHero();
 
 	if(_hero->getRigidBody()->getLinearVelocity().y < 0.001 && _hero->getRigidBody()->getLinearVelocity().y > -0.0001 ){// a veces es 5.72205e-06

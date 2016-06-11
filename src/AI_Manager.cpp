@@ -108,19 +108,31 @@ void AI_Manager::updateBossMovement(){
 			}
 		}
 	}*/
+	cout << "	posTren" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
+	cout << "	target" << _bossRoute.at(1) << endl;
+	cout << "	distancia" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(_bossRoute.at(1)) << endl;
+
 	for(unsigned int i=0; i<_bossPieces->size(); i++){
-		if(std::abs(_bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition().x - _bossRoute.at(1).x) <= EPSILON){
+		/*if(std::abs(_bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition().x - _bossRoute.at(1).x) <= EPSILON){
 			if(std::abs(_bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition().z - _bossRoute.at(1).z) <= EPSILON){
 				//lo llevo otra vez al punto inicial
-				_bossPieces->at(i)->getRigidBody()->setPosition(_bossRoute.at(i));
+				//_bossPieces->at(i)->getRigidBody()->setPosition(_bossRoute.at(i));
+				_bossPieces->at(i)->getRigidBody()->setLinearVelocity(Ogre::Vector3(0,0,0));
 			}
+		}*/
+		if(_bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(_bossRoute.at(1)) <= EPSILON){
+			//lo llevo otra vez al punto inicial
+			//_bossPieces->at(i)->getRigidBody()->setPosition(_bossRoute.at(i));
+			cout << "He llegado a mi destino" <<endl;
+			//_bossPieces->at(i)->getRigidBody()->setLinearVelocity(Ogre::Vector3(0,0,0));
+			_bossPieces->at(i)->setV_Speed(new Ogre::Vector3(0,0,0));
 		}
 	}
 }
 
 void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
-		Ogre::Vector3 entryPosition(0,FLOOR_POSITION_Y,50);
-		Ogre::Vector3 exitPosition(20,FLOOR_POSITION_Y,70);
+		Ogre::Vector3 entryPosition(0,FLOOR_POSITION_Y, BOSS_ROOM -10);
+		Ogre::Vector3 exitPosition(25,FLOOR_POSITION_Y, BOSS_ROOM -10);
 		Ogre::Vector3 speed(0,0,0);
 		Ogre::Vector3* ptrSpeed = new Ogre::Vector3(0,0,0);
 

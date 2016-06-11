@@ -1411,7 +1411,7 @@ void PlayState::createBoss(){
 
 	scale *= 2;
 
-	gameEntity = createGameEntity("BossLocomotive", "cube.mesh", position, scale);
+	gameEntity = createGameEntity("BossLocomotive", "wagon.mesh", position, scale);
 	bossLocomotive->setSceneNode(gameEntity->getSceneNode());
 	bossLocomotive->setRigidBody(gameEntity->getRigidBody());
 	bossLocomotive->setMovementSpeed(0.5);
