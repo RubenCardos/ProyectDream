@@ -7,6 +7,8 @@ using namespace Ogre;
 #define N_JUMPS 1
 #define JUMP_EPSILON 0.01
 #define DISTANCE_BETWEEN_WAGONS 10
+#define BOSS_ROOM 100.0
+#define FLOOR_POSITION_Y -2.8
 
 MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Boss*>* bossPieces, std::vector<Wall*>* walls){
 	_sceneMgr = sceneMgr;
@@ -44,16 +46,15 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
 	_hero->setSpeed(_currentSpeed);
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
-
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
-		if(!_inBossRoom){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
-		}
+		/*if(!_inBossRoom){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
+		}*/
 	}
 	if(_hero->getRigidBody()->getLinearVelocity() == Vector3(0,0,0)){
 		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
 	}
 	else{
-		//IRA LA ANIMACION DE IDLE
+		//METER LA ANIMACION DE IDLE
 	}
 	rotateHero();
 
@@ -158,6 +159,9 @@ void MovementManager::moveWalls(){
 void MovementManager::moveBoss(){
 	_aiManager->updateBossMovement();
 	for(unsigned int i=0; i<_bossPieces->size(); i++){
+		if(Ogre::Math::Ceil(_bossPieces->at(i)->getVSpeed()->squaredLength()) == 0){
+			repositionGameEntity(_bossPieces->at(i), btVector3(0 - i*DISTANCE_BETWEEN_WAGONS,FLOOR_POSITION_Y, BOSS_ROOM -10), _bossPieces->at(i)->getRigidBody()->getBulletRigidBody()->getOrientation());
+		}
 		_bossPieces->at(i)->getRigidBody()->setLinearVelocity(*(_bossPieces->at(i)->getVSpeed()));
 	}
 	rotateBoss();
