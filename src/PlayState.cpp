@@ -440,13 +440,6 @@ PlayState::keyPressed
 		_wallsAreVisible = !_wallsAreVisible;
 	}
 	//-----------------
-	/*if (e.key == OIS::KC_UP || e.key == OIS::KC_DOWN || e.key == OIS::KC_LEFT || e.key == OIS::KC_RIGHT) {
-        _animHero->setTimePosition(0);
-        _animHero->setEnabled(true);
-        _animHero->setLoop(true);
-        _animHero->setTimePosition(0);
-
-  }*/
 
 	//Movimiento PJ---------------
 	if (e.key == OIS::KC_SPACE) {
@@ -507,11 +500,7 @@ PlayState::keyReleased
 		_desp-=Vector3(0,0,1);
 	}
 	//-------------------------------
-	/*if (e.key == OIS::KC_UP || e.key == OIS::KC_DOWN || e.key == OIS::KC_LEFT || e.key == OIS::KC_RIGHT) {
-        _animHero->setEnabled(false);
-        _animHero->setLoop(false);
-
-  }*/
+	
 	//CEGUI--------------------------
 	CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(static_cast<CEGUI::Key::Scan>(e.key));
 	//-------------------------------
@@ -970,6 +959,7 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
 
 		_currentScenario=Scenario::Menu;
+		_ground->setMaterialName("GroundRoom");
 		break;
 	}
 	case Scenario::LevelGarden:
@@ -1012,8 +1002,8 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 			_nodeScn->attachObject(_entScn);
 			_nodeScn->setPosition(0,-3,0);
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
-			_nodeScn->yaw(Degree(90));
-			_nodeScn->translate(Vector3(230*i,0,0));
+			_nodeScn->yaw(Degree(270));
+			_nodeScn->translate(Vector3(200*i,0,0));
 
 			_vScenario.push_back(_nodeScn);
 		}

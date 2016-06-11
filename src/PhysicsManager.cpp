@@ -123,6 +123,7 @@ void PhysicsManager::detectHeroCollision(){
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorRoom")){
 					Scenario::Scenario scenario = Scenario::LevelRoom;
+					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					_world->getBulletDynamicsWorld()->removeCollisionObject(_aux);
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
 

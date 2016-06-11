@@ -61,7 +61,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	}
 
 
-	
+
 	rotateHero();
 
 	if(_hero->getRigidBody()->getLinearVelocity().y < 0.001 && _hero->getRigidBody()->getLinearVelocity().y > -0.0001 ){// a veces es 5.72205e-06
@@ -118,6 +118,7 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 
 	_hero->getRigidBody()->getBulletRigidBody()->setWorldTransform(initialTransform);
 	_hero->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
+
 	//mMotionState->setWorldTransform(initialTransform);
 
 	//Creo que hay que reposicionar las paredes y el suelo tambien
