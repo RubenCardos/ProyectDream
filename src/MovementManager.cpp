@@ -84,18 +84,6 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	}
 	//-------------------------------------------------------------------
 
-	/*if(_currentSpeed.z >0){//Hacia la derecha
-		_hero->getRigidBody()->setOrientation(Quaternion(Degree(-90),Vector3::UNIT_Y));
-	}
-	if(_currentSpeed.z <0){//Hacia la derecha
-		_hero->getRigidBody()->setOrientation(Quaternion(Degree(90),Vector3::UNIT_Y));
-	}
-	if(_currentSpeed.x >0){//Hacia la derecha
-		_hero->getRigidBody()->setOrientation(Quaternion(Degree(0),Vector3::UNIT_Y));
-	}
-	if(_currentSpeed.x <0){//Hacia la derecha
-		_hero->getRigidBody()->setOrientation(Quaternion(Degree(180),Vector3::UNIT_Y));
-	}*/
 
 }
 

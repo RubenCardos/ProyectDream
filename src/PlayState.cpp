@@ -1211,13 +1211,13 @@ void PlayState::createBossRoom(){
 	position.y = FLOOR_POSITION_Y;
 	//name = Floor;
 	scale = Ogre::Vector3(100,0.10,100);
-	gameEntity = createGameEntity("FloorBoss", "cube.mesh", position, scale);
+	/*gameEntity = createGameEntity("FloorBoss", "cube.mesh", position, scale);
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
-	_walls.push_back(wall);
+	_walls.push_back(wall);*/
 
 	//Muro de la izquierda--------
-	position.z = 0;
+	position.z = BOSS_ROOM-BOSS_ROOM;
     position.y = WALLL_POSITION_Y;
     //name = LeftWall;
     scale = Ogre::Vector3(BOSS_ROOM,10,1);
