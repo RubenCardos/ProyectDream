@@ -37,7 +37,8 @@ MovementManager& MovementManager::getSingleton(void){
 
 void MovementManager::moveHero(Ogre::Vector3* movement){
 	//movimiento del heroe
-	cout <<"Velocidad Y = " << _hero->getRigidBody()->getLinearVelocity().y <<endl;
+	//cout <<"Velocidad Y = " << _hero->getRigidBody()->getLinearVelocity().y <<endl;
+	cout <<"DESP = " << *movement <<endl;
 	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
 	_hero->setSpeed(_currentSpeed);
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
@@ -60,6 +61,12 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		}
 	}
 	//----------------------------------------------------------------
+
+	//Si no no mueve que el personaje mire hacia adelante(Arreglar)------
+	if(*movement == Vector3(0,0,0) && _hero->getRigidBody()->getLinearVelocity().x == 0 && _hero->getRigidBody()->getLinearVelocity().z == 0 ){
+		_hero->getRigidBody()->setOrientation(Quaternion(Degree(0),Vector3::UNIT_Y));
+	}
+	//-------------------------------------------------------------------
 
 	/*if(_currentSpeed.z >0){//Hacia la derecha
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(-90),Vector3::UNIT_Y));
