@@ -98,6 +98,8 @@ PlayState::enter ()
 
 	//Crear el AnimationManager
 	_animationManager = new AnimationManager(_sceneMgr, &_currentScenario);
+	_animationManager->setupAnimations();
+
 	//-------------------
 
 	//Iniciacion Variables---
@@ -118,7 +120,7 @@ PlayState::enter ()
 
 	//Animations---------------------------------------------------------------
 	//_animEnemy = _sceneMgr->getEntity("E_Enemy")->getAnimationState("walkEnemy");
-	_animHero = _sceneMgr->getEntity("E_Hero")->getAnimationState("runHero");
+	
 	//_animHero->setEnabled(true);
 	//_animHero->setLoop(true);
 	//_animHero->setTimePosition(0.0);
@@ -313,6 +315,8 @@ PlayState::CreateInitialWorld() {
 	_bodies.push_back(rigidBody);
 	//------------------------------------
 
+	
+
 }
 
 
@@ -352,15 +356,7 @@ PlayState::frameStarted
 	//----------------------
 
 	//Animations--------------------------------
-	if (_animHero != NULL) {
-		if (_animHero->hasEnded()) {
-			_animHero->setTimePosition(0.0);
-			_animHero->setEnabled(false);
-		}
-		else {
-			_animHero->addTime(_deltaT);
-		}
-	}
+	_animationManager->resetAnimations(AnimationManager::ANIM_RUN_HERO, _deltaT);
 	//--------------------------------------------
 
 	return true;
@@ -444,13 +440,13 @@ PlayState::keyPressed
 		_wallsAreVisible = !_wallsAreVisible;
 	}
 	//-----------------
-	if (e.key == OIS::KC_UP || e.key == OIS::KC_DOWN || e.key == OIS::KC_LEFT || e.key == OIS::KC_RIGHT) {
+	/*if (e.key == OIS::KC_UP || e.key == OIS::KC_DOWN || e.key == OIS::KC_LEFT || e.key == OIS::KC_RIGHT) {
         _animHero->setTimePosition(0);
         _animHero->setEnabled(true);
         _animHero->setLoop(true);
         _animHero->setTimePosition(0);
 
-  }
+  }*/
 
 	//Movimiento PJ---------------
 	if (e.key == OIS::KC_SPACE) {
@@ -511,11 +507,11 @@ PlayState::keyReleased
 		_desp-=Vector3(0,0,1);
 	}
 	//-------------------------------
-	if (e.key == OIS::KC_UP || e.key == OIS::KC_DOWN || e.key == OIS::KC_LEFT || e.key == OIS::KC_RIGHT) {
+	/*if (e.key == OIS::KC_UP || e.key == OIS::KC_DOWN || e.key == OIS::KC_LEFT || e.key == OIS::KC_RIGHT) {
         _animHero->setEnabled(false);
         _animHero->setLoop(false);
 
-  }
+  }*/
 	//CEGUI--------------------------
 	CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(static_cast<CEGUI::Key::Scan>(e.key));
 	//-------------------------------

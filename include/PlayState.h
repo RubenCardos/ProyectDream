@@ -73,7 +73,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   static PlayState* getSingletonPtr ();
 
   CEGUI::MouseButton convertMouseButton(OIS::MouseButtonID id);
-  Ogre::AnimationState *_animHero;
+  
 
  protected:
   Ogre::Root* _root;
