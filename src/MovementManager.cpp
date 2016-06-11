@@ -37,6 +37,7 @@ MovementManager& MovementManager::getSingleton(void){
 
 void MovementManager::moveHero(Ogre::Vector3* movement){
 	//movimiento del heroe
+	cout <<"Velocidad Y = " << _hero->getRigidBody()->getLinearVelocity().y <<endl;
 	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
 	_hero->setSpeed(_currentSpeed);
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
@@ -45,6 +46,21 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		}
 	}
 	rotateHero();
+
+	if(_hero->getRigidBody()->getLinearVelocity().y < 0.001 && _hero->getRigidBody()->getLinearVelocity().y > -0.0001 ){// a veces es 5.72205e-06
+		Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
+		_currentSpeed.y = 0 ;
+		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
+	}
+
+	//Si la velocidad en y es 0 es que ya estoy tocando suelo---------
+	if(_hero->getRigidBody()->getLinearVelocity().y == 0 ){// a veces es 5.72205e-06
+		if(_hero->getNumJumps() < N_JUMPS){
+			_hero->setNumJumps(N_JUMPS);
+		}
+	}
+	//----------------------------------------------------------------
+
 	/*if(_currentSpeed.z >0){//Hacia la derecha
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(-90),Vector3::UNIT_Y));
 	}
@@ -63,10 +79,11 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 void MovementManager::jumpHero(){
 	if(_hero->getNumJumps() > 0){
 		Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
-		_currentSpeed.y = 12.0;
+		_currentSpeed.y = 16.0;
 		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
 		_hero->setNumJumps(_hero->getNumJumps()-1);
 	}
+
 }
 
 void MovementManager::repositionHero(btVector3 position,btQuaternion orientation){
@@ -109,7 +126,7 @@ void MovementManager::moveEnemies(){
 		Ogre::Vector3 _currentSpeed = _enemies->at(i)->getRigidBody()->getLinearVelocity();
 		//enemy->getRigidBody()->setLinearVelocity(enemy->getSpeed());
 		if(_currentSpeed.squaredLength() < _enemies->at(i)->getMovementSpeed()){
-			cout << "		Velocidad del enemigo = " << _enemies->at(i)->getSpeed() <<endl;
+			//cout << "		Velocidad del enemigo = " << _enemies->at(i)->getSpeed() <<endl;
 			_enemies->at(i)->getRigidBody()->applyImpulse(_enemies->at(i)->getSpeed() ,_enemies->at(i)->getRigidBody()->getCenterOfMassPosition());
 
 		}

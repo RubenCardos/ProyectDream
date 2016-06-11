@@ -73,11 +73,11 @@ void PhysicsManager::detectHeroCollision(){
 				}*/
 
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Ground")){
-					if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
+					/*if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
 						if(_hero->getNumJumps() < N_JUMPS){
 							_hero->setNumJumps(N_JUMPS);
 						}
-					}
+					}*/
 				}	
 
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){

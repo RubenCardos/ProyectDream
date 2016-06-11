@@ -50,7 +50,7 @@ PlayState::enter ()
 	_camera = _sceneMgr->createCamera("PlayCamera");
 	_viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
 	_sceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-	_sceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
+	//_sceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
 
 	//Camara--------------------
 	//_camera->setPosition(Ogre::Vector3(-40,10,0));
@@ -1004,6 +1004,7 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 			_nodeScn->attachObject(_entScn);
 			_nodeScn->setPosition(0,-3,0);
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
+			_nodeScn->yaw(Degree(90));
 			_nodeScn->translate(Vector3(230*i,0,0));
 
 			_vScenario.push_back(_nodeScn);
