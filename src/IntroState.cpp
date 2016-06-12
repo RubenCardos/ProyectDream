@@ -5,7 +5,8 @@
 using namespace CEGUI;
 
 template<> IntroState* Ogre::Singleton<IntroState>::msSingleton = 0;
-
+Ogre::AnimationState *_animState;
+Ogre::AnimationState *_animState2;
 void
 IntroState::enter ()
 {
@@ -15,7 +16,7 @@ IntroState::enter ()
   _camera = _sceneMgr->createCamera("IntroCamera");
   _viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
   _sceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-
+  _sceneMgr -> setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE); 
   //GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("BGMusic.mp3");
   //GameManager::getSingletonPtr()->_mainTrack->play();
 
@@ -36,11 +37,15 @@ IntroState::enter ()
   //------------------------------------------------------
 
   //LUCES------------------------------------------------
-  Ogre::Light* light = _sceneMgr->createLight();
-  light->setType(Ogre::Light::LT_DIRECTIONAL);
-  light->setSpecularColour(Ogre::ColourValue::White);
-  light->setDirection(Ogre::Vector3(1,-1,0));
+  Ogre::Light* light1 = _sceneMgr->createLight();
+  light1->setType(Ogre::Light::LT_DIRECTIONAL);
+  light1->setSpecularColour(Ogre::ColourValue::White);
+  light1->setDirection(Ogre::Vector3(-1,-1,1));
 
+  Ogre::Light* light = _sceneMgr->createLight("Light1");
+  light->setType(Ogre::Light::LT_POINT);
+  light -> setPosition (Ogre::Vector3(-10, 100, 100));
+  light->setSpecularColour(Ogre::ColourValue::White);
   //-----------------------------------------------------
 
   //SkyBox-------------------------------------
@@ -63,7 +68,7 @@ IntroState::enter ()
   //Suelo Grafico-----------------------------------------------
   SceneNode* _groundNode = _sceneMgr->createSceneNode("SN_Ground");
   Entity* _groundEnt = _sceneMgr->createEntity("E_Ground", "p1");
-  _groundEnt->setMaterialName("GroundRoom");
+  _groundEnt->setMaterialName("GroundRoomAnim");
   _groundNode->attachObject(_groundEnt);
   _sceneMgr->getRootSceneNode()->addChild(_groundNode);
 
@@ -73,6 +78,7 @@ IntroState::enter ()
   node->setPosition(10,-3,0);
   node->attachObject(entity);
   node->yaw(Degree(-30));
+  
 
   Entity *entityBoss = _sceneMgr->createEntity("E_BossLocomotive", "train.mesh");
   SceneNode *nodeBoss = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_BossLocomotive");
@@ -80,7 +86,22 @@ IntroState::enter ()
   nodeBoss->setPosition(-1,3,-8);
   nodeBoss->setScale(1.5,1.5,1.5);
   nodeBoss->yaw(Degree(48));
+
   //---------------------------------------------------
+
+  //Animaciones---------------------------------------
+
+  _animState=_sceneMgr->getEntity("E_Hero")->getAnimationState("runHero");
+  _animState->setEnabled(true);
+  _animState->setLoop(true);
+  _animState->setTimePosition(0.0);
+
+  _animState2=_sceneMgr->getEntity("E_BossLocomotive")->getAnimationState("walktrainMain");
+  _animState2->setEnabled(true);
+  _animState2->setLoop(true);
+  _animState2->setTimePosition(0.0);
+
+  //--------------------------------------------------
 }
 void IntroState::createGUI()
 {
@@ -315,6 +336,7 @@ IntroState::exit()
   sheet->destroyChild("recordsButton");
   sheet->destroyChild("creditsButton");
   sheet->destroyChild("quitButton");
+  sheet->destroyChild("textEnter");
   //--------------------------------------------
 
   //GameManager::getSingletonPtr()->_mainTrack->unload();
@@ -334,6 +356,27 @@ bool
 IntroState::frameStarted
 (const Ogre::FrameEvent& evt) 
 { 
+  _deltaT = evt.timeSinceLastFrame;
+
+  if (_animState != NULL) {
+    if (_animState->hasEnded()) {
+      _animState->setTimePosition(0.0);
+      _animState->setEnabled(false);
+    }
+    else {
+      _animState->addTime(_deltaT);
+    }
+  }
+
+  if (_animState2 != NULL) {
+    if (_animState2->hasEnded()) {
+      _animState2->setTimePosition(0.0);
+      _animState2->setEnabled(false);
+    }
+    else {
+      _animState2->addTime(_deltaT);
+    }
+  }
   return true;
 }
 
