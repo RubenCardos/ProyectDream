@@ -16,7 +16,7 @@ IntroState::enter ()
   _camera = _sceneMgr->createCamera("IntroCamera");
   _viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
   _sceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-  _sceneMgr -> setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE); 
+  _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE); 
   //GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("BGMusic.mp3");
   //GameManager::getSingletonPtr()->_mainTrack->play();
 
@@ -133,7 +133,7 @@ void IntroState::createGUI()
   ImageManager::getSingleton().addFromImageFile("BackgroundImage","logo.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageRecords","records.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageCredits","credits.png");
-  ImageManager::getSingleton().addFromImageFile("BackgroundImageMenu","wallpaper.png");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImageEnter","introscreen.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageBar","barra.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageMeter","medidor.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageFinish","finish.png");
@@ -152,62 +152,55 @@ void IntroState::createGUI()
   sheetBG->setVisible(false);*/
 
   Window* sheetStart =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_start");
-  sheetStart->setPosition(CEGUI::UVector2(CEGUI::UDim(0.27, 0),CEGUI::UDim(0, 0)));
-  sheetStart->setSize( CEGUI::USize(CEGUI::UDim(0.50, 0), CEGUI::UDim(0.50, 0)));
-  sheetStart->setProperty("Image","BackgroundImage");
+  sheetStart->setPosition(UVector2(cegui_reldim(0),cegui_reldim(0)));
+  sheetStart->setSize(CEGUI::USize(CEGUI::UDim(20,0),CEGUI::UDim(20,0)));
+  sheetStart->setProperty("Image","BackgroundImageEnter");
   sheetStart->setProperty("FrameEnabled","False");
   sheetStart->setProperty("BackgroundEnabled", "False");
-   sheetStart->setVisible(false);
+  
    //Buttons
   CEGUI::Window* playButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","playButton");
   playButton->setText("[font='DickVanDyke'] Play");
   playButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  playButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.20,0)));
+  playButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.20,0)));
   playButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::play,this));
-  //playButton->setVisible(false);
+  playButton->setVisible(false);
 
   CEGUI::Window* infoButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","infoButton");
   infoButton->setText("[font='DickVanDyke'] How To Play");
   infoButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  infoButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.28,0)));
+  infoButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.28,0)));
   infoButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::info,this));
-  //infoButton->setVisible(false);
+  infoButton->setVisible(false);
 
   CEGUI::Window* optionsButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","optionsButton");
   optionsButton->setText("[font='DickVanDyke'] Options");
   optionsButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  optionsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.36,0)));
+  optionsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.36,0)));
   optionsButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::options,this));
-  //optionsButton->setVisible(false);
+  optionsButton->setVisible(false);
 
   CEGUI::Window* recordsButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","recordsButton");
   recordsButton->setText("[font='DickVanDyke'] Records");
   recordsButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  recordsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.44,0)));
+  recordsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.44,0)));
   recordsButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::records,this));
-  //recordsButton->setVisible(false);
+  recordsButton->setVisible(false);
 
   CEGUI::Window* creditsButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","creditsButton");
   creditsButton->setText("[font='DickVanDyke'] Credits");
   creditsButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  creditsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.52,0)));
+  creditsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.52,0)));
   creditsButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::credits,this));
-  ///creditsButton->setVisible(false);
+  creditsButton->setVisible(false);
 
   CEGUI::Window* quitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","quitButton");
   quitButton->setText("[font='DickVanDyke'] Exit");
   quitButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.60,0)));
+  quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.60,0)));
   quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::quit,this));
-  //quitButton->setVisible(false);
+  quitButton->setVisible(false);
 
-  CEGUI::Window* textEnter = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textEnter");
-  textEnter->setText("PRESS ENTER");
-  textEnter->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
-  textEnter->setPosition(CEGUI::UVector2(CEGUI::UDim(0.40,0),CEGUI::UDim(0.50,0)));
-  textEnter->setProperty("FrameEnabled","False");
-  textEnter->setProperty("BackgroundEnabled", "False");
-  textEnter->setProperty("VertFormatting", "TopAligned");
 
   //Attaching buttons
   sheet->addChild(playButton);
@@ -216,7 +209,6 @@ void IntroState::createGUI()
   sheet->addChild(recordsButton);
   sheet->addChild(creditsButton);
   sheet->addChild(quitButton);
-  sheet->addChild(textEnter);
   sheet->addChild(sheetStart);
   CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 
@@ -336,7 +328,6 @@ IntroState::exit()
   sheet->destroyChild("recordsButton");
   sheet->destroyChild("creditsButton");
   sheet->destroyChild("quitButton");
-  sheet->destroyChild("textEnter");
   //--------------------------------------------
 
   //GameManager::getSingletonPtr()->_mainTrack->unload();
@@ -402,6 +393,20 @@ IntroState::keyPressed
 
   CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyDown(static_cast<CEGUI::Key::Scan>(e.key));
   CEGUI::System::getSingleton().getDefaultGUIContext().injectChar(e.text);
+
+  if (e.key == OIS::KC_RETURN) {
+    
+    CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+    //sheet->getChild("background_wnd")->setVisible(true);
+    sheet->getChild("playButton")->setVisible(true);
+    sheet->getChild("infoButton")->setVisible(true);
+    sheet->getChild("optionsButton")->setVisible(true);
+    sheet->getChild("recordsButton")->setVisible(true);
+    sheet->getChild("creditsButton")->setVisible(true);
+    sheet->getChild("quitButton")->setVisible(true);
+    sheet->getChild("background_start")->setVisible(false);
+
+  }
 
 }
 
