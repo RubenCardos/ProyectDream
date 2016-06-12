@@ -23,13 +23,19 @@ IntroState::enter ()
 
   
 
-  //LUCES------------------------------------------------
-  Light* _sunLight = _sceneMgr->createLight("SunLight");
-  _sunLight->setPosition(200, 200, 200);
-  _sunLight->setType(Light::LT_SPOTLIGHT);
-  _sunLight->setDiffuseColour(.20, .20, 0);
-  _sunLight->setSpotlightRange(Degree(30), Degree(50));
+  ///Camera----------------------------------------------------
+  _camera->setPosition(Ogre::Vector3(30,10,0)); //primer valor acerca, el segundo subo para arriba o abajo
+  _camera->lookAt(Ogre::Vector3(0,0,0));
+  _camera->setNearClipDistance(5);
+  _camera->setFarClipDistance(10000);
 
+
+  double width = _viewport->getActualWidth();
+  double height = _viewport->getActualHeight();
+  _camera->setAspectRatio(width / height);
+  //------------------------------------------------------
+
+  //LUCES------------------------------------------------
   Ogre::Light* light = _sceneMgr->createLight();
   light->setType(Ogre::Light::LT_DIRECTIONAL);
   light->setSpecularColour(Ogre::ColourValue::White);
@@ -47,6 +53,34 @@ IntroState::enter ()
   _resWidth=1200;
   _resHeigt=800;
   //---------------------------
+  //Escenario----------------------------------------------------------
+  Plane plane1(Ogre::Vector3(0,1,0), -3);    // Normal y distancia  (antes estaba a 0)
+  MeshManager::getSingleton().createPlane("p1",
+  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
+  1000, 1000, 1, 1, true, 1, 20, 20, Ogre::Vector3::UNIT_Z);
+  //--------------------------------------------------------
+
+  //Suelo Grafico-----------------------------------------------
+  SceneNode* _groundNode = _sceneMgr->createSceneNode("SN_Ground");
+  Entity* _groundEnt = _sceneMgr->createEntity("E_Ground", "p1");
+  _groundEnt->setMaterialName("GroundRoom");
+  _groundNode->attachObject(_groundEnt);
+  _sceneMgr->getRootSceneNode()->addChild(_groundNode);
+
+
+  Entity *entity = _sceneMgr->createEntity("E_Hero", "tedybear.mesh");
+  SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Hero");
+  node->setPosition(10,-3,0);
+  node->attachObject(entity);
+  node->yaw(Degree(-30));
+
+  Entity *entityBoss = _sceneMgr->createEntity("E_BossLocomotive", "train.mesh");
+  SceneNode *nodeBoss = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_BossLocomotive");
+  nodeBoss->attachObject(entityBoss);
+  nodeBoss->setPosition(-1,3,-8);
+  nodeBoss->setScale(1.5,1.5,1.5);
+  nodeBoss->yaw(Degree(48));
+  //---------------------------------------------------
 }
 void IntroState::createGUI()
 {
@@ -88,50 +122,71 @@ void IntroState::createGUI()
   ImageManager::getSingleton().addFromImageFile("BackgroundImageControls","controls.png");
 
   //Sheet
-  Window* sheetBG =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd");
+  /*Window* sheetBG =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd");
   sheetBG->setPosition(CEGUI::UVector2(CEGUI::UDim(0.27, 0),CEGUI::UDim(0, 0)));
   sheetBG->setSize( CEGUI::USize(CEGUI::UDim(0.50, 0), CEGUI::UDim(0.50, 0)));
   sheetBG->setProperty("Image","BackgroundImage");
   sheetBG->setProperty("FrameEnabled","False");
   sheetBG->setProperty("BackgroundEnabled", "False");
-   
+  sheetBG->setVisible(false);*/
+
+  Window* sheetStart =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_start");
+  sheetStart->setPosition(CEGUI::UVector2(CEGUI::UDim(0.27, 0),CEGUI::UDim(0, 0)));
+  sheetStart->setSize( CEGUI::USize(CEGUI::UDim(0.50, 0), CEGUI::UDim(0.50, 0)));
+  sheetStart->setProperty("Image","BackgroundImage");
+  sheetStart->setProperty("FrameEnabled","False");
+  sheetStart->setProperty("BackgroundEnabled", "False");
+   sheetStart->setVisible(false);
    //Buttons
   CEGUI::Window* playButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","playButton");
   playButton->setText("[font='DickVanDyke'] Play");
-  playButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
-  playButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.40,0),CEGUI::UDim(0.50,0)));
+  playButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
+  playButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.20,0)));
   playButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::play,this));
+  //playButton->setVisible(false);
 
   CEGUI::Window* infoButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","infoButton");
   infoButton->setText("[font='DickVanDyke'] How To Play");
-  infoButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
-  infoButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.40,0),CEGUI::UDim(0.58,0)));
+  infoButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
+  infoButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.28,0)));
   infoButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::info,this));
+  //infoButton->setVisible(false);
 
   CEGUI::Window* optionsButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","optionsButton");
   optionsButton->setText("[font='DickVanDyke'] Options");
-  optionsButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
-  optionsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.40,0),CEGUI::UDim(0.66,0)));
+  optionsButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
+  optionsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.36,0)));
   optionsButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::options,this));
+  //optionsButton->setVisible(false);
 
   CEGUI::Window* recordsButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","recordsButton");
   recordsButton->setText("[font='DickVanDyke'] Records");
-  recordsButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
-  recordsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.40,0),CEGUI::UDim(0.74,0)));
+  recordsButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
+  recordsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.44,0)));
   recordsButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::records,this));
+  //recordsButton->setVisible(false);
 
   CEGUI::Window* creditsButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","creditsButton");
   creditsButton->setText("[font='DickVanDyke'] Credits");
-  creditsButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
-  creditsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.40,0),CEGUI::UDim(0.82,0)));
+  creditsButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
+  creditsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.52,0)));
   creditsButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::credits,this));
+  ///creditsButton->setVisible(false);
 
   CEGUI::Window* quitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","quitButton");
   quitButton->setText("[font='DickVanDyke'] Exit");
-  quitButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
-  quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.40,0),CEGUI::UDim(0.90,0)));
+  quitButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
+  quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.07,0),CEGUI::UDim(0.60,0)));
   quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::quit,this));
+  //quitButton->setVisible(false);
 
+  CEGUI::Window* textEnter = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textEnter");
+  textEnter->setText("PRESS ENTER");
+  textEnter->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
+  textEnter->setPosition(CEGUI::UVector2(CEGUI::UDim(0.40,0),CEGUI::UDim(0.50,0)));
+  textEnter->setProperty("FrameEnabled","False");
+  textEnter->setProperty("BackgroundEnabled", "False");
+  textEnter->setProperty("VertFormatting", "TopAligned");
 
   //Attaching buttons
   sheet->addChild(playButton);
@@ -140,7 +195,8 @@ void IntroState::createGUI()
   sheet->addChild(recordsButton);
   sheet->addChild(creditsButton);
   sheet->addChild(quitButton);
-  sheet->addChild(sheetBG);
+  sheet->addChild(textEnter);
+  sheet->addChild(sheetStart);
   CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 
   
@@ -252,7 +308,7 @@ IntroState::exit()
   //Destruir interfaz--------------------------
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 
-  sheet->destroyChild("background_wnd");
+  //sheet->destroyChild("background_wnd");
   sheet->destroyChild("playButton");
   sheet->destroyChild("infoButton");
   sheet->destroyChild("optionsButton");
