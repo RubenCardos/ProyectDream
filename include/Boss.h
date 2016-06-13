@@ -34,6 +34,7 @@ class Boss : public GameEntity
   Ogre::Vector3* getVSpeed();
   int getCurrentIndex();
   Ogre::Vector3* getTargetPosition();
+  int getDistanceBetweenWagons();
 
   void setType(BossType type);
   void loseHealth();
@@ -54,6 +55,7 @@ class Boss : public GameEntity
   Ogre::Vector3* _vSpeed;
   int _currentIndex;
   Ogre::Vector3* _targetPosition;
+  int _distanceBetweenWagons;
 };
 
 #endif

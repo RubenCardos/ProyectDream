@@ -7,7 +7,6 @@
 #include "Hero.h"
 #include "Wall.h"
 
-
 #include <OgreBulletDynamicsRigidBody.h>
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
@@ -61,6 +60,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   std::vector<Boss*>* _bossPieces;
   AI_Manager* _aiManager;
   bool _inBossRoom;
+  int _currentIndex;
 };
 
 #endif

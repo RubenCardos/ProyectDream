@@ -34,6 +34,7 @@ void Boss::spawn(){
 	_movementSpeed=5.0;
 	_vSpeed = new Ogre::Vector3(0,0,0);
 	_targetPosition = new Ogre::Vector3(0,0,0);
+	_distanceBetweenWagons = 10;
 }
 
 void Boss::die(){
@@ -75,6 +76,9 @@ int Boss::getCurrentIndex(){
 }
 Ogre::Vector3* Boss::getTargetPosition(){
 	return _targetPosition;
+}
+int Boss::getDistanceBetweenWagons(){
+	return _distanceBetweenWagons;
 }
 
 void Boss::setType(BossType type){

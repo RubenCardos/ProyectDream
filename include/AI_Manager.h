@@ -13,6 +13,8 @@
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include "GameEntity.h"
 
+#define WAGON_DISTANCE 10
+
 using namespace Ogre;
 
 class AI_Manager : public Ogre::Singleton<AI_Manager>
@@ -24,6 +26,7 @@ class AI_Manager : public Ogre::Singleton<AI_Manager>
   Hero* getHero();
   std::vector<Enemy*>* getEnemies();
   std::vector<Boss*>* getBossPieces();
+  std::vector<Ogre::Vector3>* getBossRoute();
 
   void setHero(Hero* hero);
   void setEnemies(std::vector<Enemy*>* enemies);

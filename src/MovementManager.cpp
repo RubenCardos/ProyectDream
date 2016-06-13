@@ -6,7 +6,6 @@ using namespace Ogre;
 
 #define N_JUMPS 1
 #define JUMP_EPSILON 0.01
-#define DISTANCE_BETWEEN_WAGONS 10
 #define BOSS_ROOM 100.0
 #define FLOOR_POSITION_Y -2.8
 
@@ -19,6 +18,7 @@ MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::
 	_hero->setNumJumps(N_JUMPS);
 	_inBossRoom = false;
 	_aiManager = new AI_Manager(sceneMgr, _hero,_bossPieces,_enemies);
+	_currentIndex = 0;
 }
 
 MovementManager::~MovementManager(){
@@ -120,9 +120,12 @@ void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 posi
 	gameentity->getRigidBody()->getBulletRigidBody()->setWorldTransform(initialTransform);
 	gameentity->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
 	//mMotionState->setWorldTransform(initialTransform);*/
+	btVector3 vect(0,0,0);
+	vect = position - gameentity->getRigidBody()->getBulletRigidBody()->getCenterOfMassPosition();
 
 	gameentity->getRigidBody()->getBulletRigidBody()->activate(true);
-	gameentity->getRigidBody()->getBulletRigidBody()->translate(btVector3(-10,0,0));
+	gameentity->getRigidBody()->getBulletRigidBody()->translate(vect);
+	gameentity->getSceneNode()->setPosition(gameentity->getRigidBody()->getCenterOfMassPosition());
 
 	//Reposiciona bien
 
@@ -162,10 +165,16 @@ void MovementManager::moveWalls(){
 }
 
 void MovementManager::moveBoss(){
+	btVector3 vect(0,0,0);
+	int dist = 0;
 	_aiManager->updateBossMovement();
 	for(unsigned int i=0; i<_bossPieces->size(); i++){
 		if(Ogre::Math::Ceil(_bossPieces->at(i)->getVSpeed()->squaredLength()) == 0){
-			repositionGameEntity(_bossPieces->at(i), btVector3(0 - i*DISTANCE_BETWEEN_WAGONS,0, BOSS_ROOM -10), _bossPieces->at(i)->getRigidBody()->getBulletRigidBody()->getOrientation());
+			//repositionGameEntity(_bossPieces->at(i), btVector3(0 - i*DISTANCE_BETWEEN_WAGONS,0, BOSS_ROOM -10), _bossPieces->at(i)->getRigidBody()->getBulletRigidBody()->getOrientation());
+			vect = OgreBulletCollisions::convert(_aiManager->getBossRoute()->at(_currentIndex));
+			dist = (_bossPieces->at(0)->getDistanceBetweenWagons()) * i;
+			vect.setX(vect.getX() - dist);
+			repositionGameEntity(_bossPieces->at(i), vect, _bossPieces->at(i)->getRigidBody()->getBulletRigidBody()->getOrientation());
 			_bossPieces->at(i)->setV_Speed(new Ogre::Vector3(1,0,0));
 		}
 		_bossPieces->at(i)->getRigidBody()->setLinearVelocity(*(_bossPieces->at(i)->getVSpeed()));
@@ -228,6 +237,7 @@ void MovementManager::inBossRoom(){
 void MovementManager::initializeBossMovement(Ogre::Real* deltaT){
 	//_aiManager->loadBossRoute();
 	_aiManager->initializeBossMovement(deltaT);
+	_currentIndex = 0;
 }
 
 void MovementManager::rotateHero(){

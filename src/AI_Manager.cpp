@@ -3,7 +3,6 @@ using namespace Ogre;
 
 #define BOSS_ROOM 100.0
 #define EPSILON 0.1
-#define DISTANCE_BETWEEN_WAGONS 10
 #define FLOOR_POSITION_Y -2.8
 
 AI_Manager::AI_Manager (Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Boss*>* bossPieces,std::vector<Enemy*>* enemies){
@@ -50,7 +49,9 @@ void AI_Manager::setBossPieces(std::vector<Boss*>* bossPieces){
 void AI_Manager::setSceneManager(Ogre::SceneManager* sceneMgr){
 	_sceneMgr = sceneMgr;
 }
-
+std::vector<Ogre::Vector3>* AI_Manager::getBossRoute(){
+	return &_bossRoute;
+}
 void AI_Manager::updateEnemyMovement(){
 	//Aquí actualizar el Speed de cada Enemy según el tipo de enemy y el tipo de ia que tenga
 	//Quizá hacer un metodo privado para cada tipo de IA de enemigo y llamarlos desde este
@@ -108,9 +109,9 @@ void AI_Manager::updateBossMovement(){
 			}
 		}
 	}*/
-	/*cout << "	posTren" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
+	cout << "	posTren" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
 	cout << "	target" << _bossRoute.at(1) << endl;
-	cout << "	distancia = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(_bossRoute.at(1)) << endl;*/
+	cout << "	distancia" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(_bossRoute.at(1)) << endl;
 
 	for(unsigned int i=0; i<_bossPieces->size(); i++){
 		/*if(std::abs(_bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition().x - _bossRoute.at(1).x) <= EPSILON){
@@ -131,13 +132,8 @@ void AI_Manager::updateBossMovement(){
 }
 
 void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
-
-	//Guardo el centro de gravedad del boss------------------------
-		Real _y = _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().y;
-		//------------------------------------------------------------
-
-		Ogre::Vector3 entryPosition(0,_y, BOSS_ROOM -10);
-		Ogre::Vector3 exitPosition(25,_y, BOSS_ROOM -10);
+		Ogre::Vector3 entryPosition(0,0, BOSS_ROOM -10);
+		Ogre::Vector3 exitPosition(25,0, BOSS_ROOM -10);
 		Ogre::Vector3 speed(0,0,0);
 		Ogre::Vector3* ptrSpeed = new Ogre::Vector3(0,0,0);
 
@@ -157,7 +153,7 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 		for(unsigned int i=0; i<_bossPieces->size(); i++){
 			_bossPieces->at(i)->getRigidBody()->setPosition(entryPosition);
 			_bossPieces->at(i)->setV_Speed(ptrSpeed);
-			entryPosition.z = entryPosition.z - DISTANCE_BETWEEN_WAGONS;
+			entryPosition.z = entryPosition.z - WAGON_DISTANCE;
 		}
 		std::cout << "DESPUES DE REPOSICIONAR" << std::endl;
 
