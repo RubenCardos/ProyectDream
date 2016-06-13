@@ -1406,7 +1406,7 @@ void PlayState::createBoss(){
 	_bossPieces.clear();
 	GameEntity* gameEntity = new GameEntity();
 	Boss* bossLocomotive = new Boss();
-	Ogre::Vector3 position(0,FLOOR_POSITION_Y,BOSS_ROOM -10);
+	Ogre::Vector3 position(0,0,BOSS_ROOM -10);
 	Ogre::Vector3 scale(1,1,1);
 
 	scale *= 2;

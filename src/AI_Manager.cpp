@@ -108,9 +108,9 @@ void AI_Manager::updateBossMovement(){
 			}
 		}
 	}*/
-	cout << "	posTren" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
+	/*cout << "	posTren" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
 	cout << "	target" << _bossRoute.at(1) << endl;
-	cout << "	distancia" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(_bossRoute.at(1)) << endl;
+	cout << "	distancia = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(_bossRoute.at(1)) << endl;*/
 
 	for(unsigned int i=0; i<_bossPieces->size(); i++){
 		/*if(std::abs(_bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition().x - _bossRoute.at(1).x) <= EPSILON){
@@ -131,8 +131,13 @@ void AI_Manager::updateBossMovement(){
 }
 
 void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
-		Ogre::Vector3 entryPosition(0,FLOOR_POSITION_Y, BOSS_ROOM -10);
-		Ogre::Vector3 exitPosition(25,FLOOR_POSITION_Y, BOSS_ROOM -10);
+
+	//Guardo el centro de gravedad del boss------------------------
+		Real _y = _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().y;
+		//------------------------------------------------------------
+
+		Ogre::Vector3 entryPosition(0,_y, BOSS_ROOM -10);
+		Ogre::Vector3 exitPosition(25,_y, BOSS_ROOM -10);
 		Ogre::Vector3 speed(0,0,0);
 		Ogre::Vector3* ptrSpeed = new Ogre::Vector3(0,0,0);
 

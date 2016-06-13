@@ -111,7 +111,7 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 }
 
 void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 position,btQuaternion orientation){
-	btTransform initialTransform;
+	/*btTransform initialTransform;
 
 	initialTransform.setOrigin(position);
 	initialTransform.setRotation(orientation);
@@ -119,9 +119,14 @@ void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 posi
 
 	gameentity->getRigidBody()->getBulletRigidBody()->setWorldTransform(initialTransform);
 	gameentity->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
-	//mMotionState->setWorldTransform(initialTransform);
+	//mMotionState->setWorldTransform(initialTransform);*/
 
-	//Creo que hay que reposicionar las paredes y el suelo tambien
+	gameentity->getRigidBody()->getBulletRigidBody()->activate(true);
+	gameentity->getRigidBody()->getBulletRigidBody()->translate(btVector3(-10,0,0));
+
+	//Reposiciona bien
+
+
 }
 
 void MovementManager::moveEnemies(){
@@ -160,7 +165,8 @@ void MovementManager::moveBoss(){
 	_aiManager->updateBossMovement();
 	for(unsigned int i=0; i<_bossPieces->size(); i++){
 		if(Ogre::Math::Ceil(_bossPieces->at(i)->getVSpeed()->squaredLength()) == 0){
-			repositionGameEntity(_bossPieces->at(i), btVector3(0 - i*DISTANCE_BETWEEN_WAGONS,FLOOR_POSITION_Y, BOSS_ROOM -10), _bossPieces->at(i)->getRigidBody()->getBulletRigidBody()->getOrientation());
+			repositionGameEntity(_bossPieces->at(i), btVector3(0 - i*DISTANCE_BETWEEN_WAGONS,0, BOSS_ROOM -10), _bossPieces->at(i)->getRigidBody()->getBulletRigidBody()->getOrientation());
+			_bossPieces->at(i)->setV_Speed(new Ogre::Vector3(1,0,0));
 		}
 		_bossPieces->at(i)->getRigidBody()->setLinearVelocity(*(_bossPieces->at(i)->getVSpeed()));
 	}
@@ -244,7 +250,7 @@ void MovementManager::rotateBoss(){
 	for(unsigned i=0; i<_bossPieces->size(); i++){
 		vel = _bossPieces->at(i)->getVSpeed();
 		//calculo los grados entre el vector de velocidad del personaje y el unitario en Z
-		degrees = vel->angleBetween(Ogre::Vector3::UNIT_X);
+		degrees = vel->angleBetween(Ogre::Vector3::UNIT_Z);
 		if(vel->z < 0){
 			_bossPieces->at(i)->getRigidBody()->setOrientation(Quaternion(Degree(degrees),Vector3::UNIT_Y));
 		}
