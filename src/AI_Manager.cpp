@@ -2,7 +2,7 @@
 using namespace Ogre;
 
 #define BOSS_ROOM 100.0
-#define EPSILON 0.1
+#define EPSILON 0.25
 #define FLOOR_POSITION_Y -2.8
 
 AI_Manager::AI_Manager (Ogre::SceneManager* sceneMgr , OgreBulletDynamics::DynamicsWorld * world , Hero* hero, std::vector<Boss*>* bossPieces,std::vector<Enemy*>* enemies){
@@ -110,9 +110,9 @@ void AI_Manager::updateBossMovement(){
 			}
 		}
 	}*/
-	cout << "	posTren" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
-	cout << "	target" << _bossRoute.at(_bossPieces->at(0)->getCurrentIndex()) << endl;
-	cout << "	distancia" << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(_bossRoute.at(_bossPieces->at(0)->getCurrentIndex())) << endl;
+	cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
+	cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
+	cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
 
 
 	//for(unsigned int i=0; i<_bossPieces->size(); i++){
@@ -123,24 +123,61 @@ void AI_Manager::updateBossMovement(){
 				_bossPieces->at(i)->getRigidBody()->setLinearVelocity(Ogre::Vector3(0,0,0));
 			}
 		}*/
-		if(_bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(_bossRoute.at(_bossPieces->at(0)->getCurrentIndex())) <= EPSILON){
+		if(_bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) < EPSILON){
 			//lo llevo otra vez al punto inicial
 			//_bossPieces->at(i)->getRigidBody()->setPosition(_bossRoute.at(i));
 			cout << "He llegado a mi destino "<< _bossPieces->at(0)->getCurrentIndex() <<endl;
 
+			//Compruebo nuevo indice--------------------------------
+			int New_Index=_bossPieces->at(0)->getCurrentIndex()+2;
+			if(New_Index>=_bossRoute.size()){
+				New_Index=0;
+			}
+			//----------------------------------------------------
+
+			//Aumento index-----------
+			for(int i = 0;i<_bossPieces->size();i++){
+				_bossPieces->at(0)->setCurrentIndex(New_Index);
+				cout << "Actualizo Indice = "<< _bossPieces->at(0)->getCurrentIndex() <<endl;
+			}
+			//------------------------
+
 			//Reposicionar----------------------------------------------------------------------------------------------------
-			Vector3 pos= _bossRoute.at(0);
+			Vector3 pos= _bossRoute.at(_bossPieces->at(0)->getCurrentIndex());//Nuevo Origen
 			for(unsigned int i=0; i<_bossPieces->size(); i++){
 				pos.x -= 10*i;
 				btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
 				transform.setOrigin(OgreBulletCollisions::convert(pos));
 				//Girar---------------------------------------
-				transform.setRotation(OgreBulletCollisions::convert(Quaternion(Degree(90),Vector3::UNIT_Y)));
+				transform.setRotation(OgreBulletCollisions::convert(Quaternion(Degree(0),Vector3::UNIT_Y)));
 				//--------------------------------------------
 				_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
 
 			}
 			//--------------------------------------------------------------------------------------------------------------------
+
+			//Calcular nuevo desplazamiento y establecer nuevo destino---
+			Ogre::Vector3 speed(0,0,0);
+			Ogre::Vector3* ptrSpeed = new Ogre::Vector3(0,0,0);
+
+			speed = _bossRoute.at(_bossPieces->at(0)->getCurrentIndex()+1) - _bossRoute.at(_bossPieces->at(0)->getCurrentIndex());
+			speed = speed.normalisedCopy();
+			speed= speed*5;
+			*ptrSpeed = speed;
+
+			for(unsigned int i=0; i<_bossPieces->size(); i++){
+				//_bossPieces->at(i)->getRigidBody()->setPosition(entryPosition);
+				_bossPieces->at(i)->setV_Speed(ptrSpeed);
+				Vector3* _aux = &_bossRoute.at(_bossPieces->at(0)->getCurrentIndex()+1);
+				cout << "AUX = "<< *_aux <<endl;
+				_bossPieces->at(i)->setTargetPosition(_aux);
+			}
+			cout << "===INFO=== " <<endl;
+			cout << "Indice = "<< _bossPieces->at(0)->getCurrentIndex() <<endl;
+			cout << "Estoy en = "<< _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition() <<endl;
+			cout << "Voy a = "<< *_bossPieces->at(0)->getTargetPosition() <<endl;
+			//-----------------------------------------------------------
+
 
 
 
@@ -159,6 +196,13 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 		_bossRoute.push_back(entryPosition);
 		_bossRoute.push_back(exitPosition);
 
+		//Mas punto de ruta----
+		Ogre::Vector3 entryPosition2(0,0, 0);
+		Ogre::Vector3 exitPosition2(0,0, 200);
+		_bossRoute.push_back(entryPosition2);
+		_bossRoute.push_back(exitPosition2);
+		//---------------------
+
 		speed = exitPosition - entryPosition;
 		speed = speed.normalisedCopy();
 		speed= speed*5;
@@ -171,9 +215,20 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 		for(unsigned int i=0; i<_bossPieces->size(); i++){
 			//_bossPieces->at(i)->getRigidBody()->setPosition(entryPosition);
 			_bossPieces->at(i)->setV_Speed(ptrSpeed);
-			_bossPieces->at(i)->setTargetPosition(&_bossRoute.at(1));
-			_bossPieces->at(i)->setCurrentIndex(1);
+			_bossPieces->at(i)->setCurrentIndex(0);
+			Vector3* aux = new Vector3(0,0,0);
+			aux=&_bossRoute.at(_bossPieces->at(i)->getCurrentIndex()+1);
+			cout << "EXIT = " << *aux << endl;
+ 			_bossPieces->at(i)->setTargetPosition(aux);
+			//_bossPieces->at(i)->setCurrentIndex(0);
 			entryPosition.z = entryPosition.z - WAGON_DISTANCE;
+
+			btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
+			//transform.setOrigin(OgreBulletCollisions::convert(pos));
+			//Girar---------------------------------------
+			transform.setRotation(OgreBulletCollisions::convert(Quaternion(Degree(90),Vector3::UNIT_Y)));
+			//--------------------------------------------
+			_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
 		}
 		std::cout << "DESPUES DE REPOSICIONAR" << std::endl;
 

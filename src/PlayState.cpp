@@ -1185,7 +1185,7 @@ void PlayState::createBossRoom(){
 		while ( it.hasMoreElements() ) {//Recorro el iterador
 			SceneNode* _aux = static_cast<SceneNode*>(it.getNext());
 
-			if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall")){
+			if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Door")){
 				Entity* _e = static_cast<Entity*>(_aux->getAttachedObject(0));//Recupero la entidad
 				OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
 				_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
@@ -1261,7 +1261,7 @@ void PlayState::createBossRoom(){
     wall->setRigidBody(gameEntity->getRigidBody());
     _walls.push_back(wall);
 
-	_movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+	_movementManager->repositionHero(btVector3(0,0,BOSS_ROOM),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 	/*//Cambiar posicion de la camara--------------------
     int y = 10 + BOSS_ROOM;
     _camera->setPosition(Ogre::Vector3(-40,y,0));
@@ -1411,7 +1411,7 @@ void PlayState::createBoss(){
 
 	scale *= 2;
 
-	gameEntity = createGameEntity("BossLocomotive", "wagon.mesh", position, scale);
+	gameEntity = createGameEntity("BossLocomotive", "train.mesh", position, scale);
 	bossLocomotive->setSceneNode(gameEntity->getSceneNode());
 	bossLocomotive->setRigidBody(gameEntity->getRigidBody());
 	bossLocomotive->setMovementSpeed(0.5);
