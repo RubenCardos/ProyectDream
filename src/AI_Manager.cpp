@@ -128,13 +128,19 @@ void AI_Manager::updateBossMovement(){
 			//_bossPieces->at(i)->getRigidBody()->setPosition(_bossRoute.at(i));
 			cout << "He llegado a mi destino "<< _bossPieces->at(0)->getCurrentIndex() <<endl;
 
+			//Reposicionar----------------------------------------------------------------------------------------------------
 			Vector3 pos= _bossRoute.at(0);
 			for(unsigned int i=0; i<_bossPieces->size(); i++){
 				pos.x -= 10*i;
 				btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
 				transform.setOrigin(OgreBulletCollisions::convert(pos));
+				//Girar---------------------------------------
+				transform.setRotation(OgreBulletCollisions::convert(Quaternion(Degree(90),Vector3::UNIT_Y)));
+				//--------------------------------------------
 				_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
+
 			}
+			//--------------------------------------------------------------------------------------------------------------------
 
 
 
