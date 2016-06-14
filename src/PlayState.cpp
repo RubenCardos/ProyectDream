@@ -89,7 +89,7 @@ PlayState::enter ()
 	//-------------------
 
 	//Crear el MovementManager
-	_movementManager = new MovementManager(_sceneMgr,_hero,&_enemies,&_bossPieces,&_walls);
+	_movementManager = new MovementManager(_sceneMgr,_world,_hero,&_enemies,&_bossPieces,&_walls);
 	//-------------------
 
 	//Crear el PhysicsManager
@@ -1406,7 +1406,7 @@ void PlayState::createBoss(){
 	_bossPieces.clear();
 	GameEntity* gameEntity = new GameEntity();
 	Boss* bossLocomotive = new Boss();
-	Ogre::Vector3 position(0,0,BOSS_ROOM -10);
+	Ogre::Vector3 position(-100,0,BOSS_ROOM -10);
 	Ogre::Vector3 scale(1,1,1);
 
 	scale *= 2;

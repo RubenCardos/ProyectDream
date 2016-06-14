@@ -74,6 +74,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
 
   CEGUI::MouseButton convertMouseButton(OIS::MouseButtonID id);
   
+  void createBoss();
+
 
  protected:
   Ogre::Root* _root;
@@ -129,7 +131,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   void createScenario(Scenario::Scenario nextScenario);
   void createAllWalls();
   void createBossRoom();
-  void createBoss();
+
   void createTestGameEntities();
   GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale);
   void printAll();

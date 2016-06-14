@@ -19,7 +19,7 @@ using namespace Ogre;
 class MovementManager : public Ogre::Singleton<MovementManager>
 {
  public:
-  MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Boss*>* bossPieces, std::vector<Wall*>* walls);
+  MovementManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world,Hero* hero, std::vector<Enemy*>* enemies, std::vector<Boss*>* bossPieces, std::vector<Wall*>* walls);
   ~MovementManager();
 
   void moveHero(Ogre::Vector3* movement);
