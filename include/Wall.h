@@ -41,9 +41,12 @@ class Wall : public GameEntity{
   WallType getType();
   void setType(WallType type);
 
+  Vector3 getSpawnPosition();
+  void setSpawnPosition(Vector3 New_Position);
+
  protected:
   WallType _type;
-
+  Vector3 _spawnPosition;
 };
 
 #endif

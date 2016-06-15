@@ -120,6 +120,25 @@ void PhysicsManager::detectHeroCollision(){
 					}
 					//----------------------------------------------------------
 					//Actualizar las vidas en la UI
+
+					//Recoloco los muros---------------------------------------
+					//btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
+					//transform.setOrigin(OgreBulletCollisions::convert(pos));
+					//_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
+
+					for(int i=0 ; i< _gameEntities->size();i++){
+						GameEntity* _aux = _gameEntities->at(i);
+						if(Ogre::StringUtil::startsWith(_aux->getSceneNode()->getName(),"SN_Wall")){
+							Wall* w =static_cast<Wall*>(_aux);
+							cout << "POSICION PARA Reposicionar EL MURO = " << w->getSpawnPosition() << endl;
+							btTransform transform = _aux->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
+							transform.setOrigin(OgreBulletCollisions::convert(w->getSpawnPosition()));
+							_aux->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
+
+						}
+					}
+
+					//---------------------------------------------------------
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorRoom")){
 					Scenario::Scenario scenario = Scenario::LevelRoom;

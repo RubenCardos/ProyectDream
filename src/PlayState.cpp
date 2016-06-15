@@ -1043,6 +1043,8 @@ void PlayState::createAllWalls(){
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
+	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
+	cout << "POSICION PARA CREARE EL MURO = " << wall->getSpawnPosition() << endl;
 	_walls.push_back(wall);
 
 	//Muro de la derecha
@@ -1053,6 +1055,8 @@ void PlayState::createAllWalls(){
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
+	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
+	cout << "POSICION PARA CREARE EL MURO = " << wall->getSpawnPosition() << endl;
 	_walls.push_back(wall);
 
 	//Suelo
@@ -1076,6 +1080,8 @@ void PlayState::createAllWalls(){
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
+	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
+	cout << "POSICION PARA CREARE EL MURO = " << wall->getSpawnPosition() << endl;
 	_walls.push_back(wall);
 
 }

@@ -28,3 +28,11 @@ WallType Wall::getType(){
 void Wall::setType(WallType type){
 	_type = type;
 }
+
+Ogre::Vector3 Wall::getSpawnPosition(){
+	return _spawnPosition;
+}
+
+void Wall::setSpawnPosition(Vector3 New_Position){
+	_spawnPosition = New_Position;
+}
