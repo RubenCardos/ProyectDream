@@ -18,7 +18,7 @@ using namespace Ogre;
 class PhysicsManager : public Ogre::Singleton<PhysicsManager>
 {
  public:
-  PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<GameEntity*>* gameEntities, std::vector<Enemy*>* enemies);
+  PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<GameEntity*>* gameEntities, std::vector<Enemy*>* enemies, std::vector<Wall*>* walls);
   ~PhysicsManager();
 
   void detectHeroCollision();
@@ -32,6 +32,7 @@ class PhysicsManager : public Ogre::Singleton<PhysicsManager>
   void setSceneManager(Ogre::SceneManager* sceneMgr);
   void setHero(Hero* hero);
   void setEnemies(std::vector<Enemy*>* enemies);
+  void setWalls(std::vector<Wall*>* walls);
   void setGameEntities(std::vector<GameEntity*>* gameEntities);
   void setWorld(OgreBulletDynamics::DynamicsWorld * world);
 
@@ -47,6 +48,7 @@ class PhysicsManager : public Ogre::Singleton<PhysicsManager>
   Hero* _hero;
   std::vector<GameEntity*>* _gameEntities;
   std::vector<Enemy*>* _enemies;
+  std::vector<Wall*>* _walls;
   OgreBulletDynamics::DynamicsWorld * _world;
 };
 

@@ -24,6 +24,7 @@
 #define BOSS_ROOM 100.0
 #define BOSS_ROOM_SCALE 3.0
 
+#define WALL_SCALE_X 2.5
 
 using namespace std;
 
@@ -93,7 +94,7 @@ PlayState::enter ()
 	//-------------------
 
 	//Crear el PhysicsManager
-	_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,&_gameEntities, &_enemies);
+	_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,&_gameEntities, &_enemies, &_walls);
 	//-------------------
 
 	//Crear el AnimationManager
@@ -346,7 +347,7 @@ PlayState::frameStarted
 	_movementManager->moveHero(_despPtr);
 	_movementManager->moveEnemies();
 
-	if(!_bossRoom){
+	if(!_bossRoom ){
 		_movementManager->moveWalls();
 	}
 	else{
@@ -1037,14 +1038,15 @@ void PlayState::createAllWalls(){
 	//Muro de la izquierda
 	position.z = WALLL_POSITION_Z;
 	position.y = WALLL_POSITION_Y;
-	scale = Ogre::Vector3(40,10,1);
+	position.x = 60;
+	scale = Ogre::Vector3(40 * WALL_SCALE_X,10,1);
 	name = LeftWall;
 	gameEntity = createGameEntity("WallL", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
-	cout << "POSICION PARA CREARE EL MURO = " << wall->getSpawnPosition() << endl;
+	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
 	_walls.push_back(wall);
 
 	//Muro de la derecha
@@ -1056,7 +1058,7 @@ void PlayState::createAllWalls(){
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
-	cout << "POSICION PARA CREARE EL MURO = " << wall->getSpawnPosition() << endl;
+	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
 	_walls.push_back(wall);
 
 	//Suelo
@@ -1081,7 +1083,7 @@ void PlayState::createAllWalls(){
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->setRigidBody(gameEntity->getRigidBody());
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
-	cout << "POSICION PARA CREARE EL MURO = " << wall->getSpawnPosition() << endl;
+	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
 	_walls.push_back(wall);
 
 }
@@ -1361,6 +1363,7 @@ void PlayState::createTestGameEntities(){
 	node1->attachObject(entity1);
 
 	Vector3 size1 = Vector3::ZERO;
+	//Vector3 position1 = Vector3(30,1.5,3.5);
 	Vector3 position1 = Vector3(30,1.5,3.5);
 
 	OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter = NULL;

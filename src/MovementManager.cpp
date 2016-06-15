@@ -8,6 +8,8 @@ using namespace Ogre;
 #define JUMP_EPSILON 0.01
 #define BOSS_ROOM 100.0
 #define FLOOR_POSITION_Y -2.8
+#define WALLB_DISTANCE 40
+#define SIDEWALL_DISTANCE 14
 
 MovementManager::MovementManager(Ogre::SceneManager* sceneMgr,OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Boss*>* bossPieces, std::vector<Wall*>* walls){
 	_sceneMgr = sceneMgr;
@@ -159,6 +161,16 @@ void MovementManager::moveWalls(){
 		mov.y = 0.0;
 		for(unsigned int i=0; i<_walls->size();i++){
 			//_walls->at(i)->getRigidBody()->applyImpulse(mov * 20, _walls->at(i)->getRigidBody()->getCenterOfMassPosition());
+			if(i < _walls->size() -1){
+				if(_hero->getRigidBody()->getCenterOfMassPosition().x -_walls->at(_walls->size() -1)->getRigidBody()->getCenterOfMassPosition().x <= WALLB_DISTANCE){
+					mov.x = 0.0;
+				}
+			}
+			/*else{
+				if(_hero->getRigidBody()->getCenterOfMassPosition().x -_walls->at(_walls->size() -1)->getRigidBody()->getCenterOfMassPosition().x <= SIDEWALL_DISTANCE){
+					mov.x = 0.0;
+				}
+			}*/
 			_walls->at(i)->getRigidBody()->setLinearVelocity(mov);
 		}
 	}

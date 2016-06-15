@@ -5,11 +5,12 @@ using namespace Ogre;
 #define N_JUMPS 1
 #define JUMP_EPSILON 0.01
 
-PhysicsManager::PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<GameEntity*>* gameEntities, std::vector<Enemy*>* enemies){
+PhysicsManager::PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<GameEntity*>* gameEntities, std::vector<Enemy*>* enemies, std::vector<Wall*>* walls){
 	_sceneMgr = sceneMgr;
 	_world = world;
 	_hero = hero;
 	_enemies = enemies;
+	_walls = walls;
 	_gameEntities = gameEntities;
 }
 
@@ -18,6 +19,7 @@ PhysicsManager::~PhysicsManager(){
 	delete _world;
 	delete _hero;
 	delete _enemies;
+	delete _walls;
 	delete _gameEntities;
 }
 
@@ -126,18 +128,12 @@ void PhysicsManager::detectHeroCollision(){
 					//transform.setOrigin(OgreBulletCollisions::convert(pos));
 					//_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
 
-					for(int i=0 ; i< _gameEntities->size();i++){
-						GameEntity* _aux = _gameEntities->at(i);
-						if(Ogre::StringUtil::startsWith(_aux->getSceneNode()->getName(),"SN_Wall")){
-							Wall* w =static_cast<Wall*>(_aux);
-							cout << "POSICION PARA Reposicionar EL MURO = " << w->getSpawnPosition() << endl;
-							btTransform transform = _aux->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
-							transform.setOrigin(OgreBulletCollisions::convert(w->getSpawnPosition()));
-							_aux->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
-
-						}
+					for(int i=0 ; i< _walls->size();i++){
+						cout << "POSICION PARA Reposicionar EL MURO = " << _walls->at(i)->getSpawnPosition() << endl;
+						btTransform transform = _walls->at(i)->getRigidBody()->getBulletRigidBody()->getCenterOfMassTransform();
+						transform.setOrigin(OgreBulletCollisions::convert(_walls->at(i)->getSpawnPosition()));
+						_walls->at(i)->getRigidBody()->getBulletRigidBody()->setCenterOfMassTransform(transform);
 					}
-
 					//---------------------------------------------------------
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorRoom")){
@@ -250,6 +246,9 @@ void PhysicsManager::setHero(Hero* hero){
 }
 void PhysicsManager::setEnemies(std::vector<Enemy*>* enemies){
 	_enemies = enemies;
+}
+void PhysicsManager::setWalls(std::vector<Wall*>* walls){
+	_walls = walls;
 }
 
 void PhysicsManager::setGameEntities(std::vector<GameEntity*>* gameEntities){
