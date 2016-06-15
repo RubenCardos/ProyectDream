@@ -63,13 +63,41 @@ void AI_Manager::updateEnemyMovement(){
 }
 
 void AI_Manager::loadBossRoute(){
-	//Habría que cargarlo desde un archivo. De momento, lo meto a mano
-	double centerOfMass_y = 0.0;
-	centerOfMass_y = _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().y;
 
-	if(_bossRoute.size() == 0){
+	_bossRoute.clear();
+
+	//Cargamos la ruta por un fichero----------
+	fstream fichero;//Fichero
+	string frase;//Auxiliar
+	fichero.open("data/BossRoute.txt",ios::in);
+	if (fichero.is_open()) {
+		while (getline (fichero,frase)) {
+			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+
+			Vector3 routePoint = Vector3(x,y,z);
+			_bossRoute.push_back(routePoint);
+
+		}
+		fichero.close();
+	}
+	//---------------------------------------
+
+	std::cout << "tamaño del vector de ruta: " << _bossRoute.size() << std::endl;
+	std::cout << "puntos de ruta metidos en el vector: " << std::endl;
+	for(int i=0; i<_bossRoute.size(); i++){
+		std::cout << "Punto " <<_bossRoute.at(i) << std::endl;
+	}
+
+
+	//Habría que cargarlo desde un archivo. De momento, lo meto a mano
+	//double centerOfMass_y = 0.0;
+	//centerOfMass_y = _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().y;
+
+	//if(_bossRoute.size() == 0){
 		//Creo la ruta--------------------------
-		_bossRoute.clear();
+		//_bossRoute.clear();
 		/*Ogre::Vector3 routePoint(1,centerOfMass_y,BOSS_ROOM);
 		_bossRoute.push_back(routePoint);
 		routePoint.z += 10;
@@ -80,14 +108,17 @@ void AI_Manager::loadBossRoute(){
 		_bossRoute.push_back(routePoint);*/
 		//--------------------------------------
 
-		std::cout << "tamaño del vector de ruta: " << _bossRoute.size() << std::endl;
-		std::cout << "tamaño del vector de piezas de boss: " << _bossPieces->size() << std::endl;
+
+
+
+		//std::cout << "tamaño del vector de ruta: " << _bossRoute.size() << std::endl;
+		//std::cout << "tamaño del vector de piezas de boss: " << _bossPieces->size() << std::endl;
 		//std::cout << "puntos de ruta metidos en el vector: " << std::endl;
 
 		/*for(int i=0; i<_bossRoute.size(); i++){
 			std::cout << "Punto " <<_bossRoute.at(i) << std::endl;
 		}*/
-	}
+	//}
 }
 
 void AI_Manager::updateBossMovement(){
@@ -187,23 +218,28 @@ void AI_Manager::updateBossMovement(){
 }
 
 void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
-		Ogre::Vector3 entryPosition(-100,0, BOSS_ROOM -10);
-		Ogre::Vector3 exitPosition(100,0, BOSS_ROOM -10);
+		//Ogre::Vector3 entryPosition(-100,0, BOSS_ROOM -10);
+		//Ogre::Vector3 exitPosition(100,0, BOSS_ROOM -10);
 		Ogre::Vector3 speed(0,0,0);
 		Ogre::Vector3* ptrSpeed = new Ogre::Vector3(0,0,0);
 
-		_bossRoute.clear();
-		_bossRoute.push_back(entryPosition);
-		_bossRoute.push_back(exitPosition);
+		//_bossRoute.clear();
+		//_bossRoute.push_back(entryPosition);
+		//_bossRoute.push_back(exitPosition);
 
 		//Mas punto de ruta----
-		Ogre::Vector3 entryPosition2(0,0, 0);
-		Ogre::Vector3 exitPosition2(0,0, 200);
-		_bossRoute.push_back(entryPosition2);
-		_bossRoute.push_back(exitPosition2);
+		//Ogre::Vector3 entryPosition2(0,0, 0);
+		//Ogre::Vector3 exitPosition2(0,0, 200);
+		//_bossRoute.push_back(entryPosition2);
+		//_bossRoute.push_back(exitPosition2);
 		//---------------------
 
-		speed = exitPosition - entryPosition;
+		//Cargo la ruta---
+		loadBossRoute();
+		//----------------
+
+		//speed = exitPosition - entryPosition;
+		speed =_bossRoute.at(1)-_bossRoute.at(0);
 		speed = speed.normalisedCopy();
 		speed= speed*5;
 		*ptrSpeed = speed;
@@ -221,7 +257,7 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 			cout << "EXIT = " << *aux << endl;
  			_bossPieces->at(i)->setTargetPosition(aux);
 			//_bossPieces->at(i)->setCurrentIndex(0);
-			entryPosition.z = entryPosition.z - WAGON_DISTANCE;
+			//entryPosition.z = entryPosition.z - WAGON_DISTANCE;
 
 			btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
 			//transform.setOrigin(OgreBulletCollisions::convert(pos));
