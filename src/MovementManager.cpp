@@ -56,7 +56,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
 	}
 	else{
-		//METER LA ANIMACION DE IDLE
+		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_IDLE_HERO);
 	}
 	rotateHero();
 
@@ -74,8 +74,8 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	}
 	//----------------------------------------------------------------
 
-	//Si no no mueve que el personaje mire hacia adelante(Arreglar)------
-	if(*movement == Vector3(0,0,0) && _hero->getRigidBody()->getLinearVelocity().x == 0 && _hero->getRigidBody()->getLinearVelocity().z == 0 ){
+	//ARREGLADO-------------------------------------------------------
+	if(*movement == Vector3(0,0,0) && _hero->getRigidBody()->getLinearVelocity().x <= 0 && _hero->getRigidBody()->getLinearVelocity().z <= 0 ){
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(0),Vector3::UNIT_Y));
 	}
 	//-------------------------------------------------------------------
@@ -84,11 +84,16 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 }
 
 void MovementManager::jumpHero(){
-	if(_hero->getNumJumps() > 0){
+	if(_hero->getNumJumps() >= 0){
 		Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
 		_currentSpeed.y = 16.0;
 		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
 		_hero->setNumJumps(_hero->getNumJumps()-1);
+		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_RUN_HERO);
+		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_JUMP_HERO);
+	}else{
+		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_JUMP_HERO);
+		//AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_IDLE_HERO);
 	}
 
 }

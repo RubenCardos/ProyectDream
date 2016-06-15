@@ -25,7 +25,8 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
 
           ANIM_RUN_HERO,
           ANIM_IDLE_HERO,
-          ANIM_DIE_HERO
+          ANIM_ATTACK_HERO,
+          ANIM_JUMP_HERO
 
            };
 
@@ -38,7 +39,7 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
   void playAnimations(animID id);
   void stopAnimations(animID id);
   void setupAnimations();
-  void resetAnimations(animID id, Real _deltaT);
+  void resetAnimations(Real _deltaT);
   // Heredados de Ogre::Singleton.
   static AnimationManager& getSingleton ();
   static AnimationManager* getSingletonPtr ();

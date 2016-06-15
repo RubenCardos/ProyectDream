@@ -357,7 +357,8 @@ PlayState::frameStarted
 	//----------------------
 
 	//Animations--------------------------------
-	_animationManager->resetAnimations(AnimationManager::ANIM_RUN_HERO, _deltaT);
+	_animationManager->resetAnimations(_deltaT);
+	//_animationManager->resetAnimations(AnimationManager::ANIM_IDLE_HERO, _deltaT);
 	//--------------------------------------------
 
 	return true;
