@@ -382,9 +382,7 @@ void
 PlayState::keyPressed
 (const OIS::KeyEvent &e)
 {
-
 	//SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
-
 	// Tecla p --> PauseState.-------
 	if (e.key == OIS::KC_P) {
 		pushState(PauseState::getSingletonPtr());
@@ -1089,7 +1087,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
 	Ogre::SceneNode* node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_" + name + Ogre::StringConverter::toString(_numEntities));
 
-	Entity *entity = _sceneMgr->createEntity("E_" + name, mesh);
+	Entity *entity = _sceneMgr->createEntity("E_" + name + Ogre::StringConverter::toString(_numEntities), mesh);
 	node->attachObject(entity);
 
 	OgreBulletDynamics::RigidBody* rigidBody;
@@ -1419,7 +1417,7 @@ void PlayState::createBoss(){
 	//bossLocomotive->getRigidBody()->setLinearVelocity(bossLocomotive->getMovementSpeed(),0,0);
 	//bossLocomotive->getRigidBody()->setAngularVelocity(1,1,1);
 	_bossPieces.push_back(bossLocomotive);
-	position.x -= 10.0;
+	//position.x -= 10.0;
 
 	Boss* bossWagon = new Boss();
 	gameEntity = createGameEntity("BossWagon1", "wagon.mesh", position, scale);
@@ -1427,6 +1425,16 @@ void PlayState::createBoss(){
 	bossWagon->setRigidBody(gameEntity->getRigidBody());
 	bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad
 	_bossPieces.push_back(bossWagon);
+
+	//position.x -= 10.0;
+
+	bossWagon = new Boss();
+	gameEntity = createGameEntity("BossWagon2", "wagon.mesh", position, scale);
+	bossWagon->setSceneNode(gameEntity->getSceneNode());
+	bossWagon->setRigidBody(gameEntity->getRigidBody());
+	bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad
+	_bossPieces.push_back(bossWagon);
+
 	//----------------------------------------------------------------
 }
 

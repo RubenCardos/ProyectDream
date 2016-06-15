@@ -63,7 +63,6 @@ void AI_Manager::updateEnemyMovement(){
 }
 
 void AI_Manager::loadBossRoute(){
-
 	_bossRoute.clear();
 
 	//Cargamos la ruta por un fichero----------
@@ -109,8 +108,6 @@ void AI_Manager::loadBossRoute(){
 		//--------------------------------------
 
 
-
-
 		//std::cout << "tamaño del vector de ruta: " << _bossRoute.size() << std::endl;
 		//std::cout << "tamaño del vector de piezas de boss: " << _bossPieces->size() << std::endl;
 		//std::cout << "puntos de ruta metidos en el vector: " << std::endl;
@@ -145,7 +142,6 @@ void AI_Manager::updateBossMovement(){
 	cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
 	cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
 
-
 	//for(unsigned int i=0; i<_bossPieces->size(); i++){
 		/*if(std::abs(_bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition().x - _bossRoute.at(1).x) <= EPSILON){
 			if(std::abs(_bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition().z - _bossRoute.at(1).z) <= EPSILON){
@@ -175,19 +171,7 @@ void AI_Manager::updateBossMovement(){
 
 			//Reposicionar----------------------------------------------------------------------------------------------------
 			Vector3 pos= _bossRoute.at(_bossPieces->at(0)->getCurrentIndex());//Nuevo Origen
-			for(unsigned int i=0; i<_bossPieces->size(); i++){
-				pos.x -= 10*i;
-				btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
-				transform.setOrigin(OgreBulletCollisions::convert(pos));
-				//Girar---------------------------------------
-				transform.setRotation(OgreBulletCollisions::convert(Quaternion(Degree(0),Vector3::UNIT_Y)));
-				//--------------------------------------------
-				_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
 
-			}
-			//--------------------------------------------------------------------------------------------------------------------
-
-			//Calcular nuevo desplazamiento y establecer nuevo destino---
 			Ogre::Vector3 speed(0,0,0);
 			Ogre::Vector3* ptrSpeed = new Ogre::Vector3(0,0,0);
 
@@ -195,6 +179,52 @@ void AI_Manager::updateBossMovement(){
 			speed = speed.normalisedCopy();
 			speed= speed*5;
 			*ptrSpeed = speed;
+
+			Ogre::Vector3 desp(0,0,0);
+			int degrees = 0;
+
+			if(speed.x >0){
+				desp.x = -1;
+				degrees = 90;
+			}
+			else if(speed.x <0){
+				desp.x = 1;
+				degrees = 270;
+			}
+			else if(speed.z >0){
+				desp.z = -1;
+				degrees = 0;
+
+			}
+			else if(speed.z <0){
+				desp.z = 1;
+				degrees = 180;
+
+			}
+			Ogre::Quaternion rot(Ogre::Degree(degrees),Ogre::Vector3::UNIT_Y);
+
+			for(unsigned int i=0; i<_bossPieces->size(); i++){
+				//pos.x -= 10*i;
+				if(i==0){
+					//desp = desp * 3;
+				}
+				if(i==1){
+					//desp = desp /3;
+					desp = desp * 5;
+				}
+
+				pos = pos + desp*i;
+				btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
+				transform.setOrigin(OgreBulletCollisions::convert(pos));
+				//Girar---------------------------------------
+				transform.setRotation(OgreBulletCollisions::convert(rot));
+				//--------------------------------------------
+				_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
+
+			}
+			//--------------------------------------------------------------------------------------------------------------------
+
+			//Calcular nuevo desplazamiento y establecer nuevo destino---
 
 			for(unsigned int i=0; i<_bossPieces->size(); i++){
 				//_bossPieces->at(i)->getRigidBody()->setPosition(entryPosition);
