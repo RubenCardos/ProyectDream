@@ -170,6 +170,7 @@ PlayState::CreateInitialWorld() {
 	Entity* _groundEnt = _sceneMgr->createEntity("E_Ground", "p1");
 	_groundEnt->setMaterialName("GroundRoom");
 	_groundNode->attachObject(_groundEnt);
+	_groundEnt->setCastShadows(false); //PRUEBA DE SOMBRAS 
 	_sceneMgr->getRootSceneNode()->addChild(_groundNode);
 	//------------------------------------------------------------
 
@@ -595,19 +596,19 @@ PlayState::createGUI()
 	sheetBG->setProperty("BackgroundEnabled", "False");
 
 	CEGUI::Window* pauseButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","PauseButton");
-	pauseButton->setText("Pause");
+	pauseButton->setText("[font='SPIDER MONKEY'] Pause");
 	pauseButton->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.5,0)));
 	pauseButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.6,0),CEGUI::UDim(0.3,0)));
 	//pauseButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::pauseB,this));
 
 	CEGUI::Window* quitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","QuitButton");
-	quitButton->setText("Exit");
+	quitButton->setText("[font='SPIDER MONKEY'] Exit");
 	quitButton->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.5,0)));
 	quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.8,0),CEGUI::UDim(0.3,0)));
 	// quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::quit,this));
 
 	CEGUI::Window* textPoints = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textPoints");
-	textPoints->setText("SCORE 000");
+	textPoints->setText("[font='SPIDER MONKEY'] SCORE 000");
 	textPoints->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
 	textPoints->setXPosition(CEGUI::UDim(0.43f, 0.0f));
 	textPoints->setYPosition(CEGUI::UDim(0.35f, 0.0f));
@@ -616,7 +617,7 @@ PlayState::createGUI()
 	textPoints->setProperty("VertFormatting", "TopAligned");
 
 	CEGUI::Window* textLives = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textLives");
-	textLives->setText("LIVES 0");
+	textLives->setText("[font='SPIDER MONKEY'] LIVES 0");
 	textLives->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
 	textLives->setXPosition(CEGUI::UDim(0.1f, 0.0f));
 	textLives->setYPosition(CEGUI::UDim(0.35f, 0.0f));
@@ -641,8 +642,8 @@ PlayState::updateGUI()
 	CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 
 	//Actualizo la puntuacion------------
-	sheet->getChild("background_wnd2")->getChild("textPoints")->setText("SCORE: "+Ogre::StringConverter::toString(_hero->getScore()));
-	sheet->getChild("background_wnd2")->getChild("textLives")->setText("LIVES: "+Ogre::StringConverter::toString(_hero->getLives()));
+	sheet->getChild("background_wnd2")->getChild("textPoints")->setText("[font='SPIDER MONKEY'] SCORE: "+Ogre::StringConverter::toString(_hero->getScore()));
+	sheet->getChild("background_wnd2")->getChild("textLives")->setText("[font='SPIDER MONKEY'] LIVES: "+Ogre::StringConverter::toString(_hero->getLives()));
 	//----------------------------------
 
 	if(_currentScenario==Scenario::Menu){
@@ -1162,6 +1163,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBody->disableDeactivation();
 	rigidBody->getBulletObject()->setUserPointer((void *) node);
+	entity->setCastShadows(false); //PRUEBA DE SOMBRAS 
 
 	gameEntity = new GameEntity();
 	gameEntity->setSceneNode(node);

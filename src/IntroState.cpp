@@ -15,8 +15,11 @@ IntroState::enter ()
   _sceneMgr = _root->createSceneManager(Ogre::ST_GENERIC, "SceneManager");
   _camera = _sceneMgr->createCamera("IntroCamera");
   _viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
-  _sceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-  //_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+  _sceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
+  _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
+  _sceneMgr->setShadowColour(Ogre::ColourValue(0.5,0.5,0.5));
+  _sceneMgr->setShadowTextureSize(1024);
+  _sceneMgr->setShadowTextureCount(1);
   //GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("BGMusic.mp3");
   //GameManager::getSingletonPtr()->_mainTrack->play();
 
@@ -71,7 +74,7 @@ IntroState::enter ()
   _groundEnt->setMaterialName("GroundRoomAnim");
   _groundNode->attachObject(_groundEnt);
   _sceneMgr->getRootSceneNode()->addChild(_groundNode);
-
+  _groundEnt->setCastShadows(false);
 
   Entity *entity = _sceneMgr->createEntity("E_Hero", "tedybear.mesh");
   SceneNode *node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Hero");
@@ -143,63 +146,50 @@ void IntroState::createGUI()
   ImageManager::getSingleton().addFromImageFile("BackgroundImageControls","controls.png");
 
   //Sheet
-  /*Window* sheetBG =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd");
-  sheetBG->setPosition(CEGUI::UVector2(CEGUI::UDim(0.27, 0),CEGUI::UDim(0, 0)));
-  sheetBG->setSize( CEGUI::USize(CEGUI::UDim(0.50, 0), CEGUI::UDim(0.50, 0)));
+  Window* sheetBG =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd");
+  sheetBG->setPosition(CEGUI::UVector2(CEGUI::UDim(0.03, 0),CEGUI::UDim(0.0, 0)));
+  sheetBG->setSize( CEGUI::USize(CEGUI::UDim(0.35, 0), CEGUI::UDim(0.35, 0)));
   sheetBG->setProperty("Image","BackgroundImage");
   sheetBG->setProperty("FrameEnabled","False");
   sheetBG->setProperty("BackgroundEnabled", "False");
-  sheetBG->setVisible(false);*/
 
-  Window* sheetStart =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_start");
-  sheetStart->setPosition(UVector2(cegui_reldim(0),cegui_reldim(0)));
-  sheetStart->setSize(CEGUI::USize(CEGUI::UDim(20,0),CEGUI::UDim(20,0)));
-  sheetStart->setProperty("Image","BackgroundImageEnter");
-  sheetStart->setProperty("FrameEnabled","False");
-  sheetStart->setProperty("BackgroundEnabled", "False");
-  
    //Buttons
   CEGUI::Window* playButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","playButton");
-  playButton->setText("[font='DickVanDyke'] Play");
+  playButton->setText("[font='SPIDER MONKEY-18'] Play");
   playButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  playButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.20,0)));
+  playButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.10,0),CEGUI::UDim(0.38,0)));
   playButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::play,this));
-  playButton->setVisible(false);
 
   CEGUI::Window* infoButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","infoButton");
-  infoButton->setText("[font='DickVanDyke'] How To Play");
+  infoButton->setText("[font='SPIDER MONKEY-18'] How To Play");
   infoButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  infoButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.28,0)));
+  infoButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.10,0),CEGUI::UDim(0.46,0)));
   infoButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::info,this));
-  infoButton->setVisible(false);
 
   CEGUI::Window* optionsButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","optionsButton");
-  optionsButton->setText("[font='DickVanDyke'] Options");
+  optionsButton->setText("[font='SPIDER MONKEY-18'] Options");
   optionsButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  optionsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.36,0)));
+  optionsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.10,0),CEGUI::UDim(0.54,0)));
   optionsButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::options,this));
-  optionsButton->setVisible(false);
 
   CEGUI::Window* recordsButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","recordsButton");
-  recordsButton->setText("[font='DickVanDyke'] Records");
+  recordsButton->setText("[font='SPIDER MONKEY-18'] Records");
   recordsButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  recordsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.44,0)));
+  recordsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.10,0),CEGUI::UDim(0.62,0)));
   recordsButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::records,this));
-  recordsButton->setVisible(false);
 
   CEGUI::Window* creditsButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","creditsButton");
-  creditsButton->setText("[font='DickVanDyke'] Credits");
+  creditsButton->setText("[font='SPIDER MONKEY-18'] Credits");
   creditsButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  creditsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.52,0)));
+  creditsButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.10,0),CEGUI::UDim(0.70,0)));
   creditsButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::credits,this));
-  creditsButton->setVisible(false);
-
+ 
   CEGUI::Window* quitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","quitButton");
-  quitButton->setText("[font='DickVanDyke'] Exit");
+  quitButton->setText("[font='SPIDER MONKEY-18'] Exit");
   quitButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.60,0)));
+  quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.10,0),CEGUI::UDim(0.78,0)));
   quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::quit,this));
-  quitButton->setVisible(false);
+  
 
 
   //Attaching buttons
@@ -209,7 +199,7 @@ void IntroState::createGUI()
   sheet->addChild(recordsButton);
   sheet->addChild(creditsButton);
   sheet->addChild(quitButton);
-  sheet->addChild(sheetStart);
+  sheet->addChild(sheetBG);
   CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 
   
@@ -260,7 +250,7 @@ IntroState::credits(const CEGUI::EventArgs &e)
   sheetBG->setProperty("BackgroundEnabled", "False");
 
   CEGUI::Window* backButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","back");
-  backButton->setText("[font='DickVanDyke'] Back ");
+  backButton->setText("[font='SPIDER MONKEY'] Back ");
   backButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
   backButton->setXPosition(UDim(0.66f, 0.0f));
   backButton->setYPosition(UDim(0.85f, 0.0f));
@@ -288,14 +278,14 @@ IntroState::records(const CEGUI::EventArgs &e)
   sheetBG->setProperty("BackgroundEnabled", "False");
 
   CEGUI::Window* backButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","back");
-  backButton->setText("[font='DickVanDyke'] Back ");
+  backButton->setText("[font='SPIDER MONKEY'] Back ");
   backButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
   backButton->setXPosition(UDim(0.66f, 0.0f));
   backButton->setYPosition(UDim(0.85f, 0.0f));
   backButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::back,this));
   
   CEGUI::Window* text = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text");
-  text->setText("[font='DickVanDyke']"+readRecords());
+  text->setText("[font='SPIDER MONKEY']"+readRecords());
   text->setSize(CEGUI::USize(CEGUI::UDim(0.50,0),CEGUI::UDim(0.70,0)));
   text->setXPosition(UDim(0.1f, 0.0f));
   text->setYPosition(UDim(0.15f, 0.0f));
@@ -321,7 +311,7 @@ IntroState::exit()
   //Destruir interfaz--------------------------
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 
-  //sheet->destroyChild("background_wnd");
+  sheet->destroyChild("background_wnd");
   sheet->destroyChild("playButton");
   sheet->destroyChild("infoButton");
   sheet->destroyChild("optionsButton");
@@ -553,7 +543,7 @@ IntroState::info(const CEGUI::EventArgs &e)
   sheetBG->setProperty("BackgroundEnabled", "False");
 
   CEGUI::Window* backButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","back");
-  backButton->setText("[font='DickVanDyke'] Back ");
+  backButton->setText("[font='SPIDER MONKEY'] Back ");
   backButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
   backButton->setXPosition(UDim(0.66f, 0.0f));
   backButton->setYPosition(UDim(0.85f, 0.0f));
@@ -581,21 +571,21 @@ IntroState::options(const CEGUI::EventArgs &e)
   sheetBG->setProperty("BackgroundEnabled", "False");
 
   CEGUI::Window* backButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","back");
-  backButton->setText("[font='DickVanDyke'] Back ");
+  backButton->setText("[font='SPIDER MONKEY'] Back ");
   backButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
   backButton->setXPosition(UDim(0.66f, 0.0f));
   backButton->setYPosition(UDim(0.85f, 0.0f));
   backButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::back,this));
   
   CEGUI::Window* applyButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","apply");
-  applyButton->setText("[font='DickVanDyke'] apply ");
+  applyButton->setText("[font='SPIDER MONKEY'] apply ");
   applyButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
   applyButton->setXPosition(UDim(0.66f, 0.0f));
   applyButton->setYPosition(UDim(0.77f, 0.0f));
   applyButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::apply,this));
 
   CEGUI::Window* text = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text");
-  text->setText("[font='DickVanDyke'] Mouse Speed");
+  text->setText("[font='SPIDER MONKEY'] Mouse Speed");
   text->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.1,0)));
   text->setPosition(CEGUI::UVector2(CEGUI::UDim(0.12,0),CEGUI::UDim(0.32,0)));
   text->setProperty("FrameEnabled","False");
@@ -610,7 +600,7 @@ IntroState::options(const CEGUI::EventArgs &e)
   sb->subscribeEvent(Slider::EventValueChanged, Event::Subscriber(&IntroState::onSliderValueChanged, this));
 
   CEGUI::Window* sbText = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textSliderSpeed");
-  sbText->setText("[font='DickVanDyke']20");
+  sbText->setText("[font='SPIDER MONKEY']20");
   sbText->setSize(CEGUI::USize(CEGUI::UDim(0.05,0),CEGUI::UDim(0.08,0)));
   sbText->setPosition(CEGUI::UVector2(CEGUI::UDim(0.36,0),CEGUI::UDim(0.38,0)));
   sbText->setProperty("FrameEnabled","False");
@@ -618,7 +608,7 @@ IntroState::options(const CEGUI::EventArgs &e)
   sbText->setProperty("HorzFormatting", "RightAligned");
 
   CEGUI::Window* text2 = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text2");
-  text2->setText("[font='DickVanDyke'] Auto-Reload Arrows");
+  text2->setText("[font='SPIDER MONKEY'] Auto-Reload Arrows");
   text2->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
   text2->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15,0),CEGUI::UDim(0.46,0)));
   text2->setProperty("FrameEnabled","False");
@@ -629,21 +619,21 @@ IntroState::options(const CEGUI::EventArgs &e)
   cb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.52,0)));
 
   CEGUI::Window* resetButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","resetButton");
-  resetButton->setText("[font='DickVanDyke'] Reset Records ");
+  resetButton->setText("[font='SPIDER MONKEY'] Reset Records ");
   resetButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
   resetButton->setXPosition(UDim(0.40f, 0.0f));
   resetButton->setYPosition(UDim(0.85f, 0.0f));
   resetButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::resetRecords,this));
 
   CEGUI::Window* configButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","configButton");
-  configButton->setText("[font='DickVanDyke'] Restore Config ");
+  configButton->setText("[font='SPIDER MONKEY'] Restore Config ");
   configButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
   configButton->setXPosition(UDim(0.40f, 0.0f));
   configButton->setYPosition(UDim(0.77f, 0.0f));
   configButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::resetConfig,this));
 
   CEGUI::Window* text3 = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","FullscreenText");
-  text3->setText("[font='DickVanDyke'] Fullscreen");
+  text3->setText("[font='SPIDER MONKEY'] Fullscreen");
   text3->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
   text3->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15,0),CEGUI::UDim(0.57,0)));
   text3->setProperty("FrameEnabled","False");
@@ -655,7 +645,7 @@ IntroState::options(const CEGUI::EventArgs &e)
   cbFullscreen->subscribeEvent(CEGUI::ToggleButton::EventSelectStateChanged,CEGUI::Event::Subscriber(&IntroState::tbFullscreenChanged,this));
 
   CEGUI::Window* text4 = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","ResolutionText");
-  text4->setText("[font='DickVanDyke'] Resolution");
+  text4->setText("[font='SPIDER MONKEY'] Resolution");
   text4->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
   text4->setPosition(CEGUI::UVector2(CEGUI::UDim(0.5,0),CEGUI::UDim(0.35,0)));
   text4->setProperty("FrameEnabled","False");
@@ -674,21 +664,21 @@ IntroState::options(const CEGUI::EventArgs &e)
   
   CEGUI::ListboxTextItem* itm;
   itm = new CEGUI::ListboxTextItem("800x600",0);
-  itm->setFont("DickVanDyke-28");
+  itm->setFont("SPIDER MONKEY-28");
   itm->setTextColours(CEGUI::Colour(0.0,0.8,0.5));
   itm->setSelectionBrushImage(sel_img);
   lbRes->addItem(itm);
   
   CEGUI::ListboxTextItem* itm2;
   itm2 = new CEGUI::ListboxTextItem("1200x800",1);
-  itm2->setFont("DickVanDyke-28");
+  itm2->setFont("SPIDER MONKEY-28");
   itm2->setTextColours(CEGUI::Colour(0.0,0.8,0.5));
   itm2->setSelectionBrushImage(sel_img);
   lbRes->addItem(itm2);
 
   CEGUI::ListboxTextItem* itm3;
   itm3 = new CEGUI::ListboxTextItem("1920x1020",2);
-  itm3->setFont("DickVanDyke-28");
+  itm3->setFont("SPIDER MONKEY-28");
   itm3->setTextColours(CEGUI::Colour(0.0,0.8,0.5));
   itm3->setSelectionBrushImage(sel_img);
   lbRes->addItem(itm3);
@@ -729,7 +719,7 @@ IntroState::onSliderValueChanged(const CEGUI::EventArgs &e){
   if(aux<5.0){
     aux=5.0;
   }
-  sbText->setText("[font='DickVanDyke']"+Ogre::StringConverter::toString( (int)aux ));
+  sbText->setText("[font='SPIDER MONKEY']"+Ogre::StringConverter::toString( (int)aux ));
   return true;
 }
 
