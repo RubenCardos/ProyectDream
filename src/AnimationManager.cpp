@@ -62,7 +62,7 @@ void AnimationManager::playAnimations(animID id){
 	if(id==ANIM_JUMP_HERO){
 		_anims[id]->setEnabled(true);
 		_anims[id]->setLoop(true);
-		_anims[id]->setTimePosition(2.0);
+		_anims[id]->setTimePosition(1.0);
 
 	}
 
@@ -74,6 +74,12 @@ void AnimationManager::stopAnimations(animID id){
 		_anims[id]->setEnabled(false);
 	}
 	if(id==ANIM_JUMP_HERO){
+		_anims[id]->setEnabled(false);
+	}
+	if(id==ANIM_ATTACK_HERO){
+		_anims[id]->setEnabled(false);
+	}
+	if(id==ANIM_IDLE_HERO){
 		_anims[id]->setEnabled(false);
 	}
 

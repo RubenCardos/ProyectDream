@@ -384,19 +384,13 @@ IntroState::keyPressed
   CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyDown(static_cast<CEGUI::Key::Scan>(e.key));
   CEGUI::System::getSingleton().getDefaultGUIContext().injectChar(e.text);
 
-  if (e.key == OIS::KC_RETURN) {
-    
-    CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
-    //sheet->getChild("background_wnd")->setVisible(true);
-    sheet->getChild("playButton")->setVisible(true);
-    sheet->getChild("infoButton")->setVisible(true);
-    sheet->getChild("optionsButton")->setVisible(true);
-    sheet->getChild("recordsButton")->setVisible(true);
-    sheet->getChild("creditsButton")->setVisible(true);
-    sheet->getChild("quitButton")->setVisible(true);
-    sheet->getChild("background_start")->setVisible(false);
 
+
+  if(e.key == OIS::KC_RETURN){
+    _animState->setEnabled(false);
   }
+  
+  
 
 }
 
@@ -407,7 +401,11 @@ IntroState::keyReleased
   if (e.key == OIS::KC_ESCAPE) {
     _exitGame = true;
   }
-
+  if(e.key == OIS::KC_RETURN){
+    _animState->setEnabled(true);
+    _animState->setLoop(true);
+    _animState->setTimePosition(0.0);
+  }
   CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(static_cast<CEGUI::Key::Scan>(e.key));
 }
 

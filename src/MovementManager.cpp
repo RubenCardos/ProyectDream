@@ -89,11 +89,7 @@ void MovementManager::jumpHero(){
 		_currentSpeed.y = 16.0;
 		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
 		_hero->setNumJumps(_hero->getNumJumps()-1);
-		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_RUN_HERO);
-		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_JUMP_HERO);
-	}else{
-		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_JUMP_HERO);
-		//AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_IDLE_HERO);
+		
 	}
 
 }
