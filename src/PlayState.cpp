@@ -323,7 +323,6 @@ PlayState::frameStarted
 (const Ogre::FrameEvent& evt)
 { 
 	_deltaT = evt.timeSinceLastFrame;
-	cout << "ATTACKING: " << _hero->isAttacking() << endl;
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 

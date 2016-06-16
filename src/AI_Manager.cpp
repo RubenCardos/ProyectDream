@@ -2,7 +2,7 @@
 using namespace Ogre;
 
 #define BOSS_ROOM 100.0
-#define EPSILON 0.25
+#define EPSILON 0.3 //Se va a 0.27
 #define FLOOR_POSITION_Y -2.8
 
 AI_Manager::AI_Manager (Ogre::SceneManager* sceneMgr , OgreBulletDynamics::DynamicsWorld * world , Hero* hero, std::vector<Boss*>* bossPieces,std::vector<Enemy*>* enemies){
@@ -138,8 +138,8 @@ void AI_Manager::updateBossMovement(){
 			}
 		}
 	}*/
-	cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
-	cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
+	//cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
+	//cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
 	cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
 
 	//for(unsigned int i=0; i<_bossPieces->size(); i++){

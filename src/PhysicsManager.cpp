@@ -64,7 +64,7 @@ void PhysicsManager::detectHeroCollision(){
 			
 
      		if (node) {
-				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
+				cout << "Hero choca con: " << node->getName() << "\n" << endl;
 				
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
 					/*if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
@@ -74,13 +74,35 @@ void PhysicsManager::detectHeroCollision(){
 					}*/
 				}
 
-				/*if(Ogre::StringUtil::startsWith(node->getName(),"SN_BossWagon1") && AnimationManager::getSingletonPtr()->getAnimation(AnimationManager::ANIM_ATTACK_HERO)==true
-					|| Ogre::StringUtil::startsWith(node->getName(),"SN_BossWagon2") ){
-					
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_BossWagon")){
+					//Si me choco contra un vagon atacando---
+					if(_hero->isAttacking()){
+						//Miro si es el ultimo vagon---------
 
+						//-----------------------------------
+					}
+					//Si me choco sin atacar-----------------
+					else{
+						_hero->loseLife();
+						MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,100),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+					}
+					//---------------------------------------
+				}
 
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_BossLocomotive6")){
+					//Si me choco contra un vagon atacando---
+					if(_hero->isAttacking()){
+						//Si puedo atacare a la locomotora---------
 
-				}	*/
+						//-----------------------------------------
+					}
+					//Si me choco sin atacar-----------------
+					else{
+						_hero->loseLife();
+						MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,100),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+					}
+					//---------------------------------------
+				}
 
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){
 					//Eliminar SceneNode, Entity y Cuerpo Fisico asi--------------
