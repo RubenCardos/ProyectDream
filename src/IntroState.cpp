@@ -16,6 +16,7 @@ IntroState::enter ()
   _camera = _sceneMgr->createCamera("IntroCamera");
   _viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
   _sceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
+  
   _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
   _sceneMgr->setShadowColour(Ogre::ColourValue(0.5,0.5,0.5));
   _sceneMgr->setShadowTextureSize(1024);

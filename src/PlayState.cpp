@@ -33,11 +33,6 @@ template<> PlayState* Ogre::Singleton<PlayState>::msSingleton = 0;
 Vector3 _desp ;
 Vector3 *_despPtr;
 
-struct RigidNode{
-	Ogre::SceneNode* node;
-	OgreBulletDynamics::RigidBody* rigidBody;
-};
-
 void
 PlayState::enter ()
 {
@@ -310,6 +305,7 @@ PlayState::CreateInitialWorld() {
 	_hero->setSceneNode(node);
 	_hero->setRigidBody(rigidBody);
 	_hero->setMovementSpeed(150.0);
+	_hero->setAttacking(false);
 	//-----------------------------------------------------------------------------
 
 	// Anadimos los objetos a las deques--
