@@ -52,12 +52,12 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		/*if(!_inBossRoom){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
 		}*/
 	}
-	if(_hero->getRigidBody()->getLinearVelocity() == Vector3(0,0,0)){
+	if(_currentSpeed.squaredLength() == 0){
+		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_RUN_HERO);
+	}else{
 		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
 	}
-	else{
-		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_IDLE_HERO);
-	}
+
 	rotateHero();
 
 	if(_hero->getRigidBody()->getLinearVelocity().y < 0.001 && _hero->getRigidBody()->getLinearVelocity().y > -0.0001 ){// a veces es 5.72205e-06
@@ -75,9 +75,9 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	//----------------------------------------------------------------
 
 	//ARREGLADO-------------------------------------------------------
-	if(*movement == Vector3(0,0,0) && _hero->getRigidBody()->getLinearVelocity().x <= 0 && _hero->getRigidBody()->getLinearVelocity().z <= 0 ){
+	/*if(*movement == Vector3(0,0,0) && _hero->getRigidBody()->getLinearVelocity().x <= 0 && _hero->getRigidBody()->getLinearVelocity().z <= 0 ){
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(0),Vector3::UNIT_Y));
-	}
+	}*/
 	//-------------------------------------------------------------------
 
 

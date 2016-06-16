@@ -98,7 +98,7 @@ PlayState::enter ()
 	//-------------------
 
 	//Crear el AnimationManager
-	_animationManager = new AnimationManager(_sceneMgr, &_currentScenario);
+	_animationManager = new AnimationManager(_sceneMgr, &_currentScenario, _hero);
 	_animationManager->setupAnimations();
 
 	//-------------------
@@ -327,7 +327,7 @@ PlayState::frameStarted
 (const Ogre::FrameEvent& evt)
 { 
 	_deltaT = evt.timeSinceLastFrame;
-
+	cout << "ATTACKING: " << _hero->isAttacking() << endl;
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
@@ -462,7 +462,7 @@ PlayState::keyPressed
 	}
 	if (e.key == OIS::KC_V) {
 		_animationManager->stopAnimations(AnimationManager::ANIM_RUN_HERO);
-		_animationManager->stopAnimations(AnimationManager::ANIM_IDLE_HERO);
+		//_animationManager->stopAnimations(AnimationManager::ANIM_IDLE_HERO);
 		_animationManager->playAnimations(AnimationManager::ANIM_ATTACK_HERO);
 	}
 	//--------------------------------
@@ -507,9 +507,9 @@ PlayState::keyReleased
 	if (e.key == OIS::KC_RIGHT) {
 		_desp-=Vector3(0,0,1);
 	}
-	if (e.key == OIS::KC_V) {
+	/*if (e.key == OIS::KC_V) {
 		_animationManager->stopAnimations(AnimationManager::ANIM_ATTACK_HERO);
-	}
+	}*/
 	if (e.key == OIS::KC_SPACE) {
 		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_JUMP_HERO);
 	}

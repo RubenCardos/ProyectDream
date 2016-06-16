@@ -66,21 +66,21 @@ void PhysicsManager::detectHeroCollision(){
      		if (node) {
 				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
 				
-				/*if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
-					if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
-						if(_hero->getNumJumps() < N_JUMPS){
-							_hero->setNumJumps(N_JUMPS);
-						}
-					}
-				}*/
-
-				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Ground")){
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
 					/*if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
 						if(_hero->getNumJumps() < N_JUMPS){
 							_hero->setNumJumps(N_JUMPS);
 						}
 					}*/
-				}	
+				}
+
+				/*if(Ogre::StringUtil::startsWith(node->getName(),"SN_BossWagon1") && AnimationManager::getSingletonPtr()->getAnimation(AnimationManager::ANIM_ATTACK_HERO)==true
+					|| Ogre::StringUtil::startsWith(node->getName(),"SN_BossWagon2") ){
+					
+
+
+
+				}	*/
 
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){
 					//Eliminar SceneNode, Entity y Cuerpo Fisico asi--------------

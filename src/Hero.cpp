@@ -27,6 +27,7 @@ Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
 	_movementspeed=50.0;
 	_nJumps = NUM_JUMPS;
 	_speed = Ogre::Vector3(0,0,0);
+	_attacking = false;
 	spawn();
 }
 
@@ -56,7 +57,9 @@ double Hero::getMovementSpeed(){
 Ogre::Vector3 Hero::getSpeed(){
 	return _speed;
 }
-
+bool Hero::isAttacking(){
+	return _attacking;
+}
 
 void Hero::increaseScore(int amount){
 	_score = _score + amount;
@@ -100,4 +103,6 @@ void Hero::setNReel(int _addReel){
 	_nReel+=_addReel;
 }
 
-
+void Hero::setAttacking(bool attacking){
+	_attacking = attacking;
+}
