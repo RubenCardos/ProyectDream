@@ -32,11 +32,13 @@ class AI_Manager : public Ogre::Singleton<AI_Manager>
   void setEnemies(std::vector<Enemy*>* enemies);
   void setBossPieces(std::vector<Boss*>* bossPieces);
   void setSceneManager(Ogre::SceneManager* sceneMgr);
+  void deleteLastWagon();
   
   void updateEnemyMovement();
   void loadBossRoute();
   void initializeBossMovement(Ogre::Real* deltaT);
   void updateBossMovement();
+  Boss* getLastWagon();
 
   // Heredados de Ogre::Singleton.
   static AI_Manager& getSingleton ();

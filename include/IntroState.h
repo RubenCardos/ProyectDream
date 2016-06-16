@@ -76,8 +76,9 @@ class IntroState : public Ogre::Singleton<IntroState>, public GameState
   Ogre::SceneManager* _sceneMgr;
   Ogre::Viewport* _viewport;
   Ogre::Camera* _camera;
-Ogre::Real _deltaT;
+  Ogre::Real _deltaT;
   CEGUI::OgreRenderer* renderer;
+  Ogre::SceneNode* _cameraPivot;
 
   bool _exitGame;
   bool _credits;

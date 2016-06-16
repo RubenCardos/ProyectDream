@@ -17,10 +17,10 @@ IntroState::enter ()
   _viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
   _sceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
   
-  _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
+  /*_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
   _sceneMgr->setShadowColour(Ogre::ColourValue(0.5,0.5,0.5));
   _sceneMgr->setShadowTextureSize(1024);
-  _sceneMgr->setShadowTextureCount(1);
+  _sceneMgr->setShadowTextureCount(1);*/
   //GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("BGMusic.mp3");
   //GameManager::getSingletonPtr()->_mainTrack->play();
 
@@ -105,6 +105,11 @@ IntroState::enter ()
   _animState2->setLoop(true);
   _animState2->setTimePosition(0.0);
 
+  //--------------------------------------------------
+
+  //Pivote Camara-------------------------------------
+  _cameraPivot = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_CameraPivot");
+  _cameraPivot->attachObject(_camera);
   //--------------------------------------------------
 }
 void IntroState::createGUI()
@@ -359,6 +364,13 @@ IntroState::frameStarted
       _animState2->addTime(_deltaT);
     }
   }
+
+
+  //Aminacion con la camara---
+  Ogre::SceneNode* _pivot = _sceneMgr->getSceneNode("SN_CameraPivot");
+  _pivot->yaw(Ogre::Degree(0.1));
+  //--------------------------
+
   return true;
 }
 

@@ -64,7 +64,7 @@ void PhysicsManager::detectHeroCollision(){
 			
 
      		if (node) {
-				cout << "Hero choca con: " << node->getName() << "\n" << endl;
+				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
 				
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
 					/*if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
@@ -78,7 +78,12 @@ void PhysicsManager::detectHeroCollision(){
 					//Si me choco contra un vagon atacando---
 					if(_hero->isAttacking()){
 						//Miro si es el ultimo vagon---------
+						Boss* _last= AI_Manager::getSingletonPtr()->getLastWagon();
 
+						if(Ogre::StringUtil::match(_last->getSceneNode()->getName(),node->getName())){
+							AI_Manager::getSingletonPtr()->deleteLastWagon();
+							cout << "\nAtaco al ultimo vagon\n"<< endl;
+						}
 						//-----------------------------------
 					}
 					//Si me choco sin atacar-----------------

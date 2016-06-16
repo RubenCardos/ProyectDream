@@ -140,7 +140,7 @@ void AI_Manager::updateBossMovement(){
 	}*/
 	//cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
 	//cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
-	cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
+	//cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
 
 	//for(unsigned int i=0; i<_bossPieces->size(); i++){
 		/*if(std::abs(_bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition().x - _bossRoute.at(1).x) <= EPSILON){
@@ -330,4 +330,15 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 		}
 		//---------------------------------------------------------------------------
 	}*/
+}
+
+void AI_Manager::deleteLastWagon(){
+	if(_bossPieces->size()>0){
+		_bossPieces->pop_back();
+	}
+
+}
+
+Boss* AI_Manager::getLastWagon(){
+	return _bossPieces->back();
 }
