@@ -339,7 +339,7 @@ PlayState::frameStarted
 
 	if(_currentScenario != Scenario::Menu){
 		//if((trunc(_hero->getRigidBody()->getCenterOfMassPosition().x) % WALL_LENGTH_X) == 0){ //si queremos que solo llame a poblar de vez en cuando
-		//populateEnemies();
+		populateEnemies();
 		//}
 	}
 
@@ -1497,10 +1497,8 @@ void PlayState::deleteScenarioContent(){
 
 void PlayState::populateEnemies(){
 	int index = 100;
-	GameEntity* dir1;
 	GameEntity* gameEntity = new GameEntity();
 	Enemy* enemy;
-	dir1 = gameEntity;
 
 	double hero_x = _hero->getRigidBody()->getCenterOfMassPosition().x;
 	double enemy_x = 0.0;
@@ -1514,7 +1512,6 @@ void PlayState::populateEnemies(){
 		}
 	}
 
-	delete dir1;
 }
 
 void PlayState::readEnemies(string path){
