@@ -27,6 +27,7 @@
 #define BOSS_ROOM_SCALE 3.0
 
 #define WALL_LENGTH_X 100
+#define WALL_HEIGHT_Y 20
 
 using namespace std;
 
@@ -340,6 +341,7 @@ PlayState::frameStarted
 	if(_currentScenario != Scenario::Menu){
 		//if((trunc(_hero->getRigidBody()->getCenterOfMassPosition().x) % WALL_LENGTH_X) == 0){ //si queremos que solo llame a poblar de vez en cuando
 		populateEnemies();
+		removeAllBehindBackWall();
 		//}
 	}
 
@@ -1062,7 +1064,7 @@ void PlayState::createAllWalls(){
 	position.z = WALLL_POSITION_Z;
 	position.y = WALLL_POSITION_Y;
 	position.x = WALL_LENGTH_X/2 + 10;
-	scale = Ogre::Vector3(WALL_LENGTH_X,10,1);
+	scale = Ogre::Vector3(WALL_LENGTH_X,WALL_HEIGHT_Y,1);
 	name = LeftWall;
 	gameEntity = createGameEntity("WallL", "cube.mesh", position, scale);
 	wall = new Wall();
@@ -1087,7 +1089,7 @@ void PlayState::createAllWalls(){
 	//Muro trasero
 	position.z = WALLB_POSITION_Z;
 	position.x = WALLB_POSITION_X;
-	scale = Ogre::Vector3(1,10,16);
+	scale = Ogre::Vector3(1,WALL_HEIGHT_Y,16);
 	name = BackWall;
 	gameEntity = createGameEntity("WallB", "cube.mesh", position, scale);
 	wall = new Wall();
@@ -1340,7 +1342,7 @@ void PlayState::createTestGameEntities(){
 
 	rigidBody1->setShape(node1, bodyShape1,
 			0.0 /* Restitucion */, 0.9 /* Friccion */,
-			5.0 /* Masa */, position1 /* Posicion inicial */,
+			15.0 /* Masa */, position1 /* Posicion inicial */,
 			Quaternion::IDENTITY /* Orientacion */);
 
 	//Propiedades del cuerpo fisico--------------------------------------
@@ -1354,7 +1356,7 @@ void PlayState::createTestGameEntities(){
 	enemy->setSceneNode(node1);
 	enemy->setRigidBody(rigidBody1);
 	enemy->setMovementSpeed(50.0);
-	enemy->setSpeed(Ogre::Vector3(0,0,-1));
+	enemy->setSpeed(Ogre::Vector3(0,0,-2));
 	_numEntities++;
 	//-----------------------------------------------------------------------------
 
@@ -1511,7 +1513,7 @@ void PlayState::populateEnemies(){
 			gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
 			enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
 			enemy->setMovementSpeed(50.0);
-			enemy->setSpeed(Ogre::Vector3(0,0,-1));
+			enemy->setSpeed(Ogre::Vector3(0,0,-2));
 			_enemies.push_back(enemy);
 			index++;
 			_posEnemies.at(i) = Ogre::Vector3(-10,-10,-10);
@@ -1551,17 +1553,19 @@ void PlayState::readEnemies(string path){
 
 void PlayState::removeAllBehindBackWall(){
 	//todo lo que vaya quedandose detrás del backwall (con un pequeño margen), ir eliminandolo
-	int threshold = 10; //margen, borramos todo lo que se quede a 10 por detrás del backwall
+	int threshold = 5; //margen, borramos todo lo que se quede a 10 por detrás del backwall
 	if(_walls.size() > 0){
 		int backWall_x = _walls.at(_walls.size() - 1)->getRigidBody()->getCenterOfMassPosition().x;
 		for(unsigned int i = 0; i < _gameEntities.size(); i++){
-			if(_gameEntities.at(i)->getRigidBody()->getCenterOfMassPosition().x < (backWall_x + threshold)){
-				//Borrar la gameentity porque está detrás del muro trasero
-				Entity* entity = static_cast<Entity*>(_gameEntities.at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
-				OgreBulletCollisions::Object* Baux =_world->findObject(_gameEntities.at(i)->getSceneNode());
-				_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
-				_sceneMgr->destroyEntity(entity);
-				_sceneMgr->getRootSceneNode()->removeChild(_gameEntities.at(i)->getSceneNode());
+			if(_gameEntities.at(i)->getRigidBody()->getCenterOfMassPosition().x < (backWall_x - threshold)){
+				//Borrar la gameentity (Si no es un obstaculo) porque está detrás del muro trasero
+				if(Ogre::StringUtil::startsWith(_gameEntities.at(i)->getRigidBody()->getName(),"SN_Obstacle")){
+					Entity* entity = static_cast<Entity*>(_gameEntities.at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
+					OgreBulletCollisions::Object* Baux =_world->findObject(_gameEntities.at(i)->getSceneNode());
+					_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
+					_sceneMgr->destroyEntity(entity);
+					_sceneMgr->getRootSceneNode()->removeChild(_gameEntities.at(i)->getSceneNode());
+				}
 			}
 		}
 	}
