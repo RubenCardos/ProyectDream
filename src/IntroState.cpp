@@ -108,8 +108,8 @@ IntroState::enter ()
   //--------------------------------------------------
 
   //Pivote Camara-------------------------------------
-  _cameraPivot = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_CameraPivot");
-  _cameraPivot->attachObject(_camera);
+  //_cameraPivot = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_CameraPivot");
+  //_cameraPivot->attachObject(_camera);
   //--------------------------------------------------
 }
 void IntroState::createGUI()
@@ -367,8 +367,8 @@ IntroState::frameStarted
 
 
   //Aminacion con la camara---
-  Ogre::SceneNode* _pivot = _sceneMgr->getSceneNode("SN_CameraPivot");
-  _pivot->yaw(Ogre::Degree(0.1));
+  //Ogre::SceneNode* _pivot = _sceneMgr->getSceneNode("SN_CameraPivot");
+  //_pivot->yaw(Ogre::Degree(0.1));
   //--------------------------
 
   return true;

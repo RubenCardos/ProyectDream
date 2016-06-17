@@ -150,6 +150,7 @@ void AI_Manager::updateBossMovement(){
 				_bossPieces->at(i)->getRigidBody()->setLinearVelocity(Ogre::Vector3(0,0,0));
 			}
 		}*/
+	if(_bossPieces->size()>0){
 		if(_bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) < EPSILON){
 			//lo llevo otra vez al punto inicial
 			//_bossPieces->at(i)->getRigidBody()->setPosition(_bossRoute.at(i));
@@ -244,6 +245,8 @@ void AI_Manager::updateBossMovement(){
 
 			//--------------------------
 		}
+	}
+
 	//}
 }
 

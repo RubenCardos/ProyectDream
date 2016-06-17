@@ -64,7 +64,7 @@ void PhysicsManager::detectHeroCollision(){
 			
 
      		if (node) {
-				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
+				cout << "Hero choca con: " << node->getName() << "\n" << endl;
 				
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")){
 					/*if(_hero->getRigidBody()->getLinearVelocity().y < 0.0){
@@ -83,6 +83,18 @@ void PhysicsManager::detectHeroCollision(){
 						if(Ogre::StringUtil::match(_last->getSceneNode()->getName(),node->getName())){
 							AI_Manager::getSingletonPtr()->deleteLastWagon();
 							cout << "\nAtaco al ultimo vagon\n"<< endl;
+
+							for(unsigned int i=0; i<_gameEntities->size(); i++){
+								if(Ogre::StringUtil::match(_gameEntities->at(i)->getSceneNode()->getName(),_last->getSceneNode()->getName())){
+									Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
+									OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
+									_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
+									_sceneMgr->destroyEntity(_e);
+									_sceneMgr->getRootSceneNode()->removeChild(_gameEntities->at(i)->getSceneNode());
+									_gameEntities->erase(_gameEntities->begin() + i);
+								}
+							}
+
 						}
 						//-----------------------------------
 					}
@@ -94,11 +106,26 @@ void PhysicsManager::detectHeroCollision(){
 					//---------------------------------------
 				}
 
-				if(Ogre::StringUtil::startsWith(node->getName(),"SN_BossLocomotive6")){
+				if(Ogre::StringUtil::startsWith(node->getName(),"SN_BossLocomotive")){
 					//Si me choco contra un vagon atacando---
 					if(_hero->isAttacking()){
 						//Si puedo atacare a la locomotora---------
+						Boss* _last= AI_Manager::getSingletonPtr()->getLastWagon();
+						if(Ogre::StringUtil::startsWith(_last->getSceneNode()->getName(),"SN_BossLocomotive")){
+							AI_Manager::getSingletonPtr()->deleteLastWagon();
+							cout << "\nAtaco a la locomotora\n"<< endl;
 
+							for(unsigned int i=0; i<_gameEntities->size(); i++){
+								if(Ogre::StringUtil::match(_gameEntities->at(i)->getSceneNode()->getName(),_last->getSceneNode()->getName())){
+									Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
+									OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
+									_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
+									_sceneMgr->destroyEntity(_e);
+									_sceneMgr->getRootSceneNode()->removeChild(_gameEntities->at(i)->getSceneNode());
+									_gameEntities->erase(_gameEntities->begin() + i);
+								}
+							}
+						}
 						//-----------------------------------------
 					}
 					//Si me choco sin atacar-----------------
