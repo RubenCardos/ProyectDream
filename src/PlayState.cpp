@@ -332,7 +332,7 @@ PlayState::frameStarted
 	_cameraPivot->setPosition(_hero->getSceneNode()->getPosition());
 	//-------------------
 
-	//Deteccion Colisones---------
+	//Deteccion Colisiones---------
 	_physicsManager->detectHeroCollision();
 	_physicsManager->detectEnemiesCollision();
 	//---------------------------
@@ -1472,32 +1472,27 @@ PlayState::populateThreads(String _path){
 }
 
 void PlayState::deleteScenarioContent(){
-	//Borra puertas, hilos, carretes, bobinas, muros, suelo de boss, bosses, enemigos y obstaculos
+	//Borra puertas, hilos, carretes, bobinas, muros, suelo de boss, bosses, enemigos y obstaculos.
 
 	Ogre::SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();//Recupero el tablero del jugador en un iterador
 	while ( it.hasMoreElements() ) {//Recorro el iterador
-		SceneNode* _aux = static_cast<SceneNode*>(it.getNext());
-
-		if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Thread") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Door")
-		|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Reel") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Enemy")
-		|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Floor")
-		|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Boss") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Obstacle")){
-
-			Entity* _e = static_cast<Entity*>(_aux->getAttachedObject(0));//Recupero la entidad
-			OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
+		SceneNode* node = static_cast<SceneNode*>(it.getNext());
+		if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread") || Ogre::StringUtil::startsWith(node->getName(),"SN_Door")
+		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Reel") || Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")
+		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")
+		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Boss") || Ogre::StringUtil::startsWith(node->getName(),"SN_Obstacle")){
+			Entity* entity = static_cast<Entity*>(node->getAttachedObject(0));//Recupero la entidad
+			OgreBulletCollisions::Object* Baux =_world->findObject(node);
 			_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
-			_sceneMgr->destroyEntity(_e);
-			_sceneMgr->getRootSceneNode()->removeChild(_aux);
+			_sceneMgr->destroyEntity(entity);
+			_sceneMgr->getRootSceneNode()->removeChild(node);
 		}
 	}
 	_enemies.clear();
 	_bossRoom = false;
 	_bossCreated = false;
 
-	_gameEntities.clear();//¿Esta el heroe aqui?
-	//restauro el score y las vidas?
-	//_hero->resetScore();
-	//_hero->resetLives();
+	_gameEntities.clear();
 }
 
 void PlayState::populateEnemies(){
@@ -1511,7 +1506,7 @@ void PlayState::populateEnemies(){
 	double enemy_x = 0.0;
 	for(unsigned int i=0; i<_posEnemies.size(); i++){
 		enemy_x = _posEnemies.at(i).x;
-		if(hero_x <= enemy_x && enemy_x <= (hero_x + WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
+		if(hero_x < enemy_x && enemy_x < (hero_x + WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
 			gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
 			enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
 			_enemies.push_back(enemy);
@@ -1545,6 +1540,10 @@ void PlayState::readEnemies(string path){
 		file.close();
 	}
 	//-------------------------------------------------
+	std::cout <<"	COMPROBAR POSICIONES DE ENEMIGOS"<< std::endl;
+	for(unsigned int i = 0; i < _posEnemies.size(); i++){
+		std::cout << " " << _posEnemies.at(i) << std::endl;
+	}
 }
 
 void PlayState::removeAllBehindBackWall(){
@@ -1555,6 +1554,11 @@ void PlayState::removeAllBehindBackWall(){
 		for(unsigned int i = 0; i < _gameEntities.size(); i++){
 			if(_gameEntities.at(i)->getRigidBody()->getCenterOfMassPosition().x < (backWall_x + threshold)){
 				//Borrar la gameentity porque está detrás del muro trasero
+				Entity* entity = static_cast<Entity*>(_gameEntities.at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
+				OgreBulletCollisions::Object* Baux =_world->findObject(_gameEntities.at(i)->getSceneNode());
+				_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
+				_sceneMgr->destroyEntity(entity);
+				_sceneMgr->getRootSceneNode()->removeChild(_gameEntities.at(i)->getSceneNode());
 			}
 		}
 	}
