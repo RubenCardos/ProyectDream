@@ -1150,6 +1150,9 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		if(Ogre::StringUtil::startsWith(name,"Boss")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Boss,PhysicsMask::boss_collides_with);
 		}
+		else if(Ogre::StringUtil::startsWith(name,"Enemy")){
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
+		}
 		else{
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
 		}
@@ -1507,8 +1510,11 @@ void PlayState::populateEnemies(){
 		if(hero_x < enemy_x && enemy_x < (hero_x + WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
 			gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
 			enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
+			enemy->setMovementSpeed(50.0);
+			enemy->setSpeed(Ogre::Vector3(0,0,-1));
 			_enemies.push_back(enemy);
 			index++;
+			_posEnemies.at(i) = Ogre::Vector3(-10,-10,-10);
 		}
 	}
 
