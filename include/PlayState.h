@@ -102,6 +102,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   std::vector<Wall*> _walls;
   std::vector<GameEntity*> _gameEntities;
   std::vector<Boss*> _bossPieces;
+  std::vector<Ogre::Vector3> _posEnemies;
 
   MovementManager* _movementManager;
   PhysicsManager* _physicsManager;
@@ -138,6 +139,10 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
 
   void populateObstacles(String _path);
   void populateThreads(String _path);
+  void populateEnemies();
+  void readEnemies(String path);
+
+  void removeAllBehindBackWall();
 
 };
 

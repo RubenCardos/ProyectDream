@@ -9,6 +9,8 @@
 #include "Shapes/OgreBulletCollisionsBoxShape.h"
 #include "OgreBulletCollisionsRay.h"
 
+#include "math.h"
+
 #define FLOOR_POSITION_Y -2.8  // PONERLO BIEN (todos los define, meterlos en un archivo de configuracion)
 #define FLOOR_POSITION_Z 4.0
 
@@ -24,7 +26,7 @@
 #define BOSS_ROOM 100.0
 #define BOSS_ROOM_SCALE 3.0
 
-#define WALL_SCALE_X 2.5
+#define WALL_LENGTH_X 100
 
 using namespace std;
 
@@ -334,6 +336,10 @@ PlayState::frameStarted
 	_physicsManager->detectHeroCollision();
 	_physicsManager->detectEnemiesCollision();
 	//---------------------------
+
+	//if((trunc(_hero->getRigidBody()->getCenterOfMassPosition().x) % WALL_LENGTH_X) == 0){ //si queremos que solo llame a poblar de vez en cuando
+	populateEnemies();
+	//}
 
 	//Actualizo GUI---
 	updateGUI();
@@ -999,6 +1005,11 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 		//Hilos--------------------------------------
 		populateThreads("data/Levels/ThreadsGarden.txt");
 		//-------------------------------------------
+
+		//Leer fichero de enemigos--------------------------
+		readEnemies("data/Levels/Enemies.txt");
+		//--------------------------------------------------
+
 		break;
 
 	case Scenario::LevelRoom:
@@ -1048,8 +1059,8 @@ void PlayState::createAllWalls(){
 	//Muro de la izquierda
 	position.z = WALLL_POSITION_Z;
 	position.y = WALLL_POSITION_Y;
-	position.x = 60;
-	scale = Ogre::Vector3(40 * WALL_SCALE_X,10,1);
+	position.x = WALL_LENGTH_X/2 + 10;
+	scale = Ogre::Vector3(WALL_LENGTH_X,10,1);
 	name = LeftWall;
 	gameEntity = createGameEntity("WallL", "cube.mesh", position, scale);
 	wall = new Wall();
@@ -1555,4 +1566,48 @@ void PlayState::deleteScenarioContent(){
 	//restauro el score y las vidas?
 	//_hero->resetScore();
 	//_hero->resetLives();
+}
+
+void PlayState::populateEnemies(){
+	int index = 100;
+	GameEntity* gameEntity;
+	Ogre::Quaternion quat = Ogre::Quaternion(Ogre::Quaternion::IDENTITY);
+
+	double hero_x = _hero->getRigidBody()->getCenterOfMassPosition().x;
+	double enemy_x = 0.0;
+	for(unsigned int i=0; i<_posEnemies.size(); i++){
+		enemy_x = _posEnemies.at(i).x;
+		if(hero_x <= enemy_x && enemy_x <= (hero_x + WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
+			GameEntity* gameEntity = new GameEntity();
+			gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+			Entity* e = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+			e->setMaterialName("Ground");
+			index++;
+		}
+	}
+}
+
+void PlayState::readEnemies(string path){
+	_posEnemies.clear();
+	//Leo el fichero-----------------------------------
+	fstream file;//Fichero
+	string line; //leer linea a linea
+	Ogre::Vector3 vPos(0,0,0);
+
+	file.open(path.c_str(),ios::in);
+
+	if (file.is_open()) {
+		while (getline (file,line)) {
+			int enemyPos_x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[0]);
+			int enemyPos_y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[1]);
+			int enemyPos_z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[2]);
+
+			int EnemyType = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[3]);
+
+			vPos = Ogre::Vector3(enemyPos_x,enemyPos_y,enemyPos_z);
+			_posEnemies.push_back(vPos);
+		}
+		file.close();
+	}
+	//-------------------------------------------------
 }
