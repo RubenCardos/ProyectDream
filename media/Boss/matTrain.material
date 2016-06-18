@@ -10,7 +10,7 @@ material matTrain
         {
             ambient 1.0 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0 1.0
-            specular 0.0 0.0 0.0 1.0 12.5
+            specular 0.04736841097474098 0.04736841097474098 0.04736841097474098 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off
@@ -32,7 +32,7 @@ material matTrain
 
             texture_unit 
             {
-                texture O5GLL70.jpg
+                texture woodTrain.jpg
                 tex_address_mode wrap
                 scale 1.0 1.0
                 colour_op modulate

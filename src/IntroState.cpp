@@ -88,7 +88,7 @@ IntroState::enter ()
   SceneNode *nodeBoss = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_BossLocomotive");
   nodeBoss->attachObject(entityBoss);
   nodeBoss->setPosition(-1,3,-8);
-  nodeBoss->setScale(1.5,1.5,1.5);
+  nodeBoss->setScale(0.8,0.8,0.8);
   nodeBoss->yaw(Degree(48));
 
   //---------------------------------------------------
@@ -140,8 +140,8 @@ void IntroState::createGUI()
 
   //Cargo la imagen
   ImageManager::getSingleton().addFromImageFile("BackgroundImage","logo.png");
-  ImageManager::getSingleton().addFromImageFile("BackgroundImageRecords","records.png");
-  ImageManager::getSingleton().addFromImageFile("BackgroundImageCredits","credits.png");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImageRecords","records.jpg");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImageCredits","credits.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageEnter","introscreen.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageBar","barra.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageMeter","medidor.png");

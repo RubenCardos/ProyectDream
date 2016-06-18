@@ -1172,6 +1172,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 					Quaternion::IDENTITY /* Orientacion */);
 		}
 
+
 	}
 
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
@@ -1195,6 +1196,7 @@ void PlayState::createBossRoom(){
 	if(!_bossRoom){
 		Ogre::Vector3 position(0,1.5,0);
 		Ogre::Vector3 scale(1,1,1);
+
 		//WallType name = "";
 		GameEntity* gameEntity = new GameEntity();
 		Wall* wall = new Wall();
@@ -1226,17 +1228,19 @@ void PlayState::createBossRoom(){
 	//Muro de la izquierda--------
 	position.z = BOSS_ROOM-BOSS_ROOM;
     position.y = WALLL_POSITION_Y;
-    scale = Ogre::Vector3(BOSS_ROOM,10,1);
-    gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
+    scale = Ogre::Vector3(BOSS_ROOM,5,1);
+    gameEntity = createGameEntity("WallLBoss", "Cube.mesh", position, scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
     _walls.push_back(wall);
+    Entity* e = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+			e->setMaterialName("boss");
 
     //Muro de la derecha----------
     position.z =  BOSS_ROOM*2;
     position.y = WALLR_POSITION_Y;
-    gameEntity = createGameEntity("WallRBoss", "cube.mesh", position, scale);
+    gameEntity = createGameEntity("WallRBoss", "Cube.mesh", position, scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
@@ -1247,8 +1251,8 @@ void PlayState::createBossRoom(){
     position.z = BOSS_ROOM;
     position.x = BOSS_ROOM;
     position.y = WALLL_POSITION_Y;
-    scale = Ogre::Vector3(1,10,100);
-    gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
+    scale = Ogre::Vector3(1,5,100);
+    gameEntity = createGameEntity("WallFBoss", "Cube.mesh", position,scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
@@ -1258,7 +1262,7 @@ void PlayState::createBossRoom(){
     position.z = BOSS_ROOM;
     position.y = WALLR_POSITION_Y;
     position.x = - BOSS_ROOM;
-    gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
+    gameEntity = createGameEntity("WallBBoss", "Cube.mesh", position,scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
