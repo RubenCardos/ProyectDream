@@ -1228,7 +1228,7 @@ void PlayState::createBossRoom(){
 	//Muro de la izquierda--------
 	position.z = BOSS_ROOM-BOSS_ROOM;
     position.y = WALLL_POSITION_Y;
-    scale = Ogre::Vector3(BOSS_ROOM,50,1);
+    scale = Ogre::Vector3(BOSS_ROOM,10,1);
     gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());

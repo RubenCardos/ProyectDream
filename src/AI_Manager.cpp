@@ -72,10 +72,12 @@ void AI_Manager::loadBossRoute(){
 	if (fichero.is_open()) {
 		while (getline (fichero,frase)) {
 			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+			//int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
 			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
 
-			Vector3 routePoint = Vector3(x,y,z);
+			//Vector3 routePoint = Vector3(x,y,z);
+
+			Vector3 routePoint = Vector3(x,3.42,z);//Habria que calcular el Y pero no se me ocurre como.
 			_bossRoute.push_back(routePoint);
 
 		}
@@ -138,9 +140,9 @@ void AI_Manager::updateBossMovement(){
 			}
 		}
 	}*/
-	//cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
+	cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
 	//cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
-	//cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
+	cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
 
 	//for(unsigned int i=0; i<_bossPieces->size(); i++){
 		/*if(std::abs(_bossPieces->at(i)->getRigidBody()->getCenterOfMassPosition().x - _bossRoute.at(1).x) <= EPSILON){
@@ -211,7 +213,7 @@ void AI_Manager::updateBossMovement(){
 				}
 				if(i==1){
 					//desp = desp /3;
-					desp = desp * 5;
+					desp = desp * 9;
 				}
 
 				pos = pos + desp*i;
@@ -281,25 +283,60 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 		std::cout << "VELOCIDAD DE LA LOCOMOTORA PTR*" << *ptrSpeed << std::endl;
 
 		std::cout << "ANTES DE REPOSICIONAR" << std::endl;
+
+		Vector3 pos = _bossRoute.at(0);
+		int degrees = 0;
+
+		//Cambio la rotacion donde aparece el siguiente modulo---
+		if(speed.x >0){
+			degrees=90;
+		}
+		else if(speed.x <0){
+			degrees=270;
+		}
+		else if(speed.z >0){
+			degrees=0;
+		}
+		else if(speed.z <0){
+			degrees=180;
+		}
+		//--------------------------------------------------------
+
 		for(unsigned int i=0; i<_bossPieces->size(); i++){
-			//_bossPieces->at(i)->getRigidBody()->setPosition(entryPosition);
 			_bossPieces->at(i)->setV_Speed(ptrSpeed);
 			_bossPieces->at(i)->setCurrentIndex(0);
 			Vector3* aux = new Vector3(0,0,0);
 			aux=&_bossRoute.at(_bossPieces->at(i)->getCurrentIndex()+1);
 			cout << "EXIT = " << *aux << endl;
  			_bossPieces->at(i)->setTargetPosition(aux);
-			//_bossPieces->at(i)->setCurrentIndex(0);
-			//entryPosition.z = entryPosition.z - WAGON_DISTANCE;
 
 			btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
-			//transform.setOrigin(OgreBulletCollisions::convert(pos));
+			transform.setOrigin(OgreBulletCollisions::convert(pos));
 			//Girar---------------------------------------
-			transform.setRotation(OgreBulletCollisions::convert(Quaternion(Degree(90),Vector3::UNIT_Y)));
+			transform.setRotation(OgreBulletCollisions::convert(Quaternion(Degree(degrees),Vector3::UNIT_Y)));
 			//--------------------------------------------
 			_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
+
+			//Cambio la posicion donde aparece el siguiente modulo---
+			if(speed.x >0){
+				pos.x -= 25;
+			}
+			else if(speed.x <0){
+				pos.x += 25;
+			}
+			else if(speed.z >0){
+				pos.z -= 25;
+			}
+			else if(speed.z <0){
+				pos.z += 25;
+			}
+			//--------------------------------------------------------
 		}
 		std::cout << "DESPUES DE REPOSICIONAR" << std::endl;
+
+
+		Real y = _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().y;
+		cout << "Y : " <<y << endl;
 
 	/*if(_bossRoute.size() != 0){
 		Ogre::Vector3* ptrPosition = new Ogre::Vector3();
