@@ -142,14 +142,14 @@ void IntroState::createGUI()
   ImageManager::getSingleton().addFromImageFile("BackgroundImage","logo.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageRecords","records.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageCredits","credits.jpg");
-  ImageManager::getSingleton().addFromImageFile("BackgroundImageEnter","introscreen.jpg");
-  ImageManager::getSingleton().addFromImageFile("BackgroundImageBar","barra.png");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImagePlayState","cabecera.png");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImagePause","paused.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageMeter","medidor.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageFinish","finish.png");
   CEGUI::ImageManager::getSingleton().addFromImageFile("BackgroundImageArrow","flecha.png");
   CEGUI::ImageManager::getSingleton().addFromImageFile("BackgroundImagePower","RainOfArrows.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageOptions","options.png");
-  ImageManager::getSingleton().addFromImageFile("BackgroundImageControls","controls.png");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImageControls","controls.jpg");
 
   //Sheet
   Window* sheetBG =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd");

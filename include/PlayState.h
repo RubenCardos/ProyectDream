@@ -143,6 +143,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   void readEnemies(String path);
 
   void removeAllBehindBackWall();
+  bool quit(const CEGUI::EventArgs &e);
+  bool pauseB(const CEGUI::EventArgs &e);
 
 };
 
