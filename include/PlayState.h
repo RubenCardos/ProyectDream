@@ -139,6 +139,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
 
   void populateObstacles(String _path);
   void populateThreads(String _path);
+  void populateSpike(String _path);
   void populateEnemies();
   void readEnemies(String path);
 
