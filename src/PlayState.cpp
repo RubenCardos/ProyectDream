@@ -330,7 +330,16 @@ PlayState::frameStarted
 	_timeLastObject -= _deltaT;
 
 	//Actualizo camara---
-	_cameraPivot->setPosition(_hero->getSceneNode()->getPosition());
+	if(!_bossRoom){
+		_cameraPivot->setPosition(_hero->getSceneNode()->getPosition());
+	}
+	else{
+		_camera->setPosition(0,150,100);
+		_camera->lookAt(0,0,100);
+		_camera->setFixedYawAxis(true,Vector3(0,150,100));
+		//_camera->setOrientation(Quaternion::ZERO);
+	}
+
 	//-------------------
 
 	//Deteccion Colisiones---------
@@ -1285,6 +1294,7 @@ void PlayState::createBossRoom(){
     //-----------------------------*/
 	//_movementManager->setWalls(&_walls);
 	_bossRoom = true;
+
 	}
 }
 
