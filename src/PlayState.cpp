@@ -1228,45 +1228,51 @@ void PlayState::createBossRoom(){
 	//Muro de la izquierda--------
 	position.z = BOSS_ROOM-BOSS_ROOM;
     position.y = WALLL_POSITION_Y;
-    scale = Ogre::Vector3(BOSS_ROOM,5,1);
-    gameEntity = createGameEntity("WallLBoss", "Cube.mesh", position, scale);
+    scale = Ogre::Vector3(BOSS_ROOM,50,1);
+    gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
     _walls.push_back(wall);
-    Entity* e = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
-			e->setMaterialName("boss");
+    Entity* eWallLBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+	eWallLBoss->setMaterialName("matCarton");
 
     //Muro de la derecha----------
     position.z =  BOSS_ROOM*2;
     position.y = WALLR_POSITION_Y;
-    gameEntity = createGameEntity("WallRBoss", "Cube.mesh", position, scale);
+    gameEntity = createGameEntity("WallRBoss", "cube.mesh", position, scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
     _walls.push_back(wall);
+    Entity* eWallRBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+	eWallRBoss->setMaterialName("matCarton");
 
 
     //Muro delantero--------
     position.z = BOSS_ROOM;
     position.x = BOSS_ROOM;
     position.y = WALLL_POSITION_Y;
-    scale = Ogre::Vector3(1,5,100);
-    gameEntity = createGameEntity("WallFBoss", "Cube.mesh", position,scale);
+    scale = Ogre::Vector3(1,50,100);
+    gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
     _walls.push_back(wall);
+    Entity* eWallFBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+	eWallFBoss->setMaterialName("matCarton");
 
     //Muro trasero----------
     position.z = BOSS_ROOM;
     position.y = WALLR_POSITION_Y;
     position.x = - BOSS_ROOM;
-    gameEntity = createGameEntity("WallBBoss", "Cube.mesh", position,scale);
+    gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
     wall->setRigidBody(gameEntity->getRigidBody());
     _walls.push_back(wall);
+    Entity* eWallBBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+	eWallBBoss->setMaterialName("matCarton");
 
 	_movementManager->repositionHero(btVector3(0,0,BOSS_ROOM),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 	/*//Cambiar posicion de la camara--------------------
