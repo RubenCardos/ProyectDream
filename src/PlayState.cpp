@@ -334,10 +334,10 @@ PlayState::frameStarted
 		_cameraPivot->setPosition(_hero->getSceneNode()->getPosition());
 	}
 	else{
-		_camera->setPosition(0,150,100);
+		_camera->setPosition(-175,150,100);
 		_camera->lookAt(0,0,100);
-		_camera->setFixedYawAxis(true,Vector3(0,150,100));
-		//_camera->setOrientation(Quaternion::ZERO);
+		//_camera->setFixedYawAxis(true,Vector3(0,0,100));
+		//_camera->yaw(Degree(180));
 	}
 
 	//-------------------
@@ -1015,7 +1015,7 @@ void PlayState::createBossRoom(){
 	//Suelo-----------------------
 	position.z = FLOOR_POSITION_Z + BOSS_ROOM;
 	position.y = FLOOR_POSITION_Y;
-	scale = Ogre::Vector3(100,0.10,100);
+	scale = Ogre::Vector3(100,50,100);
 
 	//Muro de la izquierda--------
 	position.z = BOSS_ROOM-BOSS_ROOM;
@@ -1045,7 +1045,7 @@ void PlayState::createBossRoom(){
     position.z = BOSS_ROOM;
     position.x = BOSS_ROOM;
     position.y = WALLL_POSITION_Y;
-    scale = Ogre::Vector3(1,50,100);
+    scale = Ogre::Vector3(1,10,100);
     gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
     wall = new Wall();
     wall->setSceneNode(gameEntity->getSceneNode());
@@ -1320,7 +1320,7 @@ void PlayState::populateEnemies(){
 			enemy->setSpeed(Ogre::Vector3(0,0,-2));
 			_enemies.push_back(enemy);
 			index++;
-			_posEnemies.at(i) = Ogre::Vector3(-10,-10,-10);
+			_posEnemies.at(i) = Ogre::Vector3(-50,-50,-50);
 		}
 	}
 

@@ -180,7 +180,7 @@ void AI_Manager::updateBossMovement(){
 
 			speed = _bossRoute.at(_bossPieces->at(0)->getCurrentIndex()+1) - _bossRoute.at(_bossPieces->at(0)->getCurrentIndex());
 			speed = speed.normalisedCopy();
-			speed= speed*5;
+			speed= speed*15;
 			*ptrSpeed = speed;
 
 			Ogre::Vector3 desp(0,0,0);
@@ -213,7 +213,7 @@ void AI_Manager::updateBossMovement(){
 				}
 				if(i==1){
 					//desp = desp /3;
-					desp = desp * 9;
+					desp = desp * 11;
 				}
 
 				pos = pos + desp*i;
@@ -276,7 +276,7 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 		//speed = exitPosition - entryPosition;
 		speed =_bossRoute.at(1)-_bossRoute.at(0);
 		speed = speed.normalisedCopy();
-		speed= speed*5;
+		speed= speed*15;
 		*ptrSpeed = speed;
 
 		std::cout << "VELOCIDAD DE LA LOCOMOTORA" << speed << std::endl;
