@@ -10,6 +10,7 @@
 
 #define INITIAL_LIVES 3
 #define NUM_JUMPS 1
+#define INVULNERABILITY_TIME 5.0
 
 Hero::Hero(){
 	_lives = INITIAL_LIVES;
@@ -17,6 +18,8 @@ Hero::Hero(){
 	_movementspeed=50.0;
 	_nJumps = NUM_JUMPS;
 	_speed = Ogre::Vector3(0,0,0);
+	_pickedReels[0] = false;
+	_pickedReels[1] = false;
 }
 
 Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
@@ -28,6 +31,8 @@ Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
 	_nJumps = NUM_JUMPS;
 	_speed = Ogre::Vector3(0,0,0);
 	_attacking = false;
+	_pickedReels[0] = false;
+	_pickedReels[1] = false;
 	spawn();
 }
 
@@ -67,6 +72,14 @@ void Hero::increaseScore(int amount){
 int Hero::getNumJumps(){
 	return _nJumps;
 }
+bool Hero::isInvulnerable(){
+	bool invulnerable = false;
+	if(_invulnerabilityLeft > 0.0){
+		invulnerable = true;
+	}
+	return invulnerable;
+}
+
 void Hero::setNumJumps(int nJumps){
 	_nJumps = nJumps;
 }
@@ -95,12 +108,31 @@ void Hero::resetLives(){
 	_lives = INITIAL_LIVES;
 }
 
-int Hero::getNReel(){
-	return _nReel;
+bool Hero:: AllReelsPicked(){
+	bool picked = false;
+	if(_pickedReels[0] && _pickedReels[1]){
+		picked = true;
+	}
+	return picked;
 }
-
-void Hero::setNReel(int _addReel){
-	_nReel+=_addReel;
+void Hero::picksReel(string reelName){
+	if(Ogre::StringUtil::startsWith(reelName, "SN_ReelGarden")){
+		_pickedReels[0] = true;
+	}
+	else if(Ogre::StringUtil::startsWith(reelName, "SN_ReelRoom")){
+		_pickedReels[1] = true;
+	}
+}
+void Hero::makeInvulnerable(){
+	_invulnerabilityLeft = INVULNERABILITY_TIME;
+}
+void Hero::UpdateInvulnerability(Ogre::Real deltaT){
+	if((_invulnerabilityLeft - deltaT) > 0){
+		_invulnerabilityLeft = _invulnerabilityLeft - deltaT;
+	}
+	else{
+		_invulnerabilityLeft = 0.0;
+	}
 }
 
 void Hero::setAttacking(bool attacking){

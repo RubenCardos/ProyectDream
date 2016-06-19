@@ -95,6 +95,10 @@ void MovementManager::jumpHero(){
 }
 
 void MovementManager::repositionHero(btVector3 position,btQuaternion orientation){
+
+	//Hago el hero invulnerable-------------------------------
+	_hero->makeInvulnerable();
+	//--------------------------------------------------------
 	btTransform initialTransform;
 
 	initialTransform.setOrigin(position);

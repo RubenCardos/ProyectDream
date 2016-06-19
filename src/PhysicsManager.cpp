@@ -81,8 +81,10 @@ void PhysicsManager::detectHeroCollision(){
 					}
 					//Si me choco sin atacar-----------------
 					else{
-						_hero->loseLife();
-						MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,100),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+						if(!_hero->isInvulnerable()){
+							_hero->loseLife();
+							MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,100),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+						}
 					}
 					//---------------------------------------
 				}
@@ -101,8 +103,10 @@ void PhysicsManager::detectHeroCollision(){
 					}
 					//Si me choco sin atacar-----------------
 					else{
-						_hero->loseLife();
-						MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,100),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+						if(!_hero->isInvulnerable()){
+							_hero->loseLife();
+							MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,100),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+						}
 					}
 					//---------------------------------------
 				}
@@ -117,26 +121,24 @@ void PhysicsManager::detectHeroCollision(){
 					//Actualizar los puntos en la UI
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
-					//PlayState::getSingletonPtr()->changeScenarioQ();
-					_hero->setNReel(1);
-					cout << "\n\nNum Bobinas recogidas: " <<_hero->getNReel() << endl;
-					if(_hero->getNReel()==2){
-						cout << "\n\nAqui pasaria al boss\n\n" << endl;
-					}
+					_hero->getRigidBody()->setLinearVelocity(Ogre::Vector3(0,0,0));
+					_hero->picksReel(node->getName());
+					std::cout << "Recogida bobina " << node->getName() << std::endl;
+					cout << "¿Todas las bobinas recogidas?: " << _hero->AllReelsPicked() << endl;
 					Scenario::Scenario scenario = Scenario::Menu;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(aux);
 					cout << "CAMBIANDO AL ESCENARIO DE MENU" <<endl;
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
 				}
 
-				else if (Ogre::StringUtil::startsWith(node->getName(),"SN_Spike")){
+				else if (Ogre::StringUtil::startsWith(node->getName(),"SN_Spike") && !_hero->isInvulnerable()){
 					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					_hero->loseLife();
 				}
 
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
 					
-					if(!_hero->isAttacking()){
+					if(!_hero->isAttacking() && !_hero->isInvulnerable()){
 						_hero->loseLife();
 						MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 						for(int i=0 ; i< _walls->size();i++){

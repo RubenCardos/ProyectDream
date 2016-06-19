@@ -189,7 +189,6 @@ PlayState::CreateInitialWorld() {
 	//------------------------------------------------------------
 
 	_currentScenario = Scenario::Menu;
-	_nextScenario = Scenario::LevelGarden;
 	createScenario(_currentScenario);
 	//createAllWalls();
 	//Paredes Laterales--------------------------
@@ -336,6 +335,7 @@ PlayState::frameStarted
 	else{
 		_camera->setPosition(-175,150,100);
 		_camera->lookAt(0,0,100);
+		_camera->yaw(Ogre::Degree(180));
 		//_camera->setFixedYawAxis(true,Vector3(0,0,100));
 		//_camera->yaw(Degree(180));
 	}
@@ -368,6 +368,16 @@ PlayState::frameStarted
 	else{
 		_movementManager->moveBoss(); //ACTIVAR
 	}
+
+	//Invulnerabilidad del hero---------------
+	_hero->UpdateInvulnerability(_deltaT);
+	if(_hero->isInvulnerable()){
+		_hero->getSceneNode()->flipVisibility();
+	}
+	else{
+		_hero->getSceneNode()->setVisible(true);
+	}
+	//----------------------------------------
 
 	//----------------------
 
@@ -406,42 +416,20 @@ PlayState::keyPressed
 	}
 	//-----------------
 
-	// Tecla p --> GameOverState.-------
+	// Tecla g --> GameOverState.-------
 	if (e.key == OIS::KC_G) {
 		changeState(GameOverState::getSingletonPtr());
 	}
 	//-----------------
-
-	// Tecla T --> Test Cambiar Escenario-------
-	if (e.key == OIS::KC_T) {
-		//changeScenarioQ();
-	}
-	//-----------------
-
-	/*// Tecla B --> Boss Room-------
-	if (e.key == OIS::KC_B) {
-		createBossRoom();
-	}
-	//-----------------
-	*/
 	// Tecla N --> Boss Creation-------
-	if (e.key == OIS::KC_N) {
+	/*if (e.key == OIS::KC_N) {
 		if(!_bossCreated){
 			createBossRoom();
 			createBoss();
 			_bossCreated = true;
 		}
 		_movementManager->initializeBossMovement(&_deltaT);    //ACTIVAR
-	}
-	//-----------------
-
-	// Tecla I --> Impulse locomotive-------
-	if (e.key == OIS::KC_I) {
-		if(_bossCreated){
-			//_bossPieces.at(0)->getRigidBody()->applyImpulse(Ogre::Vector3(500,0,0), _bossPieces.at(0)->getRigidBody()->getCenterOfMassPosition());
-			_bossPieces.at(0)->getRigidBody()->setLinearVelocity(Ogre::Vector3(0,0,3));
-		}
-	}
+	}*/
 	//-----------------
 
 	// Tecla S --> Print current scenario and change backwall visibility-------
@@ -740,8 +728,8 @@ bool PlayState::deleteCurrentScenario(){
 	return _vScenario.empty();
 }
 
-void PlayState::createScenario(Scenario::Scenario _nextScenario){
-
+void PlayState::createScenario(Scenario::Scenario nextScenario){
+	_nextScenario = nextScenario;
 	//Creo el nuevo escenario---
 	Entity* _ground = _sceneMgr->getEntity("E_Ground");
 
@@ -762,6 +750,16 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 
 		_currentScenario=Scenario::Menu;
 		_ground->setMaterialName("GroundRoom");
+
+		if(_hero!=NULL &&_hero->AllReelsPicked()){
+			if(!_bossCreated){
+				createBossRoom();
+				createBoss();
+				_bossCreated = true;
+			}
+			_movementManager->initializeBossMovement(&_deltaT);    //ACTIVAR
+		}
+
 		break;
 	}
 	case Scenario::LevelGarden:
@@ -1082,9 +1080,17 @@ void PlayState::createBossRoom(){
 }
 
 void PlayState::createTestGameEntities(){
+	string scenario = "";
+	if(_nextScenario == Scenario::LevelGarden){
+		scenario = "ReelGarden";
+	}
+	else{
+		scenario = "ReelRoom";
+	}
+
 	//BOBINA-------------------------------------------------------------------------------
-	Entity *entityReel = _sceneMgr->createEntity("E_Reel"+ Ogre::StringConverter::toString(_numEntities), "Bobina.mesh");
-	SceneNode *nodeReel = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Reel"+ Ogre::StringConverter::toString(_numEntities));
+	Entity *entityReel = _sceneMgr->createEntity("E_"+ scenario + Ogre::StringConverter::toString(_numEntities), "Bobina.mesh");
+	SceneNode *nodeReel = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_"+ scenario + Ogre::StringConverter::toString(_numEntities));
 	nodeReel->attachObject(entityReel);
 
 	Vector3 sizeReel = Vector3::ZERO;
@@ -1104,7 +1110,7 @@ void PlayState::createTestGameEntities(){
 	bodyShapeReel = trimeshConverterReel->createConvex();
 
 	//bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-	rigidBodyReel = new OgreBulletDynamics::RigidBody("RB_Reel"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Reel,PhysicsMask::reel_collides_with);
+	rigidBodyReel = new OgreBulletDynamics::RigidBody("RB_"+ scenario + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Reel,PhysicsMask::reel_collides_with);
 
 	rigidBodyReel->setShape(nodeReel, bodyShapeReel,
 			0.0 /* Restitucion */, 0.9 /* Friccion */,

@@ -21,8 +21,9 @@ class Hero : public GameEntity
   double getMovementSpeed();
   double getJumpSpeed();
   Ogre::Vector3 getSpeed();
-  int getNReel();
+  bool AllReelsPicked();
   bool isAttacking();
+  bool isInvulnerable();
 
   void setNumJumps(int nJumps);
   void loseLife();
@@ -31,8 +32,10 @@ class Hero : public GameEntity
   void setSpeed(Ogre::Vector3 speed);
   void resetScore();
   void resetLives();
-  void setNReel(int _addReel);
+  void picksReel(string reelName);
   void setAttacking(bool attacking);
+  void makeInvulnerable();
+  void UpdateInvulnerability(Ogre::Real deltaT);
 
   //El comportamiento de el heroe al spawnear y al morir se pondria en estas funciones
   void spawn();
@@ -45,8 +48,9 @@ class Hero : public GameEntity
   double _movementspeed;
   double _jumpSpeed;
   Ogre::Vector3 _speed;
-  int _nReel;
+  bool _pickedReels [];
   bool _attacking;
+  Ogre::Real _invulnerabilityLeft;
 };
 
 #endif
