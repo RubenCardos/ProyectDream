@@ -361,7 +361,6 @@ PlayState::frameStarted
 	//Movimiento------------
 	_movementManager->moveHero(_despPtr);
 	_movementManager->moveEnemies();
-	cout << "Pos: " << _hero->getRigidBody()->getCenterOfMassPosition().x <<endl;
 
 	if(!_bossRoom ){
 		_movementManager->moveWalls();
@@ -619,7 +618,7 @@ PlayState::createGUI()
 	CEGUI::Window* sheetBG =  CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd2");
 	sheetBG->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0.0f),CEGUI::UDim(0.0, 0)));
 	sheetBG->setSize( CEGUI::USize(CEGUI::UDim(1.0, 0), CEGUI::UDim(0.10, 0)));
-	sheetBG->setProperty("Image","BackgroundImagePlayState");
+	//sheetBG->setProperty("Image","Background");
 	sheetBG->setProperty("FrameEnabled","False");
 	sheetBG->setProperty("BackgroundEnabled", "False");
 
@@ -627,13 +626,13 @@ PlayState::createGUI()
 	pauseButton->setText("[font='SPIDER MONKEY'] Pause");
 	pauseButton->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.5,0)));
 	pauseButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.6,0),CEGUI::UDim(0.3,0)));
-	pauseButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::pauseB,this));
+	//pauseButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::pauseB,this));
 
 	CEGUI::Window* quitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","QuitButton");
 	quitButton->setText("[font='SPIDER MONKEY'] Exit");
 	quitButton->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.5,0)));
 	quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.8,0),CEGUI::UDim(0.3,0)));
-	quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::quit,this));
+	// quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::quit,this));
 
 	CEGUI::Window* textPoints = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textPoints");
 	textPoints->setText("[font='SPIDER MONKEY'] SCORE 000");
@@ -661,19 +660,6 @@ PlayState::createGUI()
 	sheetBG->addChild(quitButton);
 	sheet->addChild(sheetBG);
 	//--------------------------------
-}
-bool
-PlayState::quit(const CEGUI::EventArgs &e)
-{
-  _exitGame=true;
-  return true;
-}
-
-bool
-PlayState::pauseB(const CEGUI::EventArgs &e)
-{
-  pushState(PauseState::getSingletonPtr());
-  return true;
 }
 
 void
@@ -859,16 +845,118 @@ bool PlayState::deleteCurrentScenario(){
 
 		//Elimino las puertas y los muros-------------------------------------------------------------------------------------
 		deleteScenarioContent();
+/*		Ogre::SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();//Recupero el tablero del jugador en un iterador
+		while ( it.hasMoreElements() ) {//Recorro el iterador
+			SceneNode* _aux = static_cast<SceneNode*>(it.getNext());
+
+			if( Ogre::StringUtil::startsWith(_aux->getName(),"SN_DoorRoom")|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_DoorGarden") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Floor") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Boss") ){
+				Entity* _e = static_cast<Entity*>(_aux->getAttachedObject(0));//Recupero la entidad
+				OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
+				_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
+				_sceneMgr->destroyEntity(_e);
+				_sceneMgr->getRootSceneNode()->removeChild(_aux);
+			}
+		}
+*/
+		//--------------------------------------------------------------------------------------------------------
+
+		/*while(iterator.hasMoreElements()){
+			Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
+			if(Ogre::StringUtil::startsWith(e->getName(),"E_DoorRoom") || Ogre::StringUtil::startsWith(e->getName(),"E_DoorGarden")){
+				_sceneMgr->destroyEntity(e);
+
+			}
+		}
+		while (it.hasMoreElements()){
+			sAux = it.getNext()->getName();
+			if(Ogre::StringUtil::startsWith(sAux,"SN_DoorRoom") || Ogre::StringUtil::startsWith(sAux,"SN_DoorGarden")){
+				_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
+				_sceneMgr->destroySceneNode(sAux);
+			}
+		}*/
 
 		break;
 	}
 	case Scenario::LevelGarden:{
 		deleteScenarioContent();
-	
+	/*	Ogre::SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();//Recupero el tablero del jugador en un iterador
+		while ( it.hasMoreElements() ) {//Recorro el iterador
+			SceneNode* _aux = static_cast<SceneNode*>(it.getNext());
+
+			if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Obstacle") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Thread")
+			|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Reel")|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Enemy")
+			|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Floor") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Boss")){
+				Entity* _e = static_cast<Entity*>(_aux->getAttachedObject(0));//Recupero la entidad
+				OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
+				_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
+				_sceneMgr->destroyEntity(_e);
+				_sceneMgr->getRootSceneNode()->removeChild(_aux);
+			}
+		}
+*/
+		//-----------------------------
+
+		//iterator = _sceneMgr->getMovableObjectIterator("Entity");
+		/*while(iterator.hasMoreElements()){
+			Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
+			if(Ogre::StringUtil::startsWith(e->getName(),"E_LevelGarden")
+			|| Ogre::StringUtil::startsWith(e->getName(),"E_Reel")
+			|| Ogre::StringUtil::startsWith(e->getName(),"E_Thread")
+			|| Ogre::StringUtil::startsWith(e->getName(),"E_Enemy")){
+
+				_sceneMgr->destroyEntity(e);
+			}
+		}
+		while (it.hasMoreElements()){
+			sAux = it.getNext()->getName();
+			if(Ogre::StringUtil::startsWith(sAux,"SN_LevelGarden")
+			|| Ogre::StringUtil::startsWith(sAux,"SN_Reel")
+			|| Ogre::StringUtil::startsWith(sAux,"SN_Thread")
+			|| Ogre::StringUtil::startsWith(sAux,"SN_Enemy")){
+
+				_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
+				_sceneMgr->destroySceneNode(sAux);
+			}
+		}*/
 		break;}
 	case Scenario::LevelRoom:
 		deleteScenarioContent();
-	
+	/*	Ogre::SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();//Recupero el tablero del jugador en un iterador
+		while ( it.hasMoreElements() ) {//Recorro el iterador
+			SceneNode* _aux = static_cast<SceneNode*>(it.getNext());
+
+			if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Thread")
+			|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Reel")|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Enemy")
+			|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Floor") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Boss")){
+				Entity* _e = static_cast<Entity*>(_aux->getAttachedObject(0));//Recupero la entidad
+				OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
+				_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
+				_sceneMgr->destroyEntity(_e);
+				_sceneMgr->getRootSceneNode()->removeChild(_aux);
+			}
+		}
+*/
+		/*while(iterator.hasMoreElements()){
+			Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
+			if(Ogre::StringUtil::startsWith(e->getName(),"E_LevelRoom")
+			|| Ogre::StringUtil::startsWith(e->getName(),"E_Reel")
+			|| Ogre::StringUtil::startsWith(e->getName(),"E_Thread")
+			|| Ogre::StringUtil::startsWith(e->getName(),"E_Enemy")){
+
+				_sceneMgr->destroyEntity(e);
+			}
+		}
+		while (it.hasMoreElements()){
+			sAux = it.getNext()->getName();
+			if(Ogre::StringUtil::startsWith(sAux,"SN_LevelRoom")
+			|| Ogre::StringUtil::startsWith(sAux,"SN_Reel")
+			|| Ogre::StringUtil::startsWith(sAux,"SN_Thread")
+			|| Ogre::StringUtil::startsWith(sAux,"SN_Enemy")){
+
+				_sceneMgr->getSceneNode(sAux)->removeAndDestroyAllChildren();
+				_sceneMgr->destroySceneNode(sAux);
+			}
+		}*/
 		break;
 	}
 	printAll();
@@ -931,10 +1019,6 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 		populateThreads("data/Levels/ThreadsGarden.txt");
 		//-------------------------------------------
 
-		//PinchosLego--------------------------------------
-		populateSpike("data/Levels/SpikeGarden.txt");
-		//-------------------------------------------
-
 		//Leer fichero de enemigos--------------------------
 		readEnemies("data/Levels/Enemies.txt");
 		//--------------------------------------------------
@@ -960,6 +1044,12 @@ void PlayState::createScenario(Scenario::Scenario _nextScenario){
 		_currentScenario = Scenario::LevelRoom;
 		_numModules += 3;
 		_sceneMgr->setSkyBox(true, "MaterialSkybox");
+
+
+		//PinchosLego--------------------------------------
+		populateSpike("data/Levels/SpikeGarden.txt");
+		//-------------------------------------------
+
 		break;
 	}
 
@@ -1079,6 +1169,9 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		}
 		else if(Ogre::StringUtil::startsWith(name,"Enemy")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
+		}
+		else if(Ogre::StringUtil::startsWith(name,"Spike")){
+					rigidBody = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
 		}
 		else{
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
@@ -1361,7 +1454,7 @@ PlayState::populateObstacles(String _path){
 			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
 			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
 
-			Vector3 aux = Vector3(x,y,z); //POSICION
+			Vector3 aux = Vector3(x,y,z);
 			Quaternion q = Quaternion(Quaternion::IDENTITY);
 			Vector3 scale = Vector3(Sx,Sy,Sz);
 
@@ -1403,7 +1496,7 @@ PlayState::populateThreads(String _path){
 
 			GameEntity* ge = new GameEntity();
 			ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
-			ge->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3::UNIT_X));
+
 			index++;
 
 		}
@@ -1411,8 +1504,10 @@ PlayState::populateThreads(String _path){
 	}
 	//-------------------------------------------------
 }
+
 void
 PlayState::populateSpike(String _path){
+	cout << "\nCreo pinchos\n"<<endl;
 	//Leo el fichero-----------------------------------
 	fstream fichero;//Fichero
 	string frase;//Auxiliar
@@ -1443,6 +1538,7 @@ PlayState::populateSpike(String _path){
 	}
 	//-------------------------------------------------
 }
+
 void PlayState::deleteScenarioContent(){
 	//Borra puertas, hilos, carretes, bobinas, muros, suelo de boss, bosses, enemigos y obstaculos.
 

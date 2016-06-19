@@ -160,6 +160,12 @@ void PhysicsManager::detectHeroCollision(){
 					cout << "CAMBIANDO AL ESCENARIO DE MENU" <<endl;
 					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
 				}
+
+				else if (Ogre::StringUtil::startsWith(node->getName(),"SN_Spike")){
+					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+					_hero->loseLife();
+				}
+
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
 					
 					if(!_hero->isAttacking()){
