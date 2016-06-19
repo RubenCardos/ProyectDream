@@ -760,14 +760,26 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		_currentScenario=Scenario::Menu;
 		_ground->setMaterialName("GroundRoom");
 
+		//Musica -------------------------------------------
+		GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Menu.mp3");
+		GameManager::getSingletonPtr()->_mainTrack->play();
+		//--------------------------------------------------
+
 		if(_hero!=NULL &&_hero->AllReelsPicked()){
 			if(!_bossCreated){
+
+				//Musica -------------------------------------------
+				GameManager::getSingletonPtr()->_mainTrack->unload();
+				//---------------------------------------------------
+
 				createBossRoom();
 				createBoss();
 				_bossCreated = true;
 			}
 			_movementManager->initializeBossMovement(&_deltaT);    //ACTIVAR
 		}
+
+
 
 		break;
 	}
@@ -831,6 +843,10 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		_numModules += 3;
 		_sceneMgr->setSkyBox(true, "MaterialSkybox");
 
+		//Musica -------------------------------------------
+		GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Room.mp3");
+		GameManager::getSingletonPtr()->_mainTrack->play();
+		//--------------------------------------------------
 
 		//PinchosLego--------------------------------------
 		populateSpike("data/Levels/SpikeGarden.txt");
@@ -998,6 +1014,12 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
 void PlayState::createBossRoom(){
 	if(!_bossRoom){
+
+		//Musica -------------------------------------------
+		GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("BossFight.wav");
+		GameManager::getSingletonPtr()->_mainTrack->play();
+		//--------------------------------------------------
+
 		Ogre::Vector3 position(0,1.5,0);
 		Ogre::Vector3 scale(1,1,1);
 
