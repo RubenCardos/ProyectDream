@@ -681,120 +681,6 @@ PlayState::updateGUI()
 }
 
 
-void 
-PlayState::changeScenario(Scenario::Scenario _nextScenario){
-	cout << "Cambio de escenario" << endl;
-	//Ogre::SceneNode* _snIter = new SceneNode("snIter");
-
-	//Reajustando personaje---
-	//Volvemos a poner al personaje en la posición (0,0,0)
-	cout << "Ajustando posicion del PJ..." << endl;
-	_movementManager->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
-	//------------------------
-
-	//Cambio de escenario---
-	//Primero hay que borrar el escenario anterior y luego cargar el nuevo.
-
-	SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
-	Ogre::SceneManager::MovableObjectIterator iterator = _sceneMgr->getMovableObjectIterator("Entity");
-
-	switch(_currentScenario) {
-	case Scenario::Menu:
-		/* circle stuff */
-		break;
-	case Scenario::LevelGarden:
-		while (it.hasMoreElements()){
-			String  _aux = it.getNext()->getName();
-			if(Ogre::StringUtil::startsWith(_aux,"SN_Garden")){
-				_sceneMgr->getRootSceneNode()->removeChild(_aux); //detach node from parent
-			}
-		}
-		while(iterator.hasMoreElements()){
-			Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
-			if(Ogre::StringUtil::startsWith(e->getName(),"E_Garden")){
-				_sceneMgr->destroyEntity(e); //detach node from parent
-			}
-		}
-		break;
-	case Scenario::LevelRoom:
-		while (it.hasMoreElements()){
-			String  _aux = it.getNext()->getName();
-			if(Ogre::StringUtil::startsWith(_aux,"SN_Room")){
-				_sceneMgr->getRootSceneNode()->removeChild(_aux); //detach node from parent
-			}
-		}
-		while(iterator.hasMoreElements()){
-			Ogre::Entity* e = static_cast<Ogre::Entity*>(iterator.getNext());
-			if(Ogre::StringUtil::startsWith(e->getName(),"E_Garden")){
-				_sceneMgr->destroyEntity(e); //detach node from parent
-			}
-		}
-		break;
-	}
-
-	//----------------------
-
-	cout << "Vengo de: " << _currentScenario << endl;
-
-	//Cambio de valor de escenario---
-	switch(_currentScenario) {
-	case Scenario::Menu:
-		/* circle stuff */
-		break;
-	case Scenario::LevelGarden:
-		_currentScenario=Scenario::LevelRoom;
-		break;
-	case Scenario::LevelRoom:
-		_currentScenario=Scenario::LevelGarden;
-		break;
-	case Scenario::LevelTest:
-		_currentScenario=Scenario::LevelRoom;
-		break;
-	}
-	//-------------------------------
-
-	cout << "Voy a : " << _currentScenario << endl;
-
-	//Creo el nuevo escenario---
-	Entity* _ground = _sceneMgr->getEntity("E_Ground");
-	switch(_currentScenario) {
-	case Scenario::Menu:
-		/* circle stuff */
-		break;
-	case Scenario::LevelGarden:
-		for(unsigned int i=0;i<3;i++ ){
-			String aux=Ogre::StringConverter::toString(i);
-			Entity* _entScn = _sceneMgr->createEntity("E_Garden"+aux, "escenario2.mesh");
-			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Garden"+aux);
-			_nodeScn->attachObject(_entScn);
-			_nodeScn->yaw(Degree(270));
-			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
-			_nodeScn->translate(Vector3(205*i,0,0));
-		}
-		_ground->setMaterialName("Ground");
-		break;
-	case Scenario::LevelRoom:
-		for(unsigned int i=0;i<3;i++ ){
-			String aux=Ogre::StringConverter::toString(i);
-			Entity* _entScn = _sceneMgr->createEntity("EntRoom"+aux, "escenario1.mesh");
-			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Room"+aux);
-			_nodeScn->attachObject(_entScn);
-			_nodeScn->yaw(Degree(270));
-			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
-			_nodeScn->translate(Vector3(230*i,0,0));
-			/*std::cout << "meter trozo de escenario en vector" << std::endl;
-            //_vScenario.push_back(_nodeScn);
-            std::cout << "trozo de escenario en vector metido" << std::endl;*/
-		}
-		_ground->setMaterialName("GroundRoom");
-		break;
-	case Scenario::LevelTest:
-		_currentScenario=Scenario::LevelRoom;
-		break;
-	}
-	//-------------------------------
-
-}
 
 void PlayState::changeScenarioQ(Scenario::Scenario _nextScenario){
 	cout << "Cambio de escenario" << endl;
@@ -1234,47 +1120,13 @@ void PlayState::createTestGameEntities(){
 
 	//------------------------------------------------------------------------------------
 	//Enemigo----------------------------------------
-	Entity *entity1 = _sceneMgr->createEntity("E_Enemy"+ Ogre::StringConverter::toString(_numEntities), "enemy.mesh");
-	SceneNode *node1 = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_Enemy"+ Ogre::StringConverter::toString(_numEntities));
-	node1->attachObject(entity1);
-
-	Vector3 size1 = Vector3::ZERO;
-	//Vector3 position1 = Vector3(30,1.5,3.5);
 	Vector3 position1 = Vector3(30,1.5,3.5);
-
-	OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter = NULL;
-	OgreBulletCollisions::CollisionShape *bodyShape1 = NULL;
-	OgreBulletDynamics::RigidBody *rigidBody1 = NULL;
-
-	AxisAlignedBox boundingB1 = entity1->getBoundingBox();
-	size1 = boundingB1.getSize();
-	size1 *= node1->getScale();
-	size1 /= 2.0f;   // El tamano en Bullet se indica desde el centro
-
-	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(entity1);
-	bodyShape1 = trimeshConverter->createConvex();
-
-	//bodyShape = new OgreBulletCollisions::BoxCollisionShape(size);
-	rigidBody1 = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
-
-	rigidBody1->setShape(node1, bodyShape1,
-			0.0 /* Restitucion */, 0.9 /* Friccion */,
-			15.0 /* Masa */, position1 /* Posicion inicial */,
-			Quaternion::IDENTITY /* Orientacion */);
-
-	//Propiedades del cuerpo fisico--------------------------------------
-	rigidBody1->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
-	rigidBody1->disableDeactivation();
-	rigidBody1->getBulletObject()->setUserPointer((void *) node1);
-	//-------------------------------------------------------------------
+	GameEntity* gameEntity = createGameEntity("Enemy","enemy.mesh",position1,Ogre::Vector3::UNIT_SCALE);
 
 	//creamos el Enemy para que contenga lo anterior, el sceneNode y el RigidBody---
 	Enemy *enemy = new Enemy();
-	enemy->setSceneNode(node1);
-	enemy->setRigidBody(rigidBody1);
-	enemy->setMovementSpeed(50.0);
-	enemy->setSpeed(Ogre::Vector3(0,0,-2));
-	_numEntities++;
+	enemy->setSceneNode(gameEntity->getSceneNode());
+	enemy->setRigidBody(gameEntity->getRigidBody());
 	//-----------------------------------------------------------------------------
 
 	//crear el vector de enemigos. De momento, con un enemigo---

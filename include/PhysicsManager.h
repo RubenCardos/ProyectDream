@@ -36,8 +36,7 @@ class PhysicsManager : public Ogre::Singleton<PhysicsManager>
   void setGameEntities(std::vector<GameEntity*>* gameEntities);
   void setWorld(OgreBulletDynamics::DynamicsWorld * world);
 
-  void removeGameEntity(unsigned int index);
-  void removeGameEntity(std::string name);
+  void removeGameEntity(btCollisionObject* colObject, std::string name);
 
   // Heredados de Ogre::Singleton.
   static PhysicsManager& getSingleton ();
