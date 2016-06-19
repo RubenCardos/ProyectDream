@@ -75,7 +75,7 @@ void PhysicsManager::detectHeroCollision(){
 						if(Ogre::StringUtil::match(_last->getSceneNode()->getName(),node->getName())){
 							AI_Manager::getSingletonPtr()->deleteLastWagon();
 							cout << "\nAtaco al ultimo vagon\n"<< endl;
-							removeGameEntity(aux,_last->getSceneNode()->getName());
+							removeGameEntity(_last->getSceneNode()->getName());
 						}
 						//-----------------------------------
 					}
@@ -97,7 +97,7 @@ void PhysicsManager::detectHeroCollision(){
 						if(Ogre::StringUtil::startsWith(_last->getSceneNode()->getName(),"SN_BossLocomotive")){
 							AI_Manager::getSingletonPtr()->deleteLastWagon();
 							cout << "\nAtaco a la locomotora\n"<< endl;
-							removeGameEntity(aux,_last->getSceneNode()->getName());
+							removeGameEntity(_last->getSceneNode()->getName());
 						}
 						//-----------------------------------------
 					}
@@ -113,7 +113,7 @@ void PhysicsManager::detectHeroCollision(){
 
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Thread")){
 					//Eliminar SceneNode, Entity y Cuerpo Fisico asi--------------
-					removeGameEntity(aux,node->getName());
+					removeGameEntity(node->getName());
 					//------------------------------------------------------------
 					_hero->increaseScore(10);
 
@@ -134,6 +134,15 @@ void PhysicsManager::detectHeroCollision(){
 				else if (Ogre::StringUtil::startsWith(node->getName(),"SN_Spike") && !_hero->isInvulnerable()){
 					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					_hero->loseLife();
+
+					//Eliminar todos los enemigos--
+					/*for(int i =0 ; i<_gameEntities->size();i++){
+						if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){
+							removeGameEntity(_gameEntities->at(i)->getSceneNode()->getName());
+						}
+					}
+					_enemies->clear();*/
+					//-----------------------------
 				}
 
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
@@ -149,7 +158,15 @@ void PhysicsManager::detectHeroCollision(){
 						}
 					}
 					//Elimino el enemigo con el que te chocas-------------------
-					removeGameEntity(aux, node->getName());
+					removeGameEntity( node->getName());
+					//Eliminar todos los enemigos--
+					/*for(int i =0 ; i<_gameEntities->size();i++){
+						if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){
+							removeGameEntity(_gameEntities->at(i)->getSceneNode()->getName());
+						}
+					}
+					_enemies->clear();*/
+					//-----------------------------
 					//----------------------------------------------------------
 					//Actualizar las vidas en la UI
 
@@ -280,11 +297,11 @@ void PhysicsManager::setGameEntities(std::vector<GameEntity*>* gameEntities){
 	_gameEntities = gameEntities;
 }
 
-void PhysicsManager::removeGameEntity(btCollisionObject* colObject, std::string name){
+void PhysicsManager::removeGameEntity( std::string name){
 	for(unsigned int i=0; i<_gameEntities->size(); i++){
 		if(Ogre::StringUtil::match(_gameEntities->at(i)->getSceneNode()->getName(),name)){
 			Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
-			OgreBulletCollisions::Object* Baux =_world->findObject(colObject);
+			OgreBulletCollisions::Object* Baux =_world->findObject(_gameEntities->at(i)->getSceneNode());
 			_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
 			_sceneMgr->destroyEntity(_e);
 			_sceneMgr->getRootSceneNode()->removeChild(_gameEntities->at(i)->getSceneNode());

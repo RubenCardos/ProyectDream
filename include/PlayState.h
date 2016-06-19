@@ -120,6 +120,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   bool _bossCreated;
 
   SceneNode* _cameraPivot;
+  int _frameCounter;
 
   void CreateInitialWorld();
 

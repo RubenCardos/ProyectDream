@@ -109,7 +109,7 @@ PlayState::enter ()
 	_bossRoom = false;
 	_wallsAreVisible = true;
 	_bossCreated = false;
-
+	_frameCounter = 0;
 	//-----------------------
 
 	//CameraPivote---
@@ -372,7 +372,11 @@ PlayState::frameStarted
 	//Invulnerabilidad del hero---------------
 	_hero->UpdateInvulnerability(_deltaT);
 	if(_hero->isInvulnerable()){
-		_hero->getSceneNode()->flipVisibility();
+		if(++_frameCounter>15){
+			_hero->getSceneNode()->flipVisibility();
+			_frameCounter = 0 ;
+		}
+
 	}
 	else{
 		_hero->getSceneNode()->setVisible(true);
@@ -729,6 +733,11 @@ bool PlayState::deleteCurrentScenario(){
 }
 
 void PlayState::createScenario(Scenario::Scenario nextScenario){
+
+	//Musica Intro---------------------------------------
+	GameManager::getSingletonPtr()->_mainTrack->unload();
+	//---------------------------------------------------
+
 	_nextScenario = nextScenario;
 	//Creo el nuevo escenario---
 	Entity* _ground = _sceneMgr->getEntity("E_Ground");
@@ -776,6 +785,11 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 			_nodeScn->translate(Vector3(230*i,0,0));
 
 			_vScenario.push_back(_nodeScn);
+
+			//Musica -------------------------------------------
+			GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Garden.ogg");
+			GameManager::getSingletonPtr()->_mainTrack->play();
+			//--------------------------------------------------
 		}
 
 		_ground->setMaterialName("Ground");
@@ -1133,6 +1147,7 @@ void PlayState::createTestGameEntities(){
 	Enemy *enemy = new Enemy();
 	enemy->setSceneNode(gameEntity->getSceneNode());
 	enemy->setRigidBody(gameEntity->getRigidBody());
+	enemy->setSpeed(Vector3(0,0,-2));
 	//-----------------------------------------------------------------------------
 
 	//crear el vector de enemigos. De momento, con un enemigo---

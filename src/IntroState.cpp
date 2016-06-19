@@ -111,6 +111,11 @@ IntroState::enter ()
   //_cameraPivot = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_CameraPivot");
   //_cameraPivot->attachObject(_camera);
   //--------------------------------------------------
+
+  //Musica Intro--------------------------------------
+  GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Intro.ogg");
+  GameManager::getSingletonPtr()->_mainTrack->play();
+  //--------------------------------------------------
 }
 void IntroState::createGUI()
 {
@@ -326,7 +331,9 @@ IntroState::exit()
   sheet->destroyChild("quitButton");
   //--------------------------------------------
 
-  //GameManager::getSingletonPtr()->_mainTrack->unload();
+  //Musica Intro---------------------------------------
+  GameManager::getSingletonPtr()->_mainTrack->unload();
+  //---------------------------------------------------
 }
 
 void

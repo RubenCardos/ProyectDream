@@ -115,6 +115,8 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 		_walls->at(i)->getRigidBody()->getBulletRigidBody()->setWorldTransform(initialTransform);
 		_walls->at(i)->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
 	}*/
+
+
 }
 
 void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 position,btQuaternion orientation){
