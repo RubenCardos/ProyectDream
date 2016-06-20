@@ -165,8 +165,8 @@ PlayState::CreateInitialWorld() {
 	//Suelo Infinito NO TOCAR---------------------------------
 	Plane plane1(Vector3(0,1,0), -3);    // Normal y distancia  (antes estaba a 0)
 	MeshManager::getSingleton().createPlane("p1",
-			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
-			1000, 1000, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
+	ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
+	1000, 1000, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
 	//--------------------------------------------------------
 
 	//Suelo Grafico-----------------------------------------------
@@ -363,6 +363,10 @@ PlayState::frameStarted
 	//Actualizo GUI---
 	updateGUI();
 	//----------------
+
+	cout << "POS  X: " << _hero->getRigidBody()->getCenterOfMassPosition().x << endl;
+	cout << "POS  Z: " << _hero->getRigidBody()->getCenterOfMassPosition().z << endl;
+
 
 	//Movimiento------------
 	_movementManager->moveHero(_despPtr);
@@ -632,7 +636,7 @@ PlayState::createGUI()
 	quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::quit,this));
 
 	CEGUI::Window* textPoints = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textPoints");
-	textPoints->setText("[font='SPIDER MONKEY'] SCORE 000");
+	textPoints->setText("[font='SPIDER MONKEY-18'] 000");
 	textPoints->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
 	textPoints->setXPosition(CEGUI::UDim(0.43f, 0.0f));
 	textPoints->setYPosition(CEGUI::UDim(0.35f, 0.0f));
@@ -641,7 +645,7 @@ PlayState::createGUI()
 	textPoints->setProperty("VertFormatting", "TopAligned");
 
 	CEGUI::Window* textLives = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textLives");
-	textLives->setText("[font='SPIDER MONKEY'] LIVES 0");
+	textLives->setText("[font='SPIDER MONKEY-18'] 0");
 	textLives->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
 	textLives->setXPosition(CEGUI::UDim(0.1f, 0.0f));
 	textLives->setYPosition(CEGUI::UDim(0.35f, 0.0f));
@@ -680,8 +684,8 @@ PlayState::updateGUI()
 	CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 
 	//Actualizo la puntuacion------------
-	sheet->getChild("background_wnd2")->getChild("textPoints")->setText("[font='SPIDER MONKEY'] SCORE: "+Ogre::StringConverter::toString(_hero->getScore()));
-	sheet->getChild("background_wnd2")->getChild("textLives")->setText("[font='SPIDER MONKEY'] LIVES: "+Ogre::StringConverter::toString(_hero->getLives()));
+	sheet->getChild("background_wnd2")->getChild("textPoints")->setText("[font='SPIDER MONKEY-18']"+Ogre::StringConverter::toString(_hero->getScore()));
+	sheet->getChild("background_wnd2")->getChild("textLives")->setText("[font='SPIDER MONKEY-18']"+Ogre::StringConverter::toString(_hero->getLives()));
 	//----------------------------------
 
 	if(_currentScenario==Scenario::Menu){
@@ -868,7 +872,11 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		//--------------------------------------------------
 
 		//PinchosLego--------------------------------------
-		populateSpike("data/Levels/SpikeGarden.txt");
+		populateSpike("data/Levels/SpikeRoom.txt");
+		//-------------------------------------------
+
+		//Obstacles--------------------------------------
+		populateObstacles("data/Levels/ObstaclesLvlRoom.txt");
 		//-------------------------------------------
 
 		break;
@@ -876,6 +884,123 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 
 	std::cout << "currentScenario: "<< _currentScenario << " nextScenario "<< _nextScenario <<std::endl;
 	printAll();
+}
+
+void
+PlayState::populateObstacles(String _path){
+	//Leo el fichero-----------------------------------
+	fstream fichero;//Fichero
+	string frase;//Auxiliar
+	fichero.open(_path.c_str(),ios::in);
+	int index=0;
+	if (fichero.is_open()) {
+		while (getline (fichero,frase)) {
+			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+
+			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+
+			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+
+			Vector3 aux = Vector3(x,y,z);
+			Quaternion q = Quaternion(Quaternion::IDENTITY);
+			Vector3 scale = Vector3(Sx,Sy,Sz);
+
+			GameEntity* ge = new GameEntity();
+			ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",aux,scale);
+
+			Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
+
+			if(_currentScenario == Scenario::LevelRoom){
+				if(x <120){
+					e->setMaterialName("matRed");
+
+				}else{
+					e->setMaterialName("matGreen");
+
+				}
+				
+			}else{
+				e->setMaterialName("Ground");
+			}
+			
+			index++;
+
+		}
+		fichero.close();
+	}
+	//-------------------------------------------------
+}
+
+void
+PlayState::populateThreads(String _path){
+	//Leo el fichero-----------------------------------
+	fstream fichero;//Fichero
+	string frase;//Auxiliar
+	fichero.open(_path.c_str(),ios::in);
+	int index=0;
+	if (fichero.is_open()) {
+		while (getline (fichero,frase)) {
+			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+
+			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+
+			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+
+			Vector3 aux = Vector3(x,y,z);
+			Quaternion q = Quaternion(Quaternion::IDENTITY);
+			Vector3 scale = Vector3(Sx,Sy,Sz);
+
+			GameEntity* ge = new GameEntity();
+			ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
+			ge->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3::UNIT_X));
+			index++;
+
+		}
+		fichero.close();
+	}
+	//-------------------------------------------------
+}
+
+void
+PlayState::populateSpike(String _path){
+	cout << "\nCreo pinchos\n"<<endl;
+	//Leo el fichero-----------------------------------
+	fstream fichero;//Fichero
+	string frase;//Auxiliar
+	fichero.open(_path.c_str(),ios::in);
+	int index=0;
+	if (fichero.is_open()) {
+		while (getline (fichero,frase)) {
+			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+
+			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+
+			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+
+			Vector3 aux = Vector3(x,y,z);
+			Quaternion q = Quaternion(Quaternion::IDENTITY);
+			Vector3 scale = Vector3(Sx,Sy,Sz);
+
+			GameEntity* ge = new GameEntity();
+			ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale);
+			index++;
+
+		}
+		fichero.close();
+	}
+	//-------------------------------------------------
 }
 
 void PlayState::printAll(){
@@ -951,6 +1076,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
 	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor") || Ogre::StringUtil::startsWith(name,"Obstacle")|| Ogre::StringUtil::startsWith(name,"Thread")){
 		node->scale(scale);
+		entity->setCastShadows(false); //PRUEBA DE SOMBRAS 
 		OgreBulletCollisions::BoxCollisionShape* bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
 
 		if(Ogre::StringUtil::startsWith(name,"Obstacle")){
@@ -967,6 +1093,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 					if(Ogre::StringUtil::startsWith(name,"WallB")){
 						rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_BackWall,PhysicsMask::backwall_collides_with);
 						rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
+						entity->setCastShadows(false); //PRUEBA DE SOMBRAS 
 					}
 					else{
 						rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
@@ -977,6 +1104,10 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 					rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
 					rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
 				}
+				if(Ogre::StringUtil::startsWith(name,"Spike")){
+					rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
+				}
+				
 			}
 		}
 	}
@@ -991,9 +1122,9 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		else if(Ogre::StringUtil::startsWith(name,"Enemy")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
 		}
-		else if(Ogre::StringUtil::startsWith(name,"Spike")){
-					rigidBody = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
-		}
+		//else if(Ogre::StringUtil::startsWith(name,"Spike")){
+			//rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
+		//}
 		else{
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
 		}
@@ -1017,7 +1148,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBody->disableDeactivation();
 	rigidBody->getBulletObject()->setUserPointer((void *) node);
-	entity->setCastShadows(false); //PRUEBA DE SOMBRAS 
+	
 
 	gameEntity = new GameEntity();
 	gameEntity->setSceneNode(node);
@@ -1237,109 +1368,7 @@ void PlayState::createBoss(){
 	//----------------------------------------------------------------
 }
 
-void
-PlayState::populateObstacles(String _path){
-	//Leo el fichero-----------------------------------
-	fstream fichero;//Fichero
-	string frase;//Auxiliar
-	fichero.open(_path.c_str(),ios::in);
-	int index=0;
-	if (fichero.is_open()) {
-		while (getline (fichero,frase)) {
-			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
-			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
 
-			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
-
-			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
-			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
-			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
-
-			Vector3 aux = Vector3(x,y,z);
-			Quaternion q = Quaternion(Quaternion::IDENTITY);
-			Vector3 scale = Vector3(Sx,Sy,Sz);
-
-			GameEntity* ge = new GameEntity();
-			ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",aux,scale);
-
-			Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
-			e->setMaterialName("Ground");
-			index++;
-
-		}
-		fichero.close();
-	}
-	//-------------------------------------------------
-}
-
-void
-PlayState::populateThreads(String _path){
-	//Leo el fichero-----------------------------------
-	fstream fichero;//Fichero
-	string frase;//Auxiliar
-	fichero.open(_path.c_str(),ios::in);
-	int index=0;
-	if (fichero.is_open()) {
-		while (getline (fichero,frase)) {
-			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
-			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
-
-			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
-
-			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
-			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
-			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
-
-			Vector3 aux = Vector3(x,y,z);
-			Quaternion q = Quaternion(Quaternion::IDENTITY);
-			Vector3 scale = Vector3(Sx,Sy,Sz);
-
-			GameEntity* ge = new GameEntity();
-			ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
-			ge->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3::UNIT_X));
-			index++;
-
-		}
-		fichero.close();
-	}
-	//-------------------------------------------------
-}
-
-void
-PlayState::populateSpike(String _path){
-	cout << "\nCreo pinchos\n"<<endl;
-	//Leo el fichero-----------------------------------
-	fstream fichero;//Fichero
-	string frase;//Auxiliar
-	fichero.open(_path.c_str(),ios::in);
-	int index=0;
-	if (fichero.is_open()) {
-		while (getline (fichero,frase)) {
-			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
-			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
-
-			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
-
-			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
-			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
-			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
-
-			Vector3 aux = Vector3(x,y,z);
-			Quaternion q = Quaternion(Quaternion::IDENTITY);
-			Vector3 scale = Vector3(Sx,Sy,Sz);
-
-			GameEntity* ge = new GameEntity();
-			ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale);
-			index++;
-
-		}
-		fichero.close();
-	}
-	//-------------------------------------------------
-}
 
 void PlayState::deleteScenarioContent(){
 	//Borra puertas, hilos, carretes, bobinas, muros, suelo de boss, bosses, enemigos y obstaculos.
