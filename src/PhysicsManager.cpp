@@ -128,7 +128,7 @@ void PhysicsManager::detectHeroCollision(){
 					Scenario::Scenario scenario = Scenario::Menu;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(aux);
 					cout << "CAMBIANDO AL ESCENARIO DE MENU" <<endl;
-					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
+					PlayState::getSingletonPtr()->changeScenario(scenario);
 				}
 
 				else if (Ogre::StringUtil::startsWith(node->getName(),"SN_Spike") && !_hero->isInvulnerable()){
@@ -182,13 +182,13 @@ void PhysicsManager::detectHeroCollision(){
 					Scenario::Scenario scenario = Scenario::LevelRoom;
 					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					_world->getBulletDynamicsWorld()->removeCollisionObject(aux);
-					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
+					PlayState::getSingletonPtr()->changeScenario(scenario);
 
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorGarden")){
 					Scenario::Scenario scenario = Scenario::LevelGarden;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(aux);
-					PlayState::getSingletonPtr()->changeScenarioQ(scenario);
+					PlayState::getSingletonPtr()->changeScenario(scenario);
 				}
 				/*//Para hacer que no se pegue a la pared
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Wall")){

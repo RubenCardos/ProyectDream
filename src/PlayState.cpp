@@ -36,9 +36,7 @@ template<> PlayState* Ogre::Singleton<PlayState>::msSingleton = 0;
 Vector3 _desp ;
 Vector3 *_despPtr;
 
-void
-PlayState::enter ()
-{
+void PlayState::enter(){
 	_root = Ogre::Root::getSingletonPtr();
 
 	//GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("BGGame.ogg");
@@ -52,8 +50,6 @@ PlayState::enter ()
 	//_sceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
 
 	//Camara--------------------
-	//_camera->setPosition(Ogre::Vector3(-40,10,0));
-	//_camera->lookAt(Ogre::Vector3(0,0,0));
 	_camera->setPosition(Ogre::Vector3(-40,30,0));
 	_camera->lookAt(Ogre::Vector3(15,0,0));
 	_camera->setNearClipDistance(5);
@@ -98,7 +94,6 @@ PlayState::enter ()
 	//Crear el AnimationManager
 	_animationManager = new AnimationManager(_sceneMgr, _currentScenario, _hero);
 	_animationManager->setupAnimations();
-
 	//-------------------	
 
 	//Iniciacion Variables---
@@ -126,9 +121,7 @@ PlayState::enter ()
 	//---------------------------------------------------------------------------
 }
 
-void
-PlayState::exit ()
-{
+void PlayState::exit(){
 	//Salgo del estado------------------------------
 	_sceneMgr->clearScene();
 	_sceneMgr->destroyCamera("PlayCamera");
@@ -149,24 +142,18 @@ PlayState::exit ()
 	GameManager::getSingletonPtr()->_mainTrack->unload();
 }
 
-void
-PlayState::pause()
-{
+void PlayState::pause(){
 }
 
-void
-PlayState::resume()
-{
-
+void PlayState::resume(){
 }
 
-void 
-PlayState::CreateInitialWorld() {
+void PlayState::CreateInitialWorld() {
 	//Suelo Infinito NO TOCAR---------------------------------
 	Plane plane1(Vector3(0,1,0), -3);    // Normal y distancia  (antes estaba a 0)
 	MeshManager::getSingleton().createPlane("p1",
-	ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
-	1000, 1000, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
+			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
+			1000, 1000, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
 	//--------------------------------------------------------
 
 	//Suelo Grafico-----------------------------------------------
@@ -188,79 +175,33 @@ PlayState::CreateInitialWorld() {
 	// Creamos la forma estatica (forma, Restitucion, Friccion) ------
 	rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8);
 	rigidBodyPlane->getBulletObject()->setUserPointer((void *) _groundNode);
-	// Anadimos los objetos Shape y RigidBody ------------------------
-	_shapes.push_back(Shape);
-	_bodies.push_back(rigidBodyPlane);
-
-	//------------------------------------------------------------
 
 	_currentScenario = Scenario::Menu;
 	createScenario(_currentScenario);
-	//createAllWalls();
-	//Paredes Laterales--------------------------
 
-	//Pared Grafica---------------------------------
-	/*Plane plane2(Vector3(0,0,-1), -20);    // Normal y distancia
-  MeshManager::getSingleton().createPlane("p2",
-  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2,
-  1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
+	Plane plane2Left(Vector3(0,0,1), -13);    // Normal y distancia
+	MeshManager::getSingleton().createPlane("p2Left",
+			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2Left,
+			1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
 
-  SceneNode* _groundNodeWallRight = _sceneMgr->createSceneNode("WallRight");
-  Entity* _groundEntWallRight = _sceneMgr->createEntity("planeEnt2", "p2");
-  _groundEntWallRight->setMaterialName("Ground");
-  _groundNodeWallRight->attachObject(_groundEntWallRight);
-  _sceneMgr->getRootSceneNode()->addChild(_groundNodeWallRight);
-  _groundNodeWallRight->setVisible(false);
+	SceneNode* _groundNodeWallLeft = _sceneMgr->createSceneNode("WallLeft");
+	Entity* _groundEntWallLeft = _sceneMgr->createEntity("planeEntLeft", "p2Left");
+	_groundEntWallLeft->setMaterialName("Ground");
+	_groundNodeWallLeft->attachObject(_groundEntWallLeft);
+	_sceneMgr->getRootSceneNode()->addChild(_groundNodeWallLeft);
+	_groundNodeWallLeft->setVisible(false);
 
-  //------------------------------------------------------------
+	//------------------------------------------------------------
 
-  // Creamos forma de colision para el plano ----------------------- 
-  OgreBulletCollisions::CollisionShape *ShapeWallRight;
-  ShapeWallRight = new OgreBulletCollisions::StaticPlaneCollisionShape
-    (Ogre::Vector3(0,0,-1), -20);   // Vector normal y distancia
-  OgreBulletDynamics::RigidBody *rigidBodyPlaneWallRight = new 
-    OgreBulletDynamics::RigidBody("WallRight", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
+	// Creamos forma de colision para el plano -----------------------
+	OgreBulletCollisions::CollisionShape *ShapeWallLeft;
+	ShapeWallLeft = new OgreBulletCollisions::StaticPlaneCollisionShape
+			(Ogre::Vector3(0,0,1), -13);   // Vector normal y distancia
+	OgreBulletDynamics::RigidBody *rigidBodyPlaneWallLeft = new
+			OgreBulletDynamics::RigidBody("WallLeft", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
 
-  // Creamos la forma estatica (forma, Restitucion, Friccion) ------
-  rigidBodyPlaneWallRight->setStaticShape(ShapeWallRight, 0.1, 0.8); 
-
-
-  // Anadimos los objetos Shape y RigidBody ------------------------
-  _shapes.push_back(ShapeWallRight);  
-  _bodies.push_back(rigidBodyPlaneWallRight);
-  //-------------------------------------------
-
-  Plane plane2Left(Vector3(0,0,1), -13);    // Normal y distancia
-  MeshManager::getSingleton().createPlane("p2Left",
-  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2Left,
-  1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
-
-  SceneNode* _groundNodeWallLeft = _sceneMgr->createSceneNode("WallLeft");
-  Entity* _groundEntWallLeft = _sceneMgr->createEntity("planeEntLeft", "p2Left");
-  _groundEntWallLeft->setMaterialName("Ground");
-  _groundNodeWallLeft->attachObject(_groundEntWallLeft);
-  _sceneMgr->getRootSceneNode()->addChild(_groundNodeWallLeft);
-  _groundNodeWallLeft->setVisible(false);
-
-  //------------------------------------------------------------
-
-  // Creamos forma de colision para el plano ----------------------- 
-  OgreBulletCollisions::CollisionShape *ShapeWallLeft;
-  ShapeWallLeft = new OgreBulletCollisions::StaticPlaneCollisionShape
-    (Ogre::Vector3(0,0,1), -13);   // Vector normal y distancia
-  OgreBulletDynamics::RigidBody *rigidBodyPlaneWallLeft = new 
-    OgreBulletDynamics::RigidBody("WallLeft", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
-
-  // Creamos la forma estatica (forma, Restitucion, Friccion) ------
-  rigidBodyPlaneWallLeft->setStaticShape(ShapeWallLeft, 0.1, 0.8); 
-
-
-
-  // Anadimos los objetos Shape y RigidBody ------------------------
-  _shapes.push_back(ShapeWallLeft);  
-  _bodies.push_back(rigidBodyPlaneWallLeft);*/
-
-	//---------------------------------------------------------------------
+	// Creamos la forma estatica (forma, Restitucion, Friccion) ------
+	rigidBodyPlaneWallLeft->setStaticShape(ShapeWallLeft, 0.1, 0.8);
 
 	//LUCES------------------------------------------------
 	Ogre::Light* light = _sceneMgr->createLight();
@@ -315,26 +256,14 @@ PlayState::CreateInitialWorld() {
 	_hero->setMovementSpeed(150.0);
 	_hero->setAttacking(false);
 	//-----------------------------------------------------------------------------
-
-	// Anadimos los objetos a las deques--
-	_shapes.push_back(bodyShape);
-	_bodies.push_back(rigidBody);
-	//------------------------------------
-
-	
-
 }
 
-
-bool
-PlayState::frameStarted
-(const Ogre::FrameEvent& evt)
-{ 
+bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	_deltaT = evt.timeSinceLastFrame;
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
-	//Actualizo camara---
+	//Actualizo camara----------------------
 	if(!_bossRoom){
 		_cameraPivot->setPosition(_hero->getSceneNode()->getPosition());
 	}
@@ -342,10 +271,7 @@ PlayState::frameStarted
 		_camera->setPosition(-175,150,100);
 		_camera->lookAt(0,0,100);
 		_camera->yaw(Ogre::Degree(180));
-		//_camera->setFixedYawAxis(true,Vector3(0,0,100));
-		//_camera->yaw(Degree(180));
 	}
-
 	//-------------------
 
 	//Deteccion Colisiones---------
@@ -354,19 +280,13 @@ PlayState::frameStarted
 	//---------------------------
 
 	if(_currentScenario != Scenario::Menu){
-		//if((trunc(_hero->getRigidBody()->getCenterOfMassPosition().x) % WALL_LENGTH_X) == 0){ //si queremos que solo llame a poblar de vez en cuando
 		populateEnemies();
 		removeAllBehindBackWall();
-		//}
 	}
 
 	//Actualizo GUI---
 	updateGUI();
 	//----------------
-
-	cout << "POS  X: " << _hero->getRigidBody()->getCenterOfMassPosition().x << endl;
-	cout << "POS  Z: " << _hero->getRigidBody()->getCenterOfMassPosition().z << endl;
-
 
 	//Movimiento------------
 	_movementManager->moveHero(_despPtr);
@@ -378,6 +298,7 @@ PlayState::frameStarted
 	else{
 		_movementManager->moveBoss(); //ACTIVAR
 	}
+	//----------------------
 
 	//Invulnerabilidad del hero---------------
 	_hero->UpdateInvulnerability(_deltaT);
@@ -386,14 +307,11 @@ PlayState::frameStarted
 			_hero->getSceneNode()->flipVisibility();
 			_frameCounter = 0 ;
 		}
-
 	}
 	else{
 		_hero->getSceneNode()->setVisible(true);
 	}
 	//----------------------------------------
-
-	//----------------------
 
 	//Animations--------------------------------
 	_animationManager->resetAnimations(_deltaT);
@@ -404,11 +322,7 @@ PlayState::frameStarted
 }
 
 
-bool
-PlayState::frameEnded
-(const Ogre::FrameEvent& evt)
-{
-
+bool PlayState::frameEnded (const Ogre::FrameEvent& evt){
 	_deltaT = evt.timeSinceLastFrame;
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 
@@ -419,11 +333,7 @@ PlayState::frameEnded
 	return true;
 }
 
-void
-PlayState::keyPressed
-(const OIS::KeyEvent &e)
-{
-	//SceneNode* _pj = _sceneMgr->getSceneNode("SNCube");
+void PlayState::keyPressed (const OIS::KeyEvent &e){
 	// Tecla p --> PauseState.-------
 	if (e.key == OIS::KC_P) {
 		pushState(PauseState::getSingletonPtr());
@@ -434,17 +344,6 @@ PlayState::keyPressed
 	if (e.key == OIS::KC_G) {
 		changeState(GameOverState::getSingletonPtr());
 	}
-	//-----------------
-	// Tecla N --> Boss Creation-------
-	/*if (e.key == OIS::KC_N) {
-		if(!_bossCreated){
-			createBossRoom();
-			createBoss();
-			_bossCreated = true;
-		}
-		_movementManager->initializeBossMovement(&_deltaT);    //ACTIVAR
-	}*/
-	//-----------------
 
 	// Tecla S --> Print current scenario and change backwall visibility-------
 	if (e.key == OIS::KC_S) {
@@ -489,17 +388,7 @@ PlayState::keyPressed
 	//-------------------------------
 }
 
-void
-PlayState::keyReleased
-(const OIS::KeyEvent &e)
-{
-
-	//Recargo flechas---------------
-	/*if (e.key == OIS::KC_R) {
-
-  }*/
-	//------------------------------
-
+void PlayState::keyReleased (const OIS::KeyEvent &e){
 	//Salgo del juego---------------
 	if (e.key == OIS::KC_ESCAPE) {
 		_exitGame = true;
@@ -507,9 +396,6 @@ PlayState::keyReleased
 	//-------------------------------
 
 	//Movimiento---------------------
-	/*if (e.key == OIS::KC_SPACE) {
-
-  }*/
 	if (e.key == OIS::KC_UP) {
 		_desp-=Vector3(1,0,0);
 	}
@@ -697,7 +583,7 @@ PlayState::updateGUI()
 
 
 
-void PlayState::changeScenarioQ(Scenario::Scenario _nextScenario){
+void PlayState::changeScenario(Scenario::Scenario _nextScenario){
 	cout << "Cambio de escenario" << endl;
 
 	//Volvemos a poner al personaje en la posición (0,0,0)
@@ -801,9 +687,6 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 			}
 			_movementManager->initializeBossMovement(&_deltaT);    //ACTIVAR
 		}
-
-
-
 		break;
 	}
 	case Scenario::LevelGarden:
@@ -879,131 +762,11 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		//Obstacles--------------------------------------
 		populateObstacles("data/Levels/ObstaclesLvlRoom.txt");
 		//-------------------------------------------
-
-
-
 		break;
 	}
 
 	std::cout << "currentScenario: "<< _currentScenario << " nextScenario "<< _nextScenario <<std::endl;
 	printAll();
-}
-
-void
-PlayState::populateObstacles(String _path){
-	//Leo el fichero-----------------------------------
-	fstream fichero;//Fichero
-	string frase;//Auxiliar
-	fichero.open(_path.c_str(),ios::in);
-	int index=0;
-	if (fichero.is_open()) {
-		while (getline (fichero,frase)) {
-			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
-			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
-
-			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
-
-			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
-			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
-			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
-
-			Vector3 aux = Vector3(x,y,z);
-			Quaternion q = Quaternion(Quaternion::IDENTITY);
-			Vector3 scale = Vector3(Sx,Sy,Sz);
-
-			GameEntity* ge = new GameEntity();
-			ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",aux,scale);
-
-			Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
-
-			if(_currentScenario == Scenario::LevelRoom){
-				if(x <120){
-					e->setMaterialName("matRed");
-
-				}else{
-					e->setMaterialName("matGreen");
-
-				}
-				
-			}else{
-				e->setMaterialName("Ground");
-			}
-			
-			index++;
-
-		}
-		fichero.close();
-	}
-	//-------------------------------------------------
-}
-
-void
-PlayState::populateThreads(String _path){
-	//Leo el fichero-----------------------------------
-	fstream fichero;//Fichero
-	string frase;//Auxiliar
-	fichero.open(_path.c_str(),ios::in);
-	int index=0;
-	if (fichero.is_open()) {
-		while (getline (fichero,frase)) {
-			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
-			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
-
-			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
-
-			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
-			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
-			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
-
-			Vector3 aux = Vector3(x,y,z);
-			Quaternion q = Quaternion(Quaternion::IDENTITY);
-			Vector3 scale = Vector3(Sx,Sy,Sz);
-
-			GameEntity* ge = new GameEntity();
-			ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
-			ge->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3::UNIT_X));
-			index++;
-
-		}
-		fichero.close();
-	}
-	//-------------------------------------------------
-}
-
-void
-PlayState::populateSpike(String _path){
-	cout << "\nCreo pinchos\n"<<endl;
-	//Leo el fichero-----------------------------------
-	fstream fichero;//Fichero
-	string frase;//Auxiliar
-	fichero.open(_path.c_str(),ios::in);
-	int index=0;
-	if (fichero.is_open()) {
-		while (getline (fichero,frase)) {
-			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
-			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
-
-			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
-
-			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
-			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
-			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
-
-			Vector3 aux = Vector3(x,y,z);
-			Quaternion q = Quaternion(Quaternion::IDENTITY);
-			Vector3 scale = Vector3(Sx,Sy,Sz);
-
-			GameEntity* ge = new GameEntity();
-			ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale);
-			index++;
-
-		}
-		fichero.close();
-	}
-	//-------------------------------------------------
 }
 
 void PlayState::printAll(){
@@ -1018,18 +781,16 @@ void PlayState::printAll(){
 void PlayState::createAllWalls(){
 	Ogre::Vector3 position(0,1.5,0);
 	Ogre::Vector3 scale(1,1,1);
-	WallType name;
 	GameEntity* gameEntity = new GameEntity();
 	Wall* wall;
 
-	//para paredes laterales //cambiar el 40 por la longitud de 2 o 3 modulos de nivel
+	//para paredes laterales cambiar el 40 por la longitud de 2 o 3 modulos de nivel
 
 	//Muro de la izquierda
 	position.z = WALLL_POSITION_Z;
 	position.y = WALLL_POSITION_Y;
 	position.x = WALL_LENGTH_X/2 + 10;
 	scale = Ogre::Vector3(WALL_LENGTH_X,WALL_HEIGHT_Y,1);
-	name = LeftWall;
 	gameEntity = createGameEntity("WallL", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
@@ -1041,7 +802,6 @@ void PlayState::createAllWalls(){
 	//Muro de la derecha
 	position.z = WALLR_POSITION_Z;
 	position.y = WALLR_POSITION_Y;
-	name = RightWall;
 	gameEntity = createGameEntity("WallR", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
@@ -1054,7 +814,6 @@ void PlayState::createAllWalls(){
 	position.z = WALLB_POSITION_Z;
 	position.x = WALLB_POSITION_X;
 	scale = Ogre::Vector3(1,WALL_HEIGHT_Y,16);
-	name = BackWall;
 	gameEntity = createGameEntity("WallB", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
@@ -1062,7 +821,6 @@ void PlayState::createAllWalls(){
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
 	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
 	_walls.push_back(wall);
-
 }
 
 GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale){
@@ -1125,9 +883,6 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		else if(Ogre::StringUtil::startsWith(name,"Enemy")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
 		}
-		//else if(Ogre::StringUtil::startsWith(name,"Spike")){
-			//rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
-		//}
 		else{
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
 		}
@@ -1144,8 +899,6 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 					15.0 /* Masa */, position /* Posicion inicial */,
 					Quaternion::IDENTITY /* Orientacion */);
 		}
-
-
 	}
 
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
@@ -1199,72 +952,61 @@ void PlayState::createBossRoom(){
 		}
 		//--------------------------------------------------------------------------------------------------------
 
-	//Suelo-----------------------
-	position.z = FLOOR_POSITION_Z + BOSS_ROOM;
-	position.y = FLOOR_POSITION_Y;
-	scale = Ogre::Vector3(100,50,100);
+		//Suelo-----------------------
+		position.z = FLOOR_POSITION_Z + BOSS_ROOM;
+		position.y = FLOOR_POSITION_Y;
+		scale = Ogre::Vector3(100,50,100);
 
-	//Muro de la izquierda--------
-	position.z = BOSS_ROOM-BOSS_ROOM;
-    position.y = WALLL_POSITION_Y;
-    scale = Ogre::Vector3(BOSS_ROOM,10,1);
-    gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
-    wall = new Wall();
-    wall->setSceneNode(gameEntity->getSceneNode());
-    wall->setRigidBody(gameEntity->getRigidBody());
-    _walls.push_back(wall);
-    Entity* eWallLBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
-	eWallLBoss->setMaterialName("matCarton");
+		//Muro de la izquierda--------
+		position.z = BOSS_ROOM-BOSS_ROOM;
+		position.y = WALLL_POSITION_Y;
+		scale = Ogre::Vector3(BOSS_ROOM,10,1);
+		gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
+		wall = new Wall();
+		wall->setSceneNode(gameEntity->getSceneNode());
+		wall->setRigidBody(gameEntity->getRigidBody());
+		_walls.push_back(wall);
+		Entity* eWallLBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+		eWallLBoss->setMaterialName("matCarton");
 
-    //Muro de la derecha----------
-    position.z =  BOSS_ROOM*2;
-    position.y = WALLR_POSITION_Y;
-    gameEntity = createGameEntity("WallRBoss", "cube.mesh", position, scale);
-    wall = new Wall();
-    wall->setSceneNode(gameEntity->getSceneNode());
-    wall->setRigidBody(gameEntity->getRigidBody());
-    _walls.push_back(wall);
-    Entity* eWallRBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
-	eWallRBoss->setMaterialName("matCarton");
+		//Muro de la derecha----------
+		position.z =  BOSS_ROOM*2;
+		position.y = WALLR_POSITION_Y;
+		gameEntity = createGameEntity("WallRBoss", "cube.mesh", position, scale);
+		wall = new Wall();
+		wall->setSceneNode(gameEntity->getSceneNode());
+		wall->setRigidBody(gameEntity->getRigidBody());
+		_walls.push_back(wall);
+		Entity* eWallRBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+		eWallRBoss->setMaterialName("matCarton");
 
+		//Muro delantero--------
+		position.z = BOSS_ROOM;
+		position.x = BOSS_ROOM;
+		position.y = WALLL_POSITION_Y;
+		scale = Ogre::Vector3(1,10,100);
+		gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
+		wall = new Wall();
+		wall->setSceneNode(gameEntity->getSceneNode());
+		wall->setRigidBody(gameEntity->getRigidBody());
+		_walls.push_back(wall);
+		Entity* eWallFBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+		eWallFBoss->setMaterialName("matCarton");
 
-    //Muro delantero--------
-    position.z = BOSS_ROOM;
-    position.x = BOSS_ROOM;
-    position.y = WALLL_POSITION_Y;
-    scale = Ogre::Vector3(1,10,100);
-    gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
-    wall = new Wall();
-    wall->setSceneNode(gameEntity->getSceneNode());
-    wall->setRigidBody(gameEntity->getRigidBody());
-    _walls.push_back(wall);
-    Entity* eWallFBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
-	eWallFBoss->setMaterialName("matCarton");
+		//Muro trasero----------
+		position.z = BOSS_ROOM;
+		position.y = WALLR_POSITION_Y;
+		position.x = - BOSS_ROOM;
+		gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
+		wall = new Wall();
+		wall->setSceneNode(gameEntity->getSceneNode());
+		wall->setRigidBody(gameEntity->getRigidBody());
+		_walls.push_back(wall);
+		Entity* eWallBBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+		eWallBBoss->setMaterialName("matCarton");
 
-    //Muro trasero----------
-    position.z = BOSS_ROOM;
-    position.y = WALLR_POSITION_Y;
-    position.x = - BOSS_ROOM;
-    gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
-    wall = new Wall();
-    wall->setSceneNode(gameEntity->getSceneNode());
-    wall->setRigidBody(gameEntity->getRigidBody());
-    _walls.push_back(wall);
-    Entity* eWallBBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
-	eWallBBoss->setMaterialName("matCarton");
-
-	_movementManager->repositionHero(btVector3(0,0,BOSS_ROOM),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
-	/*//Cambiar posicion de la camara--------------------
-    int y = 10 + BOSS_ROOM;
-    _camera->setPosition(Ogre::Vector3(-40,y,0));
-    y = BOSS_ROOM;
-    _camera->lookAt(Ogre::Vector3(0,y,0));
-    _camera->setNearClipDistance(5);
-    _camera->setFarClipDistance(10000);
-    //-----------------------------*/
-	//_movementManager->setWalls(&_walls);
-	_bossRoom = true;
-
+		_movementManager->repositionHero(btVector3(0,0,BOSS_ROOM),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+		_bossRoom = true;
 	}
 }
 
@@ -1371,8 +1113,6 @@ void PlayState::createBoss(){
 	//----------------------------------------------------------------
 }
 
-
-
 void PlayState::deleteScenarioContent(){
 	//Borra puertas, hilos, carretes, bobinas, muros, suelo de boss, bosses, enemigos y obstaculos.
 
@@ -1396,6 +1136,116 @@ void PlayState::deleteScenarioContent(){
 	_bossCreated = false;
 
 	_gameEntities.clear();
+}
+
+void PlayState::populateObstacles(String _path){
+	//Leo el fichero-----------------------------------
+	fstream fichero;//Fichero
+	string frase;//Auxiliar
+	fichero.open(_path.c_str(),ios::in);
+	int index=0;
+	if (fichero.is_open()) {
+		while (getline (fichero,frase)) {
+			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+
+			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+
+			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+
+			Vector3 aux = Vector3(x,y,z);
+			Quaternion q = Quaternion(Quaternion::IDENTITY);
+			Vector3 scale = Vector3(Sx,Sy,Sz);
+
+			GameEntity* ge = new GameEntity();
+			ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",aux,scale);
+
+			Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
+
+			if(_currentScenario == Scenario::LevelRoom){
+				if(x <120){
+					e->setMaterialName("matRed");
+				}
+				else{
+					e->setMaterialName("matGreen");
+				}
+			}
+			else{
+				e->setMaterialName("Ground");
+			}
+
+			index++;
+		}
+		fichero.close();
+	}
+	//-------------------------------------------------
+}
+
+void PlayState::populateThreads(String _path){
+	//Leo el fichero-----------------------------------
+	fstream fichero;//Fichero
+	string frase;//Auxiliar
+	fichero.open(_path.c_str(),ios::in);
+	int index=0;
+	if (fichero.is_open()) {
+		while (getline (fichero,frase)) {
+			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+
+			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+
+			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+
+			Vector3 aux = Vector3(x,y,z);
+			Quaternion q = Quaternion(Quaternion::IDENTITY);
+			Vector3 scale = Vector3(Sx,Sy,Sz);
+
+			GameEntity* ge = new GameEntity();
+			ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
+			ge->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3::UNIT_X));
+			index++;
+		}
+		fichero.close();
+	}
+	//-------------------------------------------------
+}
+
+void PlayState::populateSpike(String _path){
+	cout << "\nCreo pinchos\n"<<endl;
+	//Leo el fichero-----------------------------------
+	fstream fichero;//Fichero
+	string frase;//Auxiliar
+	fichero.open(_path.c_str(),ios::in);
+	int index=0;
+	if (fichero.is_open()) {
+		while (getline (fichero,frase)) {
+			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+
+			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+
+			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+
+			Vector3 aux = Vector3(x,y,z);
+			Quaternion q = Quaternion(Quaternion::IDENTITY);
+			Vector3 scale = Vector3(Sx,Sy,Sz);
+
+			GameEntity* ge = new GameEntity();
+			ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale);
+			index++;
+		}
+		fichero.close();
+	}
+	//-------------------------------------------------
 }
 
 void PlayState::populateEnemies(){
@@ -1468,5 +1318,4 @@ void PlayState::removeAllBehindBackWall(){
 			}
 		}
 	}
-
 }
