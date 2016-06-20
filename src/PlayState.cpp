@@ -137,7 +137,7 @@ PlayState::exit ()
 
 	//Limpio la interfaz---------------------------
 	CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
-
+	sheet->destroyChild("background_wnd2");
 	//---------------------------------------------
 
 	//Limpiamos vectores-----------------------------
@@ -615,7 +615,7 @@ PlayState::createGUI()
 	CEGUI::Window* sheetBG =  CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd2");
 	sheetBG->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0.0f),CEGUI::UDim(0.0, 0)));
 	sheetBG->setSize( CEGUI::USize(CEGUI::UDim(1.0, 0), CEGUI::UDim(0.10, 0)));
-	//sheetBG->setProperty("Image","Background");
+	sheetBG->setProperty("Image","BackgroundImagePlayState");
 	sheetBG->setProperty("FrameEnabled","False");
 	sheetBG->setProperty("BackgroundEnabled", "False");
 
@@ -623,13 +623,13 @@ PlayState::createGUI()
 	pauseButton->setText("[font='SPIDER MONKEY'] Pause");
 	pauseButton->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.5,0)));
 	pauseButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.6,0),CEGUI::UDim(0.3,0)));
-	//pauseButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::pauseB,this));
+	pauseButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::pauseB,this));
 
 	CEGUI::Window* quitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","QuitButton");
 	quitButton->setText("[font='SPIDER MONKEY'] Exit");
 	quitButton->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.5,0)));
 	quitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.8,0),CEGUI::UDim(0.3,0)));
-	// quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::quit,this));
+	quitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&PlayState::quit,this));
 
 	CEGUI::Window* textPoints = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textPoints");
 	textPoints->setText("[font='SPIDER MONKEY'] SCORE 000");
@@ -657,6 +657,20 @@ PlayState::createGUI()
 	sheetBG->addChild(quitButton);
 	sheet->addChild(sheetBG);
 	//--------------------------------
+}
+
+bool
+PlayState::quit(const CEGUI::EventArgs &e)
+{
+  _exitGame=true;
+  return true;
+}
+
+bool
+PlayState::pauseB(const CEGUI::EventArgs &e)
+{
+  pushState(PauseState::getSingletonPtr());
+  return true;
 }
 
 void
@@ -1284,7 +1298,7 @@ PlayState::populateThreads(String _path){
 
 			GameEntity* ge = new GameEntity();
 			ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
-
+			ge->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3::UNIT_X));
 			index++;
 
 		}
