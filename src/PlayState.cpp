@@ -140,7 +140,13 @@ PlayState::exit ()
 
 	//---------------------------------------------
 
-	//GameManager::getSingletonPtr()->_mainTrack->unload();
+	//Limpiamos vectores-----------------------------
+	_gameEntities.clear();
+	_enemies.clear();
+	_walls.clear();
+	//----------------------------------------------
+
+	GameManager::getSingletonPtr()->_mainTrack->unload();
 }
 
 void

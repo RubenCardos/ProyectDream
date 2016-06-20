@@ -208,7 +208,7 @@ GameOverState::createGUI()
   CEGUI::Editbox* eb = static_cast<CEGUI::Editbox*>(wFinish->createChild("OgreTray/Editbox","ebox"));
   eb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.23f, 0)));
   eb->setSize(CEGUI::USize(CEGUI::UDim(0.30,0),CEGUI::UDim(0.07,0)));
-  eb->setFont("DickVanDyke");
+  eb->setFont("SPIDER MONKEY-18");
   //PUNTOS TOTALES
   CEGUI::Window* recordsPoints = static_cast<CEGUI::Window*>(wFinish->createChild("TaharezLook/StaticText","pointsrecords"));
   recordsPoints->setSize(CEGUI::USize(CEGUI::UDim(0.90,0),CEGUI::UDim(0.70,0)));
@@ -217,28 +217,28 @@ GameOverState::createGUI()
   recordsPoints->setProperty("FrameEnabled","False");
   recordsPoints->setProperty("BackgroundEnabled", "False");
   recordsPoints->setProperty("VertFormatting", "TopAligned");
-  recordsPoints->setText("[font='DickVanDyke-26']"+Ogre::StringConverter::toString(GameManager::getSingletonPtr()->getPunt()));
+  recordsPoints->setText("[font='SPIDER MONKEY-18']"+Ogre::StringConverter::toString(GameManager::getSingletonPtr()->getPunt()));
 
   CEGUI::Window* acceptButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","acceptButton");
-  acceptButton->setText("[font='DickVanDyke'] Accept");
+  acceptButton->setText("[font='SPIDER MONKEY-18'] Accept");
   acceptButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.08,0)));
   acceptButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.42,0),CEGUI::UDim(0.61,0)));
   acceptButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::accept,this));
 
   CEGUI::Window* menuButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","MenuButton");
-  menuButton->setText("[font='DickVanDyke'] Menu");
+  menuButton->setText("[font='SPIDER MONKEY-18'] Play Again");
   menuButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.08,0)));
   menuButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.42,0),CEGUI::UDim(0.71,0)));
   menuButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::goBackMenu,this));
 
   CEGUI::Window* exitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","exitButtonGO");
-  exitButton->setText("[font='DickVanDyke'] Exit");
+  exitButton->setText("[font='SPIDER MONKEY-18'] Exit");
   exitButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.08,0)));
   exitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.70,0),CEGUI::UDim(0.71,0)));
   exitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::quit,this));
 
   CEGUI::Window* text = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text");
-  text->setText("[font='DickVanDyke']"+IntroState::getSingletonPtr()->readRecords());
+  text->setText("[font='SPIDER MONKEY-18']"+IntroState::getSingletonPtr()->readRecords());
   text->setSize(CEGUI::USize(CEGUI::UDim(0.30,0),CEGUI::UDim(0.50,0)));
   text->setXPosition(CEGUI::UDim(0.07f, 0.0f));
   text->setYPosition(CEGUI::UDim(0.35f, 0.0f));
@@ -270,7 +270,7 @@ GameOverState::accept(const CEGUI::EventArgs &e)
     }
   }
   
-  sheet->getChild("wFinish")->getChild("text")->setText("[font='DickVanDyke']"+IntroState::getSingletonPtr()->readRecords());
+  sheet->getChild("wFinish")->getChild("text")->setText("[font='SPIDER MONKEY-18']"+IntroState::getSingletonPtr()->readRecords());
   
   return true;
 }
@@ -278,7 +278,7 @@ GameOverState::accept(const CEGUI::EventArgs &e)
 bool 
 GameOverState::goBackMenu(const CEGUI::EventArgs &e)
 {
-  changeState(MenuState::getSingletonPtr());
+  changeState(PlayState::getSingletonPtr());
   return true;
 }
 
