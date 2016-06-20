@@ -73,7 +73,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		}
 	}
 
-	
+
 	//----------------------------------------------------------------
 
 	//ARREGLADO-------------------------------------------------------
@@ -160,6 +160,8 @@ void MovementManager::moveEnemies(){
 		}else{
 			_enemies->at(i)->getRigidBody()->setOrientation(Quaternion(Degree(-90),Vector3::UNIT_Y));
 		}
+		Entity* entity = static_cast<Entity*>(_enemies->at(i)->getSceneNode()->getAttachedObject(0));
+		AnimationManager::getSingletonPtr()->playAnimationsEnemy("walkEnemy", entity->getName());
 	}
 }
 

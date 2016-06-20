@@ -96,10 +96,10 @@ PlayState::enter ()
 	//-------------------
 
 	//Crear el AnimationManager
-	_animationManager = new AnimationManager(_sceneMgr, &_currentScenario, _hero);
+	_animationManager = new AnimationManager(_sceneMgr, _currentScenario, _hero);
 	_animationManager->setupAnimations();
 
-	//-------------------
+	//-------------------	
 
 	//Iniciacion Variables---
 	_desp = Vector3(0,0,0);
@@ -849,6 +849,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 	case Scenario::LevelRoom:
 		createTestGameEntities();
 		createAllWalls();
+		
 		for(unsigned int i=0;i<3;i++){
 			String aux=Ogre::StringConverter::toString(i + _numModules);
 			Entity* _entScn = _sceneMgr->createEntity("E_LevelRoom"+aux, "escenario.mesh");
@@ -878,6 +879,8 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		//Obstacles--------------------------------------
 		populateObstacles("data/Levels/ObstaclesLvlRoom.txt");
 		//-------------------------------------------
+
+
 
 		break;
 	}
@@ -1080,7 +1083,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		OgreBulletCollisions::BoxCollisionShape* bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
 
 		if(Ogre::StringUtil::startsWith(name,"Obstacle")){
-			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
 			rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 200.0f/*Masa*/, position);
 		}
 		else{
@@ -1413,6 +1416,7 @@ void PlayState::populateEnemies(){
 			index++;
 			_posEnemies.at(i) = Ogre::Vector3(-50,-50,-50);
 		}
+		
 	}
 
 }

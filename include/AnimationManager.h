@@ -23,25 +23,26 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
 {
   public: enum animID{
 
-          ANIM_RUN_HERO,
-          ANIM_IDLE_HERO,
-          ANIM_ATTACK_HERO,
-          ANIM_JUMP_HERO,
-          ANIM_DIE_HERO
+            ANIM_RUN_HERO,
+            ANIM_IDLE_HERO,
+            ANIM_ATTACK_HERO,
+            ANIM_JUMP_HERO,
+            ANIM_DIE_HERO
 
            };
 
  public:
-  AnimationManager(Ogre::SceneManager* sceneMgr, Scenario::Scenario* currentScenario, Hero* hero);
+  AnimationManager(Ogre::SceneManager* sceneMgr, Scenario::Scenario currentScenario, Hero* hero);
   ~AnimationManager();
 
   void setSceneManager(Ogre::SceneManager* sceneMgr);
-  void setCurrentScenario(Scenario::Scenario* currentScenario);
+  void setCurrentScenario(Scenario::Scenario currentScenario);
   void playAnimations(animID id);
   void stopAnimations(animID id);
   void setupAnimations();
   void resetAnimations(Real _deltaT);
   Ogre::AnimationState* getAnimation(animID id);
+  void playAnimationsEnemy(string name, string entity);
 
   // Heredados de Ogre::Singleton.
   static AnimationManager& getSingleton ();
@@ -49,8 +50,9 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
 
  protected:
   Ogre::SceneManager* _sceneMgr;
-  Scenario::Scenario* _currentScenario;
-  Ogre::AnimationState *_anims[NUM_ANIMS];
+  Scenario::Scenario _currentScenario;
+  Ogre::AnimationState *_animsHero[NUM_ANIMS];
+  Ogre::AnimationState *_animsEnemy;
   animID _currentAnimation;
   Hero* _hero;
 };
