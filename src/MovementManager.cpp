@@ -72,6 +72,8 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 			_hero->setNumJumps(N_JUMPS);
 		}
 	}
+
+	
 	//----------------------------------------------------------------
 
 	//ARREGLADO-------------------------------------------------------

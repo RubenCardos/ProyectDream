@@ -457,8 +457,8 @@ PlayState::keyPressed
 	//Movimiento PJ---------------
 	if (e.key == OIS::KC_SPACE) {
 		_movementManager->jumpHero();
-		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_RUN_HERO);
-		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_JUMP_HERO);
+		_animationManager->stopAnimations(AnimationManager::ANIM_RUN_HERO);
+		_animationManager->playAnimations(AnimationManager::ANIM_JUMP_HERO);
 	}
 	if (e.key == OIS::KC_UP) {
 		_desp+=Vector3(1,0,0);
@@ -474,7 +474,6 @@ PlayState::keyPressed
 	}
 	if (e.key == OIS::KC_V) {
 		_animationManager->stopAnimations(AnimationManager::ANIM_RUN_HERO);
-		//_animationManager->stopAnimations(AnimationManager::ANIM_IDLE_HERO);
 		_animationManager->playAnimations(AnimationManager::ANIM_ATTACK_HERO);
 	}
 	//--------------------------------
@@ -522,9 +521,9 @@ PlayState::keyReleased
 	/*if (e.key == OIS::KC_V) {
 		_animationManager->stopAnimations(AnimationManager::ANIM_ATTACK_HERO);
 	}*/
-	if (e.key == OIS::KC_SPACE) {
+	/*if (e.key == OIS::KC_SPACE) {
 		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_JUMP_HERO);
-	}
+	}*/
 	//-------------------------------
 	
 	//CEGUI--------------------------

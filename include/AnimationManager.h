@@ -26,7 +26,8 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
           ANIM_RUN_HERO,
           ANIM_IDLE_HERO,
           ANIM_ATTACK_HERO,
-          ANIM_JUMP_HERO
+          ANIM_JUMP_HERO,
+          ANIM_DIE_HERO
 
            };
 
