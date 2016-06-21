@@ -64,11 +64,12 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	}
 	if(_currentSpeed.squaredLength() == 0){
 		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_RUN_HERO);
-	}else{
+	}
+	else{
 		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
 	}
 
-	//rotateHero();
+	rotateHero();
 
 	if(_hero->getRigidBody()->getLinearVelocity().y < 0.001 && _hero->getRigidBody()->getLinearVelocity().y > -0.0001 ){// a veces es 5.72205e-06
 		Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
@@ -83,7 +84,6 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		}
 	}
 
-
 	//----------------------------------------------------------------
 
 	//ARREGLADO-------------------------------------------------------
@@ -91,8 +91,6 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		_hero->getRigidBody()->setOrientation(Quaternion(Degree(0),Vector3::UNIT_Y));
 	}*/
 	//-------------------------------------------------------------------
-
-
 }
 
 void MovementManager::jumpHero(){
@@ -101,9 +99,7 @@ void MovementManager::jumpHero(){
 		_currentSpeed.y = 16.0;
 		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
 		_hero->setNumJumps(_hero->getNumJumps()-1);
-		
 	}
-
 }
 
 void MovementManager::repositionHero(btVector3 position,btQuaternion orientation){
@@ -141,7 +137,6 @@ void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 posi
 
 	//Reposiciona bien
 
-
 }
 
 void MovementManager::moveEnemies(){
@@ -158,7 +153,8 @@ void MovementManager::moveEnemies(){
 		}
 		if(_currentSpeed.z >0){//Hacia la derecha
 			_enemies->at(i)->getRigidBody()->setOrientation(Quaternion(Degree(90),Vector3::UNIT_Y));
-		}else{
+		}
+		else{
 			_enemies->at(i)->getRigidBody()->setOrientation(Quaternion(Degree(-90),Vector3::UNIT_Y));
 		}
 		Entity* entity = static_cast<Entity*>(_enemies->at(i)->getSceneNode()->getAttachedObject(0));

@@ -34,6 +34,7 @@ class Hero : public GameEntity
   void resetLives();
   void picksReel(string reelName);
   void setAttacking(bool attacking);
+  void resetPickedReels();
   void makeInvulnerable();
   void UpdateInvulnerability(Ogre::Real deltaT);
 

@@ -123,6 +123,11 @@ void Hero::picksReel(string reelName){
 		_pickedReels[1] = true;
 	}
 }
+void Hero::resetPickedReels(){
+	_pickedReels[0] = false;
+	_pickedReels[1] = false;
+}
+
 void Hero::makeInvulnerable(){
 	_invulnerabilityLeft = INVULNERABILITY_TIME;
 }

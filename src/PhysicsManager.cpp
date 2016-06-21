@@ -260,18 +260,18 @@ void PhysicsManager::detectEnemiesCollision(){
 
 				if (node) {
 					if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallL")){
-						std::cout << "	EL ENEMIGO HA CHOCADO CON UN WALL L" << std::endl;
+						//std::cout << "	EL ENEMIGO HA CHOCADO CON UN WALL L" << std::endl;
 						vel = _enemies->at(j)->getSpeed();
 						vel.z = std::abs(vel.z);
 						_enemies->at(j)->setSpeed(vel);
-						std::cout << "	la velocidad es " << _enemies->at(j)->getSpeed() << std::endl;
+						//std::cout << "	la velocidad es " << _enemies->at(j)->getSpeed() << std::endl;
 					}
 					else if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallR")){
-						std::cout << "	EL ENEMIGO HA CHOCADO CON UN WALL R" << std::endl;
+						//std::cout << "	EL ENEMIGO HA CHOCADO CON UN WALL R" << std::endl;
 						vel = _enemies->at(j)->getSpeed();
 						vel.z = - std::abs(vel.z);
 						_enemies->at(j)->setSpeed(vel);
-						std::cout << "	la velocidad es " << _enemies->at(j)->getSpeed() << std::endl;
+						//std::cout << "	la velocidad es " << _enemies->at(j)->getSpeed() << std::endl;
 
 					}
 				}

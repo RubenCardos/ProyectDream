@@ -96,8 +96,6 @@ void PlayState::enter(){
 		_movementManager->setEnemies(&_enemies);
 		_movementManager->setWalls(&_walls);
 		_movementManager->setSceneManager(_sceneMgr);
-
-
 	}
 	//-------------------
 
@@ -302,21 +300,6 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	updateGUI();
 	//----------------
 
-	//Movimiento------------
-	_movementManager->moveHero(_despPtr);
-	_movementManager->moveEnemies();
-
-	if(!_bossRoom ){
-		_movementManager->moveWalls();
-	}
-	else{
-		_movementManager->moveBoss(); //ACTIVAR
-		if(_bossPieces.empty()){
-			changeState(GameOverState::getSingletonPtr());
-		}
-	}
-	//----------------------
-
 	//Invulnerabilidad del hero---------------
 	_hero->UpdateInvulnerability(_deltaT);
 	if(_hero->isInvulnerable()){
@@ -335,6 +318,23 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	//_animationManager->resetAnimations(AnimationManager::ANIM_IDLE_HERO, _deltaT);
 	//--------------------------------------------
 
+	//Movimiento------------
+	_movementManager->moveHero(_despPtr);
+	_movementManager->moveEnemies();
+
+	if(!_bossRoom){
+		_movementManager->moveWalls();
+	}
+	else{
+		_movementManager->moveBoss(); //ACTIVAR
+		if(_bossPieces.empty()){
+			_hero->resetPickedReels();
+			GameManager::getSingletonPtr()->setPunt(_hero->getScore());
+			changeState(GameOverState::getSingletonPtr());
+		}
+	}
+	//----------------------
+
 	return true;
 }
 
@@ -351,8 +351,7 @@ bool PlayState::frameEnded (const Ogre::FrameEvent& evt){
 }
 
 void PlayState::keyPressed (const OIS::KeyEvent &e){
-
-	cout << "Teclas pulsadas" <<endl;
+	//cout << "Teclas pulsadas" <<endl;
 
 	// Tecla p --> PauseState.-------
 	if (e.key == OIS::KC_P) {
@@ -362,6 +361,7 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 
 	// Tecla g --> GameOverState.-------
 	if (e.key == OIS::KC_G) {
+		GameManager::getSingletonPtr()->setPunt(_hero->getScore());
 		changeState(GameOverState::getSingletonPtr());
 	}
 

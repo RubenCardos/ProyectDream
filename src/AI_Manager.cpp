@@ -88,9 +88,9 @@ void AI_Manager::loadBossRoute(){
 void AI_Manager::updateBossMovement(){
 	if(_bossPieces->size()>0){
 
-		cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
+		//cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
 		//cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
-		cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
+		//cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
 
 		if(_bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) < EPSILON){
 			//lo llevo otra vez al punto inicial

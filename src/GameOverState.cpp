@@ -32,13 +32,13 @@ GameOverState::enter ()
   cout << "Creo GUI\n" << endl;
   _exitGame = false;
 
-  cout << "Entro a exit!!!\n" << endl;
+  cout << "Entro a GAME OVER!!!\n" << endl;
 }
 
 void
 GameOverState::exit ()
 {
-  cout << "salgo de exit\n" << endl;
+  cout << "salgo de GAME OVER\n" << endl;
   //Salgo del estado------------------------------
   _sceneMgr->clearScene();
   _sceneMgr->destroyCamera("GameOverCamera");
