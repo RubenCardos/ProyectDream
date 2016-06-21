@@ -11,7 +11,7 @@ using namespace Ogre;
 #define WALLB_DISTANCE 40
 #define SIDEWALL_DISTANCE 14
 
-MovementManager::MovementManager(Ogre::SceneManager* sceneMgr,OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Boss*>* bossPieces, std::vector<Wall*>* walls){
+MovementManager::MovementManager(Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Enemy*>* enemies, std::vector<Boss*>* bossPieces, std::vector<Wall*>* walls){
 	_sceneMgr = sceneMgr;
 	_hero = hero;
 	_enemies = enemies;
@@ -21,10 +21,14 @@ MovementManager::MovementManager(Ogre::SceneManager* sceneMgr,OgreBulletDynamics
 	_inBossRoom = false;
 
 	if(!AI_Manager::getSingletonPtr()){
-		_aiManager = new AI_Manager(sceneMgr, world,_hero,_bossPieces,_enemies);
+		_aiManager = new AI_Manager(sceneMgr,_hero,_bossPieces,_enemies);
 	}
 	else{
 		_aiManager = AI_Manager::getSingletonPtr();
+		_aiManager->setSceneManager(_sceneMgr);
+		_aiManager->setHero(_hero);
+		_aiManager->setBossPieces(_bossPieces);
+		_aiManager->setEnemies(_enemies);
 	}
 
 	_currentIndex = 0;
@@ -51,7 +55,6 @@ MovementManager& MovementManager::getSingleton(void){
 void MovementManager::moveHero(Ogre::Vector3* movement){
 	//movimiento del heroe
 	//cout <<"Velocidad Y = " << _hero->getRigidBody()->getLinearVelocity().y <<endl;
-	//cout <<"DESP = " << *movement <<endl;
 	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
 	_hero->setSpeed(_currentSpeed);
 	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
@@ -65,7 +68,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
 	}
 
-	rotateHero();
+	//rotateHero();
 
 	if(_hero->getRigidBody()->getLinearVelocity().y < 0.001 && _hero->getRigidBody()->getLinearVelocity().y > -0.0001 ){// a veces es 5.72205e-06
 		Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();

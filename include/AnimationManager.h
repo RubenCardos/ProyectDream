@@ -37,12 +37,14 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
 
   void setSceneManager(Ogre::SceneManager* sceneMgr);
   void setCurrentScenario(Scenario::Scenario currentScenario);
+  void setHero(Hero* hero);
   void playAnimations(animID id);
   void stopAnimations(animID id);
   void setupAnimations();
   void resetAnimations(Real _deltaT);
   Ogre::AnimationState* getAnimation(animID id);
   void playAnimationsEnemy(string name, string entity);
+
 
   // Heredados de Ogre::Singleton.
   static AnimationManager& getSingleton ();

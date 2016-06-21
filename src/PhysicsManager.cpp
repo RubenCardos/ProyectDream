@@ -310,6 +310,10 @@ void PhysicsManager::setGameEntities(std::vector<GameEntity*>* gameEntities){
 	_gameEntities = gameEntities;
 }
 
+void PhysicsManager::setWorld(OgreBulletDynamics::DynamicsWorld * world){
+	_world=world;
+}
+
 void PhysicsManager::removeGameEntity( std::string name){
 	for(unsigned int i=0; i<_gameEntities->size(); i++){
 		if(Ogre::StringUtil::match(_gameEntities->at(i)->getSceneNode()->getName(),name)){

@@ -24,6 +24,10 @@ void AnimationManager::setCurrentScenario(Scenario::Scenario currentScenario){
 	_currentScenario = currentScenario;
 }
 
+void AnimationManager::setHero(Hero* hero){
+	_hero=hero;
+}
+
 void AnimationManager::setupAnimations(){
 
 	std::string animNames[]={"runHero","idleHero","attackHero","jumHero","dieHero"}; //SOLO ESTA LA PRIMERA DE MOMENTO

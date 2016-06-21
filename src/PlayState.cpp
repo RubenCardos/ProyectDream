@@ -87,10 +87,17 @@ void PlayState::enter(){
 
 	//Crear o recuperar el MovementManager
 	if(!MovementManager::getSingletonPtr()){
-		_movementManager = new MovementManager(_sceneMgr,_world,_hero,&_enemies,&_bossPieces,&_walls);
+		_movementManager = new MovementManager(_sceneMgr,_hero,&_enemies,&_bossPieces,&_walls);
 	}
 	else{ //lo recuperas
 		_movementManager = MovementManager::getSingletonPtr();
+		_movementManager->setHero(_hero);
+		_movementManager->setBossPieces(&_bossPieces);
+		_movementManager->setEnemies(&_enemies);
+		_movementManager->setWalls(&_walls);
+		_movementManager->setSceneManager(_sceneMgr);
+
+
 	}
 	//-------------------
 
@@ -100,6 +107,13 @@ void PlayState::enter(){
 	}
 	else{
 		_physicsManager = PhysicsManager::getSingletonPtr();
+		_physicsManager->setSceneManager(_sceneMgr);
+		_physicsManager->setHero(_hero);
+		_physicsManager->setGameEntities(&_gameEntities);
+		_physicsManager->setEnemies(&_enemies);
+		_physicsManager->setWalls(&_walls);
+		_physicsManager->setWorld(_world);
+
 	}
 	//-------------------
 
@@ -109,6 +123,10 @@ void PlayState::enter(){
 	}
 	else{
 		_animationManager = AnimationManager::getSingletonPtr();
+		_animationManager->setSceneManager(_sceneMgr);
+		_animationManager->setCurrentScenario(_currentScenario);
+		_animationManager->setHero(_hero);
+
 	}
 	_animationManager->setupAnimations();
 	//-------------------	
@@ -192,6 +210,7 @@ void PlayState::CreateInitialWorld() {
 	// Creamos la forma estatica (forma, Restitucion, Friccion) ------
 	rigidBodyPlane->setStaticShape(Shape, 0.1, 0.8);
 	rigidBodyPlane->getBulletObject()->setUserPointer((void *) _groundNode);
+
 
 	_currentScenario = Scenario::Menu;
 	createScenario(_currentScenario);
@@ -332,6 +351,9 @@ bool PlayState::frameEnded (const Ogre::FrameEvent& evt){
 }
 
 void PlayState::keyPressed (const OIS::KeyEvent &e){
+
+	cout << "Teclas pulsadas" <<endl;
+
 	// Tecla p --> PauseState.-------
 	if (e.key == OIS::KC_P) {
 		pushState(PauseState::getSingletonPtr());
@@ -345,9 +367,9 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 
 	// Tecla S --> Print current scenario and change backwall visibility-------
 	if (e.key == OIS::KC_S) {
-		if(_vScenario.size() > 0){
-			std::cout << "ESCENARIO " << _currentScenario << _vScenario.at(0)<< std::endl;
-		}
+		//if(_vScenario.size() > 0){
+			//std::cout << "ESCENARIO " << _currentScenario << _vScenario.at(0)<< std::endl;
+		//}
 		for(unsigned int i=0; i<_walls.size(); i++){
 			_walls.at(i)->getSceneNode()->setVisible(!_wallsAreVisible);
 		}
@@ -616,11 +638,13 @@ bool PlayState::deleteCurrentScenario(){
 	}
 
 	/*Borrar vector*/
-	for(unsigned int i=0; i<_vScenario.size(); i++){ //borrar los trozos de escenario
+	/*for(unsigned int i=0; i<_vScenario.size(); i++){ //borrar los trozos de escenario
 		delete _vScenario.at(i);
 	}
 
-	_vScenario.clear(); //limpiar vector
+	_vScenario.clear(); //limpiar vector*/
+
+	cout << "\n\nVamos a borrar\n\n" << endl;
 
 	switch(_currentScenario) {
 	case Scenario::Menu:{
@@ -636,7 +660,8 @@ bool PlayState::deleteCurrentScenario(){
 		break;
 	}
 	printAll();
-	return _vScenario.empty();
+	//return _vScenario.empty();
+	return true;
 }
 
 void PlayState::createScenario(Scenario::Scenario nextScenario){
@@ -700,7 +725,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->translate(Vector3(230*i,0,0));
 
-			_vScenario.push_back(_nodeScn);
+			//_vScenario.push_back(_nodeScn);
 
 			//Musica -------------------------------------------
 			GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Garden.ogg");
@@ -741,7 +766,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 			_nodeScn->yaw(Degree(270));
 			_nodeScn->translate(Vector3(200*i,0,0));
 
-			_vScenario.push_back(_nodeScn);
+			//_vScenario.push_back(_nodeScn);
 		}
 		_ground->setMaterialName("GroundRoom");
 		_currentScenario = Scenario::LevelRoom;
@@ -1121,6 +1146,11 @@ void PlayState::deleteScenarioContent(){
 			_sceneMgr->destroyEntity(entity);
 			_sceneMgr->getRootSceneNode()->removeChild(node);
 		}
+		else if (Ogre::StringUtil::startsWith(node->getName(),"SN_Level")){
+			Entity* entity = static_cast<Entity*>(node->getAttachedObject(0));//Recupero la entidad
+			_sceneMgr->destroyEntity(entity);
+			_sceneMgr->getRootSceneNode()->removeChild(node);
+		}
 	}
 	_enemies.clear();
 	_bossRoom = false;
@@ -1128,6 +1158,7 @@ void PlayState::deleteScenarioContent(){
 	_walls.clear();
 	_bossPieces.clear();
 	_gameEntities.clear();
+	cout << "Escenario Limpio" << endl;
 }
 
 void PlayState::populateObstacles(String _path){
@@ -1293,7 +1324,7 @@ void PlayState::readEnemies(string path){
 }
 
 void PlayState::removeAllBehindBackWall(){
-	//todo lo que vaya quedandose detrás del backwall (con un pequeño margen), ir eliminandolo
+	//lo que vaya quedandose detrás del backwall (con un pequeño margen), ir eliminandolo
 	int threshold = 5; //margen, borramos todo lo que se quede a 10 por detrás del backwall
 	if(_walls.size() > 0){
 		int backWall_x = _walls.at(_walls.size() - 1)->getRigidBody()->getCenterOfMassPosition().x;

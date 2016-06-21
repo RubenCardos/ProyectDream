@@ -6,12 +6,11 @@ using namespace Ogre;
 #define FLOOR_POSITION_Y -2.8
 #define DISTANCE_BETWEEN_WAGONS 23
 
-AI_Manager::AI_Manager (Ogre::SceneManager* sceneMgr , OgreBulletDynamics::DynamicsWorld * world , Hero* hero, std::vector<Boss*>* bossPieces,std::vector<Enemy*>* enemies){
+AI_Manager::AI_Manager (Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Boss*>* bossPieces,std::vector<Enemy*>* enemies){
 	_hero = hero;
 	_bossPieces = bossPieces;
 	_enemies = enemies;
 	_sceneMgr = sceneMgr;
-	_world = world;
 }
 
 AI_Manager::~AI_Manager(){

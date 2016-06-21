@@ -20,7 +20,7 @@ using namespace Ogre;
 class AI_Manager : public Ogre::Singleton<AI_Manager>
 {
  public:
-  AI_Manager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world,Hero* hero, std::vector<Boss*>* bossPieces, std::vector<Enemy*>* enemies);
+  AI_Manager(Ogre::SceneManager* sceneMgr,Hero* hero, std::vector<Boss*>* bossPieces, std::vector<Enemy*>* enemies);
   ~AI_Manager();
 
   Hero* getHero();
@@ -50,7 +50,6 @@ class AI_Manager : public Ogre::Singleton<AI_Manager>
   std::vector<Boss*>* _bossPieces;
   std::vector<Ogre::Vector3> _bossRoute;
   Ogre::SceneManager* _sceneMgr;
-  OgreBulletDynamics::DynamicsWorld * _world;
 };
 
 #endif
