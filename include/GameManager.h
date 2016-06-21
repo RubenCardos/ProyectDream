@@ -54,10 +54,10 @@ class GameManager : public Ogre::FrameListener, public Ogre::Singleton<GameManag
   static GameManager& getSingleton ();
   static GameManager* getSingletonPtr ();
 
-  //Level-----------------------------
-  string _level;
-  string getLevel();
-  void setLevel(string n_level);
+  //Win-----------------------------
+  bool _win;
+  bool getWin();
+  void setWin(bool win);
   bool _initSDL ();
   //----------------------------------
 

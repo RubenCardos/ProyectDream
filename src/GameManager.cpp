@@ -207,17 +207,13 @@ GameManager::mouseReleased
   return true;
 }
 
-void
-GameManager::setLevel(string n_level)
-{
-  _level=n_level;
+void GameManager::setWin(bool win){
+  _win = win;
 }
 
 
-string
-GameManager::getLevel()
-{
-  return _level;
+bool GameManager::getWin(){
+  return _win;
 }
 
 void

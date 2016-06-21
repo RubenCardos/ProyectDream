@@ -329,10 +329,18 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 		_movementManager->moveBoss(); //ACTIVAR
 		if(_bossPieces.empty()){
 			_hero->resetPickedReels();
+			GameManager::getSingletonPtr()->setWin(true);
 			GameManager::getSingletonPtr()->setPunt(_hero->getScore());
 			changeState(GameOverState::getSingletonPtr());
 		}
 	}
+
+	if(_hero->getLives() < 1){
+		GameManager::getSingletonPtr()->setWin(false);
+		GameManager::getSingletonPtr()->setPunt(_hero->getScore());
+		changeState(GameOverState::getSingletonPtr());
+	}
+
 	//----------------------
 
 	return true;
@@ -359,11 +367,11 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 	}
 	//-----------------
 
-	// Tecla g --> GameOverState.-------
+	/*// Tecla g --> GameOverState.-------
 	if (e.key == OIS::KC_G) {
 		GameManager::getSingletonPtr()->setPunt(_hero->getScore());
 		changeState(GameOverState::getSingletonPtr());
-	}
+	}*/
 
 	// Tecla S --> Print current scenario and change backwall visibility-------
 	if (e.key == OIS::KC_S) {
