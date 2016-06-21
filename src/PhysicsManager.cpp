@@ -64,7 +64,7 @@ void PhysicsManager::detectHeroCollision(){
 			
 
      		if (node) {
-				cout << "Hero choca con: " << node->getName() << "\n" << endl;
+				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
 				
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_BossWagon")){
 					//Si me choco contra un vagon atacando---
@@ -151,7 +151,6 @@ void PhysicsManager::detectHeroCollision(){
 				}
 
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")){
-					
 					if(!_hero->isAttacking() && !_hero->isInvulnerable()){
 						_hero->loseLife();
 						MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
@@ -163,7 +162,7 @@ void PhysicsManager::detectHeroCollision(){
 						}
 					}
 					//Elimino el enemigo con el que te chocas-------------------
-					removeGameEntity( node->getName());
+					removeGameEntity(node->getName());
 					//Eliminar todos los enemigos--
 					/*for(int i =0 ; i<_gameEntities->size();i++){
 						if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){
@@ -195,23 +194,32 @@ void PhysicsManager::detectHeroCollision(){
 					_world->getBulletDynamicsWorld()->removeCollisionObject(aux);
 					PlayState::getSingletonPtr()->changeScenario(scenario);
 				}
-				/*//Para hacer que no se pegue a la pared
+				//Para hacer que no se pegue a la pared
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Wall")){
 					Ogre::Vector3 vec(0,0,0);
 					vec = _hero->getRigidBody()->getLinearVelocity();
 					if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallL") && vec.z < 0.0){
 						vec.z = 0.0;
+						if(vec.y < 0.0 && vec.y > -16){
+							vec.y = 1.5*vec.y;
+						}
 						_hero->getRigidBody()->setLinearVelocity(vec);
 					}
 					else if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallR") && vec.z > 0.0){
 						vec.z = 0.0;
+						if(vec.y < 0.0 && vec.y > -16){
+							vec.y = 1.5*vec.y;
+						}
 						_hero->getRigidBody()->setLinearVelocity(vec);
 					}
 					else if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallB") && vec.x < 0.0){
 						vec.x = 0;
+						if(vec.y < 0.0 && vec.y > -16){
+							vec.y = 1.5*vec.y;
+						}
 						_hero->getRigidBody()->setLinearVelocity(vec);
 					}
-				}*/
+				}
 			}
    		}
 		//------------------------------------------------
@@ -305,10 +313,10 @@ void PhysicsManager::setGameEntities(std::vector<GameEntity*>* gameEntities){
 void PhysicsManager::removeGameEntity( std::string name){
 	for(unsigned int i=0; i<_gameEntities->size(); i++){
 		if(Ogre::StringUtil::match(_gameEntities->at(i)->getSceneNode()->getName(),name)){
-			Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
+			//Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
 			OgreBulletCollisions::Object* Baux =_world->findObject(_gameEntities->at(i)->getSceneNode());
 			_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
-			_sceneMgr->destroyEntity(_e);
+			//_sceneMgr->destroyEntity(_e);
 			_sceneMgr->getRootSceneNode()->removeChild(_gameEntities->at(i)->getSceneNode());
 			_gameEntities->erase(_gameEntities->begin() + i);
 		}

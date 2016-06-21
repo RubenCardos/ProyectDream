@@ -29,6 +29,8 @@
 #define WALL_LENGTH_X 100
 #define WALL_HEIGHT_Y 20
 
+#define NUM_WAGONS 5
+
 using namespace std;
 
 template<> PlayState* Ogre::Singleton<PlayState>::msSingleton = 0;
@@ -244,9 +246,11 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 		_cameraPivot->setPosition(_hero->getSceneNode()->getPosition());
 	}
 	else{
-		_camera->setPosition(-175,150,100);
-		_camera->lookAt(0,0,100);
-		_camera->yaw(Ogre::Degree(180));
+		//_camera->setPosition(0,150,100);
+		_camera->setPosition(-430,90,100);
+		//_camera->lookAt(-30,0,100);
+		_camera->lookAt(-50,0,100);
+		//_camera->yaw(Ogre::Degree(180));
 	}
 	//-------------------
 
@@ -257,7 +261,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 
 	if(_currentScenario != Scenario::Menu){
 		populateEnemies();
-		removeAllBehindBackWall();
+		//removeAllBehindBackWall();
 	}
 
 	//Actualizo GUI---
@@ -279,7 +283,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	//Invulnerabilidad del hero---------------
 	_hero->UpdateInvulnerability(_deltaT);
 	if(_hero->isInvulnerable()){
-		if(++_frameCounter>15){
+		if(++_frameCounter>30){
 			_hero->getSceneNode()->flipVisibility();
 			_frameCounter = 0 ;
 		}
@@ -813,7 +817,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
 	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor") || Ogre::StringUtil::startsWith(name,"Obstacle")|| Ogre::StringUtil::startsWith(name,"Thread")){
 		node->scale(scale);
-		entity->setCastShadows(false); //PRUEBA DE SOMBRAS 
+		//entity->setCastShadows(false); //PRUEBA DE SOMBRAS
 		OgreBulletCollisions::BoxCollisionShape* bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
 
 		if(Ogre::StringUtil::startsWith(name,"Obstacle")){
@@ -830,7 +834,6 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 					if(Ogre::StringUtil::startsWith(name,"WallB")){
 						rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_BackWall,PhysicsMask::backwall_collides_with);
 						rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
-						entity->setCastShadows(false); //PRUEBA DE SOMBRAS 
 					}
 					else{
 						rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
@@ -853,11 +856,10 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Boss,PhysicsMask::boss_collides_with);
 		}
 		else if(Ogre::StringUtil::startsWith(name,"Enemy")){
-			rigidBody = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
 		}
 		else if(Ogre::StringUtil::startsWith(name,"Spike")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
-
 		}
 		else{
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
@@ -881,7 +883,6 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 	rigidBody->disableDeactivation();
 	rigidBody->getBulletObject()->setUserPointer((void *) node);
 	
-
 	gameEntity = new GameEntity();
 	gameEntity->setSceneNode(node);
 	gameEntity->setRigidBody(rigidBody);
@@ -1031,6 +1032,7 @@ void PlayState::createTestGameEntities(){
 	//-------------------------------------------------------------------
 	_numEntities++;
 
+	/*
 	//------------------------------------------------------------------------------------
 	//Enemigo----------------------------------------
 	Vector3 position1 = Vector3(30,1.5,3.5);
@@ -1045,9 +1047,9 @@ void PlayState::createTestGameEntities(){
 
 	//crear el vector de enemigos. De momento, con un enemigo---
 	_enemies.push_back(enemy);
-	_gameEntities.push_back(enemy);
+	//_gameEntities.push_back(enemy);
 	//-------------------------------------------------
-
+	*/
 }
 
 void PlayState::createBoss(){
@@ -1070,23 +1072,18 @@ void PlayState::createBoss(){
 	_bossPieces.push_back(bossLocomotive);
 	//position.x -= 10.0;
 
-	Boss* bossWagon = new Boss();
-	gameEntity = createGameEntity("BossWagon1", "wagon.mesh", position, scale);
-	bossWagon->setSceneNode(gameEntity->getSceneNode());
-	bossWagon->setRigidBody(gameEntity->getRigidBody());
-	bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad
-	_bossPieces.push_back(bossWagon);
+	Boss* bossWagon;
 
-	//position.x -= 10.0;
+	for(unsigned int i=0; i<NUM_WAGONS; i++){
+		bossWagon = new Boss();
+		gameEntity = createGameEntity("BossWagon" + Ogre::StringConverter::toString(i), "wagon.mesh", position, scale);
+		bossWagon->setSceneNode(gameEntity->getSceneNode());
+		bossWagon->setRigidBody(gameEntity->getRigidBody());
+		bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad
+		_bossPieces.push_back(bossWagon);
 
-	bossWagon = new Boss();
-	gameEntity = createGameEntity("BossWagon2", "wagon.mesh", position, scale);
-	bossWagon->setSceneNode(gameEntity->getSceneNode());
-	bossWagon->setRigidBody(gameEntity->getRigidBody());
-	bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad
-	_bossPieces.push_back(bossWagon);
-
-	//----------------------------------------------------------------
+		//position.x -= 10.0;
+	}
 }
 
 void PlayState::deleteScenarioContent(){

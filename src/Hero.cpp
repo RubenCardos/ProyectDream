@@ -10,7 +10,7 @@
 
 #define INITIAL_LIVES 3
 #define NUM_JUMPS 1
-#define INVULNERABILITY_TIME 5.0
+#define INVULNERABILITY_TIME 3.0
 
 Hero::Hero(){
 	_lives = INITIAL_LIVES;

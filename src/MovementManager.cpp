@@ -97,7 +97,6 @@ void MovementManager::jumpHero(){
 }
 
 void MovementManager::repositionHero(btVector3 position,btQuaternion orientation){
-
 	//Hago el hero invulnerable-------------------------------
 	_hero->makeInvulnerable();
 	//--------------------------------------------------------
@@ -111,14 +110,6 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 	_hero->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
 
 	//mMotionState->setWorldTransform(initialTransform);
-
-	//Creo que hay que reposicionar las paredes y el suelo tambien
-	/*for(int i=0; i<_walls->size(); i++){
-		_walls->at(i)->getRigidBody()->getBulletRigidBody()->setWorldTransform(initialTransform);
-		_walls->at(i)->getRigidBody()->getBulletRigidBody()->getMotionState()->setWorldTransform(initialTransform);
-	}*/
-
-
 }
 
 void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 position,btQuaternion orientation){
