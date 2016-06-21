@@ -179,7 +179,7 @@ void PlayState::CreateInitialWorld() {
 	_currentScenario = Scenario::Menu;
 	createScenario(_currentScenario);
 
-	Plane plane2Left(Vector3(0,0,1), -13);    // Normal y distancia
+	/*Plane plane2Left(Vector3(0,0,1), -13);    // Normal y distancia
 	MeshManager::getSingleton().createPlane("p2Left",
 			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2Left,
 			1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
@@ -201,7 +201,7 @@ void PlayState::CreateInitialWorld() {
 			OgreBulletDynamics::RigidBody("WallLeft", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
 
 	// Creamos la forma estatica (forma, Restitucion, Friccion) ------
-	rigidBodyPlaneWallLeft->setStaticShape(ShapeWallLeft, 0.1, 0.8);
+	rigidBodyPlaneWallLeft->setStaticShape(ShapeWallLeft, 0.1, 0.8);*/
 
 	//LUCES------------------------------------------------
 	Ogre::Light* light = _sceneMgr->createLight();
