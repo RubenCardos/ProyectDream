@@ -23,3 +23,7 @@ Debido al gran peso de algunos archivos ha sido necesario el uso del plugin git 
 ###Video Entregable 1
 
 https://youtu.be/0kgsmTu3edM
+
+###Video Entregable 2
+
+https://youtu.be/6HNQO12VLR4
