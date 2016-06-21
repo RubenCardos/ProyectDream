@@ -4,6 +4,7 @@ using namespace Ogre;
 #define BOSS_ROOM 100.0
 #define EPSILON 0.3 //Se va a 0.27
 #define FLOOR_POSITION_Y -2.8
+#define DISTANCE_BETWEEN_WAGONS 23
 
 AI_Manager::AI_Manager (Ogre::SceneManager* sceneMgr , OgreBulletDynamics::DynamicsWorld * world , Hero* hero, std::vector<Boss*>* bossPieces,std::vector<Enemy*>* enemies){
 	_hero = hero;
@@ -86,11 +87,12 @@ void AI_Manager::loadBossRoute(){
 }
 
 void AI_Manager::updateBossMovement(){
-	cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
-	//cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
-	cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
-
 	if(_bossPieces->size()>0){
+
+		cout << "	posTren = " << _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition()<< endl;
+		//cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
+		cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
+
 		if(_bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) < EPSILON){
 			//lo llevo otra vez al punto inicial
 			//_bossPieces->at(i)->getRigidBody()->setPosition(_bossRoute.at(i));
@@ -145,16 +147,11 @@ void AI_Manager::updateBossMovement(){
 			Ogre::Quaternion rot(Ogre::Degree(degrees),Ogre::Vector3::UNIT_Y);
 
 			for(unsigned int i=0; i<_bossPieces->size(); i++){
-				//pos.x -= 10*i;
-				if(i==0){
-					//desp = desp * 3;
-				}
-				if(i==1){
-					//desp = desp /3;
-					desp = desp * 11;
+				if(i==2){
+					desp = desp * DISTANCE_BETWEEN_WAGONS;
 				}
 
-				pos = pos + desp*i;
+				pos = pos + desp;
 				btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
 				transform.setOrigin(OgreBulletCollisions::convert(pos));
 				//Girar---------------------------------------
@@ -192,7 +189,6 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 		loadBossRoute();
 		//----------------
 
-		//speed = exitPosition - entryPosition;
 		speed =_bossRoute.at(1)-_bossRoute.at(0);
 		speed = speed.normalisedCopy();
 		speed= speed*15;
@@ -236,18 +232,20 @@ void AI_Manager::initializeBossMovement(Ogre::Real* deltaT){
 			//--------------------------------------------
 			_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
 
-			//Cambio la posicion donde aparece el siguiente modulo---
-			if(speed.x >0){
-				pos.x -= 25;
-			}
-			else if(speed.x <0){
-				pos.x += 25;
-			}
-			else if(speed.z >0){
-				pos.z -= 25;
-			}
-			else if(speed.z <0){
-				pos.z += 25;
+			///Cambio la posicion donde aparece el siguiente modulo---
+			if(i > 0){
+				if(speed.x >0){
+					pos.x -= 25;
+				}
+				else if(speed.x <0){
+					pos.x += 25;
+				}
+				else if(speed.z >0){
+					pos.z -= 25;
+				}
+				else if(speed.z <0){
+					pos.z += 25;
+				}
 			}
 			//--------------------------------------------------------
 		}

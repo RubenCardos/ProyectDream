@@ -19,7 +19,14 @@ MovementManager::MovementManager(Ogre::SceneManager* sceneMgr,OgreBulletDynamics
 	_walls= walls;
 	_hero->setNumJumps(N_JUMPS);
 	_inBossRoom = false;
-	_aiManager = new AI_Manager(sceneMgr, world,_hero,_bossPieces,_enemies);
+
+	if(!AI_Manager::getSingletonPtr()){
+		_aiManager = new AI_Manager(sceneMgr, world,_hero,_bossPieces,_enemies);
+	}
+	else{
+		_aiManager = AI_Manager::getSingletonPtr();
+	}
+
 	_currentIndex = 0;
 }
 

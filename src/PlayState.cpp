@@ -85,16 +85,31 @@ void PlayState::enter(){
 	createGUI();
 	//-------------------
 
-	//Crear el MovementManager
-	_movementManager = new MovementManager(_sceneMgr,_world,_hero,&_enemies,&_bossPieces,&_walls);
+	//Crear o recuperar el MovementManager
+	if(!MovementManager::getSingletonPtr()){
+		_movementManager = new MovementManager(_sceneMgr,_world,_hero,&_enemies,&_bossPieces,&_walls);
+	}
+	else{ //lo recuperas
+		_movementManager = MovementManager::getSingletonPtr();
+	}
 	//-------------------
 
 	//Crear el PhysicsManager
-	_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,&_gameEntities, &_enemies, &_walls);
+	if(!PhysicsManager::getSingletonPtr()){
+		_physicsManager = new PhysicsManager(_sceneMgr,_world,_hero,&_gameEntities, &_enemies, &_walls);
+	}
+	else{
+		_physicsManager = PhysicsManager::getSingletonPtr();
+	}
 	//-------------------
 
 	//Crear el AnimationManager
-	_animationManager = new AnimationManager(_sceneMgr, _currentScenario, _hero);
+	if(!AnimationManager::getSingletonPtr()){
+		_animationManager = new AnimationManager(_sceneMgr, _currentScenario, _hero);
+	}
+	else{
+		_animationManager = AnimationManager::getSingletonPtr();
+	}
 	_animationManager->setupAnimations();
 	//-------------------	
 
@@ -277,6 +292,9 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	}
 	else{
 		_movementManager->moveBoss(); //ACTIVAR
+		if(_bossPieces.empty()){
+			changeState(GameOverState::getSingletonPtr());
+		}
 	}
 	//----------------------
 
@@ -1107,7 +1125,8 @@ void PlayState::deleteScenarioContent(){
 	_enemies.clear();
 	_bossRoom = false;
 	_bossCreated = false;
-
+	_walls.clear();
+	_bossPieces.clear();
 	_gameEntities.clear();
 }
 
