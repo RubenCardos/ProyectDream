@@ -179,30 +179,6 @@ void PlayState::CreateInitialWorld() {
 	_currentScenario = Scenario::Menu;
 	createScenario(_currentScenario);
 
-	/*Plane plane2Left(Vector3(0,0,1), -13);    // Normal y distancia
-	MeshManager::getSingleton().createPlane("p2Left",
-			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane2Left,
-			1000, 80, 1, 1, true, 1, 20, 20, Vector3::UNIT_Y);
-
-	SceneNode* _groundNodeWallLeft = _sceneMgr->createSceneNode("WallLeft");
-	Entity* _groundEntWallLeft = _sceneMgr->createEntity("planeEntLeft", "p2Left");
-	_groundEntWallLeft->setMaterialName("Ground");
-	_groundNodeWallLeft->attachObject(_groundEntWallLeft);
-	_sceneMgr->getRootSceneNode()->addChild(_groundNodeWallLeft);
-	_groundNodeWallLeft->setVisible(false);
-
-	//------------------------------------------------------------
-
-	// Creamos forma de colision para el plano -----------------------
-	OgreBulletCollisions::CollisionShape *ShapeWallLeft;
-	ShapeWallLeft = new OgreBulletCollisions::StaticPlaneCollisionShape
-			(Ogre::Vector3(0,0,1), -13);   // Vector normal y distancia
-	OgreBulletDynamics::RigidBody *rigidBodyPlaneWallLeft = new
-			OgreBulletDynamics::RigidBody("WallLeft", _world,PhysicsMask::COL_StaticWalls,PhysicsMask::staticwalls_collides_with);
-
-	// Creamos la forma estatica (forma, Restitucion, Friccion) ------
-	rigidBodyPlaneWallLeft->setStaticShape(ShapeWallLeft, 0.1, 0.8);*/
-
 	//LUCES------------------------------------------------
 	Ogre::Light* light = _sceneMgr->createLight();
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
@@ -865,10 +841,6 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 					rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
 					rigidBody->setShape(node, bodyShape, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, 100.0f/*Masa*/, position);
 				}
-				if(Ogre::StringUtil::startsWith(name,"Spike")){
-					rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
-				}
-				
 			}
 		}
 	}
@@ -882,6 +854,10 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		}
 		else if(Ogre::StringUtil::startsWith(name,"Enemy")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_Enemy"+ Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
+		}
+		else if(Ogre::StringUtil::startsWith(name,"Spike")){
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
+
 		}
 		else{
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);

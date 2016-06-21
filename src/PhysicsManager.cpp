@@ -134,7 +134,12 @@ void PhysicsManager::detectHeroCollision(){
 				else if (Ogre::StringUtil::startsWith(node->getName(),"SN_Spike") && !_hero->isInvulnerable()){
 					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					_hero->loseLife();
-
+					for(int i=0 ; i< _walls->size();i++){
+						cout << "POSICION PARA Reposicionar EL MURO = " << _walls->at(i)->getSpawnPosition() << endl;
+						btTransform transform = _walls->at(i)->getRigidBody()->getBulletRigidBody()->getCenterOfMassTransform();
+						transform.setOrigin(OgreBulletCollisions::convert(_walls->at(i)->getSpawnPosition()));
+						_walls->at(i)->getRigidBody()->getBulletRigidBody()->setCenterOfMassTransform(transform);
+					}
 					//Eliminar todos los enemigos--
 					/*for(int i =0 ; i<_gameEntities->size();i++){
 						if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){

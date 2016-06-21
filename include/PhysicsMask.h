@@ -28,7 +28,7 @@ const short thread_collides_with = COL_Player;
 const short reel_collides_with = COL_Player;
 const short obs_collides_with = COL_Player | COL_Enemy | COL_StaticWalls | COL_Obs;
 const short backwall_collides_with = COL_Player | COL_StaticWalls;
-const short spikes_collides_with = COL_Player | COL_Enemy | COL_StaticWalls;
+const short spikes_collides_with = COL_Player | COL_Enemy | COL_StaticWalls | COL_Spike;
 //-----------------------
 
 }
