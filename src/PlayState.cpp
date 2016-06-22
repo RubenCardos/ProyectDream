@@ -327,7 +327,11 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	}
 	else{
 		_movementManager->moveBoss(); //ACTIVAR
-		if(_bossPieces.empty()){
+		//Mover el nodo de las partículas a la posición del nodo de la locomotora
+		if(!_bossPieces.empty()){
+			_sceneMgr->getSceneNode("SmokeNode")->setPosition(_bossPieces.at(0)->getRigidBody()->getCenterOfMassPosition());
+		}
+		else{
 			_hero->resetPickedReels();
 			GameManager::getSingletonPtr()->setWin(true);
 			GameManager::getSingletonPtr()->setPunt(_hero->getScore());
@@ -1115,14 +1119,22 @@ void PlayState::createBoss(){
 
 	gameEntity = createGameEntity("BossLocomotive", "train.mesh", position, scale);
 	bossLocomotive->setSceneNode(gameEntity->getSceneNode());
+	//_sceneMgr->getParticleSystem("Smoke")->
 	bossLocomotive->setRigidBody(gameEntity->getRigidBody());
 	bossLocomotive->setMovementSpeed(0.5);
-	bossLocomotive->getSceneNode()->attachObject(_sceneMgr->createParticleSystem("Smoke", "Examples/Smoke"));
 	cout << "locomotive movementSpeed " << bossLocomotive->getMovementSpeed() <<endl;
 	//bossLocomotive->getRigidBody()->setLinearVelocity(bossLocomotive->getMovementSpeed(),0,0);
 	//bossLocomotive->getRigidBody()->setAngularVelocity(1,1,1);
 	_bossPieces.push_back(bossLocomotive);
 	//position.x -= 10.0;
+
+	//crear nodo que tiene las particulas de la locomotora
+	SceneNode* smokeNode = _sceneMgr->getRootSceneNode()->createChildSceneNode("SmokeNode");
+	smokeNode->setPosition(bossLocomotive->getSceneNode()->getPosition());
+	smokeNode->attachObject(_sceneMgr->createParticleSystem("Smoke", "Examples/Smoke"));
+	//smokeNode->setScale(Ogre::Vector3(0.2,0.2,0.2));
+	Ogre:ParticleSystem* smokeParticles = _sceneMgr->getParticleSystem("Smoke");
+	//smokeParticles->setParticleQuota(5);
 
 	Boss* bossWagon;
 
