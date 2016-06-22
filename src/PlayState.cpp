@@ -1123,6 +1123,8 @@ void PlayState::createBoss(){
 	_bossPieces.push_back(bossLocomotive);
 	//position.x -= 10.0;
 
+	Ogre::ParticleSystem smokeParticles = new Ogre::ParticleSystem();
+
 	Boss* bossWagon;
 
 	for(unsigned int i=0; i<NUM_WAGONS; i++){
