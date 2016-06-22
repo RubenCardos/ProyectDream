@@ -1117,13 +1117,12 @@ void PlayState::createBoss(){
 	bossLocomotive->setSceneNode(gameEntity->getSceneNode());
 	bossLocomotive->setRigidBody(gameEntity->getRigidBody());
 	bossLocomotive->setMovementSpeed(0.5);
+	bossLocomotive->getSceneNode()->attachObject(_sceneMgr->createParticleSystem("Smoke", "Examples/Smoke"));
 	cout << "locomotive movementSpeed " << bossLocomotive->getMovementSpeed() <<endl;
 	//bossLocomotive->getRigidBody()->setLinearVelocity(bossLocomotive->getMovementSpeed(),0,0);
 	//bossLocomotive->getRigidBody()->setAngularVelocity(1,1,1);
 	_bossPieces.push_back(bossLocomotive);
 	//position.x -= 10.0;
-
-	Ogre::ParticleSystem smokeParticles = new Ogre::ParticleSystem();
 
 	Boss* bossWagon;
 
