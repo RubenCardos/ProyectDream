@@ -48,7 +48,7 @@ GameOverState::exit ()
   //Destruyo GUI------------
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 
-  sheet->destroyChild("wFinish");
+  sheet->destroyChild("sheetGameOver");
   //------------------------
 }
 
@@ -198,59 +198,66 @@ GameOverState::createGUI()
   //Limpiar interfaz del estado anterior-------------------
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 
-  CEGUI::Window* wFinish = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","wFinish");
-  wFinish->setPosition(CEGUI::UVector2(cegui_reldim(0),cegui_reldim(0)));
-  wFinish->setSize(CEGUI::USize(cegui_reldim(1),cegui_reldim(1)));
-  wFinish->setProperty("Image","BackgroundImageFinish");
-  wFinish->setProperty("FrameEnabled","False");
-  wFinish->setProperty("BackgroundEnabled", "False");
+  CEGUI::Window* sheetGameOver = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","sheetGameOver");
+  sheetGameOver->setPosition(CEGUI::UVector2(cegui_reldim(0),cegui_reldim(0)));
+  sheetGameOver->setSize(CEGUI::USize(cegui_reldim(1),cegui_reldim(1)));
+  sheetGameOver->setProperty("Image","BackgroundImageGameOver");
+  sheetGameOver->setProperty("FrameEnabled","False");
+  sheetGameOver->setProperty("BackgroundEnabled", "False");
 
-  CEGUI::Editbox* eb = static_cast<CEGUI::Editbox*>(wFinish->createChild("OgreTray/Editbox","ebox"));
+  /*CEGUI::Editbox* eb = static_cast<CEGUI::Editbox*>(sheetGameOver->createChild("OgreTray/Editbox","ebox"));
   eb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.23f, 0)));
   eb->setSize(CEGUI::USize(CEGUI::UDim(0.30,0),CEGUI::UDim(0.07,0)));
-  eb->setFont("SPIDER MONKEY-18");
-  //PUNTOS TOTALES
-  CEGUI::Window* recordsPoints = static_cast<CEGUI::Window*>(wFinish->createChild("TaharezLook/StaticText","pointsrecords"));
+  eb->setFont("SPIDER MONKEY-18");*/
+
+  CEGUI::Window* recordsPoints = static_cast<CEGUI::Window*>(sheetGameOver->createChild("TaharezLook/StaticText","pointsrecords"));
   recordsPoints->setSize(CEGUI::USize(CEGUI::UDim(0.90,0),CEGUI::UDim(0.70,0)));
-  recordsPoints->setXPosition(CEGUI::UDim(0.65f, 0.0f));
-  recordsPoints->setYPosition(CEGUI::UDim(0.35f, 0.0f));
+  recordsPoints->setPosition(CEGUI::UVector2(CEGUI::UDim(0.65,0),CEGUI::UDim(0.35,0)));
   recordsPoints->setProperty("FrameEnabled","False");
   recordsPoints->setProperty("BackgroundEnabled", "False");
   recordsPoints->setProperty("VertFormatting", "TopAligned");
-  recordsPoints->setText("[font='SPIDER MONKEY-18']"+Ogre::StringConverter::toString(GameManager::getSingletonPtr()->getPunt()));
+  
 
-  CEGUI::Window* acceptButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","acceptButton");
+  /*CEGUI::Window* acceptButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","acceptButton");
   acceptButton->setText("[font='SPIDER MONKEY-18'] Accept");
   acceptButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.08,0)));
   acceptButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.42,0),CEGUI::UDim(0.61,0)));
-  acceptButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::accept,this));
+  acceptButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::accept,this));*/
 
   CEGUI::Window* menuButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","MenuButton");
   menuButton->setText("[font='SPIDER MONKEY-18'] Play Again");
-  menuButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.08,0)));
-  menuButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.42,0),CEGUI::UDim(0.71,0)));
+  menuButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
+  menuButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.67,0),CEGUI::UDim(0.50,0)));
   menuButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::goBackMenu,this));
 
   CEGUI::Window* exitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","exitButtonGO");
   exitButton->setText("[font='SPIDER MONKEY-18'] Exit");
-  exitButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.08,0)));
-  exitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.70,0),CEGUI::UDim(0.71,0)));
+  exitButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
+  exitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.67,0),CEGUI::UDim(0.60,0)));
   exitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::quit,this));
 
   CEGUI::Window* text = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text");
   text->setText("[font='SPIDER MONKEY-18']"+IntroState::getSingletonPtr()->readRecords());
   text->setSize(CEGUI::USize(CEGUI::UDim(0.30,0),CEGUI::UDim(0.50,0)));
-  text->setXPosition(CEGUI::UDim(0.07f, 0.0f));
-  text->setYPosition(CEGUI::UDim(0.35f, 0.0f));
-  text->setProperty("FrameEnabled","True");
-  text->setProperty("BackgroundEnabled", "True");
+  text->setXPosition(CEGUI::UDim(0.15f, 0.0f));
+  text->setYPosition(CEGUI::UDim(0.32f, 0.0f));
+  text->setProperty("FrameEnabled","False");
+  text->setProperty("BackgroundEnabled", "False");
   text->setProperty("HorzFormatting", "CenterAligned");
 
-  wFinish->addChild(text);
-  wFinish->addChild(acceptButton);
-  wFinish->addChild(exitButton);
-  wFinish->addChild(menuButton);
-  sheet->addChild(wFinish);
+  CEGUI::Window* textRecords = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text2");
+  textRecords->setText("[font='SPIDER MONKEY-28'] Records");
+  textRecords->setSize(CEGUI::USize(CEGUI::UDim(0.30,0),CEGUI::UDim(0.50,0)));
+  textRecords->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15,0),CEGUI::UDim(0.10,0)));
+  textRecords->setProperty("FrameEnabled","False");
+  textRecords->setProperty("BackgroundEnabled", "False");
+  textRecords->setProperty("HorzFormatting", "CenterAligned");
+
+  sheetGameOver->addChild(exitButton);
+  sheetGameOver->addChild(text);
+  sheetGameOver->addChild(textRecords);
+  sheetGameOver->addChild(menuButton);
+  sheet->addChild(sheetGameOver);
   
 
 }
@@ -260,17 +267,17 @@ GameOverState::accept(const CEGUI::EventArgs &e)
 {
   //Obtengo el nombre ----------------------------------------------------------------------
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
-  _name=sheet->getChild("wFinish")->getChild("ebox")->getText().c_str() ;
+  _name=sheet->getChild("sheetGameOver")->getChild("ebox")->getText().c_str() ;
   //-----------------------------------------------------------------------------------------
 
   if(_name!="" ){
     if(_name!=" "){
       requestScore();
-      sheet->getChild("wFinish")->getChild("acceptButton")->setVisible(false); 
+      sheet->getChild("sheetGameOver")->getChild("acceptButton")->setVisible(false); 
     }
   }
   
-  sheet->getChild("wFinish")->getChild("text")->setText("[font='SPIDER MONKEY-18']"+IntroState::getSingletonPtr()->readRecords());
+  sheet->getChild("sheetGameOver")->getChild("text")->setText("[font='SPIDER MONKEY-18']"+IntroState::getSingletonPtr()->readRecords());
   
   return true;
 }

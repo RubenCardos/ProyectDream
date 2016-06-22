@@ -149,11 +149,8 @@ void IntroState::createGUI()
   ImageManager::getSingleton().addFromImageFile("BackgroundImageCredits","credits.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImagePlayState","cabecera.png");
   ImageManager::getSingleton().addFromImageFile("BackgroundImagePause","paused.png");
-  ImageManager::getSingleton().addFromImageFile("BackgroundImageMeter","medidor.png");
-  ImageManager::getSingleton().addFromImageFile("BackgroundImageFinish","finish.png");
-  CEGUI::ImageManager::getSingleton().addFromImageFile("BackgroundImageArrow","flecha.png");
-  CEGUI::ImageManager::getSingleton().addFromImageFile("BackgroundImagePower","RainOfArrows.png");
-  ImageManager::getSingleton().addFromImageFile("BackgroundImageOptions","options.png");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImageGameOver","gameover.jpg");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImageOptions","options.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageControls","controls.jpg");
 
   //Sheet
