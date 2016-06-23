@@ -1228,6 +1228,8 @@ void PlayState::populateObstacles(String _path){
 			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
 			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
 
+			int texture = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[7]);
+
 			Vector3 aux = Vector3(x,y,z);
 			Quaternion q = Quaternion(Quaternion::IDENTITY);
 			Vector3 scale = Vector3(Sx,Sy,Sz);
@@ -1237,7 +1239,18 @@ void PlayState::populateObstacles(String _path){
 
 			Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
 
-			if(_currentScenario == Scenario::LevelRoom){
+			switch(texture){
+				case 0:
+					e->setMaterialName("matRed");
+					break;
+
+				case 1:
+					e->setMaterialName("matGreen");
+					break;
+			}
+
+
+			/*if(_currentScenario == Scenario::LevelRoom){
 				if(x <120){
 					e->setMaterialName("matRed");
 				}
@@ -1247,7 +1260,7 @@ void PlayState::populateObstacles(String _path){
 			}
 			else{
 				e->setMaterialName("Ground");
-			}
+			}*/
 
 			index++;
 		}
