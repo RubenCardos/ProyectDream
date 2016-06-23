@@ -23,8 +23,6 @@ IntroState::enter ()
   _sceneMgr->setShadowTextureCount(1);*/
 
 
-
-  _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
   _sceneMgr->setShadowIndexBufferSize(150000);
   //_sceneMgr->setShadowTextureSelfShadow(true);
 
@@ -627,15 +625,16 @@ IntroState::options(const CEGUI::EventArgs &e)
   sbText->setProperty("HorzFormatting", "RightAligned");
 
   CEGUI::Window* text2 = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text2");
-  text2->setText("[font='SPIDER MONKEY'] Auto-Reload Arrows");
+  text2->setText("[font='SPIDER MONKEY'] ¿Activate Shadows?");
   text2->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
   text2->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15,0),CEGUI::UDim(0.46,0)));
   text2->setProperty("FrameEnabled","False");
   text2->setProperty("BackgroundEnabled", "False");
   text2->setProperty("HorzFormatting", "LeftAligned");
 
-  CEGUI::ToggleButton* cb = static_cast<CEGUI::ToggleButton*> (CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Checkbox","CBAutoReload"));
+  CEGUI::ToggleButton* cb = static_cast<CEGUI::ToggleButton*> (CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Checkbox","CBShadows"));
   cb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.08,0),CEGUI::UDim(0.52,0)));
+  cb->subscribeEvent(CEGUI::ToggleButton::EventSelectStateChanged,CEGUI::Event::Subscriber(&IntroState::tbShadowsChanged,this));
 
   CEGUI::Window* resetButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","resetButton");
   resetButton->setText("[font='SPIDER MONKEY'] Reset Records ");
@@ -726,6 +725,12 @@ IntroState::options(const CEGUI::EventArgs &e)
     cbFullscreen->setSelected(false);
   }
 
+  if(_sceneMgr->getShadowTechnique() == Ogre::SHADOWTYPE_NONE){
+	 cb->setSelected(false);
+  }else{
+	 cb->setSelected(true);
+  }
+
   return true;
 }
 
@@ -748,7 +753,7 @@ IntroState::apply(const CEGUI::EventArgs &e){
   CEGUI::Slider* slider = static_cast<CEGUI::Slider*>(static_cast<const CEGUI::WindowEventArgs&>(e).window->getRootWindow()->getChild("background_options")->getChild("SliderSpeed"));
   float aux=slider->getCurrentValue();
   
-  CEGUI::ToggleButton* cb = static_cast<CEGUI::ToggleButton*>(static_cast<const CEGUI::WindowEventArgs&>(e).window->getRootWindow()->getChild("background_options")->getChild("CBAutoReload"));
+  CEGUI::ToggleButton* cb = static_cast<CEGUI::ToggleButton*>(static_cast<const CEGUI::WindowEventArgs&>(e).window->getRootWindow()->getChild("background_options")->getChild("CBShadows"));
 
   ofstream archivo;  // objeto de la clase ofstream
   archivo.open("data/Config.txt");
@@ -818,4 +823,18 @@ IntroState::changeResolution(const CEGUI::EventArgs &e){
   cout << _resWidth << endl;
   cout << _resHeigt << endl;
   return true;
+}
+
+bool IntroState::tbShadowsChanged(const CEGUI::EventArgs &e){
+	CEGUI::ToggleButton* cb = static_cast<CEGUI::ToggleButton*>(static_cast<const CEGUI::WindowEventArgs&>(e).window->getRootWindow()->getChild("background_options")->getChild("CBShadows"));
+	  if(cb->isSelected()){
+	    cout << "Activo sombras " << endl;
+	    _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+
+	  }else{
+		  cout << "	Desactivo sombras " << endl;
+		  _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_NONE);
+	  }
+
+	return true;
 }

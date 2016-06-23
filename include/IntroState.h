@@ -66,6 +66,7 @@ class IntroState : public Ogre::Singleton<IntroState>, public GameState
   bool resetRecords(const CEGUI::EventArgs &e);
   bool resetConfig(const CEGUI::EventArgs &e);
   bool tbFullscreenChanged(const CEGUI::EventArgs &e);
+  bool tbShadowsChanged(const CEGUI::EventArgs &e);
   bool changeResolution(const CEGUI::EventArgs &e);
 
   void createRecordsFile();
