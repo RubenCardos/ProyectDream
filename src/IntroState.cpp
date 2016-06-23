@@ -21,8 +21,12 @@ IntroState::enter ()
   _sceneMgr->setShadowColour(Ogre::ColourValue(0.5,0.5,0.5));
   _sceneMgr->setShadowTextureSize(1024);
   _sceneMgr->setShadowTextureCount(1);*/
-  //GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("BGMusic.mp3");
-  //GameManager::getSingletonPtr()->_mainTrack->play();
+
+
+
+  _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+  _sceneMgr->setShadowIndexBufferSize(150000);
+  //_sceneMgr->setShadowTextureSelfShadow(true);
 
   _exitGame = false;
 

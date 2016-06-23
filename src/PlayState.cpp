@@ -330,6 +330,13 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 		//Mover el nodo de las partículas a la posición del nodo de la locomotora
 		if(!_bossPieces.empty()){
 			_sceneMgr->getSceneNode("SmokeNode")->setPosition(_bossPieces.at(0)->getRigidBody()->getCenterOfMassPosition());
+			Vector3 pos = _bossPieces.back()->getSceneNode()->getPosition();
+			_sceneMgr->getSceneNode("ArrowEmptyNode")->setPosition(pos);
+			Vector3 trans = Vector3(-35,10,-35)*(_bossPieces.at(0)->getVSpeed()->normalisedCopy());
+			trans.y = 7;
+
+			_sceneMgr->getSceneNode("ArrowEmptyNode")->translate(trans);
+			cout <<"Unitario =" << _bossPieces.at(0)->getVSpeed()->normalisedCopy() << endl;
 		}
 		else{
 			_hero->resetPickedReels();
@@ -736,6 +743,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 			_nodeScn->setPosition(0,-3,0);
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->translate(Vector3(230*i,0,0));
+			_entScn->setCastShadows(false);
 
 			//_vScenario.push_back(_nodeScn);
 
@@ -777,6 +785,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->yaw(Degree(270));
 			_nodeScn->translate(Vector3(200*i,0,0));
+			_entScn->setCastShadows(false);
 
 			//_vScenario.push_back(_nodeScn);
 		}
@@ -829,6 +838,7 @@ void PlayState::createAllWalls(){
 	gameEntity = createGameEntity("WallL", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
+	wall->getSceneNode()->setVisible(false);
 	wall->setRigidBody(gameEntity->getRigidBody());
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
 	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
@@ -840,6 +850,7 @@ void PlayState::createAllWalls(){
 	gameEntity = createGameEntity("WallR", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
+	wall->getSceneNode()->setVisible(false);
 	wall->setRigidBody(gameEntity->getRigidBody());
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
 	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
@@ -852,6 +863,7 @@ void PlayState::createAllWalls(){
 	gameEntity = createGameEntity("WallB", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
+	wall->getSceneNode()->setVisible(false);
 	wall->setRigidBody(gameEntity->getRigidBody());
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
 	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
@@ -870,9 +882,9 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 
 	OgreBulletDynamics::RigidBody* rigidBody;
 
-	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Floor") || Ogre::StringUtil::startsWith(name,"Obstacle")|| Ogre::StringUtil::startsWith(name,"Thread")){
+	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Obstacle")|| Ogre::StringUtil::startsWith(name,"Thread")){
 		node->scale(scale);
-		//entity->setCastShadows(false); //PRUEBA DE SOMBRAS
+		entity->setCastShadows(false); //PRUEBA DE SOMBRAS
 		OgreBulletCollisions::BoxCollisionShape* bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
 
 		if(Ogre::StringUtil::startsWith(name,"Obstacle")){
@@ -912,9 +924,11 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		}
 		else if(Ogre::StringUtil::startsWith(name,"Enemy")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
+			entity->setCastShadows(false); //PRUEBA DE SOMBRAS
 		}
 		else if(Ogre::StringUtil::startsWith(name,"Spike")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
+			entity->setCastShadows(false); //PRUEBA DE SOMBRAS
 		}
 		else{
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
@@ -1148,6 +1162,20 @@ void PlayState::createBoss(){
 
 		//position.x -= 10.0;
 	}
+
+	//Nodo de escena vacio para la felcha que indica ultimo vagon---
+	SceneNode* arrowEmptyNode = _sceneMgr->getRootSceneNode()->createChildSceneNode("ArrowEmptyNode");
+	//arrowEmptyNode->setPosition(_bossPieces.at(1)->getSceneNode()->getPosition());
+
+	SceneNode* arrowNode = _sceneMgr->createSceneNode("ArrowNode");
+	Entity *entArrow = _sceneMgr->createEntity("E_Arrow","Arrow.mesh");
+	entArrow->setCastShadows(false);
+	arrowNode->attachObject(entArrow);
+	arrowNode->yaw(Degree(90));
+	arrowNode->scale(Ogre::Vector3(2,2,2));
+	arrowEmptyNode->addChild(arrowNode);
+
+	//--------------------------------------------------------------
 }
 
 void PlayState::deleteScenarioContent(){

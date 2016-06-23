@@ -125,9 +125,10 @@ void PhysicsManager::detectHeroCollision(){
 					_hero->picksReel(node->getName());
 					std::cout << "Recogida bobina " << node->getName() << std::endl;
 					cout << "¿Todas las bobinas recogidas?: " << _hero->AllReelsPicked() << endl;
+
 					Scenario::Scenario scenario = Scenario::Menu;
 					_world->getBulletDynamicsWorld()->removeCollisionObject(aux);
-					cout << "CAMBIANDO AL ESCENARIO DE MENU" <<endl;
+					//cout << "CAMBIANDO AL ESCENARIO DE MENU" <<endl;
 					PlayState::getSingletonPtr()->changeScenario(scenario);
 				}
 
@@ -135,7 +136,7 @@ void PhysicsManager::detectHeroCollision(){
 					MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 					_hero->loseLife();
 					for(int i=0 ; i< _walls->size();i++){
-						cout << "POSICION PARA Reposicionar EL MURO = " << _walls->at(i)->getSpawnPosition() << endl;
+						//cout << "POSICION PARA Reposicionar EL MURO = " << _walls->at(i)->getSpawnPosition() << endl;
 						btTransform transform = _walls->at(i)->getRigidBody()->getBulletRigidBody()->getCenterOfMassTransform();
 						transform.setOrigin(OgreBulletCollisions::convert(_walls->at(i)->getSpawnPosition()));
 						_walls->at(i)->getRigidBody()->getBulletRigidBody()->setCenterOfMassTransform(transform);
@@ -155,7 +156,7 @@ void PhysicsManager::detectHeroCollision(){
 						_hero->loseLife();
 						MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,0),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 						for(int i=0 ; i< _walls->size();i++){
-							cout << "POSICION PARA Reposicionar EL MURO = " << _walls->at(i)->getSpawnPosition() << endl;
+							//cout << "POSICION PARA Reposicionar EL MURO = " << _walls->at(i)->getSpawnPosition() << endl;
 							btTransform transform = _walls->at(i)->getRigidBody()->getBulletRigidBody()->getCenterOfMassTransform();
 							transform.setOrigin(OgreBulletCollisions::convert(_walls->at(i)->getSpawnPosition()));
 							_walls->at(i)->getRigidBody()->getBulletRigidBody()->setCenterOfMassTransform(transform);

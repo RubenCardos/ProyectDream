@@ -122,6 +122,7 @@ void Hero::picksReel(string reelName){
 	else if(Ogre::StringUtil::startsWith(reelName, "SN_ReelRoom")){
 		_pickedReels[1] = true;
 	}
+	cout << "Bobina Garden: " << _pickedReels[0] << " Bobina Room: "<< _pickedReels[1] <<endl;
 }
 void Hero::resetPickedReels(){
 	_pickedReels[0] = false;
