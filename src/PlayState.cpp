@@ -49,7 +49,6 @@ void PlayState::enter(){
 	_camera = _sceneMgr->createCamera("PlayCamera");
 	_viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
 	_sceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-	//_sceneMgr->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
 
 	//Camara--------------------
 	_camera->setPosition(Ogre::Vector3(-40,30,0));
@@ -145,13 +144,7 @@ void PlayState::enter(){
 	_cameraPivot->attachObject(_camera);
 	//---------------
 
-	//Animations---------------------------------------------------------------
-	//_animEnemy = _sceneMgr->getEntity("E_Enemy")->getAnimationState("walkEnemy");
 	
-	//_animHero->setEnabled(true);
-	//_animHero->setLoop(true);
-	//_animHero->setTimePosition(0.0);
-	//---------------------------------------------------------------------------
 }
 
 void PlayState::exit(){
@@ -682,7 +675,19 @@ bool PlayState::deleteCurrentScenario(){
 	//return _vScenario.empty();
 	return true;
 }
+void PlayState::createWallsSelectionLevel(){
 
+
+	GameEntity* gameEntity = new GameEntity();
+		Ogre::Vector3 positionRoom(25,-2,15);
+		Ogre::Vector3 scaleRoom = Ogre::Vector3(3,3,3);
+		gameEntity = createGameEntity("DoorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
+		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
+
+
+
+	
+}
 void PlayState::createScenario(Scenario::Scenario nextScenario){
 
 	//Musica Intro---------------------------------------
@@ -743,7 +748,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 			_nodeScn->setPosition(0,-3,0);
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->translate(Vector3(230*i,0,0));
-			_entScn->setCastShadows(false);
+			//_entScn->setCastShadows(false);
 
 			//_vScenario.push_back(_nodeScn);
 
@@ -785,7 +790,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 			_nodeScn->setScale(Vector3(2.5,2.5,2.5));
 			_nodeScn->yaw(Degree(270));
 			_nodeScn->translate(Vector3(200*i,0,0));
-			_entScn->setCastShadows(false);
+			//_entScn->setCastShadows(false);
 
 			//_vScenario.push_back(_nodeScn);
 		}

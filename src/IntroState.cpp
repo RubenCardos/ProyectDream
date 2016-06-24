@@ -21,11 +21,35 @@ IntroState::enter ()
   _sceneMgr->setShadowColour(Ogre::ColourValue(0.5,0.5,0.5));
   _sceneMgr->setShadowTextureSize(1024);
   _sceneMgr->setShadowTextureCount(1);*/
+  /* _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE);
+  //_sceneMgr->setShadowTexturzeSelfShadow(true);
+ // Set the caster material which uses the shaders defined above
+   string CUSTOM_RECEIVER_MATERIAL("Ogre/DepthShadowmap/Receiver/Float");
+  _sceneMgr->setShadowTextureSelfShadow(true);
+  _sceneMgr->setShadowTextureCasterMaterial("Ogre/DepthShadowmap/Caster/Float");
+  _sceneMgr->setShadowTextureReceiverMaterial(CUSTOM_RECEIVER_MATERIAL + "/PCF" );
+  _sceneMgr->setShadowTexturePixelFormat(Ogre::PF_FLOAT32_R);
+ // _sceneMgr->setShadowTextureSize(512);
+   _sceneMgr->setShadowTextureSettings(512,2);
+   _sceneMgr->setShadowColour(Ogre::ColourValue(0.5,0.5,0.5));*/
+
+/*
+  Ogre::LiSPSMShadowCameraSetup *mLiSPSMSetup = new Ogre::LiSPSMShadowCameraSetup();
+  mLiSPSMSetup->setUseAggressiveFocusRegion(true);
+  //mLiSPSMSetup->setUseSimpleOptimalAdjust(true);
+  mLiSPSMSetup->setOptimalAdjustFactor(1.1f);
+  _sceneMgr->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(mLiSPSMSetup));*/
 
 
-  _sceneMgr->setShadowIndexBufferSize(150000);
-  //_sceneMgr->setShadowTextureSelfShadow(true);
+/*
+ // Set the pixel format to floating point
+ 
+ // You can switch this on or off, I suggest you try both and see which works best for you
+ _sceneMgr->setShadowCasterRenderBackFaces(true);
+ // Finally enable the shadows using texture additive integrated
 
+ _sceneMgr->setShadowTextureSize(512); */
+ 
   _exitGame = false;
 
   
