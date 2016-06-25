@@ -16,11 +16,9 @@ material matCarton
             texture_unit 
             {
                 texture boss.png
-                //tex_address_mode wrap
                 scale 0.33 0.33
 		tex_coord_set 0
                 colour_op modulate	
-                //colour_op modulate
             }
         }
     }

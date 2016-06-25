@@ -368,6 +368,7 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 	// Tecla p --> PauseState.-------
 	if (e.key == OIS::KC_P) {
 		pushState(PauseState::getSingletonPtr());
+		
 	}
 	//-----------------
 
@@ -688,6 +689,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 
 	switch(_nextScenario) {
 	case Scenario::Menu:{
+
 		std::cout << "Menu " << _nextScenario <<std::endl;
 		//En el menu no aparecen hilos ni enemigos ni nada. Luego cuando se escoja nivel si
 		GameEntity* gameEntity = new GameEntity();
@@ -724,7 +726,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 
 		_currentScenario=Scenario::Menu;
 		_ground->setMaterialName("GroundRoom");
-
+		_sceneMgr->setSkyBox(true, "matSkybox");
 		//Musica -------------------------------------------
 		GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Menu.mp3");
 		GameManager::getSingletonPtr()->_mainTrack->play();
@@ -1005,7 +1007,8 @@ void PlayState::createBossRoom(){
 		while ( it.hasMoreElements() ) {//Recorro el iterador
 			SceneNode* _aux = static_cast<SceneNode*>(it.getNext());
 
-			if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Door")){
+			if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Door")
+				|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_selection")){
 				Entity* _e = static_cast<Entity*>(_aux->getAttachedObject(0));//Recupero la entidad
 				OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
 				_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
@@ -1023,7 +1026,7 @@ void PlayState::createBossRoom(){
 		//Muro de la izquierda--------
 		position.z = BOSS_ROOM-BOSS_ROOM;
 		position.y = WALLL_POSITION_Y;
-		scale = Ogre::Vector3(BOSS_ROOM,10,1);
+		scale = Ogre::Vector3(BOSS_ROOM,50,1);
 		gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
@@ -1047,7 +1050,7 @@ void PlayState::createBossRoom(){
 		position.z = BOSS_ROOM;
 		position.x = BOSS_ROOM;
 		position.y = WALLL_POSITION_Y;
-		scale = Ogre::Vector3(1,10,100);
+		scale = Ogre::Vector3(1,50,100);
 		gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
@@ -1060,6 +1063,7 @@ void PlayState::createBossRoom(){
 		position.z = BOSS_ROOM;
 		position.y = WALLR_POSITION_Y;
 		position.x = - BOSS_ROOM;
+		scale = Ogre::Vector3(1,10,100);
 		gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
@@ -1205,7 +1209,7 @@ void PlayState::deleteScenarioContent(){
 		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Reel") || Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")
 		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")
 		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Boss") || Ogre::StringUtil::startsWith(node->getName(),"SN_Obstacle")
-		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Spike")){
+		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Spike") || Ogre::StringUtil::startsWith(node->getName(),"SN_selection")){
 			Entity* entity = static_cast<Entity*>(node->getAttachedObject(0));//Recupero la entidad
 			OgreBulletCollisions::Object* Baux =_world->findObject(node);
 			_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());

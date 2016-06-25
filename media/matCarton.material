@@ -15,7 +15,7 @@ material matCarton
 
             texture_unit 
             {
-                texture boss.png
+                texture boss.jpg
                 scale 0.33 0.33
 		tex_coord_set 0
                 colour_op modulate	
