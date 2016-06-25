@@ -675,19 +675,7 @@ bool PlayState::deleteCurrentScenario(){
 	//return _vScenario.empty();
 	return true;
 }
-void PlayState::createWallsSelectionLevel(){
 
-
-	GameEntity* gameEntity = new GameEntity();
-		Ogre::Vector3 positionRoom(25,-2,15);
-		Ogre::Vector3 scaleRoom = Ogre::Vector3(3,3,3);
-		gameEntity = createGameEntity("DoorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
-		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
-
-
-
-	
-}
 void PlayState::createScenario(Scenario::Scenario nextScenario){
 
 	//Musica Intro---------------------------------------
@@ -712,6 +700,27 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		Ogre::Vector3 scaleGarden = Ogre::Vector3(3,3,3);
 		gameEntity = createGameEntity("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
 		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
+
+		Ogre::Vector3 positionWallSelection(0,0,-16);
+		Ogre::Vector3 scaleWallSelection = Ogre::Vector3(1,1,1);
+		gameEntity = createGameEntity("selection", "wallSelection.mesh", positionWallSelection, scaleWallSelection);
+		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+
+		Ogre::Vector3 positionWallSelection1(0,0,16);
+		Ogre::Vector3 scaleWallSelection1 = Ogre::Vector3(1,1,1);
+		gameEntity = createGameEntity("selection", "wallSelection1.mesh", positionWallSelection1, scaleWallSelection1);
+		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+
+		Ogre::Vector3 positionWallSelection2(0,0,0);
+		Ogre::Vector3 scaleWallSelection2 = Ogre::Vector3(1,1,1);
+		gameEntity = createGameEntity("selection", "wallSelection2.mesh", positionWallSelection2, scaleWallSelection2);
+		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+
+		Ogre::Vector3 positionWallSelection3(-50,0,0);
+		Ogre::Vector3 scaleWallSelection3 = Ogre::Vector3(1,1,1);
+		gameEntity = createGameEntity("selection", "wallSelection2.mesh", positionWallSelection3, scaleWallSelection3);
+		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		gameEntity->getSceneNode()->setVisible(false);
 
 		_currentScenario=Scenario::Menu;
 		_ground->setMaterialName("GroundRoom");
@@ -918,6 +927,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 				}
 			}
 		}
+		
 	}
 	else{
 		OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter =
@@ -939,7 +949,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
 		}
 
-		if(Ogre::StringUtil::startsWith(name,"Door")){
+		if(Ogre::StringUtil::startsWith(name,"Door") || Ogre::StringUtil::startsWith(name,"selection")){
 			rigidBody->setShape(node, bodyShape,
 					0.0 /* Restitucion */, 0.9 /* Friccion */,
 					0.0 /* Masa */, position /* Posicion inicial */,
@@ -951,6 +961,8 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 					15.0 /* Masa */, position /* Posicion inicial */,
 					Quaternion::IDENTITY /* Orientacion */);
 		}
+
+		
 	}
 
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));

@@ -1,17 +1,17 @@
-// matCristal genrated by blender2ogre 0.5.8
+// matWall1 genrated by blender2ogre 0.5.8
 
-material matCristal 
+material matWall1 
 {
     receive_shadows on 
 
     technique
     {
-        pass matCristal
+        pass matWall1
         {
-            ambient 0.800000011920929 0.800000011920929 0.800000011920929 0.1473684161901474
-            diffuse 0.42947369261791835 0.42947369261791835 0.42947369261791835 0.1473684161901474
-            specular 0.878947377204895 0.878947377204895 0.878947377204895 0.1473684161901474 12.5
-            emissive 0.0 0.0 0.0 0.1473684161901474
+            ambient 1.0 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0 1.0
+            specular 0.03125 0.03125 0.03125 1.0 12.5
+            emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off
             colour_write on
@@ -30,6 +30,13 @@ material matCristal
             shading gouraud
             transparent_sorting on
 
+            texture_unit 
+            {
+                texture wall.jpg
+                tex_address_mode wrap
+                scale 1.0 1.0
+                colour_op modulate
+            }
         }
     }
 }

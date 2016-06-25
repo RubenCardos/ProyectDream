@@ -1,16 +1,16 @@
-// matPicaGarden genrated by blender2ogre 0.5.8
+// matWall2 genrated by blender2ogre 0.5.8
 
-material matPicaGarden 
+material matWall2 
 {
     receive_shadows on 
 
     technique
     {
-        pass matPicaGarden
+        pass matWall2
         {
-            ambient 0.42002442479133606 0.42002442479133606 0.42002442479133606 1.0
-            diffuse 0.42002442479133606 0.42002442479133606 0.42002442479133606 1.0
-            specular 1.0 1.0 1.0 1.0 12.5
+            ambient 1.0 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0 1.0
+            specular 0.0 0.0 0.0 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off
@@ -30,6 +30,13 @@ material matPicaGarden
             shading gouraud
             transparent_sorting on
 
+            texture_unit 
+            {
+                texture wall2.jpg
+                tex_address_mode wrap
+                scale 1.0 1.0
+                colour_op modulate
+            }
         }
     }
 }
