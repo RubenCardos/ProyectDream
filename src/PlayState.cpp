@@ -327,8 +327,12 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 			_sceneMgr->getSceneNode("ArrowEmptyNode")->setPosition(pos);
 			Vector3 trans = Vector3(-35,10,-35)*(_bossPieces.at(0)->getVSpeed()->normalisedCopy());
 			trans.y = 7;
-
-			_sceneMgr->getSceneNode("ArrowEmptyNode")->translate(trans);
+			if(_bossPieces.size()>1){
+				_sceneMgr->getSceneNode("ArrowEmptyNode")->translate(trans);
+			}
+			else{
+				_sceneMgr->getSceneNode("ArrowEmptyNode")->translate(Ogre::Vector3(0,10,0));
+			}
 			cout <<"Unitario =" << _bossPieces.at(0)->getVSpeed()->normalisedCopy() << endl;
 		}
 		else{
@@ -947,14 +951,22 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
 			entity->setCastShadows(false); //PRUEBA DE SOMBRAS
 		}
+		//else if(Ogre::StringUtil::startsWith(name,"selection")){
+			//rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+			//entity->setCastShadows(false); //PRUEBA DE SOMBRAS
+		//}
 		else{
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
 		}
 
 		if(Ogre::StringUtil::startsWith(name,"Door") || Ogre::StringUtil::startsWith(name,"selection")){
+			double mass = 0.0;
+			//if(Ogre::StringUtil::startsWith(name,"selection")){
+				//mass = 200.0;
+			//}
 			rigidBody->setShape(node, bodyShape,
 					0.0 /* Restitucion */, 0.9 /* Friccion */,
-					0.0 /* Masa */, position /* Posicion inicial */,
+					mass /* Masa */, position /* Posicion inicial */,
 					Quaternion::IDENTITY /* Orientacion */);
 		}
 		else{
@@ -1184,7 +1196,7 @@ void PlayState::createBoss(){
 		//position.x -= 10.0;
 	}
 
-	//Nodo de escena vacio para la felcha que indica ultimo vagon---
+	//Nodo de escena vacio para la flecha que indica ultimo vagon---
 	SceneNode* arrowEmptyNode = _sceneMgr->getRootSceneNode()->createChildSceneNode("ArrowEmptyNode");
 	//arrowEmptyNode->setPosition(_bossPieces.at(1)->getSceneNode()->getPosition());
 
