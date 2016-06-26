@@ -107,7 +107,8 @@ void PhysicsManager::detectHeroCollision(){
 					else{
 						if(!_hero->isInvulnerable()){
 							_hero->loseLife();
-							MovementManager::getSingletonPtr()->repositionHero(btVector3(0,0,100),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+
+							MovementManager::getSingletonPtr()->repositionHero(OgreBulletCollisions::convert(calcuteSpawnPoint()),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 						}
 					}
 					//---------------------------------------
@@ -329,5 +330,21 @@ void PhysicsManager::removeGameEntity( std::string name){
 		}
 	}
 
+}
+
+Vector3 PhysicsManager::calcuteSpawnPoint(){
+	Vector3 res = Vector3(0,0,0);
+	Vector3 speed = *(AI_Manager::getSingletonPtr()->getLastWagon()->getVSpeed());
+	Vector3 pos = AI_Manager::getSingletonPtr()->getLastWagon()->getRigidBody()->getCenterOfMassPosition();
+	Vector3 per = Vector3(0,0,0);
+	if(speed.z !=0){
+		per = Vector3::UNIT_X*50;
+		res=per+pos;
+	}
+	else if(speed.x !=0){
+		per = Vector3::UNIT_Z*50;
+		res=per+pos;
+	}
+	return res;
 }
 

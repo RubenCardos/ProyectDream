@@ -30,12 +30,12 @@ Boss::~Boss(){
 void Boss::spawn(){
 	//animacion de aparecer
 	//las vidas y puntos se inicializan segun el tipo de enemigo
-	if(Ogre::StringUtil::startsWith(_sNode->getName(),"SN_BossLocomotive")){
-		_points = DEFAULT_POINTS * 5;
-	}
-	else{
+	//if(Ogre::StringUtil::startsWith(_sNode->getName(),"SN_BossLocomotive")){
+		//_points = DEFAULT_POINTS * 5;
+	//}
+	//else{
 		_points = DEFAULT_POINTS;
-	}
+	//}
 
 	_health = DEFAULT_HEALTH;
 	_vulnerable = true;

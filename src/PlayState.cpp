@@ -333,7 +333,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 			else{
 				_sceneMgr->getSceneNode("ArrowEmptyNode")->translate(Ogre::Vector3(0,10,0));
 			}
-			cout <<"Unitario =" << _bossPieces.at(0)->getVSpeed()->normalisedCopy() << endl;
+			//cout <<"Unitario =" << _bossPieces.at(0)->getVSpeed()->normalisedCopy() << endl;
 		}
 		else{
 			_hero->resetPickedReels();
@@ -1129,7 +1129,7 @@ void PlayState::createBossRoom(){
 			SceneNode* _aux = static_cast<SceneNode*>(it.getNext());
 
 			if(Ogre::StringUtil::startsWith(_aux->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(_aux->getName(),"SN_Door")
-				|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_selection")){
+				|| Ogre::StringUtil::startsWith(_aux->getName(),"SN_WallMenu")){
 				Entity* _e = static_cast<Entity*>(_aux->getAttachedObject(0));//Recupero la entidad
 				OgreBulletCollisions::Object* Baux =_world->findObject(_aux);
 				_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());

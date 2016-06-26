@@ -2,7 +2,7 @@
 using namespace Ogre;
 
 #define BOSS_ROOM 100.0
-#define EPSILON 0.3 //Se va a 0.27
+#define EPSILON 1 //Se va a 0.27
 #define FLOOR_POSITION_Y -2.8
 #define DISTANCE_BETWEEN_WAGONS 23
 

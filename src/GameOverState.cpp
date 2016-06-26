@@ -205,8 +205,16 @@ GameOverState::createGUI()
   sheetGameOver->setProperty("FrameEnabled","False");
   sheetGameOver->setProperty("BackgroundEnabled", "False");
 
+  CEGUI::Window* text4 = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","EnterNameText");
+  text4->setText("[font='SPIDER MONKEY'] Enter Your Name!");
+  text4->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
+  text4->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.23f, 0)));
+  text4->setProperty("FrameEnabled","False");
+  text4->setProperty("BackgroundEnabled", "False");
+  text4->setProperty("HorzFormatting", "LeftAligned");
+
   CEGUI::Editbox* eb = static_cast<CEGUI::Editbox*>(sheetGameOver->createChild("OgreTray/Editbox","ebox"));
-  eb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.23f, 0)));
+  eb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.30f, 0)));
   eb->setSize(CEGUI::USize(CEGUI::UDim(0.30,0),CEGUI::UDim(0.07,0)));
   eb->setFont("SPIDER MONKEY-18");
 
@@ -221,7 +229,7 @@ GameOverState::createGUI()
   CEGUI::Window* acceptButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","acceptButton");
   acceptButton->setText("[font='SPIDER MONKEY-18'] Accept");
   acceptButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.08,0)));
-  acceptButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.42,0),CEGUI::UDim(0.61,0)));
+  acceptButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.39f, 0)));
   acceptButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::accept,this));
 
   CEGUI::Window* menuButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","MenuButton");
@@ -257,6 +265,8 @@ GameOverState::createGUI()
   sheetGameOver->addChild(text);
   sheetGameOver->addChild(textRecords);
   sheetGameOver->addChild(menuButton);
+  sheetGameOver->addChild(text4);
+  sheetGameOver->addChild(acceptButton);
   sheet->addChild(sheetGameOver);
   
 
