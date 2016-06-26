@@ -413,8 +413,11 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 		_desp+=Vector3(0,0,1);
 	}
 	if (e.key == OIS::KC_V) {
-		_animationManager->stopAnimations(AnimationManager::ANIM_RUN_HERO);
-		_animationManager->playAnimations(AnimationManager::ANIM_ATTACK_HERO);
+		if(!_hero->isAttacking()){
+			_animationManager->stopAnimations(AnimationManager::ANIM_RUN_HERO);
+			_animationManager->playAnimations(AnimationManager::ANIM_ATTACK_HERO);
+		}
+
 	}
 	//--------------------------------
 
@@ -707,26 +710,33 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		gameEntity = createGameEntity("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
 		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
 
-		Ogre::Vector3 positionWallSelection(0,0,-16);
-		Ogre::Vector3 scaleWallSelection = Ogre::Vector3(1,1,1);
-		gameEntity = createGameEntity("selection", "wallSelection.mesh", positionWallSelection, scaleWallSelection);
-		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 
-		Ogre::Vector3 positionWallSelection1(0,0,16);
-		Ogre::Vector3 scaleWallSelection1 = Ogre::Vector3(1,1,1);
-		gameEntity = createGameEntity("selection", "wallSelection1.mesh", positionWallSelection1, scaleWallSelection1);
-		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 
-		Ogre::Vector3 positionWallSelection2(0,0,0);
+		//Muros--------------------------------------------------------------------------------------------------------
+		GameEntity* gameEntityW = new GameEntity();
+
+		Ogre::Vector3 positionWallSelection(10,0,0);
+		Ogre::Vector3 scaleWallSelection = Ogre::Vector3(1,1,2);
+		gameEntityW = createGameEntityRemade("Wall_Menu_R", "wallSelection.mesh", positionWallSelection, scaleWallSelection,0,20);
+		//gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+
+		/*Ogre::Vector3 positionWallSelection1(0,0,16);
+		Ogre::Vector3 scaleWallSelection1 = Ogre::Vector3(1,1,2);
+		gameEntity = createGameEntity("Wall_Menu_L", "wallSelection1.mesh", positionWallSelection1, scaleWallSelection1);
+		//gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+
+		Ogre::Vector3 positionWallSelection2(20,0,0);
 		Ogre::Vector3 scaleWallSelection2 = Ogre::Vector3(1,1,1);
-		gameEntity = createGameEntity("selection", "wallSelection2.mesh", positionWallSelection2, scaleWallSelection2);
-		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		//gameEntity = createGameEntity("Wall_Menu_Up", "wallSelection2.mesh", positionWallSelection2, scaleWallSelection2);
+		//gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 
 		Ogre::Vector3 positionWallSelection3(-50,0,0);
 		Ogre::Vector3 scaleWallSelection3 = Ogre::Vector3(1,1,1);
-		gameEntity = createGameEntity("selection", "wallSelection2.mesh", positionWallSelection3, scaleWallSelection3);
-		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
-		gameEntity->getSceneNode()->setVisible(false);
+		//gameEntity = createGameEntity("Wall_Menu_Back", "wallSelection2.mesh", positionWallSelection3, scaleWallSelection3);
+		//gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		//gameEntity->getSceneNode()->setVisible(false);*/
+
+		//-------------------------------------------------------------------------------------------------------
 
 		_currentScenario=Scenario::Menu;
 		_ground->setMaterialName("GroundRoom");
@@ -973,6 +983,7 @@ OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node,
 		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
 		node->getAttachedObject(0)->setCastShadows(false);
 	}
+	return rigidBody;
 }
 
 GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale){

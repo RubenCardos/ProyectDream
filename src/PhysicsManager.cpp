@@ -64,7 +64,7 @@ void PhysicsManager::detectHeroCollision(){
 			
 
      		if (node) {
-				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
+				cout << "Hero choca con: " << node->getName() << "\n" << endl;
 				
 				if(Ogre::StringUtil::startsWith(node->getName(),"SN_BossWagon")){
 					//Si me choco contra un vagon atacando---
