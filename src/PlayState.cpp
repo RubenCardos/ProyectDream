@@ -716,28 +716,30 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 
 		GameEntity* gameEntityW = new GameEntity();
 
-		Ogre::Vector3 positionWallSelection(10,0,0);
+		//Muro de Atrás "bien colocado"
+		Ogre::Vector3 positionWallSelection(-40,0,-2);  //ATRAS??
 		Ogre::Vector3 scaleWallSelection = Ogre::Vector3(1,1,4);
-		gameEntityW = createGameEntity("Wall_Menu_R", "wallSelection.mesh", positionWallSelection, scaleWallSelection);
-		gameEntityW->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
-		//gameEntity->getSceneNode()->setVisible(false);
+		gameEntityW = createGameEntity("WallMenu_Back", "wallSelection.mesh", positionWallSelection, scaleWallSelection);
+		//gameEntityW->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		gameEntityW->getSceneNode()->setVisible(false);
 
-		Ogre::Vector3 positionWallSelection1(0,0,16);
+		//Muro de Delante "bien colocado"
+		Ogre::Vector3 positionWallSelection1(40,0,2);
 		Ogre::Vector3 scaleWallSelection1 = Ogre::Vector3(1,1,2);
-		gameEntity = createGameEntity("Wall_Menu_Up", "wallSelection1.mesh", positionWallSelection1, scaleWallSelection1);
-		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		gameEntity = createGameEntity("WallMenu_Front", "wallSelection1.mesh", positionWallSelection1, scaleWallSelection1);
+		//gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 
-
-		Ogre::Vector3 positionWallSelection2(20,0,0);
+		//Muro de la Derecha "bien colocado"
+		Ogre::Vector3 positionWallSelection2(0,0,24);
 		Ogre::Vector3 scaleWallSelection2 = Ogre::Vector3(1,1,1);
-		gameEntity = createGameEntity("Wall_Menu_R", "wallSelection2.mesh", positionWallSelection2, scaleWallSelection2);
+		gameEntity = createGameEntity("WallMenu_Right", "wallSelection2.mesh", positionWallSelection2, scaleWallSelection2);
 		//gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
 
-
-		Ogre::Vector3 positionWallSelection3(-50,0,0);
+		//Muro de la Izquierda "bien colocado"
+		Ogre::Vector3 positionWallSelection3(0,0,-25);
 		Ogre::Vector3 scaleWallSelection3 = Ogre::Vector3(1,1,1);
-		gameEntity = createGameEntity("Wall_Menu_Back", "wallSelection2.mesh", positionWallSelection3, scaleWallSelection3);
-		//gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		gameEntity = createGameEntity("WallMenu_Left", "wallSelection2.mesh", positionWallSelection3, scaleWallSelection3);
+		//gameEntity->getRigidBody()->setOrientation(OgreBulletCollisions::convert(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y)));
 
 
 		//-------------------------------------------------------------------------------------------------------
@@ -904,7 +906,7 @@ void PlayState::createAllWalls(){
 	_walls.push_back(wall);
 }
 
-GameEntity* PlayState::createGameEntityRemade(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale, int bodyType, double mass){
+GameEntity* PlayState::createGameEntityRemade(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale, double mass){
 	cout << "Creando gameEntity" << endl;
 
 	GameEntity* gameEntity;
@@ -912,7 +914,7 @@ GameEntity* PlayState::createGameEntityRemade(std::string name, std::string mesh
 	Entity *entity = _sceneMgr->createEntity("E_" + name + Ogre::StringConverter::toString(_numEntities), mesh);
 	node->attachObject(entity);
 
-	OgreBulletDynamics::RigidBody* rigidBody = createRigidBody(node, mass);
+	OgreBulletDynamics::RigidBody* rigidBody = createRigidBody(node, scale, mass);
 
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBody->disableDeactivation();
@@ -928,7 +930,7 @@ GameEntity* PlayState::createGameEntityRemade(std::string name, std::string mesh
 	return gameEntity;
 }
 
-OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node, double mass){
+OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node, Ogre::Vector3 scale, double mass){
 	//bodyType = 0 es un bounding box, bodyType = 1 es un convex hull
 
 	//std::string name = node->getName().substr(1, node->getName().find("_"));
@@ -939,34 +941,28 @@ OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node,
 	OgreBulletCollisions::StaticMeshToShapeConverter* trimeshConverter;
 	OgreBulletCollisions::CollisionShape* bodyShapeConvex;
 
-	/*switch (bodyType) {
-		case 0:
-			cout << "BOX" << endl;
-			bodyShapeBox = new OgreBulletCollisions::BoxCollisionShape(node->getScale());
-			break;
-		case 1:
-			cout << "CONVEX" << endl;
-			trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(node->getAttachedObject(0));
-			bodyShapeConvex = trimeshConverter->createConvex();
-			break;
-		default:
-			cout << "fallo en el switch de CreateRigidBody" << endl;
-			break;
-	}*/
-
 	bodyShapeBox = new OgreBulletCollisions::BoxCollisionShape(node->getScale());
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(static_cast<Entity*>(node->getAttachedObject(0)));
 	bodyShapeConvex = trimeshConverter->createConvex();
 
-	if(Ogre::StringUtil::startsWith(name,"Wall")){
+	if(Ogre::StringUtil::startsWith(name,"WallMenu")){
+		AxisAlignedBox boundingBox = node->getAttachedObject(0)->getBoundingBox();
+		bodyShapeBox = new OgreBulletCollisions::BoxCollisionShape(boundingBox.getSize()/2.0);
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
 		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
 		node->getAttachedObject(0)->setCastShadows(false);
+	}
+	else if(Ogre::StringUtil::startsWith(name,"Wall")){
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
+		node->getAttachedObject(0)->setCastShadows(false);
+		node->setScale(scale);
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Obstacle")){
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
 		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
 		node->getAttachedObject(0)->setCastShadows(false);
+		node->setScale(scale);
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Thread")){
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
@@ -1003,11 +999,19 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 	node->attachObject(entity);
 
 	OgreBulletDynamics::RigidBody* rigidBody;
+	OgreBulletCollisions::BoxCollisionShape* bodyShape;
 
 	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Obstacle")|| Ogre::StringUtil::startsWith(name,"Thread")){
-		node->scale(scale);
+		if(Ogre::StringUtil::startsWith(name,"WallMenu")){
+			//node->showBoundingBox(true);
+			AxisAlignedBox boundingBox = entity->getBoundingBox();
+			bodyShape = new OgreBulletCollisions::BoxCollisionShape(boundingBox.getSize()/2.0);
+		}
+		else{
+			node->scale(scale);
+			bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
+		}
 		entity->setCastShadows(false); //PRUEBA DE SOMBRAS
-		OgreBulletCollisions::BoxCollisionShape* bodyShape = new OgreBulletCollisions::BoxCollisionShape(scale);
 
 		if(Ogre::StringUtil::startsWith(name,"Obstacle")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
