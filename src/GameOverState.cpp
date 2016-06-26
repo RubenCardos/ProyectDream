@@ -205,10 +205,10 @@ GameOverState::createGUI()
   sheetGameOver->setProperty("FrameEnabled","False");
   sheetGameOver->setProperty("BackgroundEnabled", "False");
 
-  /*CEGUI::Editbox* eb = static_cast<CEGUI::Editbox*>(sheetGameOver->createChild("OgreTray/Editbox","ebox"));
+  CEGUI::Editbox* eb = static_cast<CEGUI::Editbox*>(sheetGameOver->createChild("OgreTray/Editbox","ebox"));
   eb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.23f, 0)));
   eb->setSize(CEGUI::USize(CEGUI::UDim(0.30,0),CEGUI::UDim(0.07,0)));
-  eb->setFont("SPIDER MONKEY-18");*/
+  eb->setFont("SPIDER MONKEY-18");
 
   CEGUI::Window* recordsPoints = static_cast<CEGUI::Window*>(sheetGameOver->createChild("TaharezLook/StaticText","pointsrecords"));
   recordsPoints->setSize(CEGUI::USize(CEGUI::UDim(0.90,0),CEGUI::UDim(0.70,0)));
@@ -218,11 +218,11 @@ GameOverState::createGUI()
   recordsPoints->setProperty("VertFormatting", "TopAligned");
   
 
-  /*CEGUI::Window* acceptButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","acceptButton");
+  CEGUI::Window* acceptButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","acceptButton");
   acceptButton->setText("[font='SPIDER MONKEY-18'] Accept");
   acceptButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.08,0)));
   acceptButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.42,0),CEGUI::UDim(0.61,0)));
-  acceptButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::accept,this));*/
+  acceptButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::accept,this));
 
   CEGUI::Window* menuButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","MenuButton");
   menuButton->setText("[font='SPIDER MONKEY-18'] Play Again");
@@ -324,7 +324,8 @@ GameOverState::requestScore()
         puntuaciones.push_back(frase);
       }
       fichero.close();    
-    }else{
+    }
+    else{
 
       IntroState::getSingletonPtr()->createRecordsFile();
 
@@ -349,7 +350,6 @@ GameOverState::requestScore()
       fichero.close();
     }
 
-
     //Se debe re-escribir el fichero
     if(reWrite==true){
       puntuaciones.pop_back();//saco la ultima
@@ -361,6 +361,5 @@ GameOverState::requestScore()
       }
       archivo.close();
     }
-
 }
 

@@ -50,19 +50,16 @@ void PhysicsManager::detectHeroCollision(){
 		OgreBulletCollisions::Object *obOB_B = _world->findObject(obB);
     	OgreBulletCollisions::Object *obOB_A = _world->findObject(obA);
          
-        if ((obOB_A == obHero) || (obOB_B == obHero)) {  //si uno de los objetos colisionados es el hero
+        if((obOB_A == obHero) || (obOB_B == obHero)) {  //si uno de los objetos colisionados es el hero
 			Ogre::SceneNode* node = NULL;
 			if ((obOB_A != obHero) && (obOB_A)) {
 				node = static_cast<Ogre::SceneNode*>(obA -> getUserPointer());
 				aux=obA;
-
-				}
+			}
 			else if ((obOB_B != obHero) && (obOB_B)) {
 				node = static_cast<Ogre::SceneNode*>(obB -> getUserPointer());
 				aux=obB;
-				}
-			
-
+			}
      		if (node) {
 				//cout << "Hero choca con: " << node->getName() << "\n" << endl;
 				
@@ -70,12 +67,16 @@ void PhysicsManager::detectHeroCollision(){
 					//Si me choco contra un vagon atacando---
 					if(_hero->isAttacking()){
 						//Miro si es el ultimo vagon---------
-						Boss* _last= AI_Manager::getSingletonPtr()->getLastWagon();
+						Boss* last= AI_Manager::getSingletonPtr()->getLastWagon();
 
-						if(Ogre::StringUtil::match(_last->getSceneNode()->getName(),node->getName())){
-							AI_Manager::getSingletonPtr()->deleteLastWagon();
+						if(Ogre::StringUtil::match(last->getSceneNode()->getName(),node->getName()) && last->isVulnerable()){
 							cout << "\nAtaco al ultimo vagon\n"<< endl;
-							removeGameEntity(_last->getSceneNode()->getName());
+							_hero->increaseScore(AI_Manager::getSingletonPtr()->getLastWagon()->getPoints());
+							AI_Manager::getSingletonPtr()->deleteLastWagon();
+							removeGameEntity(last->getSceneNode()->getName());
+							//actualizar vulnerabilidad
+							last = AI_Manager::getSingletonPtr()->getLastWagon();
+							last->setVulnerable(false);
 						}
 						//-----------------------------------
 					}
@@ -95,6 +96,7 @@ void PhysicsManager::detectHeroCollision(){
 						//Si puedo atacare a la locomotora---------
 						Boss* _last= AI_Manager::getSingletonPtr()->getLastWagon();
 						if(Ogre::StringUtil::startsWith(_last->getSceneNode()->getName(),"SN_BossLocomotive")){
+							_hero->increaseScore(AI_Manager::getSingletonPtr()->getLastWagon()->getPoints());
 							AI_Manager::getSingletonPtr()->deleteLastWagon();
 							cout << "\nAtaco a la locomotora\n"<< endl;
 							removeGameEntity(_last->getSceneNode()->getName());

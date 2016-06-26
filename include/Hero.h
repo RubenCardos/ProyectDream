@@ -49,7 +49,8 @@ class Hero : public GameEntity
   double _movementspeed;
   double _jumpSpeed;
   Ogre::Vector3 _speed;
-  bool _pickedReels [];
+  bool _pickedGardenReel;
+  bool _pickedRoomReel;
   bool _attacking;
   Ogre::Real _invulnerabilityLeft;
 };

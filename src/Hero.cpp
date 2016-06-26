@@ -18,8 +18,8 @@ Hero::Hero(){
 	_movementspeed=50.0;
 	_nJumps = NUM_JUMPS;
 	_speed = Ogre::Vector3(0,0,0);
-	_pickedReels[0] = false;
-	_pickedReels[1] = false;
+	_pickedGardenReel = false;
+	_pickedRoomReel = false;
 }
 
 Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
@@ -31,8 +31,8 @@ Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
 	_nJumps = NUM_JUMPS;
 	_speed = Ogre::Vector3(0,0,0);
 	_attacking = false;
-	_pickedReels[0] = false;
-	_pickedReels[1] = false;
+	_pickedGardenReel = false;
+	_pickedRoomReel = false;
 	spawn();
 }
 
@@ -110,23 +110,23 @@ void Hero::resetLives(){
 
 bool Hero:: AllReelsPicked(){
 	bool picked = false;
-	if(_pickedReels[0] && _pickedReels[1]){
+	if(_pickedRoomReel && _pickedGardenReel){
 		picked = true;
 	}
 	return picked;
 }
 void Hero::picksReel(string reelName){
 	if(Ogre::StringUtil::startsWith(reelName, "SN_ReelGarden")){
-		_pickedReels[0] = true;
+		_pickedGardenReel = true;
 	}
 	else if(Ogre::StringUtil::startsWith(reelName, "SN_ReelRoom")){
-		_pickedReels[1] = true;
+		_pickedRoomReel = true;
 	}
-	cout << "Bobina Garden: " << _pickedReels[0] << " Bobina Room: "<< _pickedReels[1] <<endl;
+	cout << "Bobina Garden: " << _pickedGardenReel << " Bobina Room: "<< _pickedRoomReel <<endl;
 }
 void Hero::resetPickedReels(){
-	_pickedReels[0] = false;
-	_pickedReels[1] = false;
+	_pickedGardenReel = false;
+	_pickedRoomReel = false;
 }
 
 void Hero::makeInvulnerable(){

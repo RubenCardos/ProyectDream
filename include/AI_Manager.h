@@ -39,6 +39,7 @@ class AI_Manager : public Ogre::Singleton<AI_Manager>
   void initializeBossMovement(Ogre::Real* deltaT);
   void updateBossMovement();
   Boss* getLastWagon();
+  void setBossSpeed(double mult);
 
   // Heredados de Ogre::Singleton.
   static AI_Manager& getSingleton ();

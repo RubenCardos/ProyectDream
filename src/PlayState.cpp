@@ -614,11 +614,14 @@ PlayState::updateGUI()
 	sheet->getChild("background_wnd2")->getChild("textLives")->setText("[font='SPIDER MONKEY-18']"+Ogre::StringConverter::toString(_hero->getLives()));
 	//----------------------------------
 
-	if(_currentScenario==Scenario::Menu){
+	sheet->getChild("background_wnd2")->setVisible(true);
+
+	/*if(_currentScenario==Scenario::Menu){
 		sheet->getChild("background_wnd2")->setVisible(false);
-	}else{
+	}*/
+	/*else{
 		sheet->getChild("background_wnd2")->setVisible(true);
-	}
+	}*/
 }
 
 

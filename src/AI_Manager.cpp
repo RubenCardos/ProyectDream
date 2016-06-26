@@ -58,8 +58,6 @@ void AI_Manager::updateEnemyMovement(){
 	//Quizá hacer un metodo privado para cada tipo de IA de enemigo y llamarlos desde este
 	//Luego mover cada enemigo con el metodo moveEnemies del movementmanager usando la nueva speed
 	//de cada enemy
-
-
 }
 
 void AI_Manager::loadBossRoute(){
@@ -98,15 +96,15 @@ void AI_Manager::updateBossMovement(){
 			cout << "He llegado a mi destino "<< _bossPieces->at(0)->getCurrentIndex() <<endl;
 
 			//Compruebo nuevo indice--------------------------------
-			int New_Index=_bossPieces->at(0)->getCurrentIndex()+2;
-			if(New_Index>=_bossRoute.size()){
-				New_Index=0;
+			int new_Index=_bossPieces->at(0)->getCurrentIndex()+2;
+			if(new_Index>=_bossRoute.size()){
+				new_Index = 0;
 			}
 			//----------------------------------------------------
 
 			//Aumento index-----------
 			for(int i = 0;i<_bossPieces->size();i++){
-				_bossPieces->at(0)->setCurrentIndex(New_Index);
+				_bossPieces->at(0)->setCurrentIndex(new_Index);
 				cout << "Actualizo Indice = "<< _bossPieces->at(0)->getCurrentIndex() <<endl;
 			}
 			//------------------------
@@ -170,6 +168,9 @@ void AI_Manager::updateBossMovement(){
 				cout << "AUX = "<< *_aux <<endl;
 				_bossPieces->at(i)->setTargetPosition(_aux);
 			}
+
+			getLastWagon()->setVulnerable(true);
+
 			cout << "===INFO=== " <<endl;
 			cout << "Indice = "<< _bossPieces->at(0)->getCurrentIndex() <<endl;
 			cout << "Estoy en = "<< _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition() <<endl;
@@ -264,3 +265,4 @@ void AI_Manager::deleteLastWagon(){
 Boss* AI_Manager::getLastWagon(){
 	return _bossPieces->back();
 }
+

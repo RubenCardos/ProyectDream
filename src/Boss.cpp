@@ -9,7 +9,11 @@
 #include "Boss.h"
 
 #define DEFAULT_HEALTH 2
-#define DEFAULT_POINTS 10
+#define DEFAULT_POINTS 100
+
+Boss::Boss(){
+	spawn();
+}
 
 Boss::Boss(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, BossType type){
 	_sNode = sNode;
@@ -26,9 +30,15 @@ Boss::~Boss(){
 void Boss::spawn(){
 	//animacion de aparecer
 	//las vidas y puntos se inicializan segun el tipo de enemigo
-	_points = DEFAULT_POINTS;
+	if(Ogre::StringUtil::startsWith(_sNode->getName(),"SN_BossLocomotive")){
+		_points = DEFAULT_POINTS * 5;
+	}
+	else{
+		_points = DEFAULT_POINTS;
+	}
+
 	_health = DEFAULT_HEALTH;
-	_vulnerable = false;
+	_vulnerable = true;
 	_currentIndex = -1;
 	_rageTimer = 0.0;
 	_movementSpeed=5.0;

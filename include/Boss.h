@@ -15,7 +15,7 @@ enum BossType {
 class Boss : public GameEntity
 {
  public:
-  Boss() {}
+  Boss();
   Boss(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, BossType type);
   ~Boss();
 
