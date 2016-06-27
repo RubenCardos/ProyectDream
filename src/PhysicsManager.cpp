@@ -164,24 +164,25 @@ void PhysicsManager::detectHeroCollision(){
 							transform.setOrigin(OgreBulletCollisions::convert(_walls->at(i)->getSpawnPosition()));
 							_walls->at(i)->getRigidBody()->getBulletRigidBody()->setCenterOfMassTransform(transform);
 						}
-					}
-					//Elimino el enemigo con el que te chocas-------------------
-
-					//removeGameEntity(node->getName());
-
-					//Eliminar todos los enemigos--
-					for(int i =0 ; i<_gameEntities->size();i++){
-						if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){
-							removeGameEntity(_gameEntities->at(i)->getSceneNode()->getName());
+						//Eliminar todos los enemigos--
+						for(int i =0 ; i<_gameEntities->size();i++){
+							if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){
+								removeGameEntity(_gameEntities->at(i)->getSceneNode()->getName());
+							}
 						}
+						_enemies->clear();
+
+						PlayState::getSingletonPtr()->printAll();
+
+						PlayState::getSingletonPtr()->readEnemies("data/Levels/Enemies.txt");
+						//-----------------------------
 					}
-					_enemies->clear();
+					else if(_hero->isAttacking()){
+						//Elimino el enemigo con el que te chocas-------------------
+						removeGameEntity(node->getName());
+						//----------------------------------------------------------
+					}
 
-					PlayState::getSingletonPtr()->printAll();
-
-					PlayState::getSingletonPtr()->readEnemies("data/Levels/Enemies.txt");
-					//-----------------------------
-					//----------------------------------------------------------
 					//Actualizar las vidas en la UI
 
 					//Recoloco los muros---------------------------------------
@@ -325,6 +326,7 @@ void PhysicsManager::setWorld(OgreBulletDynamics::DynamicsWorld * world){
 }
 
 void PhysicsManager::removeGameEntity( std::string name){
+	cout << "GAME ENTITY A ELIMINAR=" << name << endl;
 	for(unsigned int i=0; i<_gameEntities->size(); i++){
 		if(Ogre::StringUtil::match(_gameEntities->at(i)->getSceneNode()->getName(),name)){
 			Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
@@ -333,6 +335,7 @@ void PhysicsManager::removeGameEntity( std::string name){
 			_sceneMgr->destroyEntity(_e);
 			_sceneMgr->getRootSceneNode()->removeChild(_gameEntities->at(i)->getSceneNode());
 			_gameEntities->erase(_gameEntities->begin() + i);
+			cout << "GameEntity eliminada="<< name <<endl;
 		}
 	}
 

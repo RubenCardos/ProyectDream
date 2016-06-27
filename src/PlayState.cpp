@@ -1474,7 +1474,7 @@ void PlayState::populateSpike(String _path){
 }
 
 void PlayState::populateEnemies(){
-	int index = 100;
+	//int index = 100;
 	GameEntity* gameEntity = new GameEntity();
 	Enemy* enemy;
 
@@ -1483,12 +1483,13 @@ void PlayState::populateEnemies(){
 	for(unsigned int i=0; i<_posEnemies.size(); i++){
 		enemy_x = _posEnemies.at(i).x;
 		if(hero_x < enemy_x && enemy_x < (hero_x + WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
-			gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+			//gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+			gameEntity = createGameEntity("Enemy","rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
 			enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
 			enemy->setMovementSpeed(50.0);
 			enemy->setSpeed(Ogre::Vector3(0,0,-2));
 			_enemies.push_back(enemy);
-			index++;
+			//index++;
 			_posEnemies.at(i) = Ogre::Vector3(-50,-50,-50);
 		}
 	}
