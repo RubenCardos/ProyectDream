@@ -375,7 +375,9 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 		
 	}
 	//-----------------
-
+	if (e.key == OIS::KC_J) {
+		printAll();
+	}
 	/*// Tecla g --> GameOverState.-------
 	if (e.key == OIS::KC_G) {
 		GameManager::getSingletonPtr()->setPunt(_hero->getScore());
@@ -1489,9 +1491,7 @@ void PlayState::populateEnemies(){
 			index++;
 			_posEnemies.at(i) = Ogre::Vector3(-50,-50,-50);
 		}
-		
 	}
-
 }
 
 void PlayState::readEnemies(string path){

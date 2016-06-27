@@ -17,22 +17,19 @@ MenuState::enter ()
   _camera = _sceneMgr->createCamera("MenuCamera");
   _viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
   _sceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-  
    
   //Camara--------------------
     _camera->setPosition(Ogre::Vector3(-40,10,0));
     _camera->lookAt(Ogre::Vector3(0,0,0));
     _camera->setNearClipDistance(5);
     _camera->setFarClipDistance(10000);
-    //-----------------------------
+  //-----------------------------
 
-  // Creacion de los elementos iniciales del mundo
+  //Creacion de los elementos iniciales del mundo
   CreateInitialWorld();
   createGUI();
 
   _exitGame = false;
-  
-
     
 }
 
@@ -51,15 +48,10 @@ MenuState::exit ()
 }
 
 void
-MenuState::pause()
-{
-}
+MenuState::pause(){}
 
 void
-MenuState::resume()
-{
-  
-}
+MenuState::resume(){}
 
 void 
 MenuState::CreateInitialWorld() {
@@ -104,9 +96,7 @@ bool
 MenuState::frameEnded
 (const Ogre::FrameEvent& evt)
 {
-
   _deltaT = evt.timeSinceLastFrame;
-  
 
   //Salir del juego--
   if (_exitGame)

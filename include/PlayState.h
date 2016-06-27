@@ -76,7 +76,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   CEGUI::MouseButton convertMouseButton(OIS::MouseButtonID id);
   
   void createBoss();
-
+  void readEnemies(String path);
+  void printAll();
 
  protected:
   Ogre::Root* _root;
@@ -137,13 +138,11 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale);
   GameEntity* createGameEntityRemade(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale, double mass);
   OgreBulletDynamics::RigidBody* createRigidBody(Ogre::SceneNode* node, Ogre::Vector3 scale, double mass);
-  void printAll();
 
   void populateObstacles(String _path);
   void populateThreads(String _path);
   void populateSpike(String _path);
   void populateEnemies();
-  void readEnemies(String path);
 
   void removeAllBehindBackWall();
   bool quit(const CEGUI::EventArgs &e);

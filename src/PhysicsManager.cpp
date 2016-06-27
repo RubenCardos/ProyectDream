@@ -108,7 +108,7 @@ void PhysicsManager::detectHeroCollision(){
 						if(!_hero->isInvulnerable()){
 							_hero->loseLife();
 
-							MovementManager::getSingletonPtr()->repositionHero(OgreBulletCollisions::convert(calcuteSpawnPoint()),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+							MovementManager::getSingletonPtr()->repositionHero(OgreBulletCollisions::convert(calculateSpawnPoint()),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 						}
 					}
 					//---------------------------------------
@@ -166,14 +166,20 @@ void PhysicsManager::detectHeroCollision(){
 						}
 					}
 					//Elimino el enemigo con el que te chocas-------------------
-					removeGameEntity(node->getName());
+
+					//removeGameEntity(node->getName());
+
 					//Eliminar todos los enemigos--
-					/*for(int i =0 ; i<_gameEntities->size();i++){
+					for(int i =0 ; i<_gameEntities->size();i++){
 						if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){
 							removeGameEntity(_gameEntities->at(i)->getSceneNode()->getName());
 						}
 					}
-					_enemies->clear();*/
+					_enemies->clear();
+
+					PlayState::getSingletonPtr()->printAll();
+
+					PlayState::getSingletonPtr()->readEnemies("data/Levels/Enemies.txt");
 					//-----------------------------
 					//----------------------------------------------------------
 					//Actualizar las vidas en la UI
@@ -321,10 +327,10 @@ void PhysicsManager::setWorld(OgreBulletDynamics::DynamicsWorld * world){
 void PhysicsManager::removeGameEntity( std::string name){
 	for(unsigned int i=0; i<_gameEntities->size(); i++){
 		if(Ogre::StringUtil::match(_gameEntities->at(i)->getSceneNode()->getName(),name)){
-			//Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
+			Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
 			OgreBulletCollisions::Object* Baux =_world->findObject(_gameEntities->at(i)->getSceneNode());
 			_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
-			//_sceneMgr->destroyEntity(_e);
+			_sceneMgr->destroyEntity(_e);
 			_sceneMgr->getRootSceneNode()->removeChild(_gameEntities->at(i)->getSceneNode());
 			_gameEntities->erase(_gameEntities->begin() + i);
 		}
@@ -332,7 +338,7 @@ void PhysicsManager::removeGameEntity( std::string name){
 
 }
 
-Vector3 PhysicsManager::calcuteSpawnPoint(){
+Vector3 PhysicsManager::calculateSpawnPoint(){
 	Vector3 res = Vector3(0,0,0);
 	Vector3 speed = *(AI_Manager::getSingletonPtr()->getLastWagon()->getVSpeed());
 	Vector3 pos = AI_Manager::getSingletonPtr()->getLastWagon()->getRigidBody()->getCenterOfMassPosition();
@@ -345,6 +351,19 @@ Vector3 PhysicsManager::calcuteSpawnPoint(){
 		per = Vector3::UNIT_Z*50;
 		res=per+pos;
 	}
+
+	if(res.x > 100){
+		res.x = res.x - 50;
+	}
+	if(res.x < -100){
+		res.x = res.x + 50;
+	}
+	if(res.z > 200){
+		res.z = res.z - 50;
+	}
+	if(res.x < 0){
+		res.z = res.z + 50;
+	}
+
 	return res;
 }
-
