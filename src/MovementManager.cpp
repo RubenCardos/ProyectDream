@@ -62,11 +62,13 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		/*if(!_inBossRoom){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
 		}*/
 	}
-	if(_currentSpeed.squaredLength() == 0){
-		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_RUN_HERO);
+	if(_currentSpeed.squaredLength() != 0){
+		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
+		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_IDLE_HERO);
 	}
 	else{
-		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
+		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_IDLE_HERO);
+		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_RUN_HERO);
 	}
 
 	rotateHero();
@@ -77,10 +79,12 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
 	}
 
+
 	//Si la velocidad en y es 0 es que ya estoy tocando suelo---------
 	if(_hero->getRigidBody()->getLinearVelocity().y == 0 ){// a veces es 5.72205e-06
 		if(_hero->getNumJumps() < N_JUMPS){
 			_hero->setNumJumps(N_JUMPS);
+			AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_JUMP_HERO);
 		}
 	}
 

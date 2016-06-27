@@ -266,6 +266,8 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
+	cout << "Velocidad del Heroe: " << _hero->getRigidBody()->getLinearVelocity() << " = " << _hero->getRigidBody()->getLinearVelocity().squaredLength() << endl;
+
 	//Actualizo camara----------------------
 	if(!_bossRoom){
 		_cameraPivot->setPosition(_hero->getSceneNode()->getPosition());
