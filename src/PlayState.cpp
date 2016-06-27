@@ -851,11 +851,16 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 }
 
 void PlayState::printAll(){
+	std::cout << "NODES" <<std::endl;
 	SceneNode::ChildNodeIterator it = _sceneMgr->getRootSceneNode()->getChildIterator();
 	std::cout << "Printing all children of root" << std::endl;
 	while (it.hasMoreElements()){
 		String  _aux = it.getNext()->getName();
 		std::cout << "  -"<< _aux << std::endl;
+	}
+	std::cout << "GAMEENTITIES" <<std::endl;
+	for(unsigned int i=0;i<_gameEntities.size();i++){
+		std::cout << _gameEntities.at(i)->getSceneNode()->getName() << std::endl;
 	}
 }
 

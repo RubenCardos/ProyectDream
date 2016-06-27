@@ -168,6 +168,7 @@ void PhysicsManager::detectHeroCollision(){
 						for(int i =0 ; i<_gameEntities->size();i++){
 							if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){
 								removeGameEntity(_gameEntities->at(i)->getSceneNode()->getName());
+								i--;
 							}
 						}
 						_enemies->clear();
