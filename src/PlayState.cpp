@@ -720,29 +720,25 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		GameEntity* gameEntityW = new GameEntity();
 
 		//Muro de Atrás "bien colocado"
-		Ogre::Vector3 positionWallSelection(-40,0,-2);  //ATRAS??
-		Ogre::Vector3 scaleWallSelection = Ogre::Vector3(1,1,4);
-		gameEntityW = createGameEntity("WallMenu_Back", "wallSelection.mesh", positionWallSelection, scaleWallSelection);
-		//gameEntityW->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		Ogre::Vector3 positionWallSelection(-14,0,3);  
+		Ogre::Vector3 scaleWallSelection = Ogre::Vector3(1,1,1);
+		gameEntityW = createGameEntity("WallMenu_Back", "wallSelection2.mesh", positionWallSelection, scaleWallSelection);
 		gameEntityW->getSceneNode()->setVisible(false);
 
 		//Muro de Delante "bien colocado"
-		Ogre::Vector3 positionWallSelection1(40,0,2);
-		Ogre::Vector3 scaleWallSelection1 = Ogre::Vector3(1,1,2);
-		gameEntity = createGameEntity("WallMenu_Front", "wallSelection1.mesh", positionWallSelection1, scaleWallSelection1);
-		//gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		Ogre::Vector3 positionWallSelection1(30,0,2);
+		Ogre::Vector3 scaleWallSelection1 = Ogre::Vector3(1,1,1);
+		gameEntityW = createGameEntity("WallMenu_Front", "wallSelection2.mesh", positionWallSelection1, scaleWallSelection1);
 
 		//Muro de la Derecha "bien colocado"
-		Ogre::Vector3 positionWallSelection2(0,0,24);
+		Ogre::Vector3 positionWallSelection2(10,0,37);
 		Ogre::Vector3 scaleWallSelection2 = Ogre::Vector3(1,1,1);
-		gameEntity = createGameEntity("WallMenu_Right", "wallSelection2.mesh", positionWallSelection2, scaleWallSelection2);
-		//gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y));
+		gameEntityW = createGameEntity("WallMenu_Right", "wallSelection.mesh", positionWallSelection2, scaleWallSelection2);
 
 		//Muro de la Izquierda "bien colocado"
-		Ogre::Vector3 positionWallSelection3(0,0,-25);
+		Ogre::Vector3 positionWallSelection3(9,0,-35);
 		Ogre::Vector3 scaleWallSelection3 = Ogre::Vector3(1,1,1);
-		gameEntity = createGameEntity("WallMenu_Left", "wallSelection2.mesh", positionWallSelection3, scaleWallSelection3);
-		//gameEntity->getRigidBody()->setOrientation(OgreBulletCollisions::convert(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_Y)));
+		gameEntityW = createGameEntity("WallMenu_Left", "wallSelection1.mesh", positionWallSelection3, scaleWallSelection3);
 
 
 		//-------------------------------------------------------------------------------------------------------
@@ -1485,7 +1481,7 @@ void PlayState::populateEnemies(){
 	for(unsigned int i=0; i<_posEnemies.size(); i++){
 		enemy_x = _posEnemies.at(i).x;
 		if(hero_x < enemy_x && enemy_x < (hero_x + WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
-			gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+			gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
 			enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
 			enemy->setMovementSpeed(50.0);
 			enemy->setSpeed(Ogre::Vector3(0,0,-2));
