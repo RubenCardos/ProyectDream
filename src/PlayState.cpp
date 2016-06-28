@@ -116,7 +116,7 @@ void PlayState::enter(){
 
 	//Crear el AnimationManager
 	if(!AnimationManager::getSingletonPtr()){
-		_animationManager = new AnimationManager(_sceneMgr, _currentScenario, _hero);
+		_animationManager = new AnimationManager(_sceneMgr, _currentScenario, _hero, &_enemies);
 	}
 	else{
 		_animationManager = AnimationManager::getSingletonPtr();
@@ -266,7 +266,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
-	cout << "Velocidad del Heroe: " << _hero->getRigidBody()->getLinearVelocity() << " = " << _hero->getRigidBody()->getLinearVelocity().squaredLength() << endl;
+	//cout << "Velocidad del Heroe: " << _hero->getRigidBody()->getLinearVelocity() << " = " << _hero->getRigidBody()->getLinearVelocity().squaredLength() << endl;
 
 	//Actualizo camara----------------------
 	if(!_bossRoom){
@@ -288,6 +288,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 
 	if(_currentScenario != Scenario::Menu){
 		populateEnemies();
+		
 		//removeAllBehindBackWall();
 	}
 
@@ -808,6 +809,8 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		//Leer fichero de enemigos--------------------------
 		readEnemies("data/Levels/Enemies.txt");
 		//--------------------------------------------------
+
+		//_animationManager->playAnimationsEnemy("walkRex");
 
 		break;
 
@@ -1496,6 +1499,8 @@ void PlayState::populateEnemies(){
 			enemy->setMovementSpeed(50.0);
 			enemy->setSpeed(Ogre::Vector3(0,0,-2));
 			_enemies.push_back(enemy);
+			//Entity* entity = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
+			//_animationManager->playAnimationsEnemy("walkRex", entity->getName(),i);
 			//index++;
 			_posEnemies.at(i) = Ogre::Vector3(-50,-50,-50);
 		}

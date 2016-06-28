@@ -5,11 +5,12 @@ using namespace Ogre;
 #define NUM_ANIMS 5
 
 
-AnimationManager::AnimationManager(Ogre::SceneManager* sceneMgr, Scenario::Scenario currentScenario, Hero* hero){
+AnimationManager::AnimationManager(Ogre::SceneManager* sceneMgr, Scenario::Scenario currentScenario, Hero* hero,std::vector<Enemy*>* enemies){
 	_sceneMgr = sceneMgr;
 	_currentScenario = currentScenario;
 	_currentAnimation = ANIM_IDLE_HERO;
 	_hero = hero;
+	_enemies = enemies;
 }
 
 AnimationManager::~AnimationManager(){
@@ -41,14 +42,20 @@ void AnimationManager::setupAnimations(){
 
 }
 
-void AnimationManager::playAnimationsEnemy(string name, string entity){
+void AnimationManager::playAnimationsEnemy(string name, string entity, int i){
 		
-		//ANIMATIONS ENEMY-------------------------------------------------------
-		_animsEnemy =_sceneMgr->getEntity(entity)->getAnimationState(name);
-		_animsEnemy->setEnabled(true);
-		_animsEnemy->setLoop(true);
-		_animsEnemy->setTimePosition(0.0);
-		//-----------------------------------------------------------------------
+	
+
+	//ANIMATIONS ENEMY-------------------------------------------------------
+		_animsEnemy[i] =_sceneMgr->getEntity(entity)->getAnimationState(name);
+		_animsEnemy[i]->setEnabled(true);
+		_animsEnemy[i]->setLoop(true);
+		_animsEnemy[i]->setTimePosition(0.0);
+	//-----------------------------------------------------------------------
+
+			
+
+	
 
 }
 
@@ -153,15 +160,16 @@ void AnimationManager::resetAnimations(Real _deltaT){
 		
 	}
 	if(_currentScenario != Scenario::Menu){
+		for(unsigned int i=0; i<_enemies->size();i++){
 
-
-		if (_animsEnemy != NULL) {
-			if (_animsEnemy->hasEnded()) {
-				_animsEnemy->setTimePosition(0.0);
-				_animsEnemy->setEnabled(false);
-			}
-			else {
-				_animsEnemy->addTime(_deltaT);
+			if (_animsEnemy[i] != NULL) {
+				if (_animsEnemy[i]->hasEnded()) {
+					_animsEnemy[i]->setTimePosition(0.0);
+					_animsEnemy[i]->setEnabled(false);
+				}
+				else {
+					_animsEnemy[i]->addTime(_deltaT);
+				}
 			}
 		}
 	}

@@ -32,7 +32,7 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
            };
 
  public:
-  AnimationManager(Ogre::SceneManager* sceneMgr, Scenario::Scenario currentScenario, Hero* hero);
+  AnimationManager(Ogre::SceneManager* sceneMgr, Scenario::Scenario currentScenario, Hero* hero,std::vector<Enemy*>* enemies);
   ~AnimationManager();
 
   void setSceneManager(Ogre::SceneManager* sceneMgr);
@@ -43,7 +43,7 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
   void setupAnimations();
   void resetAnimations(Real _deltaT);
   Ogre::AnimationState* getAnimation(animID id);
-  void playAnimationsEnemy(string name, string entity);
+  void playAnimationsEnemy(string name, string entity, int i);
 
 
   // Heredados de Ogre::Singleton.
@@ -54,9 +54,10 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
   Ogre::SceneManager* _sceneMgr;
   Scenario::Scenario _currentScenario;
   Ogre::AnimationState *_animsHero[NUM_ANIMS];
-  Ogre::AnimationState *_animsEnemy;
+  Ogre::AnimationState *_animsEnemy[];
   animID _currentAnimation;
   Hero* _hero;
+  std::vector<Enemy*>* _enemies;
 };
 
 #endif
