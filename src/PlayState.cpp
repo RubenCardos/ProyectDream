@@ -723,27 +723,30 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		//Muros--------------------------------------------------------------------------------------------------------
 
 		GameEntity* gameEntityW = new GameEntity();
-
-		//Muro de Atrás "bien colocado"
-		Ogre::Vector3 positionWallSelection(-14,0,3);  
 		Ogre::Vector3 scaleWallSelection = Ogre::Vector3(1,1,1);
-		gameEntityW = createGameEntity("WallMenu_Back", "wallSelection2.mesh", positionWallSelection, scaleWallSelection);
-		gameEntityW->getSceneNode()->setVisible(false);
+		//Muro de Atrás "bien colocado"
+		Ogre::Vector3 positionWallSelection(-60,0,3); //-14 
+		gameEntityW = createGameEntity("WallMenu_Back", "wallSelection3.mesh", positionWallSelection, scaleWallSelection);
+		//gameEntityW->getSceneNode()->setVisible(false);
 
 		//Muro de Delante "bien colocado"
 		Ogre::Vector3 positionWallSelection1(30,0,2);
-		Ogre::Vector3 scaleWallSelection1 = Ogre::Vector3(1,1,1);
-		gameEntityW = createGameEntity("WallMenu_Front", "wallSelection2.mesh", positionWallSelection1, scaleWallSelection1);
+		gameEntityW = createGameEntity("WallMenu_Front", "wallSelection2.mesh", positionWallSelection1, scaleWallSelection);
 
 		//Muro de la Derecha "bien colocado"
 		Ogre::Vector3 positionWallSelection2(10,0,37);
-		Ogre::Vector3 scaleWallSelection2 = Ogre::Vector3(1,1,1);
-		gameEntityW = createGameEntity("WallMenu_Right", "wallSelection.mesh", positionWallSelection2, scaleWallSelection2);
+		gameEntityW = createGameEntity("WallMenu_Right", "wallSelection.mesh", positionWallSelection2, scaleWallSelection);
+
+		Ogre::Vector3 positionWallSelection3(-38,0,45);
+		gameEntityW = createGameEntity("WallMenu_Right2", "wallSelection.mesh", positionWallSelection3, scaleWallSelection);
 
 		//Muro de la Izquierda "bien colocado"
-		Ogre::Vector3 positionWallSelection3(9,0,-35);
-		Ogre::Vector3 scaleWallSelection3 = Ogre::Vector3(1,1,1);
-		gameEntityW = createGameEntity("WallMenu_Left", "wallSelection1.mesh", positionWallSelection3, scaleWallSelection3);
+		Ogre::Vector3 positionWallSelection4(9,0,-35);
+		gameEntityW = createGameEntity("WallMenu_Left", "wallSelection1.mesh", positionWallSelection4, scaleWallSelection);
+
+		//Muro Izquierda 2
+		Ogre::Vector3 positionWallSelection5(-38,0,-36);
+		gameEntityW = createGameEntity("WallMenu_Left2", "wallSelection1.mesh", positionWallSelection5, scaleWallSelection);
 
 
 		//-------------------------------------------------------------------------------------------------------
