@@ -180,6 +180,7 @@ void PhysicsManager::detectHeroCollision(){
 					}
 					else if(_hero->isAttacking()){
 						//Elimino el enemigo con el que te chocas-------------------
+						AnimationManager::getSingletonPtr()->resetEnemyAnimation(node->getName());
 						removeGameEntity(node->getName());
 						//----------------------------------------------------------
 					}

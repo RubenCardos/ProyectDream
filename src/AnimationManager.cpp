@@ -70,11 +70,26 @@ void AnimationManager::playEnemyAnimations(Ogre::Real deltaT){
 void AnimationManager::resetEnemyAnimations(){
 	for(unsigned int i=0; i<_animsEnemy.size(); i++){
 		if(_animsEnemy.at(i) != NULL){
-			_animsEnemy.at(i)->setEnabled(false);
-			delete _animsEnemy.at(i);
+			//_animsEnemy.at(i)->setEnabled(false);
+			//delete _animsEnemy.at(i);
 		}
 	}
 	_animsEnemy.clear();
+}
+
+void AnimationManager::resetEnemyAnimation(String name){
+	for(unsigned int i=0; i<_animsEnemy.size(); i++){
+		if(_animsEnemy.at(i) != NULL){
+
+			//delete _animsEnemy.at(i);
+			if(Ogre::StringUtil::match(name,_enemies->at(i)->getSceneNode()->getName())){
+				_animsEnemy.at(i)->setEnabled(false);
+				_animsEnemy.erase(_animsEnemy.begin()+i);
+				_enemies->erase(_enemies->begin()+i);
+			}
+		}
+	}
+	//_animsEnemy.clear();
 }
 
 void AnimationManager::playAnimations(animID id){

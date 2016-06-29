@@ -46,6 +46,7 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
   Ogre::AnimationState* getAnimation(animID id);
   void playEnemyAnimations(Ogre::Real deltaT);
   void resetEnemyAnimations();
+  void resetEnemyAnimation(String name);
 
 
   // Heredados de Ogre::Singleton.
