@@ -36,13 +36,45 @@ void AnimationManager::setupAnimations(){
 	}
 }
 
-void AnimationManager::playAnimationsEnemy(string name, string entity, int i){
-	//ENEMY ANIMATIONS-------------------------------------------------------
-		_animsEnemy[i] =_sceneMgr->getEntity(entity)->getAnimationState(name);
-		_animsEnemy[i]->setEnabled(true);
-		_animsEnemy[i]->setLoop(true);
-		_animsEnemy[i]->setTimePosition(0.0);
-	//-----------------------------------------------------------------------
+void AnimationManager::setupEnemyAnimations(){
+	std::string animName = "";
+
+	if(Ogre::StringUtil::match(_enemies->back()->getType(),"rabbit")){
+		animName = "walkEnemy";
+	}
+	else{
+		animName = "walkRex";
+	}
+	Ogre::AnimationStateIterator it = static_cast<Entity*>(_enemies->back()->getSceneNode()->getAttachedObject(0))->getAllAnimationStates()->getAnimationStateIterator();
+
+	_animsEnemy.push_back(it.begin()->second);
+	_animsEnemy.back()->setEnabled(true);
+	_animsEnemy.back()->setLoop(true);
+	_animsEnemy.back()->setTimePosition(0.0);
+}
+
+void AnimationManager::playEnemyAnimations(Ogre::Real deltaT){
+	for(unsigned int i=0; i<_animsEnemy.size(); i++){
+		if(_animsEnemy.at(i) != NULL){
+			if(_animsEnemy.at(i)->hasEnded()){
+				_animsEnemy.at(i)->setTimePosition(0.0);
+				_animsEnemy.at(i)->setEnabled(false);
+			}
+			else{
+				_animsEnemy.at(i)->addTime(deltaT);
+			}
+		}
+	}
+}
+
+void AnimationManager::resetEnemyAnimations(){
+	for(unsigned int i=0; i<_animsEnemy.size(); i++){
+		if(_animsEnemy.at(i) != NULL){
+			_animsEnemy.at(i)->setEnabled(false);
+			delete _animsEnemy.at(i);
+		}
+	}
+	_animsEnemy.clear();
 }
 
 void AnimationManager::playAnimations(animID id){
@@ -123,7 +155,7 @@ void AnimationManager::resetAnimations(Real _deltaT){
 		}
 	}
 	if(_currentScenario != Scenario::Menu){
-		for(unsigned int i=0; i<_enemies->size();i++){
+		/*for(unsigned int i=0; i<_enemies->size();i++){
 			if (_animsEnemy[i] != NULL) {
 				if (_animsEnemy[i]->hasEnded()) {
 					_animsEnemy[i]->setTimePosition(0.0);
@@ -133,7 +165,7 @@ void AnimationManager::resetAnimations(Real _deltaT){
 					_animsEnemy[i]->addTime(_deltaT);
 				}
 			}
-		}
+		}*/
 	}
 }
 

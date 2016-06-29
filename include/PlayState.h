@@ -105,7 +105,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   std::vector<GameEntity*> _gameEntities;
   std::vector<Boss*> _bossPieces;
   std::vector<Ogre::Vector3> _posEnemies;
-  std::vector<int> _enemyTypes;
+  std::vector<std::string> _enemyTypes;
 
   MovementManager* _movementManager;
   PhysicsManager* _physicsManager;

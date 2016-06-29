@@ -312,6 +312,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 
 	//Animations--------------------------------
 	_animationManager->resetAnimations(_deltaT);
+	_animationManager->playEnemyAnimations(_deltaT);
 	//_animationManager->resetAnimations(AnimationManager::ANIM_IDLE_HERO, _deltaT);
 	//--------------------------------------------
 
@@ -1510,7 +1511,7 @@ void PlayState::populateEnemies(){
 		enemy_x = _posEnemies.at(i).x;
 		if(hero_x < enemy_x && enemy_x < (hero_x + WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
 			//gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
-			if(_enemyTypes.at(i) == 1){
+			if(Ogre::StringUtil::match(_enemyTypes.at(i),"rabbit")){
 				gameEntity = createGameEntity("Enemy","enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
 				enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
 			}
@@ -1522,6 +1523,7 @@ void PlayState::populateEnemies(){
 			enemy->setMovementSpeed(50.0);
 			enemy->setSpeed(Ogre::Vector3(0,0,-2));
 			_enemies.push_back(enemy);
+			_animationManager->setupEnemyAnimations();
 			//Entity* entity = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
 			//_animationManager->playAnimationsEnemy("walkRex", entity->getName(),i);
 			//index++;
@@ -1545,7 +1547,7 @@ void PlayState::readEnemies(string path){
 			int enemyPos_x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[0]);
 			int enemyPos_y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[1]);
 			int enemyPos_z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[2]);
-			int enemyType = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[3]);
+			std::string enemyType = Ogre::StringUtil::split (line,",")[3];
 
 			vPos = Ogre::Vector3(enemyPos_x,enemyPos_y,enemyPos_z);
 			_posEnemies.push_back(vPos);

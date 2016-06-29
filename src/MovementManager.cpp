@@ -110,6 +110,8 @@ void MovementManager::repositionHero(btVector3 position,btQuaternion orientation
 	//Hago el hero invulnerable-------------------------------
 	_hero->makeInvulnerable();
 	//--------------------------------------------------------
+	AnimationManager::getSingletonPtr()->resetEnemyAnimations();
+
 	btTransform initialTransform;
 
 	initialTransform.setOrigin(position);
