@@ -1197,7 +1197,7 @@ void PlayState::createBossRoom(){
 		wall->setRigidBody(gameEntity->getRigidBody());
 		_walls.push_back(wall);
 		Entity* eWallRBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
-		eWallRBoss->setMaterialName("matCarton");
+		eWallRBoss->setMaterialName("matCarton1");
 
 		//Muro delantero--------
 		position.z = BOSS_ROOM;
@@ -1216,7 +1216,7 @@ void PlayState::createBossRoom(){
 		position.z = BOSS_ROOM;
 		position.y = WALLR_POSITION_Y;
 		position.x = - BOSS_ROOM;
-		scale = Ogre::Vector3(1,10,100);
+		scale = Ogre::Vector3(1,15,100);
 		gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
@@ -1412,8 +1412,19 @@ void PlayState::populateObstacles(String _path){
 			//ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",pos,scale);
 			ge=createGameEntityRemade("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",pos,scale,200);
 			Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
+			
+			if(_currentScenario== Scenario::LevelGarden){
+				switch(texture){
+				case 0:
+					e->setMaterialName("matStone");
+					break;
 
-			switch(texture){
+				case 1:
+					e->setMaterialName("matStone2");
+					break;
+				}
+			}else{
+				switch(texture){
 				case 0:
 					e->setMaterialName("matRed");
 					break;
@@ -1421,7 +1432,10 @@ void PlayState::populateObstacles(String _path){
 				case 1:
 					e->setMaterialName("matGreen");
 					break;
+				}
+
 			}
+			
 
 
 			/*if(_currentScenario == Scenario::LevelRoom){
