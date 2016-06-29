@@ -1510,8 +1510,15 @@ void PlayState::populateEnemies(){
 		enemy_x = _posEnemies.at(i).x;
 		if(hero_x < enemy_x && enemy_x < (hero_x + WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
 			//gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
-			gameEntity = createGameEntity("Enemy","rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
-			enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
+			if(_enemyTypes.at(i) == 1){
+				gameEntity = createGameEntity("Enemy","enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+				enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
+			}
+			else{
+				gameEntity = createGameEntity("Enemy","rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+				enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"2");
+			}
+
 			enemy->setMovementSpeed(50.0);
 			enemy->setSpeed(Ogre::Vector3(0,0,-2));
 			_enemies.push_back(enemy);
@@ -1525,6 +1532,7 @@ void PlayState::populateEnemies(){
 
 void PlayState::readEnemies(string path){
 	_posEnemies.clear();
+	_enemyTypes.clear();
 	//Leo el fichero-----------------------------------
 	fstream file;//Fichero
 	string line; //leer linea a linea
@@ -1537,11 +1545,11 @@ void PlayState::readEnemies(string path){
 			int enemyPos_x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[0]);
 			int enemyPos_y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[1]);
 			int enemyPos_z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[2]);
-
-			int EnemyType = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[3]);
+			int enemyType = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[3]);
 
 			vPos = Ogre::Vector3(enemyPos_x,enemyPos_y,enemyPos_z);
 			_posEnemies.push_back(vPos);
+			_enemyTypes.push_back(enemyType);
 		}
 		file.close();
 	}
