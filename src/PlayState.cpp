@@ -145,6 +145,10 @@ void PlayState::enter(){
 	_cameraPivot->attachObject(_camera);
 	//---------------
 
+	//ParticleSystem::setDefaultNonVisibleUpdateTimeout(5); 
+	aureolaNode = _sceneMgr->getRootSceneNode()->createChildSceneNode("AureolaNode");
+	aureolaNode->attachObject(_sceneMgr->createParticleSystem("Aureola", "Examples/Sun"));
+	aureolaNode->setVisible(false);
 	
 }
 
@@ -1437,19 +1441,6 @@ void PlayState::populateObstacles(String _path){
 			}
 			
 
-
-			/*if(_currentScenario == Scenario::LevelRoom){
-				if(x <120){
-					e->setMaterialName("matRed");
-				}
-				else{
-					e->setMaterialName("matGreen");
-				}
-			}
-			else{
-				e->setMaterialName("Ground");
-			}*/
-
 			index++;
 		}
 		fichero.close();
@@ -1545,8 +1536,8 @@ void PlayState::populateEnemies(){
 			enemy->setSpeed(Ogre::Vector3(0,0,-2));
 			_enemies.push_back(enemy);
 			_animationManager->setupEnemyAnimations();
-			//Entity* entity = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
-			//_animationManager->playAnimationsEnemy("walkRex", entity->getName(),i);
+			//aureolaNode->setPosition(enemy->getRigidBody()->getCenterOfMassPosition());
+			
 			//index++;
 			_posEnemies.at(i) = Ogre::Vector3(-50,-50,-50);
 		}

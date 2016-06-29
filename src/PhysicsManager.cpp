@@ -177,12 +177,17 @@ void PhysicsManager::detectHeroCollision(){
 
 						PlayState::getSingletonPtr()->readEnemies("data/Levels/Enemies.txt");
 						//-----------------------------
+
+						_sceneMgr->getSceneNode("AureolaNode")->setVisible(false);
 					}
 					else if(_hero->isAttacking()){
 						//Elimino el enemigo con el que te chocas-------------------
 						AnimationManager::getSingletonPtr()->resetEnemyAnimation(node->getName());
 						removeGameEntity(node->getName());
 						//----------------------------------------------------------
+						
+						_sceneMgr->getSceneNode("AureolaNode")->setPosition(node->getPosition());
+						_sceneMgr->getSceneNode("AureolaNode")->setVisible(true);
 					}
 
 					//Actualizar las vidas en la UI

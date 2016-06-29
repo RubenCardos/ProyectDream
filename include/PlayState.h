@@ -85,7 +85,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   Ogre::Viewport* _viewport;
   Ogre::Camera* _camera;
   Ogre::AnimationState *_animEnemy;
-  
+  Ogre::SceneNode* aureolaNode;
   
   Real _deltaT;
   bool _exitGame;

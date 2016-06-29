@@ -7,7 +7,6 @@ particle_system Examples/GreenyNimbus
     particle_width	35
     particle_height 	35
     cull_each       false
-	cull_each       false
     quota           5000
     billboard_type  point
     
@@ -15,15 +14,15 @@ particle_system Examples/GreenyNimbus
     emitter Box
     {
         angle           30
-        emission_rate   30
+        emission_rate   5
         time_to_live    1
         direction       0 1 0
         velocity    	0
-        colour_range_start  1 1 0
-        colour_range_end    0.3 1 0.3
-        width           60
-        height          60
-        depth           60
+        //colour_range_start  1 1 0 para ponerle color
+       // colour_range_end    0.3 1 0.3
+        width           5
+        height          5
+        depth           5
     }
 
     // Make em float upwards
@@ -36,9 +35,9 @@ particle_system Examples/GreenyNimbus
     // Fader
     affector ColourFader
     {
-        red -0.25
-        green -0.25
-        blue -0.25
+        red 0
+        green 0
+        blue 0
     }
 }
 
@@ -244,5 +243,36 @@ particle_system Examples/Snow
 		randomness	10
 	}
 }
-
+particle_system Examples/Sun
+ {
+    material        Examples/Flare
+    particle_width  20
+    particle_height 20
+    cull_each       false
+    quota           100
+    billboard_type  point
+ 
+    // Area emitter
+    emitter Ellipsoid
+    {
+        angle           30
+        emission_rate   30
+        time_to_live_min 1
+        time_to_live_max 2
+        direction       0 1 0
+        velocity       0.001
+       // colour 0.15 0.1 0.0
+        width           5
+        height          5
+        depth           5
+    }
+ 
+    // Fader
+    affector ColourFader
+    {
+        red -0.010
+        green -0.025
+        blue -0.025
+    }
+ }
 
