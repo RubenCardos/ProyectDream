@@ -138,7 +138,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   void createTestGameEntities();
   GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale);
   GameEntity* createGameEntityRemade(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale, double mass);
-  OgreBulletDynamics::RigidBody* createRigidBody(Ogre::SceneNode* node, Ogre::Vector3 scale, double mass);
+  OgreBulletDynamics::RigidBody* createRigidBody(Ogre::SceneNode* node, Ogre::Vector3 scale,Ogre::Vector3 position, double mass);
 
   void populateObstacles(String _path);
   void populateThreads(String _path);

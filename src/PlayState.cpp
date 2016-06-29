@@ -939,14 +939,16 @@ GameEntity* PlayState::createGameEntityRemade(std::string name, std::string mesh
 
 	GameEntity* gameEntity;
 	Ogre::SceneNode* node = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_" + name + Ogre::StringConverter::toString(_numEntities));
+	//node->setPosition(position);
 	Entity *entity = _sceneMgr->createEntity("E_" + name + Ogre::StringConverter::toString(_numEntities), mesh);
 	node->attachObject(entity);
 
-	OgreBulletDynamics::RigidBody* rigidBody = createRigidBody(node, scale, mass);
+	OgreBulletDynamics::RigidBody* rigidBody = createRigidBody(node, scale, position , mass);
 
 	rigidBody->getBulletRigidBody()->setAngularFactor(btVector3(0,0,0));
 	rigidBody->disableDeactivation();
 	rigidBody->getBulletObject()->setUserPointer((void *) node);
+	cout << "posicion rigidbody gameEntity"<<rigidBody->getCenterOfMassPosition()<< endl;
 
 	gameEntity = new GameEntity();
 	gameEntity->setSceneNode(node);
@@ -958,59 +960,64 @@ GameEntity* PlayState::createGameEntityRemade(std::string name, std::string mesh
 	return gameEntity;
 }
 
-OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node, Ogre::Vector3 scale, double mass){
+OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node, Ogre::Vector3 scale,Ogre::Vector3 position, double mass){
 	//bodyType = 0 es un bounding box, bodyType = 1 es un convex hull
 
 	//std::string name = node->getName().substr(1, node->getName().find("_"));
 	string name = Ogre::StringUtil::split(node->getName(),"SN_")[0];
 	cout << "NAME REMADE = " << name << endl;
+	cout << "POSITION = " << position << endl;
+
 	OgreBulletDynamics::RigidBody* rigidBody;
 	OgreBulletCollisions::BoxCollisionShape* bodyShapeBox;
 	OgreBulletCollisions::StaticMeshToShapeConverter* trimeshConverter;
 	OgreBulletCollisions::CollisionShape* bodyShapeConvex;
 
-	bodyShapeBox = new OgreBulletCollisions::BoxCollisionShape(node->getScale());
+	bodyShapeBox = new OgreBulletCollisions::BoxCollisionShape(scale);
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(static_cast<Entity*>(node->getAttachedObject(0)));
 	bodyShapeConvex = trimeshConverter->createConvex();
 
 	if(Ogre::StringUtil::startsWith(name,"WallMenu")){
 		AxisAlignedBox boundingBox = node->getAttachedObject(0)->getBoundingBox();
 		bodyShapeBox = new OgreBulletCollisions::BoxCollisionShape(boundingBox.getSize()/2.0);
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
-		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 		node->getAttachedObject(0)->setCastShadows(false);
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Wall")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
-		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 		node->getAttachedObject(0)->setCastShadows(false);
 		node->setScale(scale);
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Obstacle")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
-		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
-		node->getAttachedObject(0)->setCastShadows(false);
 		node->setScale(scale);
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
+		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+		node->getAttachedObject(0)->setCastShadows(false);
+		//rigidBody->setPosition(OgreBulletCollisions::convert(position)) ;
+		cout << "posicion rigidbody CreateRigidBody"<<rigidBody->getCenterOfMassPosition() << endl;
+
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Thread")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
-		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
+		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Boss")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Boss,PhysicsMask::boss_collides_with);
-		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Boss,PhysicsMask::boss_collides_with);
+		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Enemy")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
-		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
+		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Spike")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
-		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
+		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 	}
 	else{
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name + Ogre::StringConverter::toString(_numEntities), _world);
-		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, node->getPosition());
+		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world);
+		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 		node->getAttachedObject(0)->setCastShadows(false);
 	}
 	return rigidBody;
@@ -1397,13 +1404,13 @@ void PlayState::populateObstacles(String _path){
 
 			int texture = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[7]);
 
-			Vector3 aux = Vector3(x,y,z);
+			Vector3 pos = Vector3(x,y,z);
 			Quaternion q = Quaternion(Quaternion::IDENTITY);
 			Vector3 scale = Vector3(Sx,Sy,Sz);
 
 			GameEntity* ge = new GameEntity();
-			ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",aux,scale);
-
+			//ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",pos,scale);
+			ge=createGameEntityRemade("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",pos,scale,200);
 			Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
 
 			switch(texture){
