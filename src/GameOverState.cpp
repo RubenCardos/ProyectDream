@@ -73,6 +73,7 @@ GameOverState::frameStarted
 (const Ogre::FrameEvent& evt)
 { 
   _deltaT = evt.timeSinceLastFrame;
+  updateGUI();
   //cout << "frameStarted\n" << endl;
   //cout << Ogre::StringConverter::toString(GameManager::getSingletonPtr()->getPunt()) << endl;
   return true;
@@ -205,50 +206,43 @@ GameOverState::createGUI()
   sheetGameOver->setProperty("FrameEnabled","False");
   sheetGameOver->setProperty("BackgroundEnabled", "False");
 
-  CEGUI::Window* text4 = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","EnterNameText");
-  text4->setText("[font='SPIDER MONKEY'] Enter Your Name!");
-  text4->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
-  text4->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.23f, 0)));
-  text4->setProperty("FrameEnabled","False");
-  text4->setProperty("BackgroundEnabled", "False");
-  text4->setProperty("HorzFormatting", "LeftAligned");
 
   CEGUI::Editbox* eb = static_cast<CEGUI::Editbox*>(sheetGameOver->createChild("OgreTray/Editbox","ebox"));
-  eb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.30f, 0)));
-  eb->setSize(CEGUI::USize(CEGUI::UDim(0.30,0),CEGUI::UDim(0.07,0)));
+  eb->setPosition(CEGUI::UVector2(CEGUI::UDim(0.68f, 0.0f),CEGUI::UDim(0.35f, 0)));
+  eb->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.07,0)));
   eb->setFont("SPIDER MONKEY-18");
 
-  CEGUI::Window* recordsPoints = static_cast<CEGUI::Window*>(sheetGameOver->createChild("TaharezLook/StaticText","pointsrecords"));
+ /* CEGUI::Window* recordsPoints = static_cast<CEGUI::Window*>(sheetGameOver->createChild("TaharezLook/StaticText","pointsrecords"));
   recordsPoints->setSize(CEGUI::USize(CEGUI::UDim(0.90,0),CEGUI::UDim(0.70,0)));
   recordsPoints->setPosition(CEGUI::UVector2(CEGUI::UDim(0.65,0),CEGUI::UDim(0.35,0)));
   recordsPoints->setProperty("FrameEnabled","False");
   recordsPoints->setProperty("BackgroundEnabled", "False");
-  recordsPoints->setProperty("VertFormatting", "TopAligned");
+  recordsPoints->setProperty("VertFormatting", "TopAligned");*/
   
-
   CEGUI::Window* acceptButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","acceptButton");
   acceptButton->setText("[font='SPIDER MONKEY-18'] Accept");
-  acceptButton->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.08,0)));
-  acceptButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.60f, 0.0f),CEGUI::UDim(0.39f, 0)));
+  acceptButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
+  acceptButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.63f, 0.0f),CEGUI::UDim(0.65f, 0)));
   acceptButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::accept,this));
 
   CEGUI::Window* menuButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","MenuButton");
   menuButton->setText("[font='SPIDER MONKEY-18'] Play Again");
   menuButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  menuButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.67,0),CEGUI::UDim(0.50,0)));
+  menuButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.55,0),CEGUI::UDim(0.70,0)));
   menuButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::goBackMenu,this));
+  menuButton->setVisible(false);
 
   CEGUI::Window* exitButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","exitButtonGO");
   exitButton->setText("[font='SPIDER MONKEY-18'] Exit");
   exitButton->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.06,0)));
-  exitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.67,0),CEGUI::UDim(0.60,0)));
+  exitButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.78,0),CEGUI::UDim(0.70,0)));
   exitButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&GameOverState::quit,this));
+  exitButton->setVisible(false);
 
   CEGUI::Window* text = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text");
   text->setText("[font='SPIDER MONKEY-18']"+IntroState::getSingletonPtr()->readRecords());
   text->setSize(CEGUI::USize(CEGUI::UDim(0.30,0),CEGUI::UDim(0.50,0)));
-  text->setXPosition(CEGUI::UDim(0.15f, 0.0f));
-  text->setYPosition(CEGUI::UDim(0.32f, 0.0f));
+  text->setPosition(CEGUI::UVector2(CEGUI::UDim(0.10,0),CEGUI::UDim(0.32,0)));
   text->setProperty("FrameEnabled","False");
   text->setProperty("BackgroundEnabled", "False");
   text->setProperty("HorzFormatting", "CenterAligned");
@@ -261,12 +255,21 @@ GameOverState::createGUI()
   textRecords->setProperty("BackgroundEnabled", "False");
   textRecords->setProperty("HorzFormatting", "CenterAligned");
 
+  CEGUI::Window* textScores = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","textScores");
+  textScores->setText("[font='SPIDER MONKEY-50']"+Ogre::StringConverter::toString(GameManager::getSingletonPtr()->getPunt()));
+  textScores->setSize(CEGUI::USize(CEGUI::UDim(0.40,0),CEGUI::UDim(0.15,0)));
+  textScores->setPosition(CEGUI::UVector2(CEGUI::UDim(0.68,0),CEGUI::UDim(0.48,0)));
+  textScores->setProperty("FrameEnabled","False");
+  textScores->setProperty("BackgroundEnabled", "False");
+  textScores->setProperty("HorzFormatting", "CenterAligned");
+
   sheetGameOver->addChild(exitButton);
   sheetGameOver->addChild(text);
   sheetGameOver->addChild(textRecords);
   sheetGameOver->addChild(menuButton);
-  sheetGameOver->addChild(text4);
   sheetGameOver->addChild(acceptButton);
+  sheetGameOver->addChild(eb);
+  sheetGameOver->addChild(textScores);
   sheet->addChild(sheetGameOver);
   
 
@@ -284,6 +287,10 @@ GameOverState::accept(const CEGUI::EventArgs &e)
     if(_name!=" "){
       requestScore();
       sheet->getChild("sheetGameOver")->getChild("acceptButton")->setVisible(false); 
+      sheet->getChild("sheetGameOver")->getChild("MenuButton")->setVisible(true); 
+      sheet->getChild("sheetGameOver")->getChild("exitButtonGO")->setVisible(true); 
+      CEGUI::Editbox* eb = static_cast<CEGUI::Editbox*>(sheet->getChild("sheetGameOver")->getChild("ebox"));
+      eb->setReadOnly(true); //Cuando le damos aceptar la ventana se activa a solo lectura.
     }
   }
   
@@ -303,7 +310,11 @@ void
 GameOverState::updateGUI()
 {
 
-  
+  if(GameManager::getSingletonPtr()->getWin()){
+    CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+    sheet->getChild("sheetGameOver")->setProperty("Image","BackgroundImageWinner");
+  }
+   
 }
 
 void

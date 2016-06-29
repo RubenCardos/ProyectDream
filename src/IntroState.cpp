@@ -178,6 +178,7 @@ void IntroState::createGUI()
   ImageManager::getSingleton().addFromImageFile("BackgroundImageGameOver","gameover.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageOptions","options.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageControls","controls.jpg");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImageWinner","winner.jpg");
 
   //Sheet
   Window* sheetBG =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd");
@@ -319,8 +320,8 @@ IntroState::records(const CEGUI::EventArgs &e)
   backButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::back,this));
   
   CEGUI::Window* text = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text");
-  text->setText("[font='SPIDER MONKEY']"+readRecords());
-  text->setSize(CEGUI::USize(CEGUI::UDim(0.50,0),CEGUI::UDim(0.70,0)));
+  text->setText("[font='SPIDER MONKEY-28']"+readRecords());
+  text->setSize(CEGUI::USize(CEGUI::UDim(0.50,0),CEGUI::UDim(0.75,0)));
   text->setXPosition(UDim(0.1f, 0.0f));
   text->setYPosition(UDim(0.15f, 0.0f));
   text->setProperty("FrameEnabled","False");
@@ -618,7 +619,7 @@ IntroState::options(const CEGUI::EventArgs &e)
   backButton->setYPosition(UDim(0.85f, 0.0f));
   backButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::back,this));
   
-  CEGUI::Window* applyButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","apply");
+  CEGUI::Window* applyButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","Apply");
   applyButton->setText("[font='SPIDER MONKEY'] apply ");
   applyButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
   applyButton->setXPosition(UDim(0.66f, 0.0f));

@@ -381,11 +381,11 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 	if (e.key == OIS::KC_J) {
 		printAll();
 	}
-	/*// Tecla g --> GameOverState.-------
+	// Tecla g --> GameOverState.-------
 	if (e.key == OIS::KC_G) {
 		GameManager::getSingletonPtr()->setPunt(_hero->getScore());
 		changeState(GameOverState::getSingletonPtr());
-	}*/
+	}
 
 	// Tecla S --> Print current scenario and change backwall visibility-------
 	if (e.key == OIS::KC_S) {
@@ -718,7 +718,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		gameEntity = createGameEntity("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
 		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
 
-
+		//GameManager::getSingletonPtr()->setWin(true); PARA PROBAR EL GAMEOVER
 
 		//Muros--------------------------------------------------------------------------------------------------------
 
@@ -727,7 +727,6 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		//Muro de Atrás "bien colocado"
 		Ogre::Vector3 positionWallSelection(-60,0,3); //-14 
 		gameEntityW = createGameEntity("WallMenu_Back", "wallSelection3.mesh", positionWallSelection, scaleWallSelection);
-		//gameEntityW->getSceneNode()->setVisible(false);
 
 		//Muro de Delante "bien colocado"
 		Ogre::Vector3 positionWallSelection1(30,0,2);
