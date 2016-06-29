@@ -55,6 +55,7 @@ void PlayState::enter(){
 	_camera->lookAt(Ogre::Vector3(15,0,0));
 	_camera->setNearClipDistance(5);
 	_camera->setFarClipDistance(10000);
+
 	//-----------------------------
 
 	_numEntities = 0;    // Numero de Shapes instanciadas
@@ -421,7 +422,20 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 		if(!_hero->isAttacking()){
 			_animationManager->stopAnimations(AnimationManager::ANIM_RUN_HERO);
 			_animationManager->playAnimations(AnimationManager::ANIM_ATTACK_HERO);
+			/*ParticleSystem::setDefaultNonVisibleUpdateTimeout(5); 
+			//ParticleSystem* ps = _sceneMgr->createParticleSystem("Aureola", "Examples/Aureola");
+			//ps->getEmitter(4)->setPosition(_hero->getSceneNode()->getPosition());
+			ParticleSystem* ps = _sceneMgr->createParticleSystem("Nimbus", "Examples/GreenyNimbus");
+        	_sceneMgr->getRootSceneNode()->attachObject(ps);
+
+        	SceneNode* smokeNode = _sceneMgr->getRootSceneNode()->createChildSceneNode("AureolaNode");
+			smokeNode->setPosition(_hero->getSceneNode()->getPosition());
+			smokeNode->attachObject(_sceneMgr->createParticleSystem("Aureola", "Examples/Aureola"));
+			//smokeNode->setScale(Ogre::Vector3(0.2,0.2,0.2));
+			Ogre:ParticleSystem* smokeParticles = _sceneMgr->getParticleSystem("Aureola");*/
 		}
+		
+		
 
 	}
 	//--------------------------------
