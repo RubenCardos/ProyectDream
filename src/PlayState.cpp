@@ -184,11 +184,12 @@ void PlayState::CreateInitialWorld() {
 	Plane plane1(Vector3(0,1,0), -3);    // Normal y distancia  (antes estaba a 0)
 	MeshManager::getSingleton().createPlane("p1",
 			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane1,
-			1000, 1000, 1, 1, true, 1, 20, 20, Vector3::UNIT_Z);
+			1000, 1000, 1, 1, true, 1, 40, 20, Vector3::UNIT_Z);
 	//--------------------------------------------------------
 
 	//Suelo Grafico-----------------------------------------------
 	SceneNode* _groundNode = _sceneMgr->createSceneNode("SN_Ground");
+	_groundNode->setScale(Ogre::Vector3(2,1,1)) ;
 	Entity* _groundEnt = _sceneMgr->createEntity("E_Ground", "p1");
 	_groundEnt->setMaterialName("GroundRoom");
 	_groundNode->attachObject(_groundEnt);
@@ -278,9 +279,9 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 		_cameraPivot->setPosition(_hero->getSceneNode()->getPosition());
 	}
 	else{
-		//_camera->setPosition(0,150,100);
-		_camera->setPosition(-430,90,100);
-		//_camera->lookAt(-30,0,100);
+		//_camera->setPosition(-430,90,100);
+		_camera->setPosition(-930,90,100);
+		//_camera->lookAt(-50,0,100);
 		_camera->lookAt(-50,0,100);
 		//_camera->yaw(Ogre::Degree(180));
 	}
@@ -381,7 +382,6 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 	// Tecla p --> PauseState.-------
 	if (e.key == OIS::KC_P) {
 		pushState(PauseState::getSingletonPtr());
-		
 	}
 	//-----------------
 
@@ -399,7 +399,7 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 
 	//Movimiento PJ---------------
 	if (e.key == OIS::KC_SPACE) {
-		_movementManager->jumpHero();
+		_movementManager->jumpHero(_despPtr);
 		_animationManager->stopAnimations(AnimationManager::ANIM_RUN_HERO);
 		_animationManager->playAnimations(AnimationManager::ANIM_JUMP_HERO);
 	}
@@ -1096,7 +1096,7 @@ GameEntity* PlayState::createGameEntity(std::string name, std::string mesh, Ogre
 		}
 		else if(Ogre::StringUtil::startsWith(name,"Enemy")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
-			entity->setCastShadows(false); //PRUEBA DE SOMBRAS
+			//entity->setCastShadows(false); //PRUEBA DE SOMBRAS
 		}
 		else if(Ogre::StringUtil::startsWith(name,"Spike")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_"+ name + Ogre::StringConverter::toString(_numEntities), _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
@@ -1255,7 +1255,7 @@ void PlayState::createTestGameEntities(){
 	nodeReel->attachObject(entityReel);
 
 	Vector3 sizeReel = Vector3::ZERO;
-	Vector3 positionReel = Vector3(500,0,0);
+	Vector3 positionReel = Vector3(750,0,0);
 
 	OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterReel = NULL;
 	OgreBulletCollisions::CollisionShape *bodyShapeReel = NULL;

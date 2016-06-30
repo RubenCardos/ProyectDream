@@ -23,7 +23,7 @@ class MovementManager : public Ogre::Singleton<MovementManager>
   ~MovementManager();
 
   void moveHero(Ogre::Vector3* movement);
-  void jumpHero();
+  void jumpHero(Ogre::Vector3* movement);
   void moveEnemies();
   void moveWalls();
   void moveBoss();

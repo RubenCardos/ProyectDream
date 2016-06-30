@@ -1,2 +1,2 @@
 MouseSpeed = 20
-AutoReaload = false
+AutoReaload = true

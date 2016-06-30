@@ -55,14 +55,20 @@ MovementManager& MovementManager::getSingleton(void){
 void MovementManager::moveHero(Ogre::Vector3* movement){
 	//movimiento del heroe
 	//cout <<"Velocidad Y = " << _hero->getRigidBody()->getLinearVelocity().y <<endl;
-	Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
-	_hero->setSpeed(_currentSpeed);
-	if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
+	Ogre::Vector3 currentSpeed = _hero->getRigidBody()->getLinearVelocity();
+	Ogre::Vector3 speed(1,1,1);
+	_hero->setSpeed(currentSpeed);
+	/*if(_currentSpeed.squaredLength() < _hero->getMovementSpeed()){
 		_hero->getRigidBody()->applyImpulse(*movement, _hero->getRigidBody()->getCenterOfMassPosition());
-		/*if(!_inBossRoom){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
-		}*/
+	}*/
+	if(currentSpeed.squaredLength() < _hero->getMovementSpeed()){
+		if(abs(_hero->getRigidBody()->getLinearVelocity().y) < 0.01){
+			speed = *(movement) + _hero->getRigidBody()->getLinearVelocity();
+			speed = speed*0.92;
+			_hero->getRigidBody()->setLinearVelocity(speed);
+		}
 	}
-	if(_currentSpeed.squaredLength() >= 0.1 ){
+	if(currentSpeed.squaredLength() >= 0.1 ){
 		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
 		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_IDLE_HERO);
 	}
@@ -97,11 +103,13 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 	//-------------------------------------------------------------------
 }
 
-void MovementManager::jumpHero(){
+void MovementManager::jumpHero(Ogre::Vector3* movement){
+	Ogre::Vector3 speed(1,1,1);
 	if(_hero->getNumJumps() >= 0){
-		Ogre::Vector3 _currentSpeed = _hero->getRigidBody()->getLinearVelocity();
-		_currentSpeed.y = 16.0;
-		_hero->getRigidBody()->setLinearVelocity(_currentSpeed);
+		Ogre::Vector3 currentSpeed = _hero->getRigidBody()->getLinearVelocity();
+		currentSpeed.y = 12.0;
+		speed = currentSpeed + (*(movement) * 2);
+		_hero->getRigidBody()->setLinearVelocity(speed);
 		_hero->setNumJumps(_hero->getNumJumps()-1);
 	}
 }
@@ -146,17 +154,23 @@ void MovementManager::repositionGameEntity(GameEntity* gameentity,btVector3 posi
 }
 
 void MovementManager::moveEnemies(){
+	Ogre::Vector3 speed(1,1,1);
 	//Cuando esté hecho el AI_Manager, mover a cada enemigo usando la speed calculada por el AI_Manager
 	_aiManager->updateEnemyMovement();
 	
 	for(unsigned int i=0; i<_enemies->size();i++){
 		Ogre::Vector3 _currentSpeed = _enemies->at(i)->getRigidBody()->getLinearVelocity();
 		//enemy->getRigidBody()->setLinearVelocity(enemy->getSpeed());
-		if(_currentSpeed.squaredLength() < _enemies->at(i)->getMovementSpeed()){
+		/*if(_currentSpeed.squaredLength() < _enemies->at(i)->getMovementSpeed()){
 			//cout << "		Velocidad del enemigo = " << _enemies->at(i)->getSpeed() <<endl;
 			_enemies->at(i)->getRigidBody()->applyImpulse(_enemies->at(i)->getSpeed() ,_enemies->at(i)->getRigidBody()->getCenterOfMassPosition());
 
+		}*/
+		if(abs(_enemies->at(i)->getRigidBody()->getLinearVelocity().y) < 0.01){
+			speed = _enemies->at(i)->getSpeed() * 3;
+			_enemies->at(i)->getRigidBody()->setLinearVelocity(speed);
 		}
+
 		if(_currentSpeed.z >0){//Hacia la derecha
 			_enemies->at(i)->getRigidBody()->setOrientation(Quaternion(Degree(90),Vector3::UNIT_Y));
 		}
