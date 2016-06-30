@@ -74,7 +74,7 @@ void PlayState::enter(){
 
 	_world = new OgreBulletDynamics::DynamicsWorld(_sceneMgr,worldBounds, gravity);
 	_world->setDebugDrawer (_debugDrawer);
-	_world->setShowDebugShapes(false);  // Muestra los collision shapes
+	_world->setShowDebugShapes(true);  // Muestra los collision shapes
 	//-----------------------------------------------------------------
 
 	//Creacion de los elementos iniciales del mundo---
@@ -271,7 +271,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
-	//cout << "Velocidad del Heroe: " << _hero->getRigidBody()->getLinearVelocity() << " = " << _hero->getRigidBody()->getLinearVelocity().squaredLength() << endl;
+	cout << "Posicion del Heroe: " << _hero->getRigidBody()->getCenterOfMassPosition() << endl;
 
 	//Actualizo camara----------------------
 	if(!_bossRoom){
@@ -294,7 +294,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	if(_currentScenario != Scenario::Menu){
 		populateEnemies();
 		
-		//removeAllBehindBackWall();
+		removeAllBehindBackWall();
 	}
 
 	//Actualizo GUI---
@@ -1255,7 +1255,7 @@ void PlayState::createTestGameEntities(){
 	nodeReel->attachObject(entityReel);
 
 	Vector3 sizeReel = Vector3::ZERO;
-	Vector3 positionReel = Vector3(250,0,0);
+	Vector3 positionReel = Vector3(500,0,0);
 
 	OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverterReel = NULL;
 	OgreBulletCollisions::CollisionShape *bodyShapeReel = NULL;
@@ -1586,19 +1586,34 @@ void PlayState::readEnemies(string path){
 void PlayState::removeAllBehindBackWall(){
 	//lo que vaya quedandose detrás del backwall (con un pequeño margen), ir eliminandolo
 	int threshold = 5; //margen, borramos todo lo que se quede a 10 por detrás del backwall
+	int indexGameEntity =0;
 	if(_walls.size() > 0){
-		int backWall_x = _walls.at(_walls.size() - 1)->getRigidBody()->getCenterOfMassPosition().x;
+		int backWall_x = _walls.at(_walls.size() - 2)->getRigidBody()->getCenterOfMassPosition().x;
+		cout<<"Back Wall "<< _walls.at(_walls.size() - 2)->getSceneNode()->getName() <<  backWall_x <<endl;
 		for(unsigned int i = 0; i < _gameEntities.size(); i++){
 			if(_gameEntities.at(i)->getRigidBody()->getCenterOfMassPosition().x < (backWall_x - threshold)){
+
 				//Borrar la gameentity (Si no es un obstaculo) porque está detrás del muro trasero
-				if(Ogre::StringUtil::startsWith(_gameEntities.at(i)->getRigidBody()->getName(),"SN_Obstacle")){
+				if(Ogre::StringUtil::startsWith(_gameEntities.at(i)->getRigidBody()->getName(),"RB_Enemy")){
+					cout<<"Borro enemigo " << _gameEntities.at(i)->getRigidBody()->getName() << endl;
 					Entity* entity = static_cast<Entity*>(_gameEntities.at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
 					OgreBulletCollisions::Object* Baux =_world->findObject(_gameEntities.at(i)->getSceneNode());
 					_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
-					_sceneMgr->destroyEntity(entity);
+					//_sceneMgr->destroyEntity(entity);
 					_sceneMgr->getRootSceneNode()->removeChild(_gameEntities.at(i)->getSceneNode());
+					indexGameEntity=i;
+					//_gameEntities.erase(_gameEntities.begin()+i);
+					//_enemies.erase(_enemies.begin()+i);
 				}
 			}
 		}
+		for(unsigned int i=0;i<_enemies.size();i++){
+			if(Ogre::StringUtil::startsWith(_enemies.at(i)->getSceneNode()->getName(),_gameEntities.at(indexGameEntity)->getSceneNode()->getName())){
+				_enemies.erase(_enemies.begin()+i);
+				_gameEntities.erase(_gameEntities.begin()+indexGameEntity);
+				cout<<"Borro enemigo de vectores " << _gameEntities.at(i)->getRigidBody()->getName() << endl;
+			}
+		}
+
 	}
 }
