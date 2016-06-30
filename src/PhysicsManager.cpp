@@ -182,17 +182,20 @@ void PhysicsManager::detectHeroCollision(){
 						_sceneMgr->getSceneNode("AureolaNode")->setVisible(false);
 					}
 					else if(_hero->isAttacking()){
+
+						//Particulas----------------------------------------------------------------
+						_sceneMgr->getSceneNode("AureolaNode")->setPosition(node->getPosition());
+						_sceneMgr->getSceneNode("AureolaNode")->setVisible(true);
+						_sceneMgr->getSceneNode("AureolaNode")->attachObject(_sceneMgr->createParticleSystem("PS"+Ogre::StringConverter::toString(_numPS), "Examples/Explosion"));
+						_numPS++;
+						//---------------------------------------------------------------------------
+
 						//Elimino el enemigo con el que te chocas-------------------
 						AnimationManager::getSingletonPtr()->resetEnemyAnimation(node->getName());
 						removeGameEntity(node->getName());
 						//----------------------------------------------------------
 						
-						//Ogre::ParticleSystem* ps=static_cast<Ogre::ParticleSystem*>(_sceneMgr->getSceneNode("AureolaNode")->getAttachedObject(0));
-						// ps->clear();
-						_sceneMgr->getSceneNode("AureolaNode")->setPosition(node->getPosition());
-						_sceneMgr->getSceneNode("AureolaNode")->setVisible(true);
-						_sceneMgr->getSceneNode("AureolaNode")->attachObject(_sceneMgr->createParticleSystem("PS"+Ogre::StringConverter::toString(_numPS), "Examples/Explosion"));
-						_numPS++;
+
 					}
 
 					//Actualizar las vidas en la UI

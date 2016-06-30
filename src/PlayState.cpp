@@ -74,7 +74,7 @@ void PlayState::enter(){
 
 	_world = new OgreBulletDynamics::DynamicsWorld(_sceneMgr,worldBounds, gravity);
 	_world->setDebugDrawer (_debugDrawer);
-	_world->setShowDebugShapes(true);  // Muestra los collision shapes
+	_world->setShowDebugShapes(false);  // Muestra los collision shapes
 	//-----------------------------------------------------------------
 
 	//Creacion de los elementos iniciales del mundo---
@@ -384,14 +384,6 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 		
 	}
 	//-----------------
-	if (e.key == OIS::KC_J) {
-		printAll();
-	}
-	// Tecla g --> GameOverState.-------
-	if (e.key == OIS::KC_G) {
-		GameManager::getSingletonPtr()->setPunt(_hero->getScore());
-		changeState(GameOverState::getSingletonPtr());
-	}
 
 	// Tecla S --> Print current scenario and change backwall visibility-------
 	if (e.key == OIS::KC_S) {
