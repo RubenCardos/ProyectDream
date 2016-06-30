@@ -243,13 +243,14 @@ particle_system Examples/Snow
 		randomness	10
 	}
 }
+
 particle_system Examples/Sun
  {
     material        Examples/Flare
-    particle_width  20
-    particle_height 20
+    particle_width  25
+    particle_height 25
     cull_each       false
-    quota           100
+    quota           50
     billboard_type  point
  
     // Area emitter
@@ -260,7 +261,7 @@ particle_system Examples/Sun
         time_to_live_min 1
         time_to_live_max 2
         direction       0 1 0
-        velocity       0.001
+        velocity       0.01
        // colour 0.15 0.1 0.0
         width           5
         height          5
@@ -275,4 +276,28 @@ particle_system Examples/Sun
         blue -0.025
     }
  }
+ 
+particle_system Examples/Explosion
+{
+	material        	Examples/FlarePointSprite  // The material for the particles
+	particle_width  	50                 // The width of the particle
+	particle_height 	50                 // The height of the particle
+	cull_each       	true
+	quota           	1
+	billboard_type  	point
+	sorted			true
+ 
+	emitter Point
+	{
+	   angle           180
+	   duration	   1    // This controls the duration of the emitter in seconds (1 second)
+    	   emission_rate   1    // This controls how many particles are emitted per second - just 1
+    	   time_to_live    1   	// Each particle lives this many seconds - just 1 second
+	}
+ 
+   	affector ColourFader
+   	{
+   		alpha -1        // Each second the alpha value is changed by this amount - so in one second our alpha goes from 1 to 0
+   	}
+}
 

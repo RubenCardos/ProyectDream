@@ -147,8 +147,8 @@ void PlayState::enter(){
 
 	//ParticleSystem::setDefaultNonVisibleUpdateTimeout(5); 
 	aureolaNode = _sceneMgr->getRootSceneNode()->createChildSceneNode("AureolaNode");
-	aureolaNode->attachObject(_sceneMgr->createParticleSystem("Aureola", "Examples/Sun"));
-	aureolaNode->setVisible(false);
+	//aureolaNode->attachObject(_sceneMgr->createParticleSystem("Aureola", "Examples/Sun"));
+	//aureolaNode->setVisible(false);
 	
 }
 
@@ -271,7 +271,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
-	cout << "Velocidad del Heroe: " << _hero->getRigidBody()->getLinearVelocity() << " = " << _hero->getRigidBody()->getLinearVelocity().squaredLength() << endl;
+	//cout << "Velocidad del Heroe: " << _hero->getRigidBody()->getLinearVelocity() << " = " << _hero->getRigidBody()->getLinearVelocity().squaredLength() << endl;
 
 	//Actualizo camara----------------------
 	if(!_bossRoom){
@@ -1378,9 +1378,9 @@ void PlayState::deleteScenarioContent(){
 			_sceneMgr->destroyEntity(entity);
 			_sceneMgr->getRootSceneNode()->removeChild(node);
 		}
-		else if (Ogre::StringUtil::startsWith(node->getName(),"AureolaNode")){ //Sistemas de particulas
+		/*else if (Ogre::StringUtil::startsWith(node->getName(),"AureolaNode")){ //Sistemas de particulas
 			node->setVisible(false);
-		}
+		}*/
 	}
 	_enemies.clear();
 	_bossRoom = false;

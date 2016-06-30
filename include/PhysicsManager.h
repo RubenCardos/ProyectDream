@@ -50,6 +50,7 @@ class PhysicsManager : public Ogre::Singleton<PhysicsManager>
   std::vector<Enemy*>* _enemies;
   std::vector<Wall*>* _walls;
   OgreBulletDynamics::DynamicsWorld * _world;
+  int _numPS;
 };
 
 #endif
