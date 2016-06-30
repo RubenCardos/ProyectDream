@@ -374,6 +374,6 @@ Vector3 PhysicsManager::calculateSpawnPoint(){
 	if(res.x < 0){
 		res.z = res.z + 50;
 	}
-
+	cout << "Spawn Point:  " << res << endl;
 	return res;
 }

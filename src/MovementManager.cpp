@@ -62,7 +62,7 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		/*if(!_inBossRoom){//Si estoy en la zona del boss la zona es fija, no se mueven las paredes
 		}*/
 	}
-	if(_currentSpeed.squaredLength() != 0){
+	if(_currentSpeed.squaredLength() >= 0.1 ){
 		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
 		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_IDLE_HERO);
 	}

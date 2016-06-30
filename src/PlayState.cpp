@@ -271,7 +271,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
-	//cout << "Velocidad del Heroe: " << _hero->getRigidBody()->getLinearVelocity() << " = " << _hero->getRigidBody()->getLinearVelocity().squaredLength() << endl;
+	cout << "Velocidad del Heroe: " << _hero->getRigidBody()->getLinearVelocity() << " = " << _hero->getRigidBody()->getLinearVelocity().squaredLength() << endl;
 
 	//Actualizo camara----------------------
 	if(!_bossRoom){
@@ -1366,7 +1366,7 @@ void PlayState::deleteScenarioContent(){
 		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Reel") || Ogre::StringUtil::startsWith(node->getName(),"SN_Enemy")
 		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Wall") || Ogre::StringUtil::startsWith(node->getName(),"SN_Floor")
 		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Boss") || Ogre::StringUtil::startsWith(node->getName(),"SN_Obstacle")
-		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Spike") || Ogre::StringUtil::startsWith(node->getName(),"SN_selection")){
+		|| Ogre::StringUtil::startsWith(node->getName(),"SN_Spike")){
 			Entity* entity = static_cast<Entity*>(node->getAttachedObject(0));//Recupero la entidad
 			OgreBulletCollisions::Object* Baux =_world->findObject(node);
 			_world->getBulletDynamicsWorld()->removeCollisionObject(Baux->getBulletObject());
@@ -1377,6 +1377,9 @@ void PlayState::deleteScenarioContent(){
 			Entity* entity = static_cast<Entity*>(node->getAttachedObject(0));//Recupero la entidad
 			_sceneMgr->destroyEntity(entity);
 			_sceneMgr->getRootSceneNode()->removeChild(node);
+		}
+		else if (Ogre::StringUtil::startsWith(node->getName(),"AureolaNode")){ //Sistemas de particulas
+			node->setVisible(false);
 		}
 	}
 	_enemies.clear();
