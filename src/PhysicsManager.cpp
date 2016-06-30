@@ -12,7 +12,7 @@ PhysicsManager::PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics:
 	_enemies = enemies;
 	_walls = walls;
 	_gameEntities = gameEntities;
-	_numPS=0;
+	_numParticleSystems=0;
 }
 
 PhysicsManager::~PhysicsManager(){
@@ -182,12 +182,21 @@ void PhysicsManager::detectHeroCollision(){
 						_sceneMgr->getSceneNode("AureolaNode")->setVisible(false);
 					}
 					else if(_hero->isAttacking()){
-
 						//Particulas----------------------------------------------------------------
 						_sceneMgr->getSceneNode("AureolaNode")->setPosition(node->getPosition());
 						_sceneMgr->getSceneNode("AureolaNode")->setVisible(true);
-						_sceneMgr->getSceneNode("AureolaNode")->attachObject(_sceneMgr->createParticleSystem("PS"+Ogre::StringConverter::toString(_numPS), "Examples/Explosion"));
-						_numPS++;
+						_sceneMgr->getSceneNode("AureolaNode")->translate(0,-5,0);
+						Ogre::ParticleSystem* partSystem = _sceneMgr->createParticleSystem("PS"+Ogre::StringConverter::toString(_numParticleSystems), "Examples/Smoke");
+						partSystem->getEmitter(0)->setDuration(0.2);
+						partSystem->getEmitter(0)->setColour(Ogre::ColourValue(1.0, 0.0, 0.0, 0.5));
+						partSystem->setParticleQuota(1);
+						partSystem->getEmitter(0)->setEmissionRate(5.0);
+						partSystem->getEmitter(0)->setMaxParticleVelocity(0.011);
+						partSystem->getEmitter(0)->setParticleVelocity(0.01);
+						partSystem->getEmitter(0)->setTimeToLive(1.0);
+
+						_sceneMgr->getSceneNode("AureolaNode")->attachObject(partSystem);
+						_numParticleSystems++;
 						//---------------------------------------------------------------------------
 
 						//Elimino el enemigo con el que te chocas-------------------
@@ -224,21 +233,27 @@ void PhysicsManager::detectHeroCollision(){
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Wall")){
 					Ogre::Vector3 vec(0,0,0);
 					vec = _hero->getRigidBody()->getLinearVelocity();
-					if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallL") && vec.z < 0.0){
+					if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallMenu_Front") && vec.x > 0.0){
+						vec.x = 0;
+						if(vec.y < 0.0 && vec.y > -16){
+							vec.y = 1.5*vec.y;
+						}
+					}
+					else if((Ogre::StringUtil::startsWith(node->getName(),"SN_WallL") || Ogre::StringUtil::startsWith(node->getName(),"SN_WallMenu_Left")) && vec.z < 0.0){
 						vec.z = 0.0;
 						if(vec.y < 0.0 && vec.y > -16){
 							vec.y = 1.5*vec.y;
 						}
 						_hero->getRigidBody()->setLinearVelocity(vec);
 					}
-					else if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallR") && vec.z > 0.0){
+					else if((Ogre::StringUtil::startsWith(node->getName(),"SN_WallR") || Ogre::StringUtil::startsWith(node->getName(),"SN_WallMenu_Right")) && vec.z > 0.0){
 						vec.z = 0.0;
 						if(vec.y < 0.0 && vec.y > -16){
 							vec.y = 1.5*vec.y;
 						}
 						_hero->getRigidBody()->setLinearVelocity(vec);
 					}
-					else if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallB") && vec.x < 0.0){
+					else if((Ogre::StringUtil::startsWith(node->getName(),"SN_WallB") || Ogre::StringUtil::startsWith(node->getName(),"SN_WallMenu_Back")) && vec.x < 0.0){
 						vec.x = 0;
 						if(vec.y < 0.0 && vec.y > -16){
 							vec.y = 1.5*vec.y;

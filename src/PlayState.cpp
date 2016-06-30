@@ -758,7 +758,12 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		Ogre::Vector3 positionWallSelection5(-38,0,-36);
 		gameEntityW = createGameEntity("WallMenu_Left2", "wallSelection1.mesh", positionWallSelection5, scaleWallSelection);
 
-
+		//Techo
+		scaleWallSelection.x = 70;
+		scaleWallSelection.z = 70;
+		Ogre::Vector3 positionWallSelection6(0,30,0); //-14
+		gameEntityW = createGameEntityRemade("WallRoofMenu", "cube.mesh", positionWallSelection6, scaleWallSelection, 200.0);
+		gameEntityW->getSceneNode()->setVisible(false);
 		//-------------------------------------------------------------------------------------------------------
 
 		_currentScenario=Scenario::Menu;
@@ -901,7 +906,6 @@ void PlayState::createAllWalls(){
 	wall->getSceneNode()->setVisible(false);
 	wall->setRigidBody(gameEntity->getRigidBody());
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
-	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
 	_walls.push_back(wall);
 
 	//Muro de la derecha
@@ -913,7 +917,6 @@ void PlayState::createAllWalls(){
 	wall->getSceneNode()->setVisible(false);
 	wall->setRigidBody(gameEntity->getRigidBody());
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
-	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
 	_walls.push_back(wall);
 
 	//Muro trasero
@@ -926,7 +929,19 @@ void PlayState::createAllWalls(){
 	wall->getSceneNode()->setVisible(false);
 	wall->setRigidBody(gameEntity->getRigidBody());
 	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
-	cout << "POSICION PARA CREAR EL MURO = " << wall->getSpawnPosition() << endl;
+	_walls.push_back(wall);
+
+	//Techo
+	position.z = 0.0;
+	position.x = 0.0;
+	position.y = 1.5 * WALL_HEIGHT_Y;
+	scale = Ogre::Vector3(WALL_LENGTH_X*1.1,1,16*1.1);
+	gameEntity = createGameEntity("WallRoof", "cube.mesh", position, scale);
+	wall = new Wall();
+	wall->setSceneNode(gameEntity->getSceneNode());
+	wall->getSceneNode()->setVisible(false);
+	wall->setRigidBody(gameEntity->getRigidBody());
+	wall->setSpawnPosition(gameEntity->getRigidBody()->getCenterOfMassPosition());
 	_walls.push_back(wall);
 }
 
@@ -981,18 +996,17 @@ OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node,
 		node->getAttachedObject(0)->setCastShadows(false);
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Wall")){
+		node->setScale(scale);
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
 		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 		node->getAttachedObject(0)->setCastShadows(false);
-		node->setScale(scale);
+
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Obstacle")){
 		node->setScale(scale);
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
 		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 		node->getAttachedObject(0)->setCastShadows(false);
-		//rigidBody->setPosition(OgreBulletCollisions::convert(position)) ;
-		cout << "posicion rigidbody CreateRigidBody"<<rigidBody->getCenterOfMassPosition() << endl;
 
 	}
 	else if(Ogre::StringUtil::startsWith(name,"Thread")){
