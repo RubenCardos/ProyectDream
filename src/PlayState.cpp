@@ -1617,3 +1617,7 @@ void PlayState::removeAllBehindBackWall(){
 
 	}
 }
+
+Scenario::Scenario PlayState::getCurrentScenario(){
+	return _currentScenario;
+}

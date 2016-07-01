@@ -79,6 +79,8 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   void readEnemies(String path);
   void printAll();
 
+  Scenario::Scenario getCurrentScenario();
+
  protected:
   Ogre::Root* _root;
   Ogre::SceneManager* _sceneMgr;
