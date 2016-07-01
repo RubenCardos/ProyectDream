@@ -1501,7 +1501,8 @@ void PlayState::populateSpike(String _path){
 			Vector3 scale = Vector3(Sx,Sy,Sz);
 
 			GameEntity* ge = new GameEntity();
-			ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale);
+			//ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale);
+			ge=createGameEntityRemade("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale, 30.0);
 			index++;
 		}
 		fichero.close();
@@ -1519,13 +1520,14 @@ void PlayState::populateEnemies(){
 	for(unsigned int i=0; i<_posEnemies.size(); i++){
 		enemy_x = _posEnemies.at(i).x;
 		if(hero_x < enemy_x && enemy_x < (hero_x + Constant::WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
-			//gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
 			if(Ogre::StringUtil::match(_enemyTypes.at(i),"rabbit")){
-				gameEntity = createGameEntity("Enemy","enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+				//gameEntity = createGameEntity("Enemy","enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+				gameEntity = createGameEntityRemade("Enemy","enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE, 15.0);
 				enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
 			}
 			else{
-				gameEntity = createGameEntity("Enemy","rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+				//gameEntity = createGameEntity("Enemy","rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
+				gameEntity = createGameEntityRemade("Enemy","rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE, 15.0);
 				enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"2");
 			}
 
@@ -1600,9 +1602,9 @@ void PlayState::removeAllBehindBackWall(){
 				_enemies.erase(_enemies.begin()+i);
 				_gameEntities.erase(_gameEntities.begin()+indexGameEntity);
 				cout<<"Borro enemigo de vectores " << _gameEntities.at(i)->getRigidBody()->getName() << endl;
+				break;
 			}
 		}
-
 	}
 }
 
