@@ -60,12 +60,13 @@ void MovementManager::moveHero(Ogre::Vector3* movement){
 		}
 	}
 	if(currentSpeed.squaredLength() >= 0.1 ){
-		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
 		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_IDLE_HERO);
+		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_RUN_HERO);
 	}
 	else{
 		AnimationManager::getSingletonPtr()->playAnimations(AnimationManager::ANIM_IDLE_HERO);
 		AnimationManager::getSingletonPtr()->stopAnimations(AnimationManager::ANIM_RUN_HERO);
+
 	}
 
 	rotateHero();
