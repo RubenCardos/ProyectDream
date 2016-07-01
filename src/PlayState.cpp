@@ -792,7 +792,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 	case Scenario::LevelGarden:
 		createTestGameEntities();
 		createAllWalls();
-		for(unsigned int i=0;i<3;i++ ){
+		for(unsigned int i=0;i<4;i++ ){
 			String aux=Ogre::StringConverter::toString(i + _numModules);
 			Entity* _entScn = _sceneMgr->createEntity("E_LevelGarden"+aux, "escenario2.mesh");
 			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_LevelGarden"+aux);
@@ -836,7 +836,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		createTestGameEntities();
 		createAllWalls();
 		
-		for(unsigned int i=0;i<3;i++){
+		for(unsigned int i=0;i<5;i++){
 			String aux=Ogre::StringConverter::toString(i + _numModules);
 			Entity* _entScn = _sceneMgr->createEntity("E_LevelRoom"+aux, "escenario.mesh");
 			SceneNode*_nodeScn = _sceneMgr->getRootSceneNode()->createChildSceneNode("SN_LevelRoom"+aux);
@@ -866,6 +866,15 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		//Obstacles--------------------------------------
 		populateObstacles("data/Levels/ObstaclesLvlRoom.txt");
 		//-------------------------------------------
+
+		//Hilos--------------------------------------
+		populateThreads("data/Levels/ThreadsRoom.txt");
+		//-------------------------------------------
+
+		//Leer fichero de enemigos--------------------------
+		readEnemies("data/Levels/EnemiesRoom.txt");
+		//--------------------------------------------------
+
 		break;
 	}
 

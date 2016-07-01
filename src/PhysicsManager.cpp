@@ -145,13 +145,23 @@ void PhysicsManager::detectHeroCollision(){
 						transform.setOrigin(OgreBulletCollisions::convert(_walls->at(i)->getSpawnPosition()));
 						_walls->at(i)->getRigidBody()->getBulletRigidBody()->setCenterOfMassTransform(transform);
 					}
+
 					//Eliminar todos los enemigos--
-					/*for(int i =0 ; i<_gameEntities->size();i++){
+					for(unsigned int i =0 ; i<_gameEntities->size();i++){
 						if(Ogre::StringUtil::startsWith(_gameEntities->at(i)->getSceneNode()->getName(),"SN_Enemy")){
 							removeGameEntity(_gameEntities->at(i)->getSceneNode()->getName());
+							i--;
 						}
 					}
-					_enemies->clear();*/
+					_enemies->clear();
+
+					PlayState::getSingletonPtr()->printAll();
+					if(PlayState::getSingletonPtr()->getCurrentScenario()== Scenario::LevelGarden){
+						PlayState::getSingletonPtr()->readEnemies("data/Levels/Enemies.txt");
+					}
+					if(PlayState::getSingletonPtr()->getCurrentScenario() == Scenario::LevelRoom){
+						PlayState::getSingletonPtr()->readEnemies("data/Levels/EnemiesRoom.txt");
+					}
 					//-----------------------------
 				}
 
@@ -179,7 +189,7 @@ void PhysicsManager::detectHeroCollision(){
 							PlayState::getSingletonPtr()->readEnemies("data/Levels/Enemies.txt");
 						}
 						if(PlayState::getSingletonPtr()->getCurrentScenario() == Scenario::LevelRoom){
-							//PlayState::getSingletonPtr()->readEnemies("data/Levels/Enemies.txt");
+							PlayState::getSingletonPtr()->readEnemies("data/Levels/EnemiesRoom.txt");
 						}
 
 						//-----------------------------
