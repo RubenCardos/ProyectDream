@@ -253,7 +253,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
-	cout << "Posicion del Heroe: " << _hero->getRigidBody()->getCenterOfMassPosition() << endl;
+	//cout << "Posicion del Heroe: " << _hero->getRigidBody()->getCenterOfMassPosition() << endl;
 
 	//Actualizo camara----------------------
 	if(!_bossRoom){
@@ -702,12 +702,14 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		GameEntity* gameEntity = new GameEntity();
 		Ogre::Vector3 positionRoom(25,-2,15);
 		Ogre::Vector3 scaleRoom = Ogre::Vector3(3,3,3);
-		gameEntity = createGameEntity("DoorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
+		//gameEntity = createGameEntity("DoorRoom", "doorRoom.mesh", positionRoom, scaleRoom);
+		gameEntity = createGameEntityRemade("DoorRoom", "doorRoom.mesh", positionRoom, scaleRoom, 0.0);
 		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
 
 		Ogre::Vector3 positionGarden(25,-2,-15);
 		Ogre::Vector3 scaleGarden = Ogre::Vector3(3,3,3);
-		gameEntity = createGameEntity("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
+		//gameEntity = createGameEntity("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden);
+		gameEntity = createGameEntityRemade("DoorGarden", "doorGarden.mesh", positionGarden, scaleGarden, 0.0);
 		gameEntity->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(-95),Ogre::Vector3::UNIT_Y));
 
 		//GameManager::getSingletonPtr()->setWin(true); PARA PROBAR EL GAMEOVER
@@ -718,26 +720,32 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		Ogre::Vector3 scaleWallSelection = Ogre::Vector3(1,1,1);
 		//Muro de Atrás "bien colocado"
 		Ogre::Vector3 positionWallSelection(-60,0,3); //-14 
-		gameEntityW = createGameEntity("WallMenu_Back", "wallSelection3.mesh", positionWallSelection, scaleWallSelection);
+		//gameEntityW = createGameEntity("WallMenu_Back", "wallSelection3.mesh", positionWallSelection, scaleWallSelection);
+		gameEntityW = createGameEntityRemade("WallMenu_Back", "wallSelection3.mesh", positionWallSelection, scaleWallSelection, 200.0);
 
 		//Muro de Delante "bien colocado"
 		Ogre::Vector3 positionWallSelection1(30,0,2);
-		gameEntityW = createGameEntity("WallMenu_Front", "wallSelection2.mesh", positionWallSelection1, scaleWallSelection);
+		//gameEntityW = createGameEntity("WallMenu_Front", "wallSelection2.mesh", positionWallSelection1, scaleWallSelection);
+		gameEntityW = createGameEntityRemade("WallMenu_Front", "wallSelection2.mesh", positionWallSelection1, scaleWallSelection, 200.0);
 
 		//Muro de la Derecha "bien colocado"
 		Ogre::Vector3 positionWallSelection2(10,0,37);
-		gameEntityW = createGameEntity("WallMenu_Right", "wallSelection.mesh", positionWallSelection2, scaleWallSelection);
+		//gameEntityW = createGameEntity("WallMenu_Right", "wallSelection.mesh", positionWallSelection2, scaleWallSelection);
+		gameEntityW = createGameEntityRemade("WallMenu_Right", "wallSelection.mesh", positionWallSelection2, scaleWallSelection, 200.0);
 
 		Ogre::Vector3 positionWallSelection3(-38,0,45);
-		gameEntityW = createGameEntity("WallMenu_Right2", "wallSelection.mesh", positionWallSelection3, scaleWallSelection);
+		//gameEntityW = createGameEntity("WallMenu_Right2", "wallSelection.mesh", positionWallSelection3, scaleWallSelection);
+		gameEntityW = createGameEntityRemade("WallMenu_Right2", "wallSelection.mesh", positionWallSelection3, scaleWallSelection, 200.0);
 
 		//Muro de la Izquierda "bien colocado"
 		Ogre::Vector3 positionWallSelection4(9,0,-35);
-		gameEntityW = createGameEntity("WallMenu_Left", "wallSelection1.mesh", positionWallSelection4, scaleWallSelection);
+		//gameEntityW = createGameEntity("WallMenu_Left", "wallSelection1.mesh", positionWallSelection4, scaleWallSelection);
+		gameEntityW = createGameEntityRemade("WallMenu_Left", "wallSelection1.mesh", positionWallSelection4, scaleWallSelection, 200.0);
 
 		//Muro Izquierda 2
 		Ogre::Vector3 positionWallSelection5(-38,0,-36);
-		gameEntityW = createGameEntity("WallMenu_Left2", "wallSelection1.mesh", positionWallSelection5, scaleWallSelection);
+		//gameEntityW = createGameEntity("WallMenu_Left2", "wallSelection1.mesh", positionWallSelection5, scaleWallSelection);
+		gameEntityW = createGameEntityRemade("WallMenu_Left2", "wallSelection1.mesh", positionWallSelection5, scaleWallSelection, 200.0);
 
 		//Techo
 		scaleWallSelection.x = 70;
@@ -890,7 +898,8 @@ void PlayState::createAllWalls(){
 	position.y = Constant::WALLL_POSITION_Y;
 	position.x = Constant::WALL_LENGTH_X/2 + 10;
 	scale = Ogre::Vector3(Constant::WALL_LENGTH_X,Constant::WALL_HEIGHT_Y,1);
-	gameEntity = createGameEntity("WallL", "cube.mesh", position, scale);
+	//gameEntity = createGameEntity("WallL", "cube.mesh", position, scale);
+	gameEntity = createGameEntityRemade("WallL", "cube.mesh", position, scale, 200.0);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->getSceneNode()->setVisible(false);
@@ -901,7 +910,8 @@ void PlayState::createAllWalls(){
 	//Muro de la derecha
 	position.z = Constant::WALLR_POSITION_Z;
 	position.y = Constant::WALLR_POSITION_Y;
-	gameEntity = createGameEntity("WallR", "cube.mesh", position, scale);
+	//gameEntity = createGameEntity("WallR", "cube.mesh", position, scale);
+	gameEntity = createGameEntityRemade("WallR", "cube.mesh", position, scale, 200.0);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->getSceneNode()->setVisible(false);
@@ -913,7 +923,8 @@ void PlayState::createAllWalls(){
 	position.z = Constant::WALLB_POSITION_Z;
 	position.x = Constant::WALLB_POSITION_X;
 	scale = Ogre::Vector3(1,Constant::WALL_HEIGHT_Y,16);
-	gameEntity = createGameEntity("WallB", "cube.mesh", position, scale);
+	//gameEntity = createGameEntity("WallB", "cube.mesh", position, scale);
+	gameEntity = createGameEntityRemade("WallB", "cube.mesh", position, scale, 200.0);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->getSceneNode()->setVisible(false);
@@ -925,8 +936,9 @@ void PlayState::createAllWalls(){
 	position.z = 0.0;
 	position.x = 0.0;
 	position.y = 1.5 * Constant::WALL_HEIGHT_Y;
-	scale = Ogre::Vector3(Constant::WALL_LENGTH_X*1.1,1,16*1.1);
-	gameEntity = createGameEntity("WallRoof", "cube.mesh", position, scale);
+	scale = Ogre::Vector3(Constant::WALL_LENGTH_X*1.3,1,16*1.3);
+	//gameEntity = createGameEntity("WallRoof", "cube.mesh", position, scale);
+	gameEntity = createGameEntityRemade("WallRoof", "cube.mesh", position, scale, 200.0);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
 	wall->getSceneNode()->setVisible(false);
@@ -962,12 +974,9 @@ GameEntity* PlayState::createGameEntityRemade(std::string name, std::string mesh
 }
 
 OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node, Ogre::Vector3 scale,Ogre::Vector3 position, double mass){
-	//bodyType = 0 es un bounding box, bodyType = 1 es un convex hull
-
-	//std::string name = node->getName().substr(1, node->getName().find("_"));
-	string name = Ogre::StringUtil::split(node->getName(),"SN_")[0];
-	cout << "NAME REMADE = " << name << endl;
-	cout << "POSITION = " << position << endl;
+	//Así se trocea bien el nombre, quitandole "SN_" de delante
+	std::string name = node->getName();
+	name = name.substr(3, name.size());
 
 	OgreBulletDynamics::RigidBody* rigidBody;
 	OgreBulletCollisions::BoxCollisionShape* bodyShapeBox;
@@ -978,48 +987,54 @@ OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node,
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(static_cast<Entity*>(node->getAttachedObject(0)));
 	bodyShapeConvex = trimeshConverter->createConvex();
 
-	if(Ogre::StringUtil::startsWith(name,"WallMenu")){
-		AxisAlignedBox boundingBox = node->getAttachedObject(0)->getBoundingBox();
-		bodyShapeBox = new OgreBulletCollisions::BoxCollisionShape(boundingBox.getSize()/2.0);
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
-		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
-		node->getAttachedObject(0)->setCastShadows(false);
-	}
-	else if(Ogre::StringUtil::startsWith(name,"Wall")){
-		node->setScale(scale);
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
-		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
-		node->getAttachedObject(0)->setCastShadows(false);
-
-	}
-	else if(Ogre::StringUtil::startsWith(name,"Obstacle")){
-		node->setScale(scale);
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
-		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
-		node->getAttachedObject(0)->setCastShadows(false);
-
-	}
-	else if(Ogre::StringUtil::startsWith(name,"Thread")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
-		rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
-	}
-	else if(Ogre::StringUtil::startsWith(name,"Boss")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Boss,PhysicsMask::boss_collides_with);
-		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
-	}
-	else if(Ogre::StringUtil::startsWith(name,"Enemy")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
-		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
-	}
-	else if(Ogre::StringUtil::startsWith(name,"Spike")){
-		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
-		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+	if(Ogre::StringUtil::startsWith(name,"Wall") || Ogre::StringUtil::startsWith(name,"Spike") || Ogre::StringUtil::startsWith(name,"Enemy") || Ogre::StringUtil::startsWith(name,"Boss") || Ogre::StringUtil::startsWith(name,"Obstacle") || Ogre::StringUtil::startsWith(name,"Thread")){
+		if(Ogre::StringUtil::startsWith(name,"WallMenu")){
+			AxisAlignedBox boundingBox = node->getAttachedObject(0)->getBoundingBox();
+			bodyShapeBox = new OgreBulletCollisions::BoxCollisionShape(boundingBox.getSize()/2.0);
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Walls,PhysicsMask::walls_collides_with);
+			rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+			node->getAttachedObject(0)->setCastShadows(false);
+		}
+		else if(Ogre::StringUtil::startsWith(name,"Wall")){
+			node->setScale(scale);
+			if(Ogre::StringUtil::startsWith(name,"WallB")){
+				rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world, PhysicsMask::COL_BackWall, PhysicsMask::backwall_collides_with);
+			}
+			else{
+				rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world, PhysicsMask::COL_Walls, PhysicsMask::walls_collides_with);
+			}
+			rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+			node->getAttachedObject(0)->setCastShadows(false);
+		}
+		else if(Ogre::StringUtil::startsWith(name,"Obstacle")){
+			node->setScale(scale);
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Obs,PhysicsMask::obs_collides_with);
+			rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+			node->getAttachedObject(0)->setCastShadows(false);
+		}
+		else if(Ogre::StringUtil::startsWith(name,"Thread")){
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Thread,PhysicsMask::thread_collides_with);
+			rigidBody->setShape(node, bodyShapeBox, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+		}
+		else if(Ogre::StringUtil::startsWith(name,"Boss")){
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Boss,PhysicsMask::boss_collides_with);
+			rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+		}
+		else if(Ogre::StringUtil::startsWith(name,"Enemy")){
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Enemy,PhysicsMask::enemy_collides_with);
+			rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+		}
+		else if(Ogre::StringUtil::startsWith(name,"Spike")){
+			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
+			rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+		}
 	}
 	else{
 		rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world);
 		rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
 		node->getAttachedObject(0)->setCastShadows(false);
 	}
+
 	return rigidBody;
 }
 
@@ -1180,7 +1195,8 @@ void PlayState::createBossRoom(){
 		position.z = Constant::BOSS_ROOM-Constant::BOSS_ROOM;
 		position.y = Constant::WALLL_POSITION_Y;
 		scale = Ogre::Vector3(Constant::BOSS_ROOM,50,1);
-		gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
+		//gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
+		gameEntity = createGameEntityRemade("WallLBoss", "cube.mesh", position, scale, 200.0);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
@@ -1191,7 +1207,8 @@ void PlayState::createBossRoom(){
 		//Muro de la derecha----------
 		position.z =  Constant::BOSS_ROOM*2;
 		position.y = Constant::WALLR_POSITION_Y;
-		gameEntity = createGameEntity("WallRBoss", "cube.mesh", position, scale);
+		//gameEntity = createGameEntity("WallRBoss", "cube.mesh", position, scale);
+		gameEntity = createGameEntityRemade("WallRBoss", "cube.mesh", position, scale, 200.0);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
@@ -1204,7 +1221,8 @@ void PlayState::createBossRoom(){
 		position.x = Constant::BOSS_ROOM;
 		position.y = Constant::WALLL_POSITION_Y;
 		scale = Ogre::Vector3(1,50,100);
-		gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
+		//gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
+		gameEntity = createGameEntityRemade("WallFBoss", "cube.mesh", position,scale, 200.0);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
@@ -1217,7 +1235,8 @@ void PlayState::createBossRoom(){
 		position.y = Constant::WALLR_POSITION_Y;
 		position.x = - Constant::BOSS_ROOM;
 		scale = Ogre::Vector3(1,15,100);
-		gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
+		//gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
+		gameEntity = createGameEntityRemade("WallBBoss", "cube.mesh", position,scale, 200.0);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
 		wall->setRigidBody(gameEntity->getRigidBody());
@@ -1305,7 +1324,8 @@ void PlayState::createBoss(){
 
 	scale *= 2;
 
-	gameEntity = createGameEntity("BossLocomotive", "train.mesh", position, scale);
+	//gameEntity = createGameEntity("BossLocomotive", "train.mesh", position, scale);
+	gameEntity = createGameEntityRemade("BossLocomotive", "train.mesh", position, scale, 30.0);
 	bossLocomotive->setSceneNode(gameEntity->getSceneNode());
 	//_sceneMgr->getParticleSystem("Smoke")->
 	bossLocomotive->setRigidBody(gameEntity->getRigidBody());
@@ -1328,7 +1348,8 @@ void PlayState::createBoss(){
 
 	for(unsigned int i=0; i<Constant::NUM_WAGONS; i++){
 		bossWagon = new Boss();
-		gameEntity = createGameEntity("BossWagon" + Ogre::StringConverter::toString(i), "wagon.mesh", position, scale);
+		//gameEntity = createGameEntity("BossWagon" + Ogre::StringConverter::toString(i), "wagon.mesh", position, scale);
+		gameEntity = createGameEntityRemade("BossWagon" + Ogre::StringConverter::toString(i), "wagon.mesh", position, scale, 200.0);
 		bossWagon->setSceneNode(gameEntity->getSceneNode());
 		bossWagon->setRigidBody(gameEntity->getRigidBody());
 		bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad
@@ -1468,7 +1489,8 @@ void PlayState::populateThreads(String _path){
 			Vector3 scale = Vector3(Sx,Sy,Sz);
 
 			GameEntity* ge = new GameEntity();
-			ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
+			//ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
+			ge=createGameEntityRemade("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale,0.0);
 			ge->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3::UNIT_X));
 			index++;
 		}
@@ -1522,12 +1544,12 @@ void PlayState::populateEnemies(){
 		if(hero_x < enemy_x && enemy_x < (hero_x + Constant::WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
 			if(Ogre::StringUtil::match(_enemyTypes.at(i),"rabbit")){
 				//gameEntity = createGameEntity("Enemy","enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
-				gameEntity = createGameEntityRemade("Enemy","enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE, 15.0);
+				gameEntity = createGameEntityRemade("Enemy","enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE, 1.0);
 				enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"1");
 			}
 			else{
 				//gameEntity = createGameEntity("Enemy","rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
-				gameEntity = createGameEntityRemade("Enemy","rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE, 15.0);
+				gameEntity = createGameEntityRemade("Enemy","rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE, 1.0);
 				enemy = new Enemy(gameEntity->getSceneNode(), gameEntity->getRigidBody(),"2");
 			}
 
@@ -1579,7 +1601,7 @@ void PlayState::removeAllBehindBackWall(){
 	int indexGameEntity =0;
 	if(_walls.size() > 0){
 		int backWall_x = _walls.at(_walls.size() - 2)->getRigidBody()->getCenterOfMassPosition().x;
-		cout<<"Back Wall "<< _walls.at(_walls.size() - 2)->getSceneNode()->getName() <<  backWall_x <<endl;
+		//cout<<"Back Wall "<< _walls.at(_walls.size() - 2)->getSceneNode()->getName() <<  backWall_x <<endl;
 		for(unsigned int i = 0; i < _gameEntities.size(); i++){
 			if(_gameEntities.at(i)->getRigidBody()->getCenterOfMassPosition().x < (backWall_x - threshold)){
 
