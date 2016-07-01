@@ -8,9 +8,6 @@
 
 #include "Boss.h"
 
-#define DEFAULT_HEALTH 2
-#define DEFAULT_POINTS 100
-
 Boss::Boss(){
 	spawn();
 }
@@ -34,10 +31,10 @@ void Boss::spawn(){
 		//_points = DEFAULT_POINTS * 5;
 	//}
 	//else{
-		_points = DEFAULT_POINTS;
+		_points = Constant::BOSS_DEFAULT_POINTS;
 	//}
 
-	_health = DEFAULT_HEALTH;
+	_health = Constant::BOSS_DEFAULT_HEALTH;
 	_vulnerable = true;
 	_currentIndex = -1;
 	_rageTimer = 0.0;

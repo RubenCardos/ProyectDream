@@ -5,6 +5,7 @@
 #include <OIS/OIS.h>
 
 #include "GameState.h"
+#include "Constant.h"
 
 #include <CEGUI.h>
 #include <RendererModules/Ogre/Renderer.h>

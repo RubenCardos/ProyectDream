@@ -7,6 +7,7 @@
 #include "Hero.h"
 #include "Boss.h"
 #include "Scenario.h"
+#include "Constant.h"
 
 #include <OgreBulletDynamicsRigidBody.h>
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
@@ -14,10 +15,6 @@
 
 
 using namespace Ogre;
-
-
-#define NUM_ANIMS 12
-
 
 class AnimationManager : public Ogre::Singleton<AnimationManager>
 {
@@ -56,7 +53,7 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
  protected:
   Ogre::SceneManager* _sceneMgr;
   Scenario::Scenario _currentScenario;
-  Ogre::AnimationState *_animsHero[NUM_ANIMS];
+  Ogre::AnimationState *_animsHero[Constant::ANIMATIONMANAGER_NUM_ANIMS];
   std::vector<Ogre::AnimationState*> _animsEnemy;
   //Ogre::AnimationState *_animsEnemy[];
   animID _currentAnimation;

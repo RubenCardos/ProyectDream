@@ -7,6 +7,7 @@
 #include "Hero.h"
 #include "Wall.h"
 #include "Boss.h"
+#include "Constant.h"
 
 #include <OgreBulletDynamicsRigidBody.h>
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>

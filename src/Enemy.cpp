@@ -8,14 +8,11 @@
 
 #include "Enemy.h"
 
-#define DEFAULT_LIVES 1
-#define DEFAULT_POINTS 10
-
 Enemy::Enemy(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, std::string type){
 	_sNode = sNode;
 	_rigBody = rigBody;
 	_type = type;
-	_points = DEFAULT_POINTS;
+	_points = Constant::ENEMY_DEFAULT_POINTS;
 	_movementspeed=50.0;
 	_speed = Ogre::Vector3(0,0,0);
 	spawn();

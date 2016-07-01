@@ -2,9 +2,6 @@
 #include "PlayState.h"
 using namespace Ogre;
 
-#define N_JUMPS 1
-#define JUMP_EPSILON 0.01
-
 PhysicsManager::PhysicsManager(Ogre::SceneManager* sceneMgr, OgreBulletDynamics::DynamicsWorld * world, Hero* hero, std::vector<GameEntity*>* gameEntities, std::vector<Enemy*>* enemies, std::vector<Wall*>* walls){
 	_sceneMgr = sceneMgr;
 	_world = world;
@@ -221,16 +218,6 @@ void PhysicsManager::detectHeroCollision(){
 						
 
 					}
-
-					//Actualizar las vidas en la UI
-
-					//Recoloco los muros---------------------------------------
-					//btTransform transform = _bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> getCenterOfMassTransform();
-					//transform.setOrigin(OgreBulletCollisions::convert(pos));
-					//_bossPieces->at(i)->getRigidBody()->getBulletRigidBody() -> setCenterOfMassTransform(transform);
-
-					
-					//---------------------------------------------------------
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_DoorRoom")){
 					Scenario::Scenario scenario = Scenario::LevelRoom;
@@ -302,33 +289,26 @@ void PhysicsManager::detectEnemiesCollision(){
 
 		for(unsigned int j=0; j<_enemies->size(); j++){
 			OgreBulletCollisions::Object *obEnemy = _world->findObject(_enemies->at(j)->getSceneNode());
-			if ((obOB_A == obEnemy) || (obOB_B == obEnemy)) {  //si uno de los objetos colisionados es el hero
+			if ((obOB_A == obEnemy) || (obOB_B == obEnemy)) {  //si uno de los objetos colisionados es el enemy
 				Ogre::SceneNode* node = NULL;
 				if ((obOB_A != obEnemy) && (obOB_A)) {
 					node = static_cast<Ogre::SceneNode*>(obA -> getUserPointer());
 					aux=obA;
-
 				}
 				else if ((obOB_B != obEnemy) && (obOB_B)) {
 					node = static_cast<Ogre::SceneNode*>(obB -> getUserPointer());
 					aux=obB;
 				}
-
 				if (node) {
 					if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallL")){
-						//std::cout << "	EL ENEMIGO HA CHOCADO CON UN WALL L" << std::endl;
 						vel = _enemies->at(j)->getSpeed();
 						vel.z = std::abs(vel.z);
 						_enemies->at(j)->setSpeed(vel);
-						//std::cout << "	la velocidad es " << _enemies->at(j)->getSpeed() << std::endl;
 					}
 					else if(Ogre::StringUtil::startsWith(node->getName(),"SN_WallR")){
-						//std::cout << "	EL ENEMIGO HA CHOCADO CON UN WALL R" << std::endl;
 						vel = _enemies->at(j)->getSpeed();
 						vel.z = - std::abs(vel.z);
 						_enemies->at(j)->setSpeed(vel);
-						//std::cout << "	la velocidad es " << _enemies->at(j)->getSpeed() << std::endl;
-
 					}
 				}
 			}
@@ -371,7 +351,6 @@ void PhysicsManager::setWorld(OgreBulletDynamics::DynamicsWorld * world){
 }
 
 void PhysicsManager::removeGameEntity( std::string name){
-	cout << "GAME ENTITY A ELIMINAR=" << name << endl;
 	for(unsigned int i=0; i<_gameEntities->size(); i++){
 		if(Ogre::StringUtil::match(_gameEntities->at(i)->getSceneNode()->getName(),name)){
 			Entity* _e = static_cast<Entity*>(_gameEntities->at(i)->getSceneNode()->getAttachedObject(0));//Recupero la entidad
@@ -380,10 +359,8 @@ void PhysicsManager::removeGameEntity( std::string name){
 			_sceneMgr->destroyEntity(_e);
 			_sceneMgr->getRootSceneNode()->removeChild(_gameEntities->at(i)->getSceneNode());
 			_gameEntities->erase(_gameEntities->begin() + i);
-			cout << "GameEntity eliminada="<< name <<endl;
 		}
 	}
-
 }
 
 Vector3 PhysicsManager::calculateSpawnPoint(){
@@ -412,6 +389,5 @@ Vector3 PhysicsManager::calculateSpawnPoint(){
 	if(res.x < 0){
 		res.z = res.z + 50;
 	}
-	cout << "Spawn Point:  " << res << endl;
 	return res;
 }

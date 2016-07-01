@@ -8,9 +8,6 @@
 
 #include "Wall.h"
 
-#define INITIAL_LIVES 1
-#define NUM_JUMPS 1
-
 Wall::Wall(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody, WallType type){
 	_sNode = sNode;
 	_rigBody = rigBody;

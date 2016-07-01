@@ -2,9 +2,6 @@
 
 using namespace Ogre;
 
-#define NUM_ANIMS 5
-
-
 AnimationManager::AnimationManager(Ogre::SceneManager* sceneMgr, Scenario::Scenario currentScenario, Hero* hero,std::vector<Enemy*>* enemies){
 	_sceneMgr = sceneMgr;
 	_currentScenario = currentScenario;
@@ -30,8 +27,8 @@ void AnimationManager::setHero(Hero* hero){
 }
 
 void AnimationManager::setupAnimations(){
-	std::string animNames[]={"runHero","idleHero","attackHero","jumHero","dieHero"}; //SOLO ESTA LA PRIMERA DE MOMENTO
-	for(int i=0; i < NUM_ANIMS;i++){
+	std::string animNames[]={"runHero","idleHero","attackHero","jumHero","dieHero"};
+	for(int i=0; i < Constant::ANIMATIONMANAGER_NUM_ANIMS_HERO;i++){
 		_animsHero[i]=_sceneMgr->getEntity("E_Hero")->getAnimationState(animNames[i]);
 	}
 }
@@ -149,7 +146,7 @@ void AnimationManager::stopAnimations(animID id){
 }
 
 void AnimationManager::resetAnimations(Real _deltaT){
-	for(int i=0; i < NUM_ANIMS;i++){
+	for(int i=0; i < Constant::ANIMATIONMANAGER_NUM_ANIMS_HERO;i++){
 	//	if(_anims[i]!=_anims[ANIM_JUMP_HERO]){
 			if (_animsHero[i] != NULL) {
 				if(_animsHero[i] == _animsHero[ANIM_ATTACK_HERO] && _animsHero[i]->hasEnded()){
@@ -168,19 +165,6 @@ void AnimationManager::resetAnimations(Real _deltaT){
 					stopAnimations(AnimationManager::ANIM_JUMP_HERO);
 				}
 		}
-	}
-	if(_currentScenario != Scenario::Menu){
-		/*for(unsigned int i=0; i<_enemies->size();i++){
-			if (_animsEnemy[i] != NULL) {
-				if (_animsEnemy[i]->hasEnded()) {
-					_animsEnemy[i]->setTimePosition(0.0);
-					_animsEnemy[i]->setEnabled(false);
-				}
-				else {
-					_animsEnemy[i]->addTime(_deltaT);
-				}
-			}
-		}*/
 	}
 }
 

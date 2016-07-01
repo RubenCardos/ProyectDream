@@ -11,25 +11,6 @@
 
 #include "math.h"
 
-#define FLOOR_POSITION_Y -2.8  // PONERLO BIEN (todos los define, meterlos en un archivo de configuracion)
-#define FLOOR_POSITION_Z 4.0
-
-#define WALLB_POSITION_Z 2.0
-#define WALLB_POSITION_X -39.0
-
-#define WALLL_POSITION_Y -2.8
-#define WALLL_POSITION_Z -13.0
-
-#define WALLR_POSITION_Y -2.8
-#define WALLR_POSITION_Z 19.0
-
-#define BOSS_ROOM 100.0
-#define BOSS_ROOM_SCALE 3.0
-
-#define WALL_LENGTH_X 100
-#define WALL_HEIGHT_Y 20
-
-#define NUM_WAGONS 5
 
 using namespace std;
 
@@ -905,10 +886,10 @@ void PlayState::createAllWalls(){
 	//para paredes laterales cambiar el 40 por la longitud de 2 o 3 modulos de nivel
 
 	//Muro de la izquierda
-	position.z = WALLL_POSITION_Z;
-	position.y = WALLL_POSITION_Y;
-	position.x = WALL_LENGTH_X/2 + 10;
-	scale = Ogre::Vector3(WALL_LENGTH_X,WALL_HEIGHT_Y,1);
+	position.z = Constant::WALLL_POSITION_Z;
+	position.y = Constant::WALLL_POSITION_Y;
+	position.x = Constant::WALL_LENGTH_X/2 + 10;
+	scale = Ogre::Vector3(Constant::WALL_LENGTH_X,Constant::WALL_HEIGHT_Y,1);
 	gameEntity = createGameEntity("WallL", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
@@ -918,8 +899,8 @@ void PlayState::createAllWalls(){
 	_walls.push_back(wall);
 
 	//Muro de la derecha
-	position.z = WALLR_POSITION_Z;
-	position.y = WALLR_POSITION_Y;
+	position.z = Constant::WALLR_POSITION_Z;
+	position.y = Constant::WALLR_POSITION_Y;
 	gameEntity = createGameEntity("WallR", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
@@ -929,9 +910,9 @@ void PlayState::createAllWalls(){
 	_walls.push_back(wall);
 
 	//Muro trasero
-	position.z = WALLB_POSITION_Z;
-	position.x = WALLB_POSITION_X;
-	scale = Ogre::Vector3(1,WALL_HEIGHT_Y,16);
+	position.z = Constant::WALLB_POSITION_Z;
+	position.x = Constant::WALLB_POSITION_X;
+	scale = Ogre::Vector3(1,Constant::WALL_HEIGHT_Y,16);
 	gameEntity = createGameEntity("WallB", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
@@ -943,8 +924,8 @@ void PlayState::createAllWalls(){
 	//Techo
 	position.z = 0.0;
 	position.x = 0.0;
-	position.y = 1.5 * WALL_HEIGHT_Y;
-	scale = Ogre::Vector3(WALL_LENGTH_X*1.1,1,16*1.1);
+	position.y = 1.5 * Constant::WALL_HEIGHT_Y;
+	scale = Ogre::Vector3(Constant::WALL_LENGTH_X*1.1,1,16*1.1);
 	gameEntity = createGameEntity("WallRoof", "cube.mesh", position, scale);
 	wall = new Wall();
 	wall->setSceneNode(gameEntity->getSceneNode());
@@ -1191,14 +1172,14 @@ void PlayState::createBossRoom(){
 		//--------------------------------------------------------------------------------------------------------
 
 		//Suelo-----------------------
-		position.z = FLOOR_POSITION_Z + BOSS_ROOM;
-		position.y = FLOOR_POSITION_Y;
+		position.z = Constant::FLOOR_POSITION_Z + Constant::BOSS_ROOM;
+		position.y = Constant::FLOOR_POSITION_Y;
 		scale = Ogre::Vector3(100,50,100);
 
 		//Muro de la izquierda--------
-		position.z = BOSS_ROOM-BOSS_ROOM;
-		position.y = WALLL_POSITION_Y;
-		scale = Ogre::Vector3(BOSS_ROOM,50,1);
+		position.z = Constant::BOSS_ROOM-Constant::BOSS_ROOM;
+		position.y = Constant::WALLL_POSITION_Y;
+		scale = Ogre::Vector3(Constant::BOSS_ROOM,50,1);
 		gameEntity = createGameEntity("WallLBoss", "cube.mesh", position, scale);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
@@ -1208,8 +1189,8 @@ void PlayState::createBossRoom(){
 		eWallLBoss->setMaterialName("matCarton");
 
 		//Muro de la derecha----------
-		position.z =  BOSS_ROOM*2;
-		position.y = WALLR_POSITION_Y;
+		position.z =  Constant::BOSS_ROOM*2;
+		position.y = Constant::WALLR_POSITION_Y;
 		gameEntity = createGameEntity("WallRBoss", "cube.mesh", position, scale);
 		wall = new Wall();
 		wall->setSceneNode(gameEntity->getSceneNode());
@@ -1219,9 +1200,9 @@ void PlayState::createBossRoom(){
 		eWallRBoss->setMaterialName("matCarton1");
 
 		//Muro delantero--------
-		position.z = BOSS_ROOM;
-		position.x = BOSS_ROOM;
-		position.y = WALLL_POSITION_Y;
+		position.z = Constant::BOSS_ROOM;
+		position.x = Constant::BOSS_ROOM;
+		position.y = Constant::WALLL_POSITION_Y;
 		scale = Ogre::Vector3(1,50,100);
 		gameEntity = createGameEntity("WallFBoss", "cube.mesh", position,scale);
 		wall = new Wall();
@@ -1232,9 +1213,9 @@ void PlayState::createBossRoom(){
 		eWallFBoss->setMaterialName("matCarton");
 
 		//Muro trasero----------
-		position.z = BOSS_ROOM;
-		position.y = WALLR_POSITION_Y;
-		position.x = - BOSS_ROOM;
+		position.z = Constant::BOSS_ROOM;
+		position.y = Constant::WALLR_POSITION_Y;
+		position.x = - Constant::BOSS_ROOM;
 		scale = Ogre::Vector3(1,15,100);
 		gameEntity = createGameEntity("WallBBoss", "cube.mesh", position,scale);
 		wall = new Wall();
@@ -1244,7 +1225,7 @@ void PlayState::createBossRoom(){
 		Entity* eWallBBoss = static_cast<Entity*>(gameEntity->getSceneNode()->getAttachedObject(0));
 		eWallBBoss->setMaterialName("matCarton");
 
-		_movementManager->repositionHero(btVector3(0,0,BOSS_ROOM),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
+		_movementManager->repositionHero(btVector3(0,0,Constant::BOSS_ROOM),_hero->getRigidBody()->getBulletRigidBody()->getOrientation());
 		_bossRoom = true;
 	}
 }
@@ -1319,7 +1300,7 @@ void PlayState::createBoss(){
 	_bossPieces.clear();
 	GameEntity* gameEntity = new GameEntity();
 	Boss* bossLocomotive = new Boss();
-	Ogre::Vector3 position(-100,0,BOSS_ROOM -10);
+	Ogre::Vector3 position(-100,0,Constant::BOSS_ROOM -10);
 	Ogre::Vector3 scale(1,1,1);
 
 	scale *= 2;
@@ -1345,7 +1326,7 @@ void PlayState::createBoss(){
 
 	Boss* bossWagon;
 
-	for(unsigned int i=0; i<NUM_WAGONS; i++){
+	for(unsigned int i=0; i<Constant::NUM_WAGONS; i++){
 		bossWagon = new Boss();
 		gameEntity = createGameEntity("BossWagon" + Ogre::StringConverter::toString(i), "wagon.mesh", position, scale);
 		bossWagon->setSceneNode(gameEntity->getSceneNode());
@@ -1457,8 +1438,6 @@ void PlayState::populateObstacles(String _path){
 				}
 
 			}
-			
-
 			index++;
 		}
 		fichero.close();
@@ -1539,7 +1518,7 @@ void PlayState::populateEnemies(){
 	double enemy_x = 0.0;
 	for(unsigned int i=0; i<_posEnemies.size(); i++){
 		enemy_x = _posEnemies.at(i).x;
-		if(hero_x < enemy_x && enemy_x < (hero_x + WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
+		if(hero_x < enemy_x && enemy_x < (hero_x + Constant::WALL_LENGTH_X/2)){ //si el enemigo cae dentro de los muros (con un poco de margen) lo creo
 			//gameEntity = createGameEntity("Enemy"+Ogre::StringConverter::toString(index),"rex.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);
 			if(Ogre::StringUtil::match(_enemyTypes.at(i),"rabbit")){
 				gameEntity = createGameEntity("Enemy","enemy.mesh",_posEnemies.at(i),Ogre::Vector3::UNIT_SCALE);

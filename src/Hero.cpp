@@ -8,15 +8,13 @@
 
 #include "Hero.h"
 
-#define INITIAL_LIVES 3
-#define NUM_JUMPS 1
-#define INVULNERABILITY_TIME 3.0
+
 
 Hero::Hero(){
-	_lives = INITIAL_LIVES;
+	_lives = Constant::HERO_INITIAL_LIVES;
 	_score = 0;
 	_movementspeed=50.0;
-	_nJumps = NUM_JUMPS;
+	_nJumps = Constant::HERO_NUM_JUMPS;
 	_speed = Ogre::Vector3(0,0,0);
 	_pickedGardenReel = false;
 	_pickedRoomReel = false;
@@ -25,10 +23,10 @@ Hero::Hero(){
 Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
 	_sNode = sNode;
 	_rigBody = rigBody;
-	_lives = INITIAL_LIVES;
+	_lives = Constant::HERO_INITIAL_LIVES;
 	_score = 0;
 	_movementspeed=50.0;
-	_nJumps = NUM_JUMPS;
+	_nJumps = Constant::HERO_NUM_JUMPS;
 	_speed = Ogre::Vector3(0,0,0);
 	_attacking = false;
 	_pickedGardenReel = false;
@@ -105,7 +103,7 @@ void Hero::resetScore(){
 }
 
 void Hero::resetLives(){
-	_lives = INITIAL_LIVES;
+	_lives = Constant::HERO_INITIAL_LIVES;
 }
 
 bool Hero:: AllReelsPicked(){
@@ -130,7 +128,7 @@ void Hero::resetPickedReels(){
 }
 
 void Hero::makeInvulnerable(){
-	_invulnerabilityLeft = INVULNERABILITY_TIME;
+	_invulnerabilityLeft = Constant::HERO_INVULNERABILITY_TIME;
 }
 void Hero::UpdateInvulnerability(Ogre::Real deltaT){
 	if((_invulnerabilityLeft - deltaT) > 0){

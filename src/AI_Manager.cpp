@@ -1,10 +1,7 @@
 #include "../include/AI_Manager.h"
 using namespace Ogre;
 
-#define BOSS_ROOM 100.0
-#define EPSILON 1 //Se va a 0.27
-#define FLOOR_POSITION_Y -2.8
-#define DISTANCE_BETWEEN_WAGONS 23
+
 
 AI_Manager::AI_Manager (Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Boss*>* bossPieces,std::vector<Enemy*>* enemies){
 	_hero = hero;
@@ -90,7 +87,7 @@ void AI_Manager::updateBossMovement(){
 		//cout << "	target = " << *_bossPieces->at(0)->getTargetPosition() << endl;
 		//cout << "	distancia =" <<  _bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) << endl;
 
-		if(_bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) < EPSILON){
+		if(_bossPieces->at(0)->getRigidBody()->getCenterOfMassPosition().distance(*_bossPieces->at(0)->getTargetPosition()) < Constant::AIMANAGER_EPSILON){
 			//lo llevo otra vez al punto inicial
 			//_bossPieces->at(i)->getRigidBody()->setPosition(_bossRoute.at(i));
 			cout << "He llegado a mi destino "<< _bossPieces->at(0)->getCurrentIndex() <<endl;
@@ -103,9 +100,8 @@ void AI_Manager::updateBossMovement(){
 			//----------------------------------------------------
 
 			//Aumento index-----------
-			for(int i = 0;i<_bossPieces->size();i++){
+			for(unsigned int i = 0;i<_bossPieces->size();i++){
 				_bossPieces->at(0)->setCurrentIndex(new_Index);
-				cout << "Actualizo Indice = "<< _bossPieces->at(0)->getCurrentIndex() <<endl;
 			}
 			//------------------------
 
@@ -145,7 +141,7 @@ void AI_Manager::updateBossMovement(){
 
 			for(unsigned int i=0; i<_bossPieces->size(); i++){
 				if(i==2){
-					desp = desp * DISTANCE_BETWEEN_WAGONS;
+					desp = desp * Constant::AIMANAGER_DISTANCE_BETWEEN_WAGONS;
 				}
 
 				pos = pos + desp;
