@@ -399,6 +399,7 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 	if (e.key == OIS::KC_V) {
 		if(!_hero->isAttacking()){
 			_animationManager->stopAnimations(AnimationManager::ANIM_RUN_HERO);
+			_animationManager->stopAnimations(AnimationManager::ANIM_JUMP_HERO);
 			_animationManager->playAnimations(AnimationManager::ANIM_ATTACK_HERO);
 			/*ParticleSystem::setDefaultNonVisibleUpdateTimeout(5); 
 			//ParticleSystem* ps = _sceneMgr->createParticleSystem("Aureola", "Examples/Aureola");
