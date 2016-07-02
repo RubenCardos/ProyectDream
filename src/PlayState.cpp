@@ -151,7 +151,7 @@ void PlayState::exit(){
 	_walls.clear();
 	//----------------------------------------------
 
-	GameManager::getSingletonPtr()->_mainTrack->unload();
+	GameManager::getSingletonPtr()->getMainTrack()->unload();
 }
 
 void PlayState::pause(){
@@ -687,7 +687,7 @@ bool PlayState::deleteCurrentScenario(){
 void PlayState::createScenario(Scenario::Scenario nextScenario){
 
 	//Musica Intro---------------------------------------
-	GameManager::getSingletonPtr()->_mainTrack->unload();
+	GameManager::getSingletonPtr()->getMainTrack()->unload();
 	//---------------------------------------------------
 
 	_nextScenario = nextScenario;
@@ -759,15 +759,15 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		_ground->setMaterialName("GroundRoom");
 		_sceneMgr->setSkyBox(true, "matSkybox");
 		//Musica -------------------------------------------
-		GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Menu.mp3");
-		GameManager::getSingletonPtr()->_mainTrack->play();
+		GameManager::getSingletonPtr()->setMainTrack(GameManager::getSingletonPtr()->getTrackManager()->load("Menu.mp3"));
+		GameManager::getSingletonPtr()->getMainTrack()->play();
 		//--------------------------------------------------
 
 		if(_hero!=NULL &&_hero->AllReelsPicked()){
 			if(!_bossCreated){
 
 				//Musica -------------------------------------------
-				GameManager::getSingletonPtr()->_mainTrack->unload();
+				GameManager::getSingletonPtr()->getMainTrack()->unload();
 				//---------------------------------------------------
 
 				createBossRoom();
@@ -795,11 +795,10 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 			//_vScenario.push_back(_nodeScn);
 
 			//Musica -------------------------------------------
-			GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Garden.ogg");
-			GameManager::getSingletonPtr()->_mainTrack->play();
+			GameManager::getSingletonPtr()->setMainTrack(GameManager::getSingletonPtr()->getTrackManager()->load("Garden.ogg"));
+			GameManager::getSingletonPtr()->getMainTrack()->play();
 			//--------------------------------------------------
 		}
-
 		_ground->setMaterialName("Ground");
 		_currentScenario = Scenario::LevelGarden;
 		_numModules += 3;
@@ -844,8 +843,8 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 		_sceneMgr->setSkyBox(true, "MaterialSkybox");
 
 		//Musica -------------------------------------------
-		GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Room.mp3");
-		GameManager::getSingletonPtr()->_mainTrack->play();
+		GameManager::getSingletonPtr()->setMainTrack(GameManager::getSingletonPtr()->getTrackManager()->load("Room.mp3"));
+		GameManager::getSingletonPtr()->getMainTrack()->play();
 		//--------------------------------------------------
 
 		//PinchosLego--------------------------------------
@@ -1155,8 +1154,8 @@ void PlayState::createBossRoom(){
 	if(!_bossRoom){
 
 		//Musica -------------------------------------------
-		GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("BossFight.wav");
-		GameManager::getSingletonPtr()->_mainTrack->play();
+		GameManager::getSingletonPtr()->setMainTrack(GameManager::getSingletonPtr()->getTrackManager()->load("BossFight.wav"));
+		GameManager::getSingletonPtr()->getMainTrack()->play();
 		//--------------------------------------------------
 
 		Ogre::Vector3 position(0,1.5,0);

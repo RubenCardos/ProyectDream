@@ -246,3 +246,19 @@ GameManager::_initSDL () {
  
     return true;    
 }
+
+TrackManager* GameManager::getTrackManager(){
+	return _pTrackManager;
+}
+SoundFXManager* GameManager::getSoundManager(){
+	return _pSoundFXManager;
+}
+TrackPtr GameManager::getMainTrack(){
+	return _mainTrack;
+}
+void GameManager::setMainTrack(TrackPtr track){
+	_mainTrack = track;
+}
+std::vector<SoundFXPtr>* GameManager::getSoundEffects(){
+	return &_simpleEffects;
+}

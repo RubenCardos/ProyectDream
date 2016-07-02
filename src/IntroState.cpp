@@ -139,8 +139,8 @@ IntroState::enter ()
   //--------------------------------------------------
 
   //Musica Intro--------------------------------------
-  GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("Intro.ogg");
-  GameManager::getSingletonPtr()->_mainTrack->play();
+  GameManager::getSingletonPtr()->setMainTrack(GameManager::getSingletonPtr()->getTrackManager()->load("Intro.ogg"));
+  GameManager::getSingletonPtr()->getMainTrack()->play();
   //--------------------------------------------------
 }
 void IntroState::createGUI()
@@ -356,7 +356,7 @@ IntroState::exit()
   //--------------------------------------------
 
   //Musica Intro---------------------------------------
-  GameManager::getSingletonPtr()->_mainTrack->unload();
+  GameManager::getSingletonPtr()->getMainTrack()->unload();
   //---------------------------------------------------
 }
 

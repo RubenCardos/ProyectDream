@@ -55,23 +55,21 @@ class GameManager : public Ogre::FrameListener, public Ogre::Singleton<GameManag
   static GameManager* getSingletonPtr ();
 
   //Win-----------------------------
-  bool _win;
   bool getWin();
   void setWin(bool win);
   bool _initSDL ();
   //----------------------------------
 
   //Puntuacion---------------------
-  int _punt;
   int getPunt();
   void setPunt(int n_punt);
   //-------------------------------
 
-  TrackManager* _pTrackManager;
-  SoundFXManager* _pSoundFXManager;
-  TrackPtr _mainTrack;
-  SoundFXPtr _simpleEffect;
-  SoundFXPtr _simpleEffect2;
+  TrackManager* getTrackManager();
+  SoundFXManager* getSoundManager();
+  TrackPtr getMainTrack();
+  void setMainTrack(TrackPtr track);
+  std::vector<SoundFXPtr>* getSoundEffects();
 
  protected:
   Ogre::Root* _root;
@@ -100,6 +98,13 @@ class GameManager : public Ogre::FrameListener, public Ogre::Singleton<GameManag
   InputManager *_inputMgr;
   // Estados del juego.
   std::stack<GameState*> _states;
+
+  TrackManager* _pTrackManager;
+  SoundFXManager* _pSoundFXManager;
+  TrackPtr _mainTrack;
+  std::vector<SoundFXPtr> _simpleEffects;
+  bool _win;
+  int _punt;
 };
 
 #endif
