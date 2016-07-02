@@ -70,7 +70,8 @@ class GameManager : public Ogre::FrameListener, public Ogre::Singleton<GameManag
   TrackPtr getMainTrack();
   void setMainTrack(TrackPtr track);
   std::vector<SoundFXPtr>* getSoundEffects();
-
+  SoundFXPtr _simpleEffect;
+  
  protected:
   Ogre::Root* _root;
   Ogre::SceneManager* _sceneManager;

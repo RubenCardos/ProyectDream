@@ -126,10 +126,13 @@ void PlayState::enter(){
 	_cameraPivot->attachObject(_camera);
 	//---------------
 
-	//ParticleSystem::setDefaultNonVisibleUpdateTimeout(5); 
+	//Particulas------------------------------------------
 	aureolaNode = _sceneMgr->getRootSceneNode()->createChildSceneNode("AureolaNode");
-	//aureolaNode->attachObject(_sceneMgr->createParticleSystem("Aureola", "Examples/Sun"));
-	//aureolaNode->setVisible(false);
+	//---------------------------------------------------------
+	
+
+	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("attack.ogg"));
+	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("jump.ogg"));
 	
 }
 
@@ -410,6 +413,8 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 			_animationManager->stopAnimations(AnimationManager::ANIM_RUN_HERO);
 			_animationManager->stopAnimations(AnimationManager::ANIM_JUMP_HERO);
 			_animationManager->playAnimations(AnimationManager::ANIM_ATTACK_HERO);
+			
+        	GameManager::getSingletonPtr()->getSoundEffects()->at(0)->play();
 		}
 		
 		

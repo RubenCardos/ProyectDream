@@ -259,6 +259,7 @@ TrackPtr GameManager::getMainTrack(){
 void GameManager::setMainTrack(TrackPtr track){
 	_mainTrack = track;
 }
+
 std::vector<SoundFXPtr>* GameManager::getSoundEffects(){
 	return &_simpleEffects;
 }
