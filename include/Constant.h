@@ -23,7 +23,7 @@ namespace Constant{
 	const int AIMANAGER_DISTANCE_BETWEEN_WAGONS = 23;
 	const int ANIMATIONMANAGER_NUM_ANIMS = 12;
 	const int ANIMATIONMANAGER_NUM_ANIMS_HERO = 5;
-	const int HERO_INITIAL_LIVES = 99;
+	const int HERO_INITIAL_LIVES = 5;
 	const int HERO_NUM_JUMPS = 1;
 	const int HERO_INVULNERABILITY_TIME = 3.0;
 	const int WALLB_DISTANCE = 40;

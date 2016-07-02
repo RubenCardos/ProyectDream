@@ -20,7 +20,7 @@ enum collisiontypes {
 
 //GRUPOS DE COLISION-----
 const short player_collides_with = COL_Walls | COL_StaticWalls | COL_Thread  | COL_Reel | COL_Enemy | COL_Boss | COL_Obs | COL_BackWall | COL_Spike;
-const short enemy_collides_with =  COL_Walls | COL_StaticWalls | COL_Player | COL_Obs | COL_Spike;
+const short enemy_collides_with =  COL_Walls | COL_StaticWalls | COL_Player | COL_Obs;
 const short walls_collides_with =  COL_StaticWalls | COL_Player | COL_Enemy | COL_Walls;
 const short boss_collides_with = COL_StaticWalls | COL_Player | COL_Boss;
 const short staticwalls_collides_with =  COL_Walls | COL_Player | COL_Enemy | COL_Boss | COL_Obs |COL_BackWall | COL_Spike;
@@ -28,7 +28,7 @@ const short thread_collides_with = COL_Player;
 const short reel_collides_with = COL_Player;
 const short obs_collides_with = COL_Player | COL_Enemy | COL_StaticWalls | COL_Obs;
 const short backwall_collides_with = COL_Player | COL_StaticWalls;
-const short spikes_collides_with = COL_Player | COL_Enemy | COL_StaticWalls | COL_Spike;
+const short spikes_collides_with = COL_Player | COL_StaticWalls | COL_Spike;
 //-----------------------
 
 }

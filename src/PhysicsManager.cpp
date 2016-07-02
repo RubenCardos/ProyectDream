@@ -375,26 +375,13 @@ Vector3 PhysicsManager::calculateSpawnPoint(){
 	Vector3 speed = *(AI_Manager::getSingletonPtr()->getLastWagon()->getVSpeed());
 	Vector3 pos = AI_Manager::getSingletonPtr()->getLastWagon()->getRigidBody()->getCenterOfMassPosition();
 	Vector3 per = Vector3(0,0,0);
+
 	if(speed.z !=0){
-		per = Vector3::UNIT_X*50;
-		res=per+pos;
+		res = Vector3(75,2,175);
 	}
 	else if(speed.x !=0){
-		per = Vector3::UNIT_Z*50;
-		res=per+pos;
+		res = Vector3(-75,2,25);
 	}
-
-	if(res.x > 100){
-		res.x = res.x - 50;
-	}
-	if(res.x < -100){
-		res.x = res.x + 50;
-	}
-	if(res.z > 200){
-		res.z = res.z - 50;
-	}
-	if(res.x < 0){
-		res.z = res.z + 50;
-	}
+	cout << "		POSICION DE RESPAWN: " << res << endl;
 	return res;
 }
