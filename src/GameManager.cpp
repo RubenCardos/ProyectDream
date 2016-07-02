@@ -263,3 +263,12 @@ void GameManager::setMainTrack(TrackPtr track){
 std::vector<SoundFXPtr>* GameManager::getSoundEffects(){
 	return &_simpleEffects;
 }
+
+void GameManager::playSoundEffect(std::string name){
+	for(unsigned int i=0; i<_simpleEffects.size(); i++){
+		cout << "		NOMBRE A REPRODUCIR: " << _simpleEffects.at(i).getPointer()->getName() << endl;
+		if(Ogre::StringUtil::match(name,_simpleEffects.at(i).getPointer()->getName())){
+			_simpleEffects.at(i).getPointer()->play();
+		}
+	}
+}

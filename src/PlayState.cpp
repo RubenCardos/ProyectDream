@@ -133,7 +133,10 @@ void PlayState::enter(){
 
 	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("attack.ogg"));
 	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("jump.ogg"));
-	
+	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("death.ogg"));
+	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("disco.ogg"));
+	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("footsteps.ogg"));
+	cout << "		NOMBRE: " << GameManager::getSingletonPtr()->getSoundEffects()->back()->getName()<< endl;
 }
 
 void PlayState::exit(){
@@ -414,7 +417,8 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 			_animationManager->stopAnimations(AnimationManager::ANIM_JUMP_HERO);
 			_animationManager->playAnimations(AnimationManager::ANIM_ATTACK_HERO);
 			
-        	GameManager::getSingletonPtr()->getSoundEffects()->at(0)->play();
+        	//GameManager::getSingletonPtr()->getSoundEffects()->at(0)->play();
+			GameManager::getSingletonPtr()->playSoundEffect("attack.ogg");
 		}
 		
 		
