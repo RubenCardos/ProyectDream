@@ -55,7 +55,7 @@ void PlayState::enter(){
 
 	_world = new OgreBulletDynamics::DynamicsWorld(_sceneMgr,worldBounds, gravity);
 	_world->setDebugDrawer (_debugDrawer);
-	_world->setShowDebugShapes(true);  // Muestra los collision shapes
+	_world->setShowDebugShapes(false);  // Muestra los collision shapes
 	//-----------------------------------------------------------------
 
 	//Creacion de los elementos iniciales del mundo---
@@ -313,6 +313,11 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 		_movementManager->moveBoss(); //ACTIVAR
 		//Mover el nodo de las partículas a la posición del nodo de la locomotora
 		if(!_bossPieces.empty()){
+
+			//Animaciones-----
+			_animationManager->playBossAnimations(_deltaT);
+			//----------------
+
 			_sceneMgr->getSceneNode("SmokeNode")->setPosition(_bossPieces.at(0)->getRigidBody()->getCenterOfMassPosition());
 			Vector3 pos = _bossPieces.back()->getSceneNode()->getPosition();
 			_sceneMgr->getSceneNode("ArrowEmptyNode")->setPosition(pos);
@@ -1333,6 +1338,7 @@ void PlayState::createBoss(){
 	cout << "locomotive movementSpeed " << bossLocomotive->getMovementSpeed() <<endl;
 	//bossLocomotive->getRigidBody()->setLinearVelocity(bossLocomotive->getMovementSpeed(),0,0);
 	//bossLocomotive->getRigidBody()->setAngularVelocity(1,1,1);
+	_animationManager->setupBossAnimations(bossLocomotive);
 	_bossPieces.push_back(bossLocomotive);
 	//position.x -= 10.0;
 
@@ -1354,6 +1360,7 @@ void PlayState::createBoss(){
 		bossWagon->setRigidBody(gameEntity->getRigidBody());
 		bossWagon->setMovementSpeed(bossLocomotive->getMovementSpeed()); //la locomotora marca la velocidad
 		_bossPieces.push_back(bossWagon);
+		_animationManager->setupBossAnimations(bossWagon);
 
 		//position.x -= 10.0;
 	}

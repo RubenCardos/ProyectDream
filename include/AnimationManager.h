@@ -39,7 +39,7 @@ class AnimationManager : public Ogre::Singleton<AnimationManager>
   void stopAnimations(animID id);
   void setupAnimations();
   void setupEnemyAnimations(String name);
-  void setupBossAnimations(String name);
+  void setupBossAnimations(GameEntity* ge);
   void resetAnimations(Real _deltaT);
   Ogre::AnimationState* getAnimation(animID id);
   void playEnemyAnimations(Ogre::Real deltaT);

@@ -63,7 +63,6 @@ void AnimationManager::playEnemyAnimations(Ogre::Real deltaT){
 				aux->addTime(deltaT);
 			}
 		}
-
 	}
 }
 
@@ -87,18 +86,37 @@ void AnimationManager::resetEnemyAnimation(String name){
 	//_animsEnemy.clear();
 }
 
-void AnimationManager::setupBossAnimations(String name){
-
+void AnimationManager::setupBossAnimations(GameEntity* ge){
+	Ogre::AnimationStateIterator it = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0))->getAllAnimationStates()->getAnimationStateIterator();
+	it.begin()->second->setEnabled(true);
+	it.begin()->second->setLoop(true);
+	it.begin()->second->setTimePosition(0.0);
+	_animsBoss[ge->getSceneNode()->getName()]=it.begin()->second;
 }
 
 void AnimationManager::playBossAnimations(Ogre::Real deltaT){
-
-
+	for (std::map<std::string,Ogre::AnimationState*>::iterator it=_animsBoss.begin(); it!=_animsBoss.end(); ++it){
+		//std::cout << it->first << " => " << it->second << '\n';
+		AnimationState* aux = it->second;
+		if(aux != NULL){
+			if(aux->hasEnded()){
+				aux->setTimePosition(0.0);
+				aux->setEnabled(false);
+			}
+			else{
+				aux->addTime(deltaT);
+			}
+		}
+	}
 }
 
 
 void AnimationManager::resetBossAnimation(String name){
-
+	for (std::map<std::string,Ogre::AnimationState*>::iterator it=_animsBoss.begin(); it!=_animsBoss.end(); ++it){
+		if(Ogre::StringUtil::match(name,it->first)){
+			_animsBoss.erase(it);
+		}
+	}
 }
 
 void AnimationManager::playAnimations(animID id){

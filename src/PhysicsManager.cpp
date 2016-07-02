@@ -70,11 +70,18 @@ void PhysicsManager::detectHeroCollision(){
 						if(Ogre::StringUtil::match(last->getSceneNode()->getName(),node->getName()) && last->isVulnerable()){
 							cout << "\nAtaco al ultimo vagon\n"<< endl;
 							_hero->increaseScore(AI_Manager::getSingletonPtr()->getLastWagon()->getPoints());
+
+							//Animaciones---
+							AnimationManager::getSingletonPtr()->resetBossAnimation(last->getSceneNode()->getName());
+							//--------------
+							cout << "\nPasada animacion\n"<< endl;
 							AI_Manager::getSingletonPtr()->deleteLastWagon();
 							removeGameEntity(last->getSceneNode()->getName());
 							//actualizar vulnerabilidad
 							last = AI_Manager::getSingletonPtr()->getLastWagon();
 							last->setVulnerable(false);
+
+
 						}
 						//-----------------------------------
 					}
