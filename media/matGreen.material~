@@ -1,16 +1,16 @@
-// matjengaRed genrated by blender2ogre 0.5.8
+// matjengaGreen genrated by blender2ogre 0.5.8
 
-material matRed 
+material matGreen 
 {
     receive_shadows on 
 
     technique
     {
-        pass matRed
+        pass matGreen
         {
-            ambient 0.8000000715255737 0.01562047004699707 0.01137519720941782 1.0
-            diffuse 0.8000000715255737 0.01562047004699707 0.01137519720941782 1.0
-            specular 0.005263149738311768 0.005263149738311768 0.005263149738311768 1.0 12.5
+            ambient 0.10027888417243958 0.6738447546958923 0.0 1.0
+            diffuse 0.10027888417243958 0.6738447546958923 0.0 1.0
+            specular 0.0 0.0 0.0 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off
@@ -29,11 +29,6 @@ material matRed
             scene_blend_op add
             shading gouraud
             transparent_sorting on
-
-		texture_unit{
-			texture wood.jpg
-				
-		}
 
         }
     }

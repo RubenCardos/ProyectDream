@@ -17,38 +17,6 @@ IntroState::enter ()
   _viewport = _root->getAutoCreatedWindow()->addViewport(_camera);
   _sceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
   
-  /*_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
-  _sceneMgr->setShadowColour(Ogre::ColourValue(0.5,0.5,0.5));
-  _sceneMgr->setShadowTextureSize(1024);
-  _sceneMgr->setShadowTextureCount(1);*/
-  /* _sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE);
-  //_sceneMgr->setShadowTexturzeSelfShadow(true);
- // Set the caster material which uses the shaders defined above
-   string CUSTOM_RECEIVER_MATERIAL("Ogre/DepthShadowmap/Receiver/Float");
-  _sceneMgr->setShadowTextureSelfShadow(true);
-  _sceneMgr->setShadowTextureCasterMaterial("Ogre/DepthShadowmap/Caster/Float");
-  _sceneMgr->setShadowTextureReceiverMaterial(CUSTOM_RECEIVER_MATERIAL + "/PCF" );
-  _sceneMgr->setShadowTexturePixelFormat(Ogre::PF_FLOAT32_R);
- // _sceneMgr->setShadowTextureSize(512);
-   _sceneMgr->setShadowTextureSettings(512,2);
-   _sceneMgr->setShadowColour(Ogre::ColourValue(0.5,0.5,0.5));*/
-
-/*
-  Ogre::LiSPSMShadowCameraSetup *mLiSPSMSetup = new Ogre::LiSPSMShadowCameraSetup();
-  mLiSPSMSetup->setUseAggressiveFocusRegion(true);
-  //mLiSPSMSetup->setUseSimpleOptimalAdjust(true);
-  mLiSPSMSetup->setOptimalAdjustFactor(1.1f);
-  _sceneMgr->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(mLiSPSMSetup));*/
-
-
-/*
- // Set the pixel format to floating point
- 
- // You can switch this on or off, I suggest you try both and see which works best for you
- _sceneMgr->setShadowCasterRenderBackFaces(true);
- // Finally enable the shadows using texture additive integrated
-
- _sceneMgr->setShadowTextureSize(512); */
  
   _exitGame = false;
 
@@ -179,6 +147,7 @@ void IntroState::createGUI()
   ImageManager::getSingleton().addFromImageFile("BackgroundImageOptions","options.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageControls","controls.jpg");
   ImageManager::getSingleton().addFromImageFile("BackgroundImageWinner","winner.jpg");
+  ImageManager::getSingleton().addFromImageFile("BackgroundImageTutorial","tutorial.jpg");
 
   //Sheet
   Window* sheetBG =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_wnd");
@@ -187,6 +156,8 @@ void IntroState::createGUI()
   sheetBG->setProperty("Image","BackgroundImage");
   sheetBG->setProperty("FrameEnabled","False");
   sheetBG->setProperty("BackgroundEnabled", "False");
+
+  
 
    //Buttons
   CEGUI::Window* playButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","playButton");
@@ -569,6 +540,15 @@ IntroState::readRecords(){
 }
 
 bool
+IntroState::nextInfo(const CEGUI::EventArgs &e)
+{
+  CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+  sheet->getChild("background_info")->setProperty("Image","BackgroundImageControls");
+
+  return true;
+}
+
+bool
 IntroState::info(const CEGUI::EventArgs &e)
 {
   CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
@@ -580,18 +560,26 @@ IntroState::info(const CEGUI::EventArgs &e)
   Window* sheetBG =  WindowManager::getSingleton().createWindow("TaharezLook/StaticImage","background_info");
   sheetBG->setPosition( UVector2(cegui_reldim(0),cegui_reldim(0)));
   sheetBG->setSize( USize(cegui_reldim(1),cegui_reldim(1)));
-  sheetBG->setProperty("Image","BackgroundImageControls");
+  sheetBG->setProperty("Image","BackgroundImageTutorial");
   sheetBG->setProperty("FrameEnabled","False");
   sheetBG->setProperty("BackgroundEnabled", "False");
 
   CEGUI::Window* backButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","back");
   backButton->setText("[font='SPIDER MONKEY'] Back ");
   backButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
-  backButton->setXPosition(UDim(0.66f, 0.0f));
-  backButton->setYPosition(UDim(0.85f, 0.0f));
+  backButton->setXPosition(UDim(0.49f, 0.0f));
+  backButton->setYPosition(UDim(0.92f, 0.0f));
   backButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::back,this));
+
+  CEGUI::Window* nextButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","next");
+  nextButton->setText("[font='SPIDER MONKEY'] Next ");
+  nextButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
+  nextButton->setXPosition(UDim(0.25f, 0.0f));
+  nextButton->setYPosition(UDim(0.92, 0.0f));
+  nextButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::nextInfo,this));
   
   sheetBG->addChild(backButton);
+  sheetBG->addChild(nextButton);
   sheet->addChild(sheetBG);
   return true;
 }

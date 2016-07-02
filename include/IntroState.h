@@ -58,6 +58,7 @@ class IntroState : public Ogre::Singleton<IntroState>, public GameState
   bool records(const CEGUI::EventArgs &e);
   bool back(const CEGUI::EventArgs &e);
   bool quit(const CEGUI::EventArgs &e);
+  bool nextInfo(const CEGUI::EventArgs &e);
   bool info(const CEGUI::EventArgs &e);
   bool options(const CEGUI::EventArgs &e);
   CEGUI::MouseButton convertMouseButton(OIS::MouseButtonID id);
