@@ -4,6 +4,6 @@ DaikatanaReturn 620
 JorobateFlanders 620
 Test 400
 Lucia 400
+JorobateDaikatana 120
 Quique 40
 Pro 20
-Daikatana 20

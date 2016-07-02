@@ -1556,7 +1556,7 @@ void PlayState::populateEnemies(){
 			enemy->setMovementSpeed(50.0);
 			enemy->setSpeed(Ogre::Vector3(0,0,-2));
 			_enemies.push_back(enemy);
-			_animationManager->setupEnemyAnimations();
+			_animationManager->setupEnemyAnimations(enemy->getSceneNode()->getName());
 			//aureolaNode->setPosition(enemy->getRigidBody()->getCenterOfMassPosition());
 			
 			//index++;

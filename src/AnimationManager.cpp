@@ -33,7 +33,7 @@ void AnimationManager::setupAnimations(){
 	}
 }
 
-void AnimationManager::setupEnemyAnimations(){
+void AnimationManager::setupEnemyAnimations(String name){
 	std::string animName = "";
 
 	if(Ogre::StringUtil::match(_enemies->back()->getType(),"rabbit")){
@@ -43,50 +43,62 @@ void AnimationManager::setupEnemyAnimations(){
 		animName = "walkRex";
 	}
 	Ogre::AnimationStateIterator it = static_cast<Entity*>(_enemies->back()->getSceneNode()->getAttachedObject(0))->getAllAnimationStates()->getAnimationStateIterator();
-
-	_animsEnemy.push_back(it.begin()->second);
-	_animsEnemy.back()->setEnabled(true);
-	_animsEnemy.back()->setLoop(true);
-	_animsEnemy.back()->setTimePosition(0.0);
+	it.begin()->second->setEnabled(true);
+	it.begin()->second->setLoop(true);
+	it.begin()->second->setTimePosition(0.0);
+	_animsEnemy[name]=it.begin()->second;
 }
 
 void AnimationManager::playEnemyAnimations(Ogre::Real deltaT){
-	for(unsigned int i=0; i<_animsEnemy.size(); i++){
-		if(_animsEnemy.at(i) != NULL){
-			if(_animsEnemy.at(i)->hasEnded()){
-				_animsEnemy.at(i)->setTimePosition(0.0);
-				_animsEnemy.at(i)->setEnabled(false);
+
+	for (std::map<std::string,Ogre::AnimationState*>::iterator it=_animsEnemy.begin(); it!=_animsEnemy.end(); ++it){
+	    //std::cout << it->first << " => " << it->second << '\n';
+		AnimationState* aux = it->second;
+		if(aux != NULL){
+			if(aux->hasEnded()){
+				aux->setTimePosition(0.0);
+				aux->setEnabled(false);
 			}
 			else{
-				_animsEnemy.at(i)->addTime(deltaT);
+				aux->addTime(deltaT);
 			}
 		}
+
 	}
 }
 
 void AnimationManager::resetEnemyAnimations(){
-	for(unsigned int i=0; i<_animsEnemy.size(); i++){
-		if(_animsEnemy.at(i) != NULL){
-			//_animsEnemy.at(i)->setEnabled(false);
-			//delete _animsEnemy.at(i);
-		}
-	}
 	_animsEnemy.clear();
 }
 
 void AnimationManager::resetEnemyAnimation(String name){
-	for(unsigned int i=0; i<_animsEnemy.size(); i++){
-		if(_animsEnemy.at(i) != NULL){
-
-			//delete _animsEnemy.at(i);
-			if(Ogre::StringUtil::match(name,_enemies->at(i)->getSceneNode()->getName())){
-				_animsEnemy.at(i)->setEnabled(false);
-				_animsEnemy.erase(_animsEnemy.begin()+i);
-				_enemies->erase(_enemies->begin()+i);
-			}
+	for (std::map<std::string,Ogre::AnimationState*>::iterator it=_animsEnemy.begin(); it!=_animsEnemy.end(); ++it){
+		    //std::cout << it->first << " => " << it->second << '\n';
+		if(Ogre::StringUtil::match(name,it->first)){
+			_animsEnemy.erase(it);
 		}
 	}
+	for(unsigned int i =0;i<_enemies->size();i++){
+		if(Ogre::StringUtil::match(name,_enemies->at(i)->getSceneNode()->getName())){
+			_enemies->erase(_enemies->begin()+i);
+		}
+	}
+
 	//_animsEnemy.clear();
+}
+
+void AnimationManager::setupBossAnimations(String name){
+
+}
+
+void AnimationManager::playBossAnimations(Ogre::Real deltaT){
+
+
+}
+
+
+void AnimationManager::resetBossAnimation(String name){
+
 }
 
 void AnimationManager::playAnimations(animID id){
