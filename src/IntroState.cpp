@@ -626,7 +626,7 @@ IntroState::options(const CEGUI::EventArgs &e)
   applyButton->setYPosition(UDim(0.77f, 0.0f));
   applyButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::apply,this));
 
-  CEGUI::Window* text = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text");
+  /*CEGUI::Window* text = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text");
   text->setText("[font='SPIDER MONKEY'] Mouse Speed");
   text->setSize(CEGUI::USize(CEGUI::UDim(0.15,0),CEGUI::UDim(0.1,0)));
   text->setPosition(CEGUI::UVector2(CEGUI::UDim(0.12,0),CEGUI::UDim(0.32,0)));
@@ -647,10 +647,10 @@ IntroState::options(const CEGUI::EventArgs &e)
   sbText->setPosition(CEGUI::UVector2(CEGUI::UDim(0.36,0),CEGUI::UDim(0.38,0)));
   sbText->setProperty("FrameEnabled","False");
   sbText->setProperty("BackgroundEnabled", "False");
-  sbText->setProperty("HorzFormatting", "RightAligned");
+  sbText->setProperty("HorzFormatting", "RightAligned");*/
 
   CEGUI::Window* text2 = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","text2");
-  text2->setText("[font='SPIDER MONKEY'] ¿Activate Shadows?");
+  text2->setText("[font='SPIDER MONKEY'] Activate Shadows ?");
   text2->setSize(CEGUI::USize(CEGUI::UDim(0.25,0),CEGUI::UDim(0.06,0)));
   text2->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15,0),CEGUI::UDim(0.46,0)));
   text2->setProperty("FrameEnabled","False");
@@ -668,12 +668,12 @@ IntroState::options(const CEGUI::EventArgs &e)
   resetButton->setYPosition(UDim(0.85f, 0.0f));
   resetButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::resetRecords,this));
 
-  CEGUI::Window* configButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","configButton");
+  /*CEGUI::Window* configButton = CEGUI::WindowManager::getSingleton().createWindow("OgreTray/Button","configButton");
   configButton->setText("[font='SPIDER MONKEY'] Restore Config ");
   configButton->setSize(CEGUI::USize(CEGUI::UDim(0.23,0),CEGUI::UDim(0.07,0)));
   configButton->setXPosition(UDim(0.40f, 0.0f));
   configButton->setYPosition(UDim(0.77f, 0.0f));
-  configButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::resetConfig,this));
+  configButton->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&IntroState::resetConfig,this));*/
 
   CEGUI::Window* text3 = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText","FullscreenText");
   text3->setText("[font='SPIDER MONKEY'] Fullscreen");
@@ -734,13 +734,13 @@ IntroState::options(const CEGUI::EventArgs &e)
   sheetBG->addChild(text2);
   sheetBG->addChild(cbFullscreen);
   sheetBG->addChild(text3);
-  sheetBG->addChild(sbText);
-  sheetBG->addChild(sb);
+  //sheetBG->addChild(sbText);
+  //sheetBG->addChild(sb);
   sheetBG->addChild(applyButton);
   sheetBG->addChild(backButton);
   sheetBG->addChild(resetButton);
-  sheetBG->addChild(configButton);
-  sheetBG->addChild(text);
+  //sheetBG->addChild(configButton);
+  //sheetBG->addChild(text);
   sheet->addChild(sheetBG);
     
 
@@ -775,16 +775,16 @@ IntroState::onSliderValueChanged(const CEGUI::EventArgs &e){
 bool 
 IntroState::apply(const CEGUI::EventArgs &e){
   
-  CEGUI::Slider* slider = static_cast<CEGUI::Slider*>(static_cast<const CEGUI::WindowEventArgs&>(e).window->getRootWindow()->getChild("background_options")->getChild("SliderSpeed"));
-  float aux=slider->getCurrentValue();
+  //CEGUI::Slider* slider = static_cast<CEGUI::Slider*>(static_cast<const CEGUI::WindowEventArgs&>(e).window->getRootWindow()->getChild("background_options")->getChild("SliderSpeed"));
+  //float aux=slider->getCurrentValue();
   
   CEGUI::ToggleButton* cb = static_cast<CEGUI::ToggleButton*>(static_cast<const CEGUI::WindowEventArgs&>(e).window->getRootWindow()->getChild("background_options")->getChild("CBShadows"));
 
-  ofstream archivo;  // objeto de la clase ofstream
+  /*ofstream archivo;  // objeto de la clase ofstream
   archivo.open("data/Config.txt");
   archivo<<"MouseSpeed = "+Ogre::StringConverter::toString((int)aux)<< endl;
   archivo<<"AutoReaload = "+Ogre::StringConverter::toString(cb->isSelected())<< endl;
-  archivo.close();
+  archivo.close();*/
 
   //Cambio de resolucion-----------
   if(_fullscreen){
