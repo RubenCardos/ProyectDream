@@ -259,7 +259,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
-	//cout << "Posicion del Heroe: " << _hero->getRigidBody()->getCenterOfMassPosition() << endl;
+	cout << "Posicion del Heroe: " << _hero->getRigidBody()->getCenterOfMassPosition() << endl;
 
 	//Actualizo camara----------------------
 	if(!_bossRoom){
@@ -1034,6 +1034,7 @@ OgreBulletDynamics::RigidBody* PlayState::createRigidBody(Ogre::SceneNode* node,
 		else if(Ogre::StringUtil::startsWith(name,"Spike")){
 			rigidBody = new OgreBulletDynamics::RigidBody("RB_" + name , _world,PhysicsMask::COL_Spike,PhysicsMask::spikes_collides_with);
 			rigidBody->setShape(node, bodyShapeConvex, 0.0f /*Restitucion*/, 0.9f/*Friccion*/, mass/*Masa*/, position);
+			node->getAttachedObject(0)->setCastShadows(false);
 		}
 	}
 	else{

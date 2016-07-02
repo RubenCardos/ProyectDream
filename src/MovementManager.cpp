@@ -94,6 +94,7 @@ void MovementManager::jumpHero(Ogre::Vector3* movement){
 		speed = currentSpeed + (*(movement) * 2);
 		_hero->getRigidBody()->setLinearVelocity(speed);
 		_hero->setNumJumps(_hero->getNumJumps()-1);
+		GameManager::getSingletonPtr()->playSoundEffect("jump.ogg");
 	}
 }
 
