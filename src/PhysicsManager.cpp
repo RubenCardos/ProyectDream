@@ -125,8 +125,6 @@ void PhysicsManager::detectHeroCollision(){
 					//------------------------------------------------------------
 					_hero->increaseScore(10);
 
-
-					//Actualizar los puntos en la UI
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
 					_hero->getRigidBody()->setLinearVelocity(Ogre::Vector3(0,0,0));
@@ -217,6 +215,9 @@ void PhysicsManager::detectHeroCollision(){
 						_sceneMgr->getSceneNode("AureolaNode")->attachObject(partSystem);
 						_numParticleSystems++;
 						//---------------------------------------------------------------------------
+
+						//Sumar puntos a la puntuación total
+						_hero->increaseScore(Constant::ENEMY_DEFAULT_POINTS);
 
 						//Elimino el enemigo con el que te chocas-------------------
 						AnimationManager::getSingletonPtr()->resetEnemyAnimation(node->getName());
@@ -382,6 +383,5 @@ Vector3 PhysicsManager::calculateSpawnPoint(){
 	else if(speed.x !=0){
 		res = Vector3(-75,2,25);
 	}
-	cout << "		POSICION DE RESPAWN: " << res << endl;
 	return res;
 }

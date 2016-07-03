@@ -18,7 +18,7 @@ namespace Constant{
 	const int BOSS_DEFAULT_HEALTH = 2;
 	const int BOSS_DEFAULT_POINTS = 100;
 	const int ENEMY_DEFAULT_LIVES = 1;
-	const int ENEMY_DEFAULT_POINTS = 10;
+	const int ENEMY_DEFAULT_POINTS = 20;
 	const int AIMANAGER_EPSILON = 1;
 	const int AIMANAGER_DISTANCE_BETWEEN_WAGONS = 23;
 	const int ANIMATIONMANAGER_NUM_ANIMS = 12;

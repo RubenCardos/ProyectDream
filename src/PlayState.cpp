@@ -376,7 +376,8 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 	}
 
 	if (e.key == OIS::KC_G) {
-		changeState(GameOverState::getSingletonPtr());
+		//changeState(GameOverState::getSingletonPtr());
+		_hero->godMode();
 	}
 	//-----------------
 

@@ -18,6 +18,7 @@ Hero::Hero(){
 	_speed = Ogre::Vector3(0,0,0);
 	_pickedGardenReel = false;
 	_pickedRoomReel = false;
+	_godModeOn = false;
 }
 
 Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
@@ -31,6 +32,7 @@ Hero::Hero(Ogre::SceneNode* sNode, OgreBulletDynamics::RigidBody* rigBody){
 	_attacking = false;
 	_pickedGardenReel = false;
 	_pickedRoomReel = false;
+	_godModeOn = false;
 	spawn();
 }
 
@@ -138,7 +140,16 @@ void Hero::UpdateInvulnerability(Ogre::Real deltaT){
 		_invulnerabilityLeft = 0.0;
 	}
 }
-
 void Hero::setAttacking(bool attacking){
 	_attacking = attacking;
+}
+void Hero::godMode(){
+	if(_godModeOn){
+		_invulnerabilityLeft = 0.0;
+		_godModeOn = false;
+	}
+	else{
+		_invulnerabilityLeft = std::numeric_limits<double>::max();
+		_godModeOn = true;
+	}
 }
