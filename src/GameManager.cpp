@@ -110,14 +110,14 @@ GameManager::loadResources ()
   Ogre::ConfigFile::SectionIterator sI = cf.getSectionIterator();
   Ogre::String sectionstr, typestr, datastr;
   while (sI.hasMoreElements()) {
-    sectionstr = sI.peekNextKey();
-    Ogre::ConfigFile::SettingsMultiMap *settings = sI.getNext();
-    Ogre::ConfigFile::SettingsMultiMap::iterator i;
-    for (i = settings->begin(); i != settings->end(); ++i) {
-      typestr = i->first;    datastr = i->second;
-      Ogre::ResourceGroupManager::getSingleton().addResourceLocation
-            (datastr, typestr, sectionstr);	
-    }
+	  sectionstr = sI.peekNextKey();
+	  Ogre::ConfigFile::SettingsMultiMap *settings = sI.getNext();
+	  Ogre::ConfigFile::SettingsMultiMap::iterator i;
+	  for (i = settings->begin(); i != settings->end(); ++i) {
+		  typestr = i->first;    datastr = i->second;
+		  Ogre::ResourceGroupManager::getSingleton().addResourceLocation
+				  (datastr, typestr, sectionstr);
+	  }
   }
 }
 
@@ -266,7 +266,6 @@ std::vector<SoundFXPtr>* GameManager::getSoundEffects(){
 
 void GameManager::playSoundEffect(std::string name){
 	for(unsigned int i=0; i<_simpleEffects.size(); i++){
-		cout << "		NOMBRE A REPRODUCIR: " << _simpleEffects.at(i).getPointer()->getName() << endl;
 		if(Ogre::StringUtil::match(name,_simpleEffects.at(i).getPointer()->getName())){
 			_simpleEffects.at(i).getPointer()->play();
 		}

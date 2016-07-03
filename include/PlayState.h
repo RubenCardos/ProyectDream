@@ -56,7 +56,6 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   void pause ();
   void resume ();
   
-  
   void keyPressed (const OIS::KeyEvent &e);
   void keyReleased (const OIS::KeyEvent &e);
 
@@ -114,9 +113,6 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   AI_Manager* _aiManager;
   AnimationManager* _animationManager;
 
-  std::deque <OgreBulletDynamics::RigidBody *>         _bodies;
-  std::deque <OgreBulletCollisions::CollisionShape *>  _shapes;
-
   Scenario::Scenario _currentScenario;
   Scenario::Scenario _nextScenario;
   int _numModules;
@@ -138,8 +134,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
   void createBossRoom();
 
   void createTestGameEntities();
-  GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale);
-  GameEntity* createGameEntityRemade(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale, double mass);
+  GameEntity* createGameEntity(std::string name, std::string mesh, Ogre::Vector3 position, Ogre::Vector3 scale, double mass);
   OgreBulletDynamics::RigidBody* createRigidBody(Ogre::SceneNode* node, Ogre::Vector3 scale,Ogre::Vector3 position, double mass);
 
   void populateObstacles(String _path);
