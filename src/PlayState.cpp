@@ -22,9 +22,6 @@ Vector3 *_despPtr;
 void PlayState::enter(){
 	_root = Ogre::Root::getSingletonPtr();
 
-	//GameManager::getSingletonPtr()->_mainTrack = GameManager::getSingletonPtr()->_pTrackManager->load("BGGame.ogg");
-	//GameManager::getSingletonPtr()->_mainTrack->play();
-
 	// Se recupera el gestor de escena y la cámara.----------------
 	_sceneMgr = _root->getSceneManager("SceneManager");
 	_camera = _sceneMgr->createCamera("PlayCamera");
@@ -133,9 +130,9 @@ void PlayState::enter(){
 
 	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("attack.ogg"));
 	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("jump.ogg"));
-	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("death.ogg"));
-	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("disco.ogg"));
-	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("footsteps.ogg"));
+	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("pick.ogg"));
+	GameManager::getSingletonPtr()->getSoundEffects()->push_back(GameManager::getSingletonPtr()->getSoundManager()->load("dead.ogg"));
+
 }
 
 void PlayState::exit(){
@@ -157,6 +154,7 @@ void PlayState::exit(){
 	//----------------------------------------------
 
 	GameManager::getSingletonPtr()->getMainTrack()->unload();
+
 }
 
 void PlayState::pause(){
@@ -258,7 +256,7 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	_world->stepSimulation(_deltaT); // Actualizar simulacion Bullet
 	_timeLastObject -= _deltaT;
 
-	cout << "Posicion del Heroe: " << _hero->getRigidBody()->getCenterOfMassPosition() << endl;
+	//cout << "Posicion del Heroe: " << _hero->getRigidBody()->getCenterOfMassPosition() << endl;
 
 	//Actualizo camara----------------------
 	if(!_bossRoom){
@@ -304,7 +302,6 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	//Animations--------------------------------
 	_animationManager->resetAnimations(_deltaT);
 	_animationManager->playEnemyAnimations(_deltaT);
-	//_animationManager->resetAnimations(AnimationManager::ANIM_IDLE_HERO, _deltaT);
 	//--------------------------------------------
 
 	//Movimiento------------
@@ -375,10 +372,10 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 		pushState(PauseState::getSingletonPtr());
 	}
 
-	if (e.key == OIS::KC_G) {
+	//if (e.key == OIS::KC_G) {
 		//changeState(GameOverState::getSingletonPtr());
-		_hero->godMode();
-	}
+		//_hero->godMode();
+	//}
 	//-----------------
 
 	// Tecla S --> Print current scenario and change backwall visibility-------
@@ -417,7 +414,6 @@ void PlayState::keyPressed (const OIS::KeyEvent &e){
 			_animationManager->stopAnimations(AnimationManager::ANIM_JUMP_HERO);
 			_animationManager->playAnimations(AnimationManager::ANIM_ATTACK_HERO);
 			
-        	//GameManager::getSingletonPtr()->getSoundEffects()->at(0)->play();
 			GameManager::getSingletonPtr()->playSoundEffect("attack.ogg");
 		}
 	}
@@ -468,12 +464,6 @@ PlayState::mouseMoved
 (const OIS::MouseEvent &e)
 {
 
-	//Movimiento camara-----------------------------------------------------------------------------
-	float rotx = e.state.X.rel * _deltaT * -1;
-	float roty = e.state.Y.rel * _deltaT * -1;
-	_camera->yaw(Radian(rotx));
-	_camera->pitch(Radian(roty));
-	//----------------------------------------------------------------------------------------------
 
 	//CEGUI--------------------------
 	CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseMove(e.state.X.rel, e.state.Y.rel);
@@ -567,7 +557,7 @@ PlayState::createGUI()
 	textPoints->setText("[font='SPIDER MONKEY-18'] 000");
 	textPoints->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
 	textPoints->setXPosition(CEGUI::UDim(0.43f, 0.0f));
-	textPoints->setYPosition(CEGUI::UDim(0.35f, 0.0f));
+	textPoints->setYPosition(CEGUI::UDim(0.39f, 0.0f));
 	textPoints->setProperty("FrameEnabled","False");
 	textPoints->setProperty("BackgroundEnabled", "False");
 	textPoints->setProperty("VertFormatting", "TopAligned");
@@ -576,7 +566,7 @@ PlayState::createGUI()
 	textLives->setText("[font='SPIDER MONKEY-18'] 0");
 	textLives->setSize(CEGUI::USize(CEGUI::UDim(0.20,0),CEGUI::UDim(0.70,0)));
 	textLives->setXPosition(CEGUI::UDim(0.1f, 0.0f));
-	textLives->setYPosition(CEGUI::UDim(0.35f, 0.0f));
+	textLives->setYPosition(CEGUI::UDim(0.39f, 0.0f));
 	textLives->setProperty("FrameEnabled","False");
 	textLives->setProperty("BackgroundEnabled", "False");
 	textLives->setProperty("VertFormatting", "TopAligned");
@@ -701,7 +691,7 @@ void PlayState::createScenario(Scenario::Scenario nextScenario){
 
 	switch(_nextScenario) {
 	case Scenario::Menu:{
-
+		//GameManager::getSingletonPtr()->setWin(true);
 		std::cout << "Menu " << _nextScenario <<std::endl;
 		//En el menu no aparecen hilos ni enemigos ni nada. Luego cuando se escoja nivel si
 		GameEntity* gameEntity = new GameEntity();

@@ -124,6 +124,7 @@ void PhysicsManager::detectHeroCollision(){
 					removeGameEntity(node->getName());
 					//------------------------------------------------------------
 					_hero->increaseScore(10);
+					GameManager::getSingletonPtr()->playSoundEffect("pick.ogg");
 
 				}
 				else if(Ogre::StringUtil::startsWith(node->getName(),"SN_Reel")){
@@ -136,6 +137,7 @@ void PhysicsManager::detectHeroCollision(){
 					_world->getBulletDynamicsWorld()->removeCollisionObject(aux);
 					//cout << "CAMBIANDO AL ESCENARIO DE MENU" <<endl;
 					PlayState::getSingletonPtr()->changeScenario(scenario);
+					GameManager::getSingletonPtr()->playSoundEffect("pick.ogg");
 				}
 
 				else if (Ogre::StringUtil::startsWith(node->getName(),"SN_Spike") && !_hero->isInvulnerable()){

@@ -90,10 +90,13 @@ void Hero::loseLife(){
 	if(_lives >1){
 		_lives--;
 		cout << "Hero pierde una vida " << " vida actual: " << _lives << endl;
+		GameManager::getSingletonPtr()->playSoundEffect("dead.ogg");
+
 	}
 	else{
 		cout << "Hero muere " << " vida actual: " << _lives << endl;
 		die();
+
 	}
 }
 void Hero::setSpeed(Ogre::Vector3 speed){

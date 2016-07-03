@@ -29,10 +29,21 @@ GameOverState::enter ()
   //-----------------------------
  
   createGUI();
-  cout << "Creo GUI\n" << endl;
+ 
   _exitGame = false;
 
-  cout << "Entro a GAME OVER!!!\n" << endl;
+
+  if(GameManager::getSingletonPtr()->getWin()){
+    CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+    sheet->getChild("sheetGameOver")->setProperty("Image","BackgroundImageWinner");
+    GameManager::getSingletonPtr()->getMainTrack()->unload();
+    GameManager::getSingletonPtr()->setMainTrack(GameManager::getSingletonPtr()->getTrackManager()->load("winner.ogg"));
+    GameManager::getSingletonPtr()->getMainTrack()->play();
+  }else{
+    GameManager::getSingletonPtr()->getMainTrack()->unload();
+    GameManager::getSingletonPtr()->setMainTrack(GameManager::getSingletonPtr()->getTrackManager()->load("gameover.ogg"));
+    GameManager::getSingletonPtr()->getMainTrack()->play();
+  }
 }
 
 void
@@ -50,6 +61,11 @@ GameOverState::exit ()
 
   sheet->destroyChild("sheetGameOver");
   //------------------------
+
+  //Musica---------------------------------------
+  GameManager::getSingletonPtr()->getMainTrack()->unload();
+  //---------------------------------------------------
+
 }
 
 void
@@ -298,10 +314,7 @@ void
 GameOverState::updateGUI()
 {
 
-  if(GameManager::getSingletonPtr()->getWin()){
-    CEGUI::Window* sheet=CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
-    sheet->getChild("sheetGameOver")->setProperty("Image","BackgroundImageWinner");
-  }
+
    
 }
 
