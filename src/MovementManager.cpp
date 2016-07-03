@@ -144,16 +144,18 @@ void MovementManager::moveEnemies(){
 
 void MovementManager::moveWalls(){
 	Ogre::Vector3 mov = _hero->getRigidBody()->getLinearVelocity();
-	if(mov.x >= 0){
-		mov.z = 0.0;
-		mov.y = 0.0;
-		for(unsigned int i=0; i<_walls->size();i++){
-			if(i < _walls->size() -1){
-				if(_hero->getRigidBody()->getCenterOfMassPosition().x -_walls->at(_walls->size() -1)->getRigidBody()->getCenterOfMassPosition().x <= Constant::WALLB_DISTANCE){
-					mov.x = 0.0;
+	if(_hero->getSceneNode()->getPosition().x < Constant::REEL_POSITION-20){
+		if(mov.x >= 0){
+			mov.z = 0.0;
+			mov.y = 0.0;
+			for(unsigned int i=0; i<_walls->size();i++){
+				if(i < _walls->size() -1){
+					if(_hero->getRigidBody()->getCenterOfMassPosition().x -_walls->at(_walls->size() -1)->getRigidBody()->getCenterOfMassPosition().x <= Constant::WALLB_DISTANCE){
+						mov.x = 0.0;
+					}
 				}
+				_walls->at(i)->getRigidBody()->setLinearVelocity(mov);
 			}
-			_walls->at(i)->getRigidBody()->setLinearVelocity(mov);
 		}
 	}
 }

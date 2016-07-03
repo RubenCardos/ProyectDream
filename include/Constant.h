@@ -27,6 +27,7 @@ namespace Constant{
 	const int HERO_NUM_JUMPS = 1;
 	const int HERO_INVULNERABILITY_TIME = 3.0;
 	const int WALLB_DISTANCE = 40;
+	const int REEL_POSITION = 750;
 };
 
 #endif

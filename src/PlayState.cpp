@@ -266,9 +266,9 @@ bool PlayState::frameStarted(const Ogre::FrameEvent& evt){
 	}
 	else{
 		//_camera->setPosition(-430,90,100);
-		_camera->setPosition(-930,90,100);
+		_camera->setPosition(-910,90,100);
 		//_camera->lookAt(-50,0,100);
-		_camera->lookAt(-50,0,100);
+		_camera->lookAt(-30,0,100);
 		//_camera->yaw(Ogre::Degree(180));
 	}
 	//-------------------

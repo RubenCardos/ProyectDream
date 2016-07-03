@@ -110,7 +110,6 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState{
 
   MovementManager* _movementManager;
   PhysicsManager* _physicsManager;
-  AI_Manager* _aiManager;
   AnimationManager* _animationManager;
 
   Scenario::Scenario _currentScenario;
