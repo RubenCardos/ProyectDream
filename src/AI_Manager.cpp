@@ -1,8 +1,6 @@
 #include "../include/AI_Manager.h"
 using namespace Ogre;
 
-
-
 AI_Manager::AI_Manager (Ogre::SceneManager* sceneMgr, Hero* hero, std::vector<Boss*>* bossPieces,std::vector<Enemy*>* enemies){
 	_hero = hero;
 	_bossPieces = bossPieces;

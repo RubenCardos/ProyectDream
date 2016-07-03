@@ -1307,50 +1307,53 @@ void PlayState::populateObstacles(String _path){
 	int index=0;
 	if (fichero.is_open()) {
 		while (getline (fichero,frase)) {
-			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
-			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+			if(frase.size() > 14){
+				int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+				int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+				int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
 
-			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+				int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
 
-			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
-			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
-			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+				int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+				int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+				int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
 
-			int texture = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[7]);
+				int texture = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[7]);
 
-			Vector3 pos = Vector3(x,y,z);
-			Quaternion q = Quaternion(Quaternion::IDENTITY);
-			Vector3 scale = Vector3(Sx,Sy,Sz);
+				Vector3 pos = Vector3(x,y,z);
+				Quaternion q = Quaternion(Quaternion::IDENTITY);
+				Vector3 scale = Vector3(Sx,Sy,Sz);
 
-			GameEntity* ge = new GameEntity();
-			//ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",pos,scale);
-			ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",pos,scale,200);
-			Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
-			
-			if(_currentScenario== Scenario::LevelGarden){
-				switch(texture){
-				case 0:
-					e->setMaterialName("matStone");
-					break;
+				GameEntity* ge = new GameEntity();
+				//ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",pos,scale);
+				ge=createGameEntity("Obstacle"+Ogre::StringConverter::toString(index),"cube.mesh",pos,scale,200);
+				Entity* e = static_cast<Entity*>(ge->getSceneNode()->getAttachedObject(0));
 
-				case 1:
-					e->setMaterialName("matStone2");
-					break;
+				if(_currentScenario== Scenario::LevelGarden){
+					switch(texture){
+					case 0:
+						e->setMaterialName("matStone");
+						break;
+
+					case 1:
+						e->setMaterialName("matStone2");
+						break;
+					}
 				}
-			}else{
-				switch(texture){
-				case 0:
-					e->setMaterialName("matRed");
-					break;
+				else{
+					switch(texture){
+					case 0:
+						e->setMaterialName("matRed");
+						break;
 
-				case 1:
-					e->setMaterialName("matGreen");
-					break;
+					case 1:
+						e->setMaterialName("matGreen");
+						break;
+					}
+
 				}
-
+				index++;
 			}
-			index++;
 		}
 		fichero.close();
 	}
@@ -1365,25 +1368,27 @@ void PlayState::populateThreads(String _path){
 	int index=0;
 	if (fichero.is_open()) {
 		while (getline (fichero,frase)) {
-			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
-			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+			if(frase.size() > 12){
+				int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+				int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+				int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
 
-			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+				int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
 
-			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
-			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
-			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+				int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+				int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+				int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
 
-			Vector3 aux = Vector3(x,y,z);
-			Quaternion q = Quaternion(Quaternion::IDENTITY);
-			Vector3 scale = Vector3(Sx,Sy,Sz);
+				Vector3 aux = Vector3(x,y,z);
+				Quaternion q = Quaternion(Quaternion::IDENTITY);
+				Vector3 scale = Vector3(Sx,Sy,Sz);
 
-			GameEntity* ge = new GameEntity();
-			//ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
-			ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale,0.0);
-			ge->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3::UNIT_X));
-			index++;
+				GameEntity* ge = new GameEntity();
+				//ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale);
+				ge=createGameEntity("Thread"+Ogre::StringConverter::toString(index),"thread.mesh",aux,scale,0.0);
+				ge->getRigidBody()->setOrientation(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3::UNIT_X));
+				index++;
+			}
 		}
 		fichero.close();
 	}
@@ -1399,24 +1404,26 @@ void PlayState::populateSpike(String _path){
 	int index=0;
 	if (fichero.is_open()) {
 		while (getline (fichero,frase)) {
-			int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
-			int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
-			int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
+			if(frase.size() > 12){
+				int x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[0]);
+				int y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[1]);
+				int z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[2]);
 
-			int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
+				int g =Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[3]);
 
-			int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
-			int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
-			int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
+				int Sx = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[4]);
+				int Sy = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[5]);
+				int Sz = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (frase,",")[6]);
 
-			Vector3 aux = Vector3(x,y,z);
-			Quaternion q = Quaternion(Quaternion::IDENTITY);
-			Vector3 scale = Vector3(Sx,Sy,Sz);
+				Vector3 aux = Vector3(x,y,z);
+				Quaternion q = Quaternion(Quaternion::IDENTITY);
+				Vector3 scale = Vector3(Sx,Sy,Sz);
 
-			GameEntity* ge = new GameEntity();
-			//ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale);
-			ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale, 30.0);
-			index++;
+				GameEntity* ge = new GameEntity();
+				//ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale);
+				ge=createGameEntity("Spike"+Ogre::StringConverter::toString(index),"spike.mesh",aux,scale, 30.0);
+				index++;
+			}
 		}
 		fichero.close();
 	}
@@ -1468,14 +1475,16 @@ void PlayState::readEnemies(string path){
 
 	if (file.is_open()) {
 		while (getline (file,line)) {
-			int enemyPos_x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[0]);
-			int enemyPos_y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[1]);
-			int enemyPos_z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[2]);
-			std::string enemyType = Ogre::StringUtil::split (line,",")[3];
+			if(line.size() > 9){
+				int enemyPos_x = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[0]);
+				int enemyPos_y = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[1]);
+				int enemyPos_z = Ogre::StringConverter::parseInt(Ogre::StringUtil::split (line,",")[2]);
+				std::string enemyType = Ogre::StringUtil::split (line,",")[3];
 
-			vPos = Ogre::Vector3(enemyPos_x,enemyPos_y,enemyPos_z);
-			_posEnemies.push_back(vPos);
-			_enemyTypes.push_back(enemyType);
+				vPos = Ogre::Vector3(enemyPos_x,enemyPos_y,enemyPos_z);
+				_posEnemies.push_back(vPos);
+				_enemyTypes.push_back(enemyType);
+			}
 		}
 		file.close();
 	}

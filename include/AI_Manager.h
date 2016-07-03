@@ -14,8 +14,6 @@
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include "GameEntity.h"
 
-#define WAGON_DISTANCE 10
-
 using namespace Ogre;
 
 class AI_Manager : public Ogre::Singleton<AI_Manager>
