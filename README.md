@@ -24,6 +24,10 @@ https://youtu.be/0kgsmTu3edM
 
 https://youtu.be/6HNQO12VLR4
 
+###Video Demostracion 
+
+https://www.youtube.com/watch?v=ORkgH66S25A&feature=youtu.be
+
 ###Instrucciones para la compilación
 
 Abriendo la terminal y situándonos en la carpeta del proyecto (ProyectDream), ejecutamos el comando "make" (o "make -j4" si queremos una compilación más rápida). Una vez terminada la compilación, ejecutamos el juego con el comando "./ToyQuest"
